@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:drawable/dialog_holo_light_frame">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+        android:id="@+id/list_item"
+        android:textSize="18sp"
+
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:text="I need a teacher"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="5dp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:gravity="right"
+                android:background="@drawable/curve_add"
+                android:text="pending"
+                android:textColor="@android:color/white"
+                android:paddingTop="5dp"
+                android:paddingRight="20dp"
+                android:paddingLeft="20dp"
+                android:paddingBottom="5dp"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
+
+
+
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/list_item1"
+        android:textSize="18sp"
+
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:text="Need Water"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content" />
+</LinearLayout>

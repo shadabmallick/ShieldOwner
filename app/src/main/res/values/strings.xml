@@ -1,0 +1,141 @@
+<resources>
+    <string name="app_name">SecurityOwner</string>
+
+    <string name="city_name">City Name</string>
+    <string name="block_name">Block Name</string>
+    <string name="complex_name">Complex Name</string>
+    <string name="next">Next</string>
+    <string name="flat_no">Flat Number</string>
+    <string name="login">Login</string>
+    <string name="register">Registration</string>
+    <string name="enter_registration_number">Please Enter your register Number</string>
+    <string name="enter_name">Enter Name</string>
+    <string name="enter_phone">Enter Phone</string>
+    <string name="enter_email">Enter Email</string>
+    <string name="back">Back</string>
+    <string name="otp_send">OTP Has been sent to you on</string>
+    <string name="help">Help</string>
+    <string name="activity">Activity</string>
+    <string name="community">Community</string>
+    <string name="setting">Settings</string>
+    <string name="my_details">MY DETAILS</string>
+    <string name="app_details">APP SETTINGS</string>
+    <string name="my_family">My Family</string>
+    <string name="my_staff">My Staff</string>
+    <string name="my_car">My Car</string>
+    <string name="add">ADD</string>
+    <string name="loading">wait loading</string>
+    <string name="security">Security</string>
+    <string name="enter_com">e-entercom Settings</string>
+    <string name="app_notification">App Notification Settings</string>
+    <string name="my_complex">My Complex</string>
+    <string name="about">About Us</string>
+    <string name="contact">Contact Us</string>
+    <string name="logout">Logout</string>
+    <string name="profile_info">PROFILE INFO</string>
+    <string name="member_info">MEMBER INFO</string>
+    <string name="staff_info">STAFF INFO</string>
+    <string name="car_info">CAR INFO</string>
+    <string name="save">Save</string>
+    <string name="staff_name">Enter Staff Name</string>
+    <string name="staff_type">Choose Staff Type</string>
+    <string name="enter_member_name">Enter Member Name</string>
+    <string name="entercar_no">Enter Car Number</string>
+    <string name="cartype">Choose Car Type</string>
+    <string name="parking_number">Enter Parking Number</string>
+    <string name="set_noti">Set Your notification</string>
+    <string name="manage_notification">Manage Notification</string>
+    <string name="notification_staff">Notification on Staff\'s Entry and Exit</string>
+    <string name="notification_guest">Notification on Guest\'s Entry and Exit</string>
+    <string name="notification_cab">Notification on Cab\'s Entry and Exit</string>
+    <string name="notification_car">Notification on Car\'s Entry and Exit</string>
+    <string name="search">Search Visitor</string>
+    <string name="all">ALL VISITORS</string>
+    <string name="support">:suppoprt@cartface.com</string>
+    <string name="text_contact">Cartface Technologies Pvt. Ltd.\n50 ,D.H.Road,kolkata-700104 </string>
+    <string name="text_contact1">Cartface Technologies Pvt. Ltd.50 ,D.H.Road,kolkata-700104 </string>
+    <string name="upcoming">UPCOMING VISITORS</string>
+    <string name="send">Send</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="inbox">Inbox</string>
+    <string name="visitor">Visitor</string>
+    <string name="call_visitor">Call Visitor</string>
+    <string name="call_security">Call Security</string>
+    <string name="logout_message">Are you sure you want to logout ?</string>
+    <string name="about_us_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</string>
+    <string name="car_detials">Cab Details</string>
+    <string name="medical">Medical\nEmergency</string>
+
+    <string name="default_notification_channel_id">1</string>
+    <string-array name="tab_A">
+        <item>Item 1A</item>
+        <item>Item 1B</item>
+        <item>Item 1C</item>
+        <item>Item 1D</item>
+        <item>Item 1E</item>
+        <item>Item 1F</item>
+        <item>Item 1G</item>
+        <item>Item 1H</item>
+        <item>Item 1I</item>
+        <item>Item 1J</item>
+        <item>Item 1K</item>
+        <item>Item 1L</item>
+        <item>Item 1M</item>
+        <item>Item 1N</item>
+        <item>Item 1O</item>
+        <item>Item 1P</item>
+        <item>Item 1Q</item>
+        <item>Item 1R</item>
+        <item>Item 1S</item>
+        <item>Item 1T</item>
+    </string-array>
+
+    <string-array name="tab_B">
+        <item>Item 2A</item>
+        <item>Item 2B</item>
+        <item>Item 2C</item>
+        <item>Item 2D</item>
+        <item>Item 2E</item>
+        <item>Item 2F</item>
+        <item>Item 2G</item>
+        <item>Item 2H</item>
+        <item>Item 2I</item>
+        <item>Item 2J</item>
+        <item>Item 2K</item>
+        <item>Item 2L</item>
+        <item>Item 2M</item>
+        <item>Item 2N</item>
+        <item>Item 2O</item>
+        <item>Item 2P</item>
+        <item>Item 2Q</item>
+        <item>Item 2R</item>
+        <item>Item 2S</item>
+        <item>Item 2T</item>
+    </string-array>
+
+    <string-array name="tab_C">
+        <item>Item 3A</item>
+        <item>Item 3B</item>
+        <item>Item 3C</item>
+        <item>Item 3D</item>
+        <item>Item 3E</item>
+        <item>Item 3F</item>
+        <item>Item 3G</item>
+        <item>Item 3H</item>
+        <item>Item 3I</item>
+        <item>Item 3J</item>
+        <item>Item 3K</item>
+        <item>Item 3L</item>
+        <item>Item 3M</item>
+        <item>Item 3N</item>
+        <item>Item 3O</item>
+        <item>Item 3P</item>
+        <item>Item 3Q</item>
+        <item>Item 3R</item>
+        <item>Item 3S</item>
+        <item>Item 3T</item>
+    </string-array>
+
+
+</resources>

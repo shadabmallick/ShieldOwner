@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
+    tools:context=".ui.ResponsePage"
+    android:background="@android:color/black"
+    android:alpha="0.75"
+  >
+
+
+    <LinearLayout
+        android:orientation="vertical"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+
+
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="100dp"
+                    android:layout_height="106dp"
+                    android:layout_gravity="center"
+                    android:padding="5dp"
+                    android:tint="@android:color/holo_green_dark"
+                    android:src="@mipmap/index"
+
+                    />
+
+                <TextView
+                    android:id="@+id/tv_name"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Staff Name"
+                    android:layout_gravity="center"
+                    android:textSize="16dp"
+                    android:textColor="@android:color/holo_green_dark"
+                    android:layout_marginTop="30dp"
+                    android:layout_centerInParent="true"
+
+                    />
+                <TextView
+                    android:id="@+id/tv_category"
+                    android:layout_below="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sweeper"
+                    android:textColor="@android:color/holo_green_dark"
+                    android:layout_gravity="center"
+                    android:textSize="16dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_centerInParent="true"
+
+                    />
+
+                <LinearLayout
+                    android:layout_below="@+id/tv_name1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+
+                    >
+                    <ImageView
+                        android:id="@+id/img_reject"
+                        android:layout_width="70dp"
+                        android:background="@drawable/circle_red"
+                        android:layout_height="70dp"
+                        android:padding="5dp"
+                        android:layout_gravity="right"
+                        android:tint="@android:color/white"
+                        android:src="@drawable/ic_x"/>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:gravity="right">
+                        <ImageView
+                            android:id="@+id/img_accept"
+                            android:layout_width="70dp"
+                            android:background="@drawable/circle_blue"
+                            android:layout_height="70dp"
+                            android:padding="5dp"
+                            android:tint="@android:color/white"
+                            android:src="@drawable/ic_check"/>
+
+
+                    </LinearLayout>
+
+
+
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/txt_push_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:gravity="center_horizontal"
+        android:textColor="@color/colorPrimary"
+        android:textSize="26dp" />
+
+    <TextView
+        android:id="@+id/txt_reg_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+</RelativeLayout>

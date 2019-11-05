@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent" >
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="57dp"
+        android:background="#f00"
+        android:orientation="vertical" >
+        <RelativeLayout
+            android:id="@+id/profile_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/header_cover_image"
+            android:elevation="4dp"
+
+            android:background="@android:color/white"
+            android:paddingBottom="24dp">
+
+
+
+
+            <TextView
+                android:id="@+id/user_profile_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="56dp"
+                android:text="Approve my cab in given date and time "
+                android:textSize="16sp"
+                />
+
+            <LinearLayout
+                android:id="@+id/ll_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="2"
+                android:layout_marginTop="20dp"
+                android:layout_below="@+id/user_profile_name">
+
+
+                <TextView
+                    android:id="@+id/date_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Select Date"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:background="@android:drawable/dialog_holo_light_frame"
+                    />
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:hint="Approx Time"
+                    android:layout_weight="1"
+                    android:background="@android:drawable/dialog_holo_light_frame"
+                    />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/tv_company_name"
+
+                android:layout_below="@+id/ll_date"
+                android:weightSum="2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@android:color/black"
+                    android:text="Select Company"/>
+                <EditText
+                    android:id="@+id/tv_others"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:visibility="gone"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@android:color/black"
+                    android:text="Others"/>
+
+
+            </LinearLayout>
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/company_name_recycle"
+                android:layout_width="match_parent"
+                android:layout_below="@+id/tv_company_name"
+                android:layout_marginLeft="10dp"
+                android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+            <EditText
+                android:id="@+id/edit_vehicle_no"
+                android:layout_below="@+id/company_name_recycle"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:hint="Enter last 4 digit of Vehicles"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/black_border"
+                />
+
+            <TextView
+                android:id="@+id/tv_details_company"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Company details"
+                android:gravity="center"
+                android:textColor="@color/blue"
+                android:layout_marginTop="20dp"
+                android:layout_below="@+id/edit_vehicle_no"/>
+
+
+            <LinearLayout
+                android:id="@+id/ll_hide"
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_details_company">
+                <LinearLayout
+                    android:id="@+id/ll_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2"
+                    android:layout_marginTop="20dp"
+                    >
+
+
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter Name"
+                        android:gravity="center"
+                        android:layout_weight="1"
+                        android:background="@android:drawable/dialog_holo_light_frame"
+                        />
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:inputType="number"
+                        android:hint="Enter Phone"
+                        android:layout_weight="1"
+                        android:background="@android:drawable/dialog_holo_light_frame"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_radio"
+                    android:layout_below="@+id/ll_name"
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_height="fill_parent"
+                    >
+
+                    <RadioGroup
+                        android:id="@+id/radioSex"
+                        android:weightSum="2"
+                        android:saveEnabled="true"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" >
+
+                        <RadioButton
+                            android:id="@+id/radioMale"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Once"
+                            android:layout_weight="1"
+                            android:checked="true" />
+
+                        <RadioButton
+                            android:id="@+id/radioFemale"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Frequent" />
+
+                    </RadioGroup>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/ll_submit"
+                android:layout_below="@+id/ll_hide"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="100dp"
+                    android:text="Submit"
+                    android:textColor="@android:color/white"
+                    android:gravity="center"
+                    android:background="@drawable/curve_blue"
+                    android:layout_height="40dp" />
+
+
+            </LinearLayout>
+        </RelativeLayout>
+
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/curve_blue"
+       >
+
+        <ImageView
+            android:id="@+id/user_profile_photo"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:elevation="10dp"
+            android:layout_margin="20dp"
+            android:tint="@android:color/white"
+            android:src="@mipmap/taxi"
+            android:scaleType="centerCrop"
+            />
+
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="X"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="10dp"/>
+
+<!--
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/car" />
+-->
+
+</RelativeLayout>
+    <!--
+    <?xml version="1.0" encoding="utf-8"?>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+
+        android:layout_height="match_parent"
+        >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/header_cover_image"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:scaleType="centerCrop"
+                android:alpha="0.9"
+                          />
+
+            <TextView
+                android:id="@+id/close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="X"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginTop="10dp"/>
+
+            <RelativeLayout
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:gravity="center"
+                android:layout_below="@+id/header_cover_image"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/curve_blue"
+                android:layout_marginTop="-60dp">
+
+                <ImageButton
+                    android:id="@+id/user_profile_photo"
+                    android:layout_width="100dp"
+
+                    android:layout_height="wrap_content"
+                   android:layout_centerHorizontal="true"
+                    android:elevation="10dp"
+                    android:layout_margin="20dp"
+                    android:background="@mipmap/car"
+                    android:padding="20dp"
+                    android:scaleType="centerCrop"
+                     />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/profile_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/header_cover_image"
+                android:elevation="4dp"
+
+                android:background="@android:color/white"
+                android:paddingBottom="24dp">
+
+
+
+
+                <TextView
+                    android:id="@+id/user_profile_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="56dp"
+                    android:text="Approve my cab in given date and time "
+                    android:textSize="16sp"
+                    />
+
+                <LinearLayout
+                    android:id="@+id/ll_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="2"
+                    android:layout_marginTop="20dp"
+                    android:layout_below="@+id/user_profile_name">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="Select Date"
+                        android:gravity="center"
+                           android:layout_weight="1"
+                        android:background="@android:drawable/dialog_holo_light_frame"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:hint="Approx Time"
+                           android:layout_weight="1"
+                        android:background="@android:drawable/dialog_holo_light_frame"
+                        />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_company_name"
+                    android:layout_below="@+id/ll_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@android:color/black"
+                    android:text="Select Company"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/company_name_recycle"
+                    android:layout_width="match_parent"
+                    android:layout_below="@+id/tv_company_name"
+                    android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+                <EditText
+                    android:id="@+id/edit_vehicle_no"
+                    android:layout_below="@+id/company_name_recycle"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center"
+                    android:hint="Enter last 4 digit of Vehicles"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/black_border"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_details_company"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Company details"
+                    android:gravity="center"
+                    android:textColor="@color/blue"
+                    android:layout_marginTop="20dp"
+                    android:layout_below="@+id/edit_vehicle_no"/>
+
+
+                <LinearLayout
+                    android:id="@+id/ll_hide"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_details_company">
+                    <LinearLayout
+                        android:id="@+id/ll_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:weightSum="2"
+                        android:layout_marginTop="20dp"
+                       >
+
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="Enter Name"
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:background="@android:drawable/dialog_holo_light_frame"
+                            />
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:hint="Enter Phone"
+                            android:layout_weight="1"
+                            android:background="@android:drawable/dialog_holo_light_frame"
+                            />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_radio"
+                        android:layout_below="@+id/ll_name"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_height="fill_parent"
+                        >
+
+                        <RadioGroup
+                            android:id="@+id/radioSex"
+                            android:weightSum="2"
+                            android:gravity="center"
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" >
+
+                            <RadioButton
+                                android:id="@+id/radioMale"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Once"
+                                android:layout_weight="1"
+                                android:checked="true" />
+
+                            <RadioButton
+                                android:id="@+id/radioFemale"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Frequent" />
+
+                        </RadioGroup>
+
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/ll_submit"
+                    android:layout_below="@+id/ll_hide"
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="100dp"
+                        android:text="Submit"
+                        android:textColor="@android:color/white"
+                        android:gravity="center"
+                        android:background="@drawable/curve_blue"
+                        android:layout_height="40dp" />
+
+
+                </LinearLayout>
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+    </ScrollView>
+    </RelativeLayout>-->

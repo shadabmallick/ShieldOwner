@@ -1,0 +1,1991 @@
+package com.sketch.securityowner.ui;
+
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.provider.Settings;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
+import com.borax12.materialdaterangepicker.date.DatePickerDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import com.sdsmdg.tastytoast.TastyToast;
+import com.sketch.securityowner.Adapter.ActivityListAdapterIN;
+import com.sketch.securityowner.Constant.AppConfig;
+import com.sketch.securityowner.GlobalClass.GlobalClass;
+import com.sketch.securityowner.GlobalClass.Shared_Preference;
+import com.sketch.securityowner.GlobalClass.VolleySingleton;
+import com.sketch.securityowner.R;
+import com.sketch.securityowner.model.ActivityChild;
+import com.sketch.securityowner.model.ActivityModel;
+import com.sketch.securityowner.model.ChildItem;
+import com.sketch.securityowner.model.HeaderItem;
+import com.sketch.securityowner.model.ListItem;
+import com.squareup.picasso.Picasso;
+import com.wang.avi.AVLoadingIndicatorView;
+
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+import static com.sketch.securityowner.GlobalClass.VolleySingleton.backOff;
+import static com.sketch.securityowner.GlobalClass.VolleySingleton.nuOfRetry;
+import static com.sketch.securityowner.GlobalClass.VolleySingleton.timeOut;
+
+
+public class Activity_activity extends AppCompatActivity implements
+        View.OnClickListener,
+        ActivityListAdapterIN.ItemClickListenerIN,
+        ActivityListAdapterIN.ItemClickListenerCall,
+        DatePickerDialog.OnDateSetListener,
+        SearchView.OnQueryTextListener {
+
+    @BindView(R.id.toolbar) Toolbar toolbar;
+   /* @BindView(R.id.tv_in_list) TextView tv_in_list;
+    @BindView(R.id.tv_out_list) TextView tv_out_list;*/
+    @BindView(R.id.recycle_activity)
+
+
+
+    RecyclerView recycle_activity;
+
+    @BindView(R.id.recycle_upcoming)
+
+    RecyclerView recycle_upcoming;
+
+    @BindView(R.id.edit)
+    ImageView edit;
+
+
+    @BindView(R.id.profile_image)
+    ImageView  profile_image;
+
+    @BindView(R.id.user_name)
+    TextView  user_name;
+
+
+
+
+  //  @BindView(R.id.fav)
+   // FloatingActionButton fav;
+
+    public static final int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 1;
+
+    SimpleDateFormat df_show = new SimpleDateFormat("EEE, dd-MMM-yyyy", Locale.ENGLISH);
+    SimpleDateFormat df_send = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+
+    ProgressDialog progressDialog;
+    GlobalClass globalClass;
+    Shared_Preference prefManager;
+    RelativeLayout rel_profile,rel_middle_icon;
+
+    String type_in_out, response_value = "", approved_by = "";
+    ScrollView all_visitor,upcoming_visitor;
+    AVLoadingIndicatorView avLoadingIndicatorView;
+    LinearLayout ll_bell,ll_hide,button_activity,car1,rel_upcoming_visitor,rel_all_visitor,ll_community;
+    RelativeLayout rl_profile;
+    View view_all_visitor,view_upcoming_visitor;
+    TextView tv_upcoming_visitor,tv_all_visitor;
+    Button btn_in;
+    TextView tv_details_company,close,tv_request_response;
+     ImageView img_guest,img_delivery,img_cab,img_help;
+    boolean approve_status = false;
+    private  boolean button1IsVisible = true;
+
+    ArrayList<ActivityModel> activityModelArrayList;
+    ArrayList<String> listDates;
+    ActivityListAdapterIN activityListAdapter;
+    ArrayList<ListItem> mItems;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.first_activity);
+
+        ButterKnife.bind(this);
+        all_visitor =  findViewById(R.id.scroll_activity);
+        upcoming_visitor =  findViewById(R.id.scroll_upcoming);
+        rel_upcoming_visitor =  findViewById(R.id.rel_upcoming_visitor);
+        rel_all_visitor =  findViewById(R.id.rel_all_visitor);
+        view_upcoming_visitor =  findViewById(R.id.view_upcoming_visitor);
+        view_all_visitor =  findViewById(R.id.view_all_visitor);
+        tv_upcoming_visitor =  findViewById(R.id.tv_upcoming_visitor);
+        tv_all_visitor =  findViewById(R.id.tv_all_visitor);
+        avLoadingIndicatorView =  findViewById(R.id.avi);
+        button_activity =  findViewById(R.id.button_E1);
+        ll_community =  findViewById(R.id.button_E3);
+        rel_middle_icon =  findViewById(R.id.rel_middle_icon);
+        car1 =  findViewById(R.id.car1);
+        rl_profile =  findViewById(R.id.rl_profile);
+        img_guest =  findViewById(R.id.img_guest);
+        img_delivery =  findViewById(R.id.img_delivery);
+        img_cab =  findViewById(R.id.img_cab);
+        img_help =  findViewById(R.id.img_help);
+        ll_bell =  findViewById(R.id.ll_bell);
+        actionViews();
+        user_name =  findViewById(R.id.user_name);
+
+         user_name.setText(globalClass.getName());
+
+        Picasso.with(Activity_activity.this)
+                .load(globalClass.getProfil_pic()) // web image url
+                .fit().centerInside()
+                .rotate(90)                    //if you want to rotate by 90 degrees
+                .error(R.mipmap.profile_image)
+                .placeholder(R.mipmap.profile_image)
+                .into(profile_image);
+
+        this.registerReceiver(mMessageReceiver, new IntentFilter("activity_screen"));
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent setting=new Intent(getApplicationContext(),SettingActivity.class);
+                startActivity(setting);
+            }
+        });
+        img_cab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddCab();
+                car1.setVisibility(View.GONE);
+
+                //  dialog.dismiss();
+            }
+        });
+        ll_bell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Alarm();
+                car1.setVisibility(View.GONE);
+
+                //  dialog.dismiss();
+            }
+        });
+        img_delivery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddDelivery();
+                car1.setVisibility(View.GONE);
+
+
+            }
+        });
+        img_guest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddGuest();
+                car1.setVisibility(View.GONE);
+
+
+            }
+        });
+        img_help.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AddHelp();
+                car1.setVisibility(View.GONE);
+
+
+            }
+        });
+        rel_all_visitor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivityList();
+                all_visitor.setVisibility(View.VISIBLE);
+                upcoming_visitor.setVisibility(View.GONE);
+                tv_upcoming_visitor.setTypeface(null, Typeface.NORMAL); //only text style(only bold)
+
+                tv_all_visitor.setTypeface(null, Typeface.BOLD);
+                view_all_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.blue));
+                view_upcoming_visitor.setBackgroundColor(Color.parseColor("#DCDCDC"));    }
+        });
+        rel_upcoming_visitor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivityListUpcoming();
+                all_visitor.setVisibility(View.GONE);
+                upcoming_visitor.setVisibility(View.VISIBLE);
+                tv_upcoming_visitor.setTypeface(null, Typeface.BOLD); //only text style(only bold)
+
+                tv_all_visitor.setTypeface(null, Typeface.NORMAL);
+                view_upcoming_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.blue));
+                view_all_visitor.setBackgroundColor(Color.parseColor("#DCDCDC"));    }
+        });
+        button_activity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent notification=new Intent(getApplicationContext(),MainActivity.class);
+                notification.addFlags(
+                        Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                        Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(notification);
+            }
+        });
+        ll_community.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent notification=new Intent(getApplicationContext(),CommunityActivity.class);
+                notification.addFlags(
+                        Intent.FLAG_ACTIVITY_CLEAR_TASK |
+                        Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(notification);
+            }
+        });
+        rel_middle_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(button1IsVisible==true)
+                {
+
+                    car1.setVisibility(View.VISIBLE);
+                    button1IsVisible = false;
+                }
+                else if(button1IsVisible==false)
+                {
+                    // car1.animate().alpha(1.0f);
+                    car1.setVisibility(View.GONE);
+                    button1IsVisible = true;
+                }
+            }
+        });
+        rl_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProfileDailog();
+            }
+        });
+
+
+    }
+    public void AddCab(){
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dailog_cab);
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        // set the custom dialog components - text, image and button
+        close=dialog.findViewById(R.id.close);
+        tv_details_company=dialog.findViewById(R.id.tv_details_company);
+        ll_hide=dialog.findViewById(R.id.ll_hide);
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        LinearLayout ll_submit=dialog.findViewById(R.id.ll_submit);
+
+        // if button is clicked, close the custom dialog
+        ll_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        tv_details_company.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(button1IsVisible==true)
+                {
+
+                    ll_hide.setVisibility(View.VISIBLE);
+                    button1IsVisible = false;
+                }
+                else if(button1IsVisible==false)
+                {
+                    // car1.animate().alpha(1.0f);
+                    ll_hide.setVisibility(View.GONE);
+                    button1IsVisible = true;
+                }
+            }
+        });
+
+
+        dialog.show();
+
+    }
+
+    public void AddDelivery(){
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_delivery);
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        // set the custom dialog components - text, image and button
+        close=dialog.findViewById(R.id.close);
+        tv_details_company=dialog.findViewById(R.id.tv_details_company);
+        ll_hide=dialog.findViewById(R.id.ll_hide);
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        LinearLayout ll_submit=dialog.findViewById(R.id.ll_submit);
+
+        // if button is clicked, close the custom dialog
+        ll_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        tv_details_company.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(button1IsVisible==true)
+                {
+
+                    ll_hide.setVisibility(View.VISIBLE);
+                    button1IsVisible = false;
+                }
+                else if(button1IsVisible==false)
+                {
+                    // car1.animate().alpha(1.0f);
+                    ll_hide.setVisibility(View.GONE);
+                    button1IsVisible = true;
+                }
+            }
+        });
+
+
+        dialog.show();
+
+    }
+    public void AddGuest(){
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_guest);
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        // set the custom dialog components - text, image and button
+        close=dialog.findViewById(R.id.close);
+        // tv_details_company=dialog.findViewById(R.id.tv_details_company);
+        ll_hide=dialog.findViewById(R.id.ll_hide);
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        LinearLayout ll_submit=dialog.findViewById(R.id.ll_submit);
+
+        // if button is clicked, close the custom dialog
+        ll_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
+        dialog.show();
+
+    }
+    public void AddHelp(){
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_help);
+        dialog.setCancelable(false);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        // set the custom dialog components - text, image and button
+        close=dialog.findViewById(R.id.close);
+        tv_details_company=dialog.findViewById(R.id.tv_details_company);
+        ll_hide=dialog.findViewById(R.id.ll_hide);
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        LinearLayout ll_submit=dialog.findViewById(R.id.ll_submit);
+
+        // if button is clicked, close the custom dialog
+        ll_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        tv_details_company.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(button1IsVisible==true)
+                {
+
+                    ll_hide.setVisibility(View.VISIBLE);
+                    button1IsVisible = false;
+                }
+                else if(button1IsVisible==false)
+                {
+                    // car1.animate().alpha(1.0f);
+                    ll_hide.setVisibility(View.GONE);
+                    button1IsVisible = true;
+                }
+            }
+        });
+
+
+        dialog.show();
+
+    }
+    public void Alarm(){
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.add_alarm);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        // set the custom dialog components - text, image and button
+        close=dialog.findViewById(R.id.close);
+        tv_details_company=dialog.findViewById(R.id.tv_details_company);
+        ll_hide=dialog.findViewById(R.id.ll_hide);
+
+/*
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+*/
+        //    LinearLayout ll_submit=dialog.findViewById(R.id.ll_submit);
+
+        // if button is clicked, close the custom dialog
+/*
+        ll_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+*/
+/*
+        tv_details_company.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(button1IsVisible==true)
+                {
+
+                    ll_hide.setVisibility(View.VISIBLE);
+                    button1IsVisible = false;
+                }
+                else if(button1IsVisible==false)
+                {
+                    // car1.animate().alpha(1.0f);
+                    ll_hide.setVisibility(View.GONE);
+                    button1IsVisible = true;
+                }
+            }
+        });
+*/
+
+
+        dialog.show();
+
+    }
+
+
+
+    private void actionViews(){
+
+        if (getSupportActionBar() != null) {
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
+       // user_name.setText(globalClass.getName());
+        globalClass = (GlobalClass) getApplicationContext();
+        prefManager = new Shared_Preference(this);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setMessage("Loading...");
+
+      //  tv_in_list.setBackgroundColor(getResources().getColor(R.color.button_orange));
+      //  tv_out_list.setBackgroundColor(getResources().getColor(R.color.light_grey));
+
+        recycle_activity.setLayoutManager(new LinearLayoutManager(this));
+        recycle_upcoming.setLayoutManager(new LinearLayoutManager(this));
+
+
+       // tv_in_list.setOnClickListener(this);
+      //  tv_out_list.setOnClickListener(this);
+      //  fav.setOnClickListener(this);
+
+
+
+        Date c = Calendar.getInstance().getTime();
+        System.out.println("Current time => " + c);
+        String formattedDate = df_show.format(c);
+
+        from_date = df_send.format(c);
+        to_date = df_send.format(c);
+
+
+        activityModelArrayList = new ArrayList<>();
+        type_in_out = "in";
+
+        mItems = new ArrayList<>();
+        activityListAdapter = new ActivityListAdapterIN(Activity_activity.this,
+                mItems);
+
+        getActivityList();
+
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case android.R.id.home:
+
+                finish();
+                break;
+
+        }
+        return (super.onOptionsItemSelected(menuItem));
+    }
+
+    @SuppressLint("NewApi")
+    private boolean checkPermission() {
+
+        List<String> permissionsList = new ArrayList<String>();
+
+        if (ContextCompat.checkSelfPermission(Activity_activity.this,
+                Manifest.permission.READ_EXTERNAL_STORAGE) !=
+                PackageManager.PERMISSION_GRANTED) {
+            permissionsList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+        if (ContextCompat.checkSelfPermission(Activity_activity.this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                PackageManager.PERMISSION_GRANTED) {
+            permissionsList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        if (ContextCompat.checkSelfPermission(Activity_activity.this,
+                Manifest.permission.CAMERA) !=
+                PackageManager.PERMISSION_GRANTED) {
+            permissionsList.add(Manifest.permission.CAMERA);
+        }
+
+        if (permissionsList.size() > 0) {
+            ActivityCompat.requestPermissions((Activity) Activity_activity.this,
+                    permissionsList.toArray(new String[permissionsList.size()]),
+                    REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
+
+            return false;
+        }else {
+
+
+            captureImage();
+        }
+
+
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                           int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS:
+                if (permissions.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED ||
+                        (permissions.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                                grantResults[1] == PackageManager.PERMISSION_GRANTED)){
+                } else {
+
+                    checkPermission();
+                }
+
+                break;
+
+            case REQUEST_PHONE_CALL: {
+                if (grantResults.length > 0 && grantResults[0]
+                        == PackageManager.PERMISSION_GRANTED) {
+
+
+                } else {
+
+
+                }
+                return;
+            }
+
+        }
+    }
+
+
+    @Override
+    public void onClick(View v) {
+
+        switch (v.getId()){
+
+
+
+            default:
+                break;
+
+        }
+
+    }
+
+
+    String from_date, to_date;
+    Calendar calender_now = Calendar.getInstance();
+    private boolean mAutoHighlight = true;
+    private void dialogDatePicker(){
+
+        DatePickerDialog dpd = com.borax12.materialdaterangepicker.date.DatePickerDialog.newInstance(
+                Activity_activity.this,
+                calender_now.get(Calendar.YEAR),
+                calender_now.get(Calendar.MONTH),
+                calender_now.get(Calendar.DAY_OF_MONTH)
+        );
+        dpd.setAutoHighlight(mAutoHighlight);
+        dpd.show(getFragmentManager(), "Datepickerdialog");
+    }
+
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth,
+                          int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
+
+        String sendFromDate = year + "-" +(++monthOfYear) + "-"+dayOfMonth;
+        String sendEndDate = yearEnd + "-" +(++monthOfYearEnd) + "-"+dayOfMonthEnd;
+
+        from_date = sendFromDate;
+        to_date = sendEndDate;
+
+        Log.d(AppConfig.TAG, "sendFromDate = "+sendFromDate);
+        Log.d(AppConfig.TAG, "sendEndDate = "+sendEndDate);
+
+        try {
+
+            Date date1 = df_send.parse(sendFromDate);
+            Date date2 = df_send.parse(sendEndDate);
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        getActivityList();
+
+    }
+
+
+
+
+
+
+    //// activity api call ....
+    public void getActivityList(){
+        startAnim();
+        activityModelArrayList.clear();
+
+        activityModelArrayList = new ArrayList<>();
+
+        listDates = new ArrayList<>();
+
+        String url = AppConfig.URL_DEV+"activity_list";
+
+        final Map<String, String> params = new HashMap<>();
+        params.put("type", "all");
+        params.put("flat_no", globalClass.getFlat_no());
+        params.put("complex_id", globalClass.getComplex_id());
+
+
+        Log.d(AppConfig.TAG , "activity_list- " + url);
+        Log.d(AppConfig.TAG , "activity_list- " + params.toString());
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d(AppConfig.TAG , "activity_list- " + response);
+
+                        if (response != null){
+                            try {
+
+                                ArrayList<ActivityChild> childArrayList;
+                                ActivityModel activityModel;
+
+                                JSONObject main_object = new JSONObject(response);
+
+                                int status = main_object.optInt("status");
+                                if (status == 1){
+
+                                    if (main_object.has("data_master")) {
+
+                                        JSONArray data_master =
+                                                main_object.optJSONArray("data_master");
+
+                                        for (int i = 0; i < data_master.length(); i++){
+                                            JSONObject object = data_master.getJSONObject(i);
+
+                                            String visiting_hour = object.optString("visiting_hour");
+                                            JSONArray data = object.optJSONArray("data");
+
+                                            listDates.add(visiting_hour);
+
+
+                                            childArrayList = new ArrayList<>();
+                                            for (int j = 0; j < data.length(); j++) {
+                                                JSONObject obj = data.getJSONObject(j);
+
+
+                                                ActivityChild child = new ActivityChild();
+                                                child.setType(obj.optString("type"));
+                                                child.setActivity_id(obj.optString("activity_id"));
+                                                child.setVisitor_id(obj.optString("visitor_id"));
+                                                child.setName(obj.optString("name"));
+                                                child.setMobile(obj.optString("mobile"));
+                                                child.setQr_code(obj.optString("qr_code"));
+                                                child.setQr_code_image(obj.optString("qr_code_image"));
+                                                child.setActivity_type(obj.optString("activity_type"));
+                                                child.setSecurity_id(obj.optString("security_id"));
+                                                child.setVisitor_type(obj.optString("visitor_type"));
+                                                child.setActual_in_time(obj.optString("actual_in_time"));
+                                                child.setActual_out_time(obj.optString("actual_out_time"));
+                                                child.setVisiting_time(obj.optString("visiting_time"));
+                                                child.setVisiting_date(visiting_hour);
+                                                child.setVisiting_help_cat(obj.optString("visiting_help_cat"));
+                                                child.setVehicle_no(obj.optString("vehicle_no"));
+                                                child.setProfile_image(obj.optString("profile_image"));
+                                                child.setVendor_name(obj.optString("vendor_name"));
+                                                child.setGetpass(obj.optString("getpass"));
+                                                child.setDescription(obj.optString("description"));
+                                                child.setGetpass(obj.optString("getpass_image"));
+                                                child.setVendor_image(obj.optString("vendor_image"));
+                                                child.setApprove_status(obj.optString("approve_status"));
+                                                child.setApprove_by(obj.optString("approve_by"));
+
+
+
+
+
+                                                childArrayList.add(child);
+
+                                            }
+
+                                            activityModel = new ActivityModel();
+                                            activityModel.setDate(visiting_hour);
+                                            activityModel.setListChild(childArrayList);
+
+                                            activityModelArrayList.add(activityModel);
+                                        }
+
+
+                                    }
+
+
+
+                                    if (main_object.has("data_temp")) {
+
+                                        JSONArray data_temp =
+                                                main_object.optJSONArray("data_temp");
+
+                                        for (int i = 0; i < data_temp.length(); i++){
+                                            JSONObject object = data_temp.getJSONObject(i);
+
+                                            String visiting_hour = object.optString("visiting_hour");
+                                            JSONArray data = object.optJSONArray("data");
+                                            listDates.add(visiting_hour);
+
+                                            childArrayList = new ArrayList<>();
+                                            for (int j = 0; j < data.length(); j++) {
+                                                JSONObject obj = data.getJSONObject(j);
+
+
+                                                ActivityChild child = new ActivityChild();
+                                                child.setType(obj.optString("type"));
+                                                child.setActivity_id(obj.optString("activity_id"));
+                                                child.setUser_id(obj.optString("user_id"));
+                                                child.setName(obj.optString("name"));
+                                                child.setMobile(obj.optString("mobile"));
+                                                child.setQr_code(obj.optString("qr_code"));
+                                                child.setQr_code_image(obj.optString("qr_code_image"));
+                                                child.setActivity_type(obj.optString("activity_type"));
+                                                child.setVisitor_type(obj.optString("visitor_type"));
+                                                child.setVisiting_time(obj.optString("visiting_time"));
+                                                child.setVisiting_date(visiting_hour);
+                                                child.setVisiting_help_cat(obj.optString("visiting_help_cat"));
+                                                child.setVehicle_no(obj.optString("vehicle_no"));
+                                                child.setProfile_image(obj.optString("profile_image"));
+                                                child.setVendor_name(obj.optString("vendor_name"));
+                                                child.setVendor_image(obj.optString("vendor_image"));
+
+
+
+                                                child.setType_in_out("in");
+
+
+                                                childArrayList.add(child);
+
+                                            }
+
+
+                                            activityModel = new ActivityModel();
+                                            activityModel.setDate(visiting_hour);
+                                            activityModel.setListChild(childArrayList);
+
+                                            activityModelArrayList.add(activityModel);
+                                            Log.d(AppConfig.TAG, "onResponse: "+activityModelArrayList.size());
+
+                                        }
+
+                                    }
+
+
+                                    setData();
+
+                                }
+
+                              stopAnim();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //on error storing the name to sqlite with status unsynced
+
+                        Log.e(AppConfig.TAG, "error - "+error);
+
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                return params;
+            }
+        };
+
+        VolleySingleton.getInstance(Activity_activity.this)
+                .addToRequestQueue(stringRequest
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+    }
+    public void getActivityListUpcoming(){
+        startAnim();
+         activityModelArrayList.clear();
+        activityModelArrayList = new ArrayList<>();
+
+        listDates = new ArrayList<>();
+
+        String url = AppConfig.URL_DEV+"activity_list";
+
+        final Map<String, String> params = new HashMap<>();
+        params.put("type", "up");
+        params.put("flat_no", globalClass.getFlat_no());
+        params.put("complex_id", globalClass.getComplex_id());
+
+
+        Log.d(AppConfig.TAG , "activity_list- " + url);
+        Log.d(AppConfig.TAG , "activity_list- " + params.toString());
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d(AppConfig.TAG , "activity_list- " + response);
+
+                        if (response != null){
+                            try {
+
+                                ArrayList<ActivityChild> childArrayList;
+                                ActivityModel activityModel;
+
+                                JSONObject main_object = new JSONObject(response);
+
+                                int status = main_object.optInt("status");
+                                if (status == 1){
+
+                                    if (main_object.has("data_master")) {
+
+                                        JSONArray data_master =
+                                                main_object.optJSONArray("data_master");
+
+                                        for (int i = 0; i < data_master.length(); i++){
+                                            JSONObject object = data_master.getJSONObject(i);
+
+                                            String visiting_hour = object.optString("visiting_hour");
+                                            JSONArray data = object.optJSONArray("data");
+
+                                            listDates.add(visiting_hour);
+
+
+                                            childArrayList = new ArrayList<>();
+                                            for (int j = 0; j < data.length(); j++) {
+                                                JSONObject obj = data.getJSONObject(j);
+
+
+                                                ActivityChild child = new ActivityChild();
+                                                child.setType(obj.optString("type"));
+                                                child.setActivity_id(obj.optString("activity_id"));
+                                                child.setVisitor_id(obj.optString("visitor_id"));
+                                                child.setName(obj.optString("name"));
+                                                child.setMobile(obj.optString("mobile"));
+                                                child.setQr_code(obj.optString("qr_code"));
+                                                child.setQr_code_image(obj.optString("qr_code_image"));
+                                                child.setActivity_type(obj.optString("activity_type"));
+                                                child.setSecurity_id(obj.optString("security_id"));
+                                                child.setVisitor_type(obj.optString("visitor_type"));
+                                                child.setActual_in_time(obj.optString("actual_in_time"));
+                                                child.setActual_out_time(obj.optString("actual_out_time"));
+                                                child.setVisiting_time(obj.optString("visiting_time"));
+                                                child.setVisiting_date(visiting_hour);
+                                                child.setVisiting_help_cat(obj.optString("visiting_help_cat"));
+                                                child.setVehicle_no(obj.optString("vehicle_no"));
+                                                child.setProfile_image(obj.optString("profile_image"));
+                                                child.setVendor_name(obj.optString("vendor_name"));
+                                                child.setGetpass(obj.optString("getpass"));
+                                                child.setDescription(obj.optString("description"));
+                                                child.setGetpass(obj.optString("getpass_image"));
+                                                child.setVendor_image(obj.optString("vendor_image"));
+                                                child.setApprove_status(obj.optString("approve_status"));
+                                                child.setApprove_by(obj.optString("approve_by"));
+
+
+
+
+
+                                                childArrayList.add(child);
+
+                                            }
+
+                                            activityModel = new ActivityModel();
+                                            activityModel.setDate(visiting_hour);
+                                            activityModel.setListChild(childArrayList);
+
+                                            activityModelArrayList.add(activityModel);
+                                        }
+
+
+                                    }
+
+
+
+                                    if (main_object.has("data_temp")) {
+
+                                        JSONArray data_temp =
+                                                main_object.optJSONArray("data_temp");
+
+                                        for (int i = 0; i < data_temp.length(); i++){
+                                            JSONObject object = data_temp.getJSONObject(i);
+
+                                            String visiting_hour = object.optString("visiting_hour");
+                                            JSONArray data = object.optJSONArray("data");
+                                            listDates.add(visiting_hour);
+
+                                            childArrayList = new ArrayList<>();
+                                            for (int j = 0; j < data.length(); j++) {
+                                                JSONObject obj = data.getJSONObject(j);
+
+
+                                                ActivityChild child = new ActivityChild();
+                                                child.setType(obj.optString("type"));
+                                                child.setActivity_id(obj.optString("activity_id"));
+                                                child.setUser_id(obj.optString("user_id"));
+                                                child.setName(obj.optString("name"));
+                                                child.setMobile(obj.optString("mobile"));
+                                                child.setQr_code(obj.optString("qr_code"));
+                                                child.setQr_code_image(obj.optString("qr_code_image"));
+                                                child.setActivity_type(obj.optString("activity_type"));
+                                                child.setVisitor_type(obj.optString("visitor_type"));
+                                                child.setVisiting_time(obj.optString("visiting_time"));
+                                                child.setVisiting_date(visiting_hour);
+                                                child.setVisiting_help_cat(obj.optString("visiting_help_cat"));
+                                                child.setVehicle_no(obj.optString("vehicle_no"));
+                                                child.setProfile_image(obj.optString("profile_image"));
+                                                child.setVendor_name(obj.optString("vendor_name"));
+                                                child.setVendor_image(obj.optString("vendor_image"));
+
+
+
+                                                child.setType_in_out("in");
+
+
+                                                childArrayList.add(child);
+
+                                            }
+
+
+                                            activityModel = new ActivityModel();
+                                            activityModel.setDate(visiting_hour);
+                                            activityModel.setListChild(childArrayList);
+
+                                            activityModelArrayList.add(activityModel);
+                                            Log.d(AppConfig.TAG, "onResponse: "+activityModelArrayList.size());
+
+                                        }
+
+                                    }
+
+
+                                    setData();
+
+                                }
+
+                                stopAnim();
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //on error storing the name to sqlite with status unsynced
+
+                        Log.e(AppConfig.TAG, "error - "+error);
+
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                return params;
+            }
+        };
+
+        VolleySingleton.getInstance(Activity_activity.this)
+                .addToRequestQueue(stringRequest
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+    }
+
+    private void setData(){
+
+        HashSet<String> hashSet = new HashSet<String>();
+        hashSet.addAll(listDates);
+        listDates.clear();
+        listDates.addAll(hashSet);
+
+        Collections.sort(listDates, new Comparator<String>() {
+            DateFormat f = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+            @Override
+            public int compare(String o1, String o2) {
+                try {
+                    return f.parse(o1).compareTo(f.parse(o2));
+                } catch (ParseException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            }
+        });
+
+
+        ArrayList<HashMap<String, ArrayList<ActivityChild>>> listMain = new ArrayList<>();
+        for (int i = 0; i < listDates.size(); i++){
+
+            HashMap<String, ArrayList<ActivityChild>> map = new HashMap<>();
+
+            ArrayList<ActivityChild> arrayList2 = getChildArray(listDates.get(i));
+
+            if (arrayList2.size() > 0){
+                map.put(listDates.get(i), arrayList2);
+                listMain.add(map);
+            }
+
+        }
+
+        mItems = new ArrayList<>();
+        for (HashMap<String, ArrayList<ActivityChild>> map1 : listMain){
+
+            for (String string : map1.keySet()) {
+
+                HeaderItem header = new HeaderItem();
+                header.setHeader(string);
+                mItems.add(header);
+
+                for (ActivityChild activityChild : map1.get(string)) {
+                    ChildItem item = new ChildItem();
+                    item.setActivityChild(activityChild);
+                    mItems.add(item);
+                }
+
+            }
+
+        }
+
+
+        activityListAdapter = new ActivityListAdapterIN(Activity_activity.this,
+                        mItems);
+        recycle_activity.setAdapter(activityListAdapter);
+        activityListAdapter.notifyDataSetChanged();
+
+        recycle_upcoming.setAdapter(activityListAdapter);
+        activityListAdapter.notifyDataSetChanged();
+
+        activityListAdapter.setClickListenerIN(this);
+        activityListAdapter.setClickListenerCall(this);
+
+    }
+
+
+    private ArrayList<ActivityChild> getChildArray(String date){
+
+        ArrayList<ActivityChild> list = new ArrayList<>();
+
+        for (int i = 0; i < activityModelArrayList.size(); i++){
+
+            ActivityModel activityModel = activityModelArrayList.get(i);
+
+            if (date.equals(activityModel.getDate())){
+
+                list.addAll(activityModel.getListChild());
+
+            }
+
+        }
+
+        return list;
+    }
+
+
+    @Override
+    public void onItemClickIN(ActivityChild activityChild, String in_out) {
+
+        if (in_out.equals("in")){
+           // showVisitorDetailsDialog(activityChild);
+        }else if (in_out.equals("out")){
+           // visitorOut(activityChild.getActivity_id(), activityChild.getFlat_id());
+        }
+
+    }
+
+
+    AlertDialog alertDialog;
+/*
+    private void showVisitorDetailsDialog(ActivityChild activityChild){
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_visitor_details, null);
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.setCancelable(false);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+
+        TextView tv_qr_code = dialogView.findViewById(R.id.tv_qr_code);
+        EditText edt_phone = dialogView.findViewById(R.id.edt_phone);
+        EditText edt_name = dialogView.findViewById(R.id.edt_name);
+        EditText edt_to_meet = dialogView.findViewById(R.id.edt_to_meet);
+        TextView tv_block_flat = dialogView.findViewById(R.id.tv_block_flat);
+        TextView tv_type = dialogView.findViewById(R.id.tv_type);
+        TextView tv_vehicle_no = dialogView.findViewById(R.id.tv_vehicle_no);
+        tv_request_response = dialogView.findViewById(R.id.tv_request_response);
+        profile_image = dialogView.findViewById(R.id.profile_image);
+        ImageView iv_camera = dialogView.findViewById(R.id.iv_camera);
+        ImageView iv_cancel = dialogView.findViewById(R.id.iv_cancel);
+        ImageView vendor_img = dialogView.findViewById(R.id.vendor_img);
+        btn_in = dialogView.findViewById(R.id.btn_in);
+        Button btn_choose_block_flat = dialogView.findViewById(R.id.btn_choose_block_flat);
+
+        RelativeLayout rel_block_flat_selection =
+                dialogView.findViewById(R.id.rel_block_flat_selection);
+        rel_block_flat_selection.setVisibility(View.GONE);
+
+        alertDialog = dialogBuilder.create();
+        alertDialog.show();
+
+        edt_phone.setEnabled(false);
+        edt_name.setEnabled(false);
+
+        btn_in.setText("Request for Permission");
+
+
+        iv_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                approved_by = "";
+                response_value = "";
+                approve_status = false;
+                alertDialog.dismiss();
+            }
+        });
+
+
+        try {
+
+            if (activityChild.getName().isEmpty()){
+                edt_phone.setEnabled(true);
+            }
+            if (activityChild.getMobile().isEmpty()){
+                edt_name.setEnabled(true);
+            }
+            tv_vehicle_no.setVisibility(View.GONE);
+
+
+            tv_qr_code.setText("Visitor Entry:");
+            edt_phone.setText(activityChild.getMobile());
+            edt_name.setText(activityChild.getName());
+            edt_to_meet.setText(activityChild.getRequested_by());
+
+            if (activityChild.getVisitor_type().equals(AppConfig.delivery)) {
+                tv_type.setText("(Delivery)");
+            }else  if (activityChild.getVisitor_type().equals(AppConfig.cab)) {
+                tv_type.setText("(Cab)");
+                tv_vehicle_no.setVisibility(View.VISIBLE);
+                tv_vehicle_no.setText(activityChild.getVehicle_no());
+            }else  if (activityChild.getVisitor_type().equals(AppConfig.guest)) {
+                tv_type.setText("(Guest)");
+                vendor_img.setVisibility(View.GONE);
+            }else  if (activityChild.getVisitor_type().equals(AppConfig.staff)) {
+                tv_type.setText("(Staff)");
+            }else  if (activityChild.getVisitor_type().equals(AppConfig.visiting_help)) {
+                tv_type.setText("(Domestic HelpScreen)\n"
+                        + activityChild.getVisiting_help_cat());
+            }
+
+
+
+
+            tv_block_flat.setText("Block-Flat: "
+                    +activityChild.getBlock()+"-"+activityChild.getFlat_no());
+
+            if (!activityChild.getRequested_by().isEmpty()){
+                edt_to_meet.setEnabled(false);
+            }
+
+            Glide.with(Activity_activity.this)
+                    .load(activityChild.getProfile_image())
+                    .placeholder(R.mipmap.pf_icon)
+                    .into(profile_image);
+
+            Glide.with(Activity_activity.this)
+                    .load(activityChild.getVendor_image())
+                    .placeholder(R.drawable.ic_image_black_24dp)
+                    .into(vendor_img);
+
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        iv_camera.setOnClickListener(v -> {
+
+            checkPermission();
+
+        });
+
+        btn_in.setOnClickListener(v -> {
+
+            String phone = edt_phone.getText().toString();
+            String name = edt_name.getText().toString();
+
+            if (phone.trim().isEmpty()){
+                TastyToast.makeText(Activity_activity.this,
+                        "Enter visitor phone number",
+                        TastyToast.LENGTH_LONG, TastyToast.WARNING);
+                return;
+            }
+            if (name.trim().isEmpty()){
+                TastyToast.makeText(Activity_activity.this,
+                        "Enter visitor name",
+                        TastyToast.LENGTH_LONG, TastyToast.WARNING);
+                return;
+            }
+
+            addVisitorFromActivity(activityChild, phone, name);
+
+        });
+
+
+
+    }
+*/
+
+
+/*
+    private void addVisitorFromActivity(ActivityChild activityChild,
+                                        String phone, String name){
+
+        progressDialog.show();
+
+        String url = ApiClients.from_activity_visitor_add_by_security;
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+
+
+        params.put(ApiClients.complex_id, globalClass.getComplex_id());
+        params.put(ApiClients.security_id, globalClass.getUser_id());
+        params.put(ApiClients.activity_id, activityChild.getActivity_id());
+        params.put(ApiClients.table, activityChild.getType());
+        params.put(ApiClients.visitor_name, name);
+        params.put(ApiClients.visitor_mobile, phone);
+        params.put(ApiClients.type, activityChild.getVisitor_type());
+        params.put(ApiClients.flat, activityChild.getFlat_no());
+        params.put(ApiClients.time, activityChild.getVisiting_time());
+        params.put(ApiClients.date, activityChild.getVisiting_date());
+        params.put(ApiClients.visiting_help_cat, activityChild.getVisiting_help_cat());
+        params.put(ApiClients.approve_status, approve_status);
+        params.put(ApiClients.response_value, response_value);
+        params.put(ApiClients.approved_by, approved_by);
+
+
+        Log.d(ApiClients.TAG , "from_activity_visitor_add- " + url);
+        Log.d(ApiClients.TAG , "from_activity_visitor_add- " + params.toString());
+
+
+        try{
+
+            if (p_image != null){
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+                    if (mCurrentPhotoPath != null){
+
+                        Uri uri = Uri.parse(mCurrentPhotoPath);
+
+                        File file = new File(getRealPathFromURI(uri));
+
+                        params.put(ApiClients.profileImage, file);
+                    }
+
+                }else {
+
+                    params.put(ApiClients.profileImage, p_image);
+                }
+
+            }
+
+
+        }catch (FileNotFoundException e){
+            e.printStackTrace();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        client.setSSLSocketFactory(
+                new SSLSocketFactory(Commons.getSslContext(),
+                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));
+
+
+        int DEFAULT_TIMEOUT = 15 * 1000;
+        client.setMaxRetriesAndTimeout(5 , DEFAULT_TIMEOUT);
+
+        client.post(url, params, new JsonHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers,
+                                  JSONObject response) {
+
+                Log.d(ApiClients.TAG, "from_activity_visitor_add- " + response.toString());
+
+                if (response != null) {
+                    try {
+
+                        int status = response.optInt("status");
+                        String message = response.optString("message");
+
+                        if (status == 1){
+
+                            if (approve_status){
+
+                                TastyToast.makeText(Activity_activity.this,
+                                        "Visitor entry successful",
+                                        TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                                alertDialog.dismiss();
+
+                                getActivityList();
+
+                                approved_by = "";
+                                response_value = "";
+                                approve_status = false;
+
+                            }else {
+
+                                TastyToast.makeText(Activity_activity.this,
+                                        "Request sent.",
+                                        TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                                tv_request_response.setText("Waiting for Approval...");
+                                tv_request_response.setTextColor(getResources().getColor(R.color.yellow));
+                            }
+
+
+                        }else if (status == 2){
+
+                            response_value = "";
+                            approved_by = "";
+                            approve_status = false;
+
+                            TastyToast.makeText(Activity_activity.this,
+                                    message,
+                                    TastyToast.LENGTH_LONG, TastyToast.ERROR);
+
+                            alertDialog.dismiss();
+
+                            getActivityList();
+
+                        } else {
+
+                            TastyToast.makeText(Activity_activity.this,
+                                    message,
+                                    TastyToast.LENGTH_LONG, TastyToast.WARNING);
+                        }
+
+                        progressDialog.dismiss();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers,
+                                  String res, Throwable t) {
+                Log.d(ApiClients.TAG, "new_visitor_add- " + res);
+                progressDialog.dismiss();
+
+                TastyToast.makeText(Activity_activity.this,
+                        "Server error. Try again.",
+                        TastyToast.LENGTH_LONG, TastyToast.WARNING);
+
+            }
+
+
+        });
+
+    }
+*/
+
+
+
+/*
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+
+                Glide.with(Activity_activity.this)
+                        .clear(profile_image);
+
+                Uri uri = Uri.parse(mCurrentPhotoPath);
+
+                try {
+
+                    getContentResolver().notifyChange(uri, null);
+                    ContentResolver cr = getContentResolver();
+
+                    Bitmap photo = MediaStore.Images.Media.getBitmap(cr, uri);
+                    photo = Commons.RotateBitmap(photo, 90);
+                    writeBitmap(photo);
+
+                    profile_image.setImageBitmap(photo);
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            } else{
+
+                try {
+
+                    Glide.with(Activity_activity.this)
+                            .clear(profile_image);
+
+                    Bitmap photo = (Bitmap) data.getExtras().get("data");
+
+                    writeBitmap(photo);
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+
+        }else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_CANCELED) {
+
+            p_image = null;
+
+        }
+    }
+*/
+
+
+
+    ///// image related methods ...
+    String mCurrentPhotoPath;
+    File p_image;
+    private static final int CAMERA_REQUEST = 333;
+    private void captureImage(){
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+          //  dispatchTakePictureIntent();
+        } else{
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, CAMERA_REQUEST);
+        }
+
+
+    }
+
+/*
+    private void dispatchTakePictureIntent() {
+
+        try {
+
+            final String dir = Environment
+                    .getExternalStorageDirectory() + "/Shield";
+
+            File file = new File(dir);
+            if (!file.exists())
+                file.mkdir();
+
+
+            String files = dir + "/profile_pic" +".jpg";
+            File newfile = new File(files);
+
+            p_image = newfile;
+
+            Uri photoURI = FileProvider.getUriForFile(Activity_activity.this,
+                    "com.shield.security.provider", newfile);
+            mCurrentPhotoPath = photoURI.toString();
+
+
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            startActivityForResult(intent, CAMERA_REQUEST);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+*/
+
+    private String getRealPathFromURI(Uri contentURI) {
+        String result = "";
+        try {
+            Cursor cursor = this.getContentResolver().query(contentURI, null, null, null, null);
+            if (cursor == null) { // Source is Dropbox or other similar local file path
+                result = contentURI.getPath();
+            } else {
+                cursor.moveToFirst();
+                int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+                result = cursor.getString(idx); // Exception raised HERE
+                cursor.close(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    private Uri getDestinationUri(){
+
+        String filename = "profile_pic_crop.jpg";
+        File sd = Environment.getExternalStorageDirectory();
+        File dest = new File(sd, filename);
+
+        Uri uri = Uri.fromFile(dest);
+
+        return uri;
+    }
+
+    private void writeBitmap(Bitmap bitmap){
+
+        final String dir = Environment
+                .getExternalStorageDirectory() + "/Shield";
+
+        File file = new File(dir);
+        if (!file.exists())
+            file.mkdir();
+
+
+        String files = dir + "/profile_pic" +".jpg";
+        File newfile = new File(files);
+
+        try {
+
+            profile_image.setImageBitmap(bitmap);
+
+            newfile.delete();
+            OutputStream outFile = null;
+            try {
+
+                p_image = newfile;
+
+                outFile = new FileOutputStream(newfile);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, outFile);
+                outFile.flush();
+                outFile.close();
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    ///////////////////////
+
+    protected void onDestroy() {
+        Log.d(AppConfig.TAG, "onDestroy");
+        this.unregisterReceiver(mMessageReceiver);
+        super.onDestroy();
+    }
+
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Extract data included in the Intent
+            String type = intent.getStringExtra("type");
+            approved_by = intent.getStringExtra("approved_by");
+            //do other stuff here
+            Log.d(AppConfig.TAG, "Act type = "+type);
+
+            if (type != null && !type.equals("null")){
+
+                response_value = type;
+
+                if (type.equalsIgnoreCase("approved")){
+
+                    approve_status = true;
+
+                    btn_in.setText("Enter");
+                    tv_request_response.setText("Approved");
+                    tv_request_response.setTextColor(getResources().getColor(R.color.blue));
+
+
+                }else if (type.equalsIgnoreCase("rejected")){
+
+                    approve_status = true;
+
+                   // btn_in.setOnClickListener(null);
+
+                    tv_request_response.setText("Rejected");
+                    tv_request_response.setTextColor(getResources().getColor(R.color.red));
+                    btn_in.setText("Submit");
+
+                }else if (type.equalsIgnoreCase("visitor added")
+                        || type.equalsIgnoreCase("final status")
+                        || type.equalsIgnoreCase("visitor out")
+                ){
+
+                    getActivityList();
+
+                }
+
+            }
+
+
+
+
+        }
+
+    };
+
+
+
+
+/*
+    public void visitorOut(String activity_id, String flat_id){
+
+        progressDialog.show();
+
+        String url = ApiClients.visitor_out;
+
+        final Map<String, String> params = new HashMap<>();
+
+        params.put(ApiClients.security_id, globalClass.getUser_id());
+        params.put(ApiClients.complex_id, globalClass.getComplex_id());
+        params.put(ApiClients.activity_id, activity_id);
+        params.put(ApiClients.flat_id, flat_id);
+
+        Log.d(ApiClients.TAG , "visitor_out- " + url);
+        Log.d(ApiClients.TAG , "visitor_out- " + params.toString());
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                Log.d(ApiClients.TAG , "visitor_out- " +response);
+
+                if (response != null){
+                    try {
+
+                        JSONObject main_object = new JSONObject(response);
+
+                        int status = main_object.optInt("status");
+                        String message = main_object.optString("message");
+                        if (status == 1){
+
+                            TastyToast.makeText(getApplicationContext(),
+                                    message,
+                                    TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                            getActivityList();
+
+                        }else {
+
+                            TastyToast.makeText(getApplicationContext(),
+                                    message,
+                                    TastyToast.LENGTH_LONG, TastyToast.WARNING);
+                        }
+
+                        progressDialog.dismiss();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //on error storing the name to sqlite with status unsynced
+
+                Log.e(ApiClients.TAG, "error - "+error);
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                return params;
+            }
+        };
+
+        VolleySingleton.getInstance(Activity_activity.this)
+                .addToRequestQueue(stringRequest
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+    }
+*/
+
+
+
+    //// call permission check and call ...
+
+
+    @Override
+    public void onItemClickCall(ActivityChild activityChild) {
+
+        checkCallPermission(activityChild.getMobile());
+    }
+
+    private static final int REQUEST_PHONE_CALL = 1212;
+    private void checkCallPermission(String number){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(Activity_activity.this,
+                    Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(Activity_activity.this,
+                        new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
+
+            }
+            else {
+                callPhone(number);
+            }
+        }
+        else {
+            callPhone(number);
+        }
+
+    }
+
+    private void callPhone(String number){
+
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + number));// Initiates the Intent
+        startActivity(intent);
+
+    }
+
+    //// search view n toolbar ...
+    SearchView searchView;
+/*
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+
+        searchView.setOnQueryTextListener(this);
+        searchView.setIconified(false);
+
+
+        return true;
+    }
+*/
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        //Toast.makeText(this, "Query Inserted", Toast.LENGTH_SHORT).show();
+
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+
+        return true;
+    }
+
+    void startAnim(){
+        avLoadingIndicatorView.show();
+        // or avi.smoothToShow();
+    }
+
+    void stopAnim(){
+        avLoadingIndicatorView.hide();
+        // or avi.smoothToHide();
+    }
+    public void ProfileDailog(){
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dailog_settings);
+
+        ImageView profile_image;
+        TextView user_name,block,address;
+        LinearLayout ll_setting;
+
+        profile_image=dialog.findViewById(R.id.profile_image);
+        ll_setting=dialog.findViewById(R.id.ll_setting);
+        user_name=dialog.findViewById(R.id.user_name);
+        block=dialog.findViewById(R.id.block);
+        address=dialog.findViewById(R.id.address);
+        Picasso.with(Activity_activity.this)
+                .load(globalClass.getProfil_pic()) // web image url
+                .fit().centerInside()
+                .rotate(90)                    //if you want to rotate by 90 degrees
+                .error(R.mipmap.profile_image)
+                .placeholder(R.mipmap.profile_image)
+                .into(profile_image);
+        user_name.setText(globalClass.getName());
+        address.setText(globalClass.getComplex_name());
+        block.setText(globalClass.getFlat_name()+" "+globalClass.getBlock()+" "+"block");
+
+
+        //  dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        // set the custom dialog components - text, image and button
+
+     //   LinearLayout ll_save=dialog.findViewById(R.id.ll_save);
+
+        // if button is clicked, close the custom dialog
+        ll_setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent setting=new Intent(Activity_activity.this,SettingActivity.class);
+                startActivity(setting);
+
+            }
+        });
+
+        dialog.show();
+
+    }
+
+}
