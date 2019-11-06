@@ -979,7 +979,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
            @Override
            public void onClick(View v) {
 
-           }git push -u origin master
+           }
        });
         tv_details_company.setOnClickListener(new View.OnClickListener() {
             @Override

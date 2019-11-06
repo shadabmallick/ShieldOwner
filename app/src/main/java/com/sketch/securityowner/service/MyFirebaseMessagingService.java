@@ -1,13 +1,16 @@
 package com.sketch.securityowner.service;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioAttributes;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Build;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.RemoteViews;
 
 import androidx.core.app.NotificationCompat;
@@ -16,170 +19,165 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.sketch.securityowner.GlobalClass.Config;
 import com.sketch.securityowner.R;
-import com.sketch.securityowner.ui.ResponsePage;
+import com.sketch.securityowner.ui.CallUi;
+import com.sketch.securityowner.ui.LaunchActivity;
 import com.sketch.securityowner.util.NotificationUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 import static com.sketch.securityowner.GlobalClass.GlobalClass.CHANNEL_ID;
 
-
-/**
- *
- */
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "Notifi";
-    public NotificationManagerCompat notificationManager;
     private NotificationUtils notificationUtils;
     private LocalBroadcastManager broadcaster;
     String message = "";
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-     //   notificationUtils.playNotificationSound();
-        notificationManager = NotificationManagerCompat.from(this);
-      showNotification();
 
         message = remoteMessage.getNotification().getBody();
-       // onCreate();
         if (remoteMessage == null)
             return;
 
-        // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
-            Log.e(TAG, "Notification Body: " + remoteMessage.getNotification().getBody());
-            handleNotification(remoteMessage.getNotification().getBody());
-            showNotification();
-
+            Log.e(TAG, "Notification : " + remoteMessage.getNotification().getBody());
+           // handleNotification(remoteMessage.getNotification().getBody());
+           // showNotification();
         }
 
-        // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Log.e(TAG, "Data Payload: " + remoteMessage.getData().toString());
 
-            try {
-                JSONObject json = new JSONObject(remoteMessage.getData().toString());
-                showNotification();
-                handleDataMessage(json);
-            } catch (Exception e) {
-                Log.e(TAG, "Exception: " + e.getMessage());
+            String message = remoteMessage.getData().get("message"); // message
+            String title = remoteMessage.getData().get("title"); // Notification
+            String type = remoteMessage.getData().get("type"); // call/new call
+
+            showNotification(title, message);
+
+            if (type != null && type.equals("call")){
+
+                String activity_id = remoteMessage.getData().get("activity_id");
+                String table = remoteMessage.getData().get("table");
+                String security_id = remoteMessage.getData().get("security_id");
+                String block = remoteMessage.getData().get("block");
+                String flat_name = remoteMessage.getData().get("flat_name");
+                String flat_id = remoteMessage.getData().get("flat_id");
+                String complex_name = remoteMessage.getData().get("complex_name");
+                String complex_id = remoteMessage.getData().get("complex_id");
+
+
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("activity_id", activity_id);
+                hashMap.put("table", table);
+                hashMap.put("security_id", security_id);
+                hashMap.put("block", block);
+                hashMap.put("flat_name", flat_name);
+                hashMap.put("flat_id", flat_id);
+                hashMap.put("complex_name", complex_name);
+                hashMap.put("complex_id", complex_id);
+                hashMap.put("type", type);
+                hashMap.put("message", message);
+
+                callTo(hashMap);
             }
+
+            if (type != null && type.equals("new call")){
+
+                String activity_id = remoteMessage.getData().get("activity_id");
+                String table = remoteMessage.getData().get("table");
+                String security_id = remoteMessage.getData().get("security_id");
+                String block = remoteMessage.getData().get("block");
+                String flat_name = remoteMessage.getData().get("flat_name");
+                String flat_id = remoteMessage.getData().get("flat_id");
+                String complex_name = remoteMessage.getData().get("complex_name");
+                String complex_id = remoteMessage.getData().get("complex_id");
+                String visitor_id = remoteMessage.getData().get("visitor_id");
+
+
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("activity_id", activity_id);
+                hashMap.put("table", table);
+                hashMap.put("security_id", security_id);
+                hashMap.put("block", block);
+                hashMap.put("flat_name", flat_name);
+                hashMap.put("flat_id", flat_id);
+                hashMap.put("complex_name", complex_name);
+                hashMap.put("complex_id", complex_id);
+                hashMap.put("visitor_id", visitor_id);
+                hashMap.put("type", type);
+                hashMap.put("message", message);
+
+                callTo(hashMap);
+            }
+
+            if (type != null && type.equals("new delivery call")){
+
+                String activity_id = remoteMessage.getData().get("activity_id");
+                String table = remoteMessage.getData().get("table");
+                String security_id = remoteMessage.getData().get("security_id");
+                String block = remoteMessage.getData().get("block");
+                String flat_name = remoteMessage.getData().get("flat_name");
+                String flat_id = remoteMessage.getData().get("flat_id");
+                String complex_name = remoteMessage.getData().get("complex_name");
+                String complex_id = remoteMessage.getData().get("complex_id");
+                String visitor_id = remoteMessage.getData().get("visitor_id");
+
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("activity_id", activity_id);
+                hashMap.put("table", table);
+                hashMap.put("security_id", security_id);
+                hashMap.put("block", block);
+                hashMap.put("flat_name", flat_name);
+                hashMap.put("flat_id", flat_id);
+                hashMap.put("complex_name", complex_name);
+                hashMap.put("complex_id", complex_id);
+                hashMap.put("visitor_id", visitor_id);
+                hashMap.put("type", type);
+                hashMap.put("message", message);
+
+                callTo(hashMap);
+            }
+
         }
 
     }
 
 
-
-/*
-    @Override
-    public void onCreate() {
-        //super.onCreate();
-
-        Intent in= new Intent(this, ResponsePage.class);
-        in.putExtra("message",message);
-        in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(in);
-    }
-*/
-    private void handleNotification(String message) {
+    private void handleNotification(String title, String message) {
         if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
-            showNotification();
-            // app is in foreground, broadcast the push message
-           /* Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
-            pushNotification.putExtra("message", message);
-            LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
-
-            // play notification sound
-            NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());*/
-           // notificationUtils.playNotificationSound();
+            showNotification(title, message);
         }else{
-            // If the app is in background, firebase itself handles the notification
-            showNotification();
+            showNotification(title, message);
         }
     }
 
-    private void handleDataMessage(JSONObject json) {
-        Log.e(TAG, "push json: " + json.toString());
 
-        try {
-            JSONObject data = json.getJSONObject("data");
 
-            String title = data.getString("title");
-            String message = data.getString("message");
-            boolean isBackground = data.getBoolean("is_background");
-            String imageUrl = data.getString("image");
-            String timestamp = data.getString("timestamp");
-            JSONObject payload = data.getJSONObject("payload");
+    public void showNotification(String title, String message) {
 
-            Log.e(TAG, "title: " + title);
-            Log.e(TAG, "message: " + message);
-            Log.e(TAG, "isBackground: " + isBackground);
-            Log.e(TAG, "payload: " + payload.toString());
-            Log.e(TAG, "imageUrl: " + imageUrl);
-            Log.e(TAG, "timestamp: " + timestamp);
+        Intent intent = new Intent(this, LaunchActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                0 /* Request code */, intent,
+                PendingIntent.FLAG_ONE_SHOT);
 
-            if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
-              /*  // app is in foreground, broadcast the push message
-                Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
-                pushNotification.putExtra("message", message);
-                LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);*/
-                showNotification();
-                NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
-               // notificationUtils.playNotificationSound();
-            } else {
-                // app is in background, show the notification in notification tray
-                showNotification();
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-                // check for image attachment
-                if (TextUtils.isEmpty(imageUrl)) {
-                   // showNotificationMessage(getApplicationContext(), title, message, timestamp, notificationIntent);
-                } else {
-                    // image is present, show notification with image
-                   // showNotificationMessageWithBigImage(getApplicationContext(), title, message, timestamp, notificationIntent, imageUrl);
-                }
-            }
-        } catch (JSONException e) {
-            Log.e(TAG, "Json Exception: " + e.getMessage());
-        } catch (Exception e) {
-            Log.e(TAG, "Exception: " + e.getMessage());
-        }
-    }
 
-    /**
-     * Showing notification with text only
-     */
-/*
-    private void showNotificationMessage(Context context, String title, String message, String timeStamp, Intent intent) {
-        notificationUtils = new NotificationUtils(context);
-
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        notificationUtils.showNotificationMessage(title, message, timeStamp, intent);
-    }
-*/
-
-    /**
-     * Showing notification with text and image
-     */
-/*
-    private void showNotificationMessageWithBigImage(Context context, String title, String message, String timeStamp, Intent intent, String imageUrl) {
-        notificationUtils = new NotificationUtils(context);
-        final Intent notificationIntent = new Intent(getApplicationContext(), ResponsePage.class);
-        notificationIntent.setAction(Intent.ACTION_MAIN);
-        notificationIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        notificationUtils.showNotificationMessage(title, message, timeStamp, intent, imageUrl);
-    }
-*/
-    public void showNotification() {
         RemoteViews collapsedView = new RemoteViews(getPackageName(),
                 R.layout.notification_collapsed);
         RemoteViews expandedView = new RemoteViews(getPackageName(),
                 R.layout.notification_expanded);
+
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+
 
         Intent clickIntent = new Intent(this, NotificationReceiver.class);
         PendingIntent clickPendingIntent = PendingIntent.getBroadcast(this,
@@ -192,12 +190,56 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setCustomContentView(collapsedView)
-                .setCustomBigContentView(expandedView)
-                //.setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+                //.setCustomContentView(collapsedView)
+                //.setCustomBigContentView(expandedView)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .build();
+
+
+        // Since android Oreo notification channel is needed.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
+                    "Shield",
+                    NotificationManager.IMPORTANCE_HIGH);
+
+            AudioAttributes attributes = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                    .build();
+
+            channel.setSound(defaultSoundUri, attributes);
+            channel.setDescription(message);
+
+            notificationManager.createNotificationChannel(channel);
+        }
 
         notificationManager.notify(1, notification);
     }
+
+
+    private void callTo(HashMap<String, String> hashMap){
+
+        Intent intent = new Intent(getApplicationContext(), CallUi.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("hashMap", hashMap);
+        startActivity(intent);
+
+    }
+
+
+
+    static void sendResponseToActivityScreen(Context context, String type,
+                                             String approved_by) {
+        Intent intent = new Intent("activity_screen");
+        intent.putExtra("type", type);
+        intent.putExtra("approved_by", approved_by);
+        context.sendBroadcast(intent);
+    }
+
 
 }
