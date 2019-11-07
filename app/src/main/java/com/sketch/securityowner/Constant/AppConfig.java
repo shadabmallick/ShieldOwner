@@ -7,7 +7,7 @@ public class AppConfig
 {
 
     public  static  String TAG="Shield";
-    public static String URL_DEV = "https://sketchwebsolutions.net/Api/";
+    public static String URL_DEV = "https://www.shieldapp.in/Api/";
     public static final String visiting_help = "visiting_help";
     public static final String delivery = "delivery";
     public static final String staff = "staff";

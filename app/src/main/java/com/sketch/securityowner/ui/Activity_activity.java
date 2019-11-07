@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
+import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -32,13 +33,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -47,6 +55,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -64,8 +73,12 @@ import com.android.volley.toolbox.StringRequest;
 import com.borax12.materialdaterangepicker.date.DatePickerDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.sketch.securityowner.Adapter.ActivityListAdapterIN;
+import com.sketch.securityowner.Adapter.categoryAdapter;
 import com.sketch.securityowner.Constant.AppConfig;
 import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.GlobalClass.Shared_Preference;
@@ -116,8 +129,8 @@ public class Activity_activity extends AppCompatActivity implements
         ActivityListAdapterIN.ItemClickListenerIN,
         ActivityListAdapterIN.ItemClickListenerCall,
         DatePickerDialog.OnDateSetListener,
-        SearchView.OnQueryTextListener {
-
+        SearchView.OnQueryTextListener,categoryAdapter.onItemClickListner {
+   static String TAG="Activity_activity";
     @BindView(R.id.toolbar) Toolbar toolbar;
    /* @BindView(R.id.tv_in_list) TextView tv_in_list;
     @BindView(R.id.tv_out_list) TextView tv_out_list;*/
@@ -151,25 +164,47 @@ public class Activity_activity extends AppCompatActivity implements
 
     SimpleDateFormat df_show = new SimpleDateFormat("EEE, dd-MMM-yyyy", Locale.ENGLISH);
     SimpleDateFormat df_send = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-
+    RecyclerView delivery_recycle,company_name_recycle;
     ProgressDialog progressDialog;
     GlobalClass globalClass;
+    ArrayList<String> array1;
     Shared_Preference prefManager;
     RelativeLayout rel_profile,rel_middle_icon;
-
+   EditText tv_others,edit_car_no,edit_parking_no,edit_name,edit_phone,edit_mail,edit_name_cab,edit_phone_cab, edit_vehicle_no;
     String type_in_out, response_value = "", approved_by = "";
     ScrollView all_visitor,upcoming_visitor;
     AVLoadingIndicatorView avLoadingIndicatorView;
-    LinearLayout ll_bell,ll_hide,button_activity,car1,rel_upcoming_visitor,rel_all_visitor,ll_community;
+    LinearLayout ll_alram,ll_submit,ll_bell,ll_hide,button_activity,car1,rel_upcoming_visitor,rel_all_visitor,ll_community;
     RelativeLayout rl_profile;
     View view_all_visitor,view_upcoming_visitor;
-    TextView tv_upcoming_visitor,tv_all_visitor;
+    TextView  tv_animal,tv_medical,tv_thief,tv_threat,tv_lift,tv_time,date_picker,tv_upcoming_visitor,tv_all_visitor;
     Button btn_in;
-    TextView tv_details_company,close,tv_request_response;
+    String category,help_id,date_to_push;
+    ArrayAdapter<String> dataAdapter1;
+    Spinner spinner_help;
+    CardView animal,fire,threat,lift,medical,theif;
+    categoryAdapter CategoryAdapter;
+    private int mYear, mMonth, mDay, mHour, mMinute,mSecond;
+    ArrayList<HashMap<String,String>> Category;
+    ArrayList<HashMap<String,String>> DeliveryList;
+    ArrayList<HashMap<String,String>> HelpList;
+    TextView tv_id,tv_details_company,close,tv_request_response;
      ImageView img_guest,img_delivery,img_cab,img_help;
     boolean approve_status = false;
     private  boolean button1IsVisible = true;
-
+    RadioButton radio1,radio2;
+    RadioGroup radioSex;
+    Calendar myCalendar = Calendar.getInstance();
+    RecyclerView.LayoutManager RecyclerViewLayoutManager;
+    RecyclerView.LayoutManager RecyclerViewLayoutManager1;
+    RecyclerView.LayoutManager RecyclerViewLayoutManager2;
+    RecyclerView.LayoutManager RecyclerViewLayoutManager3;
+    RecyclerView.LayoutManager RecyclerViewLayoutManager4;
+    LinearLayoutManager HorizontalLayout ;
+    LinearLayoutManager HorizontalLayout1 ;
+    LinearLayoutManager HorizontalLayout2 ;
+    LinearLayoutManager HorizontalLayout3 ;
+    LinearLayoutManager HorizontalLayout4 ;
     ArrayList<ActivityModel> activityModelArrayList;
     ArrayList<String> listDates;
     ActivityListAdapterIN activityListAdapter;
@@ -203,6 +238,10 @@ public class Activity_activity extends AppCompatActivity implements
         actionViews();
         user_name =  findViewById(R.id.user_name);
 
+        DeliveryList=new ArrayList<>();
+        HelpList=new ArrayList<>();
+
+        Category=new ArrayList<>();
          user_name.setText(globalClass.getName());
 
         Picasso.with(Activity_activity.this)
@@ -344,9 +383,59 @@ public class Activity_activity extends AppCompatActivity implements
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         // set the custom dialog components - text, image and button
         close=dialog.findViewById(R.id.close);
+        date_picker=dialog.findViewById(R.id.date_picker);
+        radio1=dialog.findViewById(R.id.radioMale);
+        radio2=dialog.findViewById(R.id.radioFemale);
+        radioSex=dialog.findViewById(R.id.radioSex);
+        edit_vehicle_no=dialog.findViewById(R.id.edit_vehicle_no);
+        edit_name_cab=dialog.findViewById(R.id.edit_name);
+        edit_phone_cab=dialog.findViewById(R.id.edit_phone);
+        tv_time=dialog.findViewById(R.id.tv_time);
         tv_details_company=dialog.findViewById(R.id.tv_details_company);
-        ll_hide=dialog.findViewById(R.id.ll_hide);
+        ll_submit=dialog.findViewById(R.id.ll_submit);
+        tv_others=dialog.findViewById(R.id.tv_others);
+        company_name_recycle=dialog.findViewById(R.id.company_name_recycle);
+        HorizontalLayout3 = new LinearLayoutManager(Activity_activity.this, LinearLayoutManager.HORIZONTAL, false);
 
+        company_name_recycle.setLayoutManager(HorizontalLayout3);
+        date_picker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final Calendar c = Calendar.getInstance();
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                new android.app.DatePickerDialog(Activity_activity.this, datePickerListener, mYear, mMonth, mDay).show();
+
+
+            }
+
+
+        });
+
+
+
+        radioSex.setOnCheckedChangeListener((group, checkedId) -> {
+            RadioButton radioButton = dialog. findViewById(checkedId);
+            // Toast.makeText(getActivity(),radioButton.getText(), Toast.LENGTH_SHORT).show();
+            String radio_value= (String) radioButton.getText();
+            Log.d(TAG, "AddCab: "+radio_value);
+            Toast.makeText(getApplicationContext(),radio_value, Toast.LENGTH_SHORT).show();
+
+        });
+
+        tv_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timePicker2();
+            }
+        });
+
+
+        ll_hide=dialog.findViewById(R.id.ll_hide);
+        CategoryList();
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -359,6 +448,13 @@ public class Activity_activity extends AppCompatActivity implements
         ll_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int selectedId = radioSex.getCheckedRadioButtonId();
+
+                // find the radiobutton by returned id
+                radio1 = dialog.findViewById(selectedId);
+
+                Toast.makeText(Activity_activity.this,
+                        radio1.getText(), Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -385,6 +481,48 @@ public class Activity_activity extends AppCompatActivity implements
         dialog.show();
 
     }
+    private android.app.DatePickerDialog.OnDateSetListener datePickerListener =
+            new android.app.DatePickerDialog.OnDateSetListener() {
+
+                public void onDateSet(DatePicker view, int selectedYear,
+                                      int selectedMonth, int selectedDay) {
+                    myCalendar.set(Calendar.YEAR, selectedYear);
+                    myCalendar.set(Calendar.MONTH, selectedMonth);
+                    myCalendar.set(Calendar.DAY_OF_MONTH, selectedDay);
+                    String myFormat = "dd MMMM, yyyy";
+
+                    SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+                    SimpleDateFormat sdf1 = new SimpleDateFormat("yy-MM-dd", Locale.US);
+                    //   date_notify_exam = sdf1.format(myCalendar.getTime());
+                    String date_to_show = sdf.format(myCalendar.getTime());
+                     date_to_push = sdf1.format(myCalendar.getTime());
+                    // Log.d(TAG, "date_notify_exam: "+date_notify_exam);
+                    date_picker.setText(date_to_show);
+
+                }
+            };
+
+
+    private void timePicker2(){
+        // Get Current Time
+        final Calendar c = Calendar.getInstance();
+        mHour = c.get(Calendar.HOUR_OF_DAY);
+        mMinute = c.get(Calendar.MINUTE);
+        mSecond=c.get(Calendar.SECOND);
+
+
+        TimePickerDialog mTimePicker;
+        mTimePicker = new TimePickerDialog(Activity_activity.this, new TimePickerDialog.OnTimeSetListener() {
+
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                tv_time.setText( ""+selectedHour + ":" + selectedMinute);
+            }
+        }, mHour, mMinute,false);
+
+        mTimePicker.show();
+    }
+
 
     public void AddDelivery(){
         final Dialog dialog = new Dialog(this);
@@ -392,23 +530,73 @@ public class Activity_activity extends AppCompatActivity implements
         dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         // set the custom dialog components - text, image and button
+        delivery_recycle=dialog.findViewById(R.id.delivery_recycle);
+        HorizontalLayout4 = new LinearLayoutManager(Activity_activity.this, LinearLayoutManager.HORIZONTAL, false);
+        date_picker=dialog.findViewById(R.id.date_picker);
+        radio1=dialog.findViewById(R.id.radioMale);
+        radio2=dialog.findViewById(R.id.radioFemale);
+        radioSex=dialog.findViewById(R.id.radioSex);
+        edit_name_cab=dialog.findViewById(R.id.edit_name);
+        edit_phone_cab=dialog.findViewById(R.id.edit_phone);
+        tv_time=dialog.findViewById(R.id.tv_time);
+        delivery_recycle.setLayoutManager(HorizontalLayout4);
         close=dialog.findViewById(R.id.close);
         tv_details_company=dialog.findViewById(R.id.tv_details_company);
         ll_hide=dialog.findViewById(R.id.ll_hide);
-
+        DeliveryList();
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
             }
         });
+        date_picker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final Calendar c = Calendar.getInstance();
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                new android.app.DatePickerDialog(Activity_activity.this, datePickerListener, mYear, mMonth, mDay).show();
+
+
+            }
+
+
+        });
+        tv_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timePicker2();
+            }
+        });
+
+        radioSex.setOnCheckedChangeListener((group, checkedId) -> {
+            RadioButton radioButton = dialog. findViewById(checkedId);
+            // Toast.makeText(getActivity(),radioButton.getText(), Toast.LENGTH_SHORT).show();
+            String radio_value= (String) radioButton.getText();
+            Log.d(TAG, "AddCab: "+radio_value);
+            Toast.makeText(getApplicationContext(),radio_value, Toast.LENGTH_SHORT).show();
+
+        });
+
+
         LinearLayout ll_submit=dialog.findViewById(R.id.ll_submit);
 
         // if button is clicked, close the custom dialog
         ll_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int selectedId = radioSex.getCheckedRadioButtonId();
 
+                // find the radiobutton by returned id
+                radio1 = dialog.findViewById(selectedId);
+
+                Toast.makeText(Activity_activity.this,
+                        radio1.getText(), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
         });
         tv_details_company.setOnClickListener(new View.OnClickListener() {
@@ -443,20 +631,65 @@ public class Activity_activity extends AppCompatActivity implements
         close=dialog.findViewById(R.id.close);
         // tv_details_company=dialog.findViewById(R.id.tv_details_company);
         ll_hide=dialog.findViewById(R.id.ll_hide);
-
+        date_picker=dialog.findViewById(R.id.date_picker);
+        radio1=dialog.findViewById(R.id.radioMale);
+        radio2=dialog.findViewById(R.id.radioFemale);
+        radioSex=dialog.findViewById(R.id.radioSex);
+        edit_name_cab=dialog.findViewById(R.id.edit_name);
+        edit_phone_cab=dialog.findViewById(R.id.edit_phone);
+        tv_time=dialog.findViewById(R.id.tv_time);
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
             }
         });
+        date_picker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final Calendar c = Calendar.getInstance();
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                new android.app.DatePickerDialog(Activity_activity.this, datePickerListener, mYear, mMonth, mDay).show();
+
+
+            }
+
+
+        });
+        tv_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timePicker2();
+            }
+        });
+
+        radioSex.setOnCheckedChangeListener((group, checkedId) -> {
+            RadioButton radioButton = dialog. findViewById(checkedId);
+            // Toast.makeText(getActivity(),radioButton.getText(), Toast.LENGTH_SHORT).show();
+            String radio_value= (String) radioButton.getText();
+            Log.d(TAG, "AddCab: "+radio_value);
+            Toast.makeText(getApplicationContext(),radio_value, Toast.LENGTH_SHORT).show();
+
+        });
+
         LinearLayout ll_submit=dialog.findViewById(R.id.ll_submit);
 
         // if button is clicked, close the custom dialog
         ll_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int selectedId = radioSex.getCheckedRadioButtonId();
 
+                // find the radiobutton by returned id
+                radio1 = dialog.findViewById(selectedId);
+
+                Toast.makeText(Activity_activity.this,
+                        radio1.getText(), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
         });
 
@@ -470,9 +703,77 @@ public class Activity_activity extends AppCompatActivity implements
         dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         // set the custom dialog components - text, image and button
+        BrowseCity();
         close=dialog.findViewById(R.id.close);
+        date_picker=dialog.findViewById(R.id.date_picker);
+        radio1=dialog.findViewById(R.id.radioMale);
+        radio2=dialog.findViewById(R.id.radioFemale);
+        radioSex=dialog.findViewById(R.id.radioSex);
+        edit_name_cab=dialog.findViewById(R.id.edit_name);
+        edit_phone_cab=dialog.findViewById(R.id.edit_phone);
+        tv_time=dialog.findViewById(R.id.tv_time);
         tv_details_company=dialog.findViewById(R.id.tv_details_company);
+        spinner_help=dialog.findViewById(R.id.spinner_help);
         ll_hide=dialog.findViewById(R.id.ll_hide);
+
+        date_picker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final Calendar c = Calendar.getInstance();
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                new android.app.DatePickerDialog(Activity_activity.this, datePickerListener, mYear, mMonth, mDay).show();
+
+
+            }
+
+
+        });
+        tv_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timePicker2();
+            }
+        });
+
+        radioSex.setOnCheckedChangeListener((group, checkedId) -> {
+            RadioButton radioButton = dialog. findViewById(checkedId);
+            // Toast.makeText(getActivity(),radioButton.getText(), Toast.LENGTH_SHORT).show();
+            String radio_value= (String) radioButton.getText();
+            Log.d(TAG, "AddCab: "+radio_value);
+            Toast.makeText(getApplicationContext(),radio_value, Toast.LENGTH_SHORT).show();
+
+        });
+        spinner_help.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent,
+                                       View arg1, int position, long arg3) {
+                // TODO Auto-generated method stub
+                // Locate the textviews in activity_main.xml
+                String selectedItemText = (String) parent.getItemAtPosition(position);
+                // If user change the default selection
+                // First item is disable and it is used for hint
+                if(position !=0){
+                    help_id = HelpList.get(position-1).get("id");
+                    Log.d(TAG, "onItemSelected: "+help_id);
+
+
+                    // BrowseComplex(city_id);
+
+                    // Notify the selected item text
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
 
         close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -486,7 +787,14 @@ public class Activity_activity extends AppCompatActivity implements
         ll_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int selectedId = radioSex.getCheckedRadioButtonId();
 
+                // find the radiobutton by returned id
+                radio1 = dialog.findViewById(selectedId);
+
+                Toast.makeText(Activity_activity.this,
+                        radio1.getText(), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
         });
         tv_details_company.setOnClickListener(new View.OnClickListener() {
@@ -512,15 +820,267 @@ public class Activity_activity extends AppCompatActivity implements
         dialog.show();
 
     }
+
+    private void BrowseCity() {
+        // Tag used to cancel the request
+        String tag_string_req = "req_login";
+        HelpList.clear();
+        startAnim();
+
+        StringRequest strReq = new StringRequest(Request.Method.GET,
+                AppConfig.URL_DEV+"help_category_list", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+
+                stopAnim();
+
+
+                Gson gson = new Gson();
+
+                try {
+
+
+                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
+                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
+                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+
+
+                    if(status.equals("1")) {
+
+                        Log.d("jobj", "" + jobj);
+                        ArrayList<String> state_array = new ArrayList<String>();
+                        state_array.add("Select State");
+
+                        //array.add("Select Location");
+                        JsonArray jarray = jobj.getAsJsonArray("data");
+                        Log.d("jarray", "" + jarray.toString());
+                        array1 = new ArrayList<>();
+                        array1.add("Help");
+                        for (int i = 0; i < jarray.size(); i++) {
+                            JsonObject jobj1 = jarray.get(i).getAsJsonObject();
+                            //get the object
+
+                            //JsonObject jobj1 = jarray.get(i).getAsJsonObject();
+                            String id = jobj1.get("id").toString().replaceAll("\"", "");
+                            String name = jobj1.get("name").toString().replaceAll("\"", "");
+                            String image = jobj1.get("image").toString().replaceAll("\"", "");
+
+                            HashMap<String, String> map_ser = new HashMap<>();
+
+
+                            map_ser.put("id", id);
+                            map_ser.put("name", name);
+                            map_ser.put("image", image);
+
+
+                            HelpList.add(map_ser);
+
+                            array1.add(name);
+
+
+                        }
+
+                        dataAdapter1 = new ArrayAdapter(Activity_activity.this, R.layout.item_spinner, R.id.tvCust, array1);
+                        spinner_help.setAdapter(dataAdapter1);
+                        spinner_help.setPrompt("Help");
+                    }
+                    else {
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                    }
+
+
+
+                } catch (Exception e) {
+                    TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
+                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                progressDialog.dismiss();
+            }
+        }) {
+
+
+
+        };
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(Activity_activity.this)
+                .addToRequestQueue(strReq
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+
+    }
+
+
+    private void FireAlarm(final String category) {
+        String tag_string_req = "req_login";
+        HelpList.clear();
+        // startAnim();
+        progressDialog.show();
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_DEV+"add_panic", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+
+                progressDialog.dismiss();
+
+
+                Gson gson = new Gson();
+
+                try {
+
+
+                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
+                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
+                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+
+
+                    if(status.equals("1")) {
+
+
+                    }
+                    else {
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                    }
+
+
+
+                } catch (Exception e) {
+                    TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
+                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                progressDialog.dismiss();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<>();
+
+                params.put("user_id", globalClass.getId());
+                params.put("category", category);
+                params.put("complex_id", globalClass.getComplex_id());
+                params.put("flat_id", globalClass.getFlat_no());
+
+                Log.d(TAG, "getParams: "+params);
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(Activity_activity.this)
+                .addToRequestQueue(strReq
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+    }
+
     public void Alarm(){
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.add_alarm);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         // set the custom dialog components - text, image and button
         close=dialog.findViewById(R.id.close);
+        animal=dialog.findViewById(R.id.animal);
+        theif=dialog.findViewById(R.id.burglary);
+        lift=dialog.findViewById(R.id.lift);
+        medical=dialog.findViewById(R.id.medical);
+        threat=dialog.findViewById(R.id.threat);
         tv_details_company=dialog.findViewById(R.id.tv_details_company);
+        tv_id=dialog.findViewById(R.id.tv_fire);
+        tv_lift=dialog.findViewById(R.id.tv_lift);
+        tv_threat=dialog.findViewById(R.id.tv_threat);
+        tv_thief=dialog.findViewById(R.id.tv_thief);
+        tv_medical=dialog.findViewById(R.id.tv_medical);
+        tv_animal=dialog.findViewById(R.id.tv_animal);
+        threat=dialog.findViewById(R.id.threat);
+        ll_alram=dialog.findViewById(R.id.ll_alram);
         ll_hide=dialog.findViewById(R.id.ll_hide);
+        fire=dialog.findViewById(R.id.fire);
 
+        fire.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String category=tv_id.getText().toString();
+                FireAlarm(category);
+                dialog.dismiss();
+
+            }
+        });
+        lift.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String category=tv_lift.getText().toString();
+                FireAlarm(category);
+                dialog.dismiss();
+
+            }
+        });
+        threat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String category=tv_threat.getText().toString();
+                FireAlarm(category);
+                dialog.dismiss();
+
+            }
+        });
+        theif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String category=tv_thief.getText().toString();
+                FireAlarm(category);
+                dialog.dismiss();
+
+            }
+        });
+        medical.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String category=tv_medical.getText().toString();
+                FireAlarm(category);
+                dialog.dismiss();
+
+            }
+        });
+        animal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String category=tv_animal.getText().toString();
+
+                FireAlarm(category);
+                dialog.dismiss();
+
+            }
+        });
 /*
         close.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -565,8 +1125,219 @@ public class Activity_activity extends AppCompatActivity implements
         dialog.show();
 
     }
+    private void CategoryList() {
+        // Tag used to cancel the request
+        String tag_string_req = "req_login";
+        Category.clear();
+
+        progressDialog.show();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_DEV+"company_list", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+
+                progressDialog.dismiss();
 
 
+                Gson gson = new Gson();
+
+                try {
+
+
+                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
+
+                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
+                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+
+                    Log.d(TAG, "Message: "+message);
+
+                    if(status.equals("1") ) {
+
+
+
+                        JsonArray product = jobj.getAsJsonArray("data");
+                        for (int i = 0; i < product.size(); i++) {
+                            JsonObject images1 = product.get(i).getAsJsonObject();
+                            String id = images1.get("id").toString().replaceAll("\"", "");
+                            String company = images1.get("company").toString().replaceAll("\"", "");
+                            String type = images1.get("type").toString().replaceAll("\"", "");
+                            String icon = images1.get("icon").toString().replaceAll("\"", "");
+
+
+                            HashMap<String, String> hashMap = new HashMap<>();
+                            hashMap.put("id", id);
+                            hashMap.put("company", company);
+                            hashMap.put("type", type);
+                            hashMap.put("icon", icon);
+
+                            Category.add(hashMap);
+                            Log.d(TAG, "Hashmap " + hashMap);
+
+                        }
+
+                        CategoryAdapter = new categoryAdapter(Activity_activity.this,
+                                Category,Activity_activity.this);
+                        company_name_recycle.setAdapter(CategoryAdapter);
+
+
+
+
+                    }
+                    else {
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    TastyToast.makeText(getApplicationContext(), "Error Connection", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
+                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                progressDialog.dismiss();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<>();
+
+                params.put("type", "cab");
+
+                Log.d(TAG, "getParams: "+params);
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(Activity_activity.this)
+                .addToRequestQueue(strReq
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+
+    }
+
+    private void DeliveryList() {
+        // Tag used to cancel the request
+        String tag_string_req = "req_login";
+        DeliveryList.clear();
+
+        progressDialog.show();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_DEV+"company_list", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+
+                progressDialog.dismiss();
+
+
+                Gson gson = new Gson();
+
+                try {
+
+
+                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
+
+                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
+                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+
+                    Log.d(TAG, "Message: "+message);
+
+                    if(status.equals("1") ) {
+
+
+
+                        JsonArray product = jobj.getAsJsonArray("data");
+                        for (int i = 0; i < product.size(); i++) {
+                            JsonObject images1 = product.get(i).getAsJsonObject();
+                            String id = images1.get("id").toString().replaceAll("\"", "");
+                            String company = images1.get("company").toString().replaceAll("\"", "");
+                            String type = images1.get("type").toString().replaceAll("\"", "");
+                            String icon = images1.get("icon").toString().replaceAll("\"", "");
+
+
+                            HashMap<String, String> hashMap = new HashMap<>();
+                            hashMap.put("id", id);
+                            hashMap.put("company", company);
+                            hashMap.put("type", type);
+                            hashMap.put("icon", icon);
+
+                            DeliveryList.add(hashMap);
+                            Log.d(TAG, "Hashmap " + hashMap);
+
+                        }
+
+                        CategoryAdapter = new categoryAdapter(Activity_activity.this,
+                                DeliveryList,Activity_activity.this);
+                        delivery_recycle.setAdapter(CategoryAdapter);
+
+
+
+
+                    }
+                    else {
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    TastyToast.makeText(getApplicationContext(), "Error Connection", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
+                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                progressDialog.dismiss();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<>();
+
+                params.put("type", "delivery");
+
+                Log.d(TAG, "getParams: "+params);
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(Activity_activity.this)
+                .addToRequestQueue(strReq
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+
+    }
 
     private void actionViews(){
 
@@ -761,7 +1532,7 @@ public class Activity_activity extends AppCompatActivity implements
 
     //// activity api call ....
     public void getActivityList(){
-        startAnim();
+        progressDialog.show();
         activityModelArrayList.clear();
 
         activityModelArrayList = new ArrayList<>();
@@ -785,7 +1556,7 @@ public class Activity_activity extends AppCompatActivity implements
                     public void onResponse(String response) {
 
                         Log.d(AppConfig.TAG , "activity_list- " + response);
-
+                              progressDialog.dismiss();
                         if (response != null){
                             try {
 
@@ -953,7 +1724,7 @@ public class Activity_activity extends AppCompatActivity implements
 
     }
     public void getActivityListUpcoming(){
-        startAnim();
+        progressDialog.show();
          activityModelArrayList.clear();
         activityModelArrayList = new ArrayList<>();
 
@@ -976,7 +1747,7 @@ public class Activity_activity extends AppCompatActivity implements
                     public void onResponse(String response) {
 
                         Log.d(AppConfig.TAG , "activity_list- " + response);
-
+                            progressDialog.dismiss();
                         if (response != null){
                             try {
 
@@ -1985,6 +2756,16 @@ public class Activity_activity extends AppCompatActivity implements
         });
 
         dialog.show();
+
+    }
+    @Override
+    public void onItemClick(String s) {
+        category=s;
+        if (category.equals("Others")){
+            tv_others.setVisibility(View.VISIBLE);
+        }
+        Toast.makeText(getApplicationContext(),s,Toast.LENGTH_LONG).show();
+
 
     }
 

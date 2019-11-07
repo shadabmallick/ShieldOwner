@@ -1,8 +1,10 @@
 package com.sketch.securityowner.ui;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,13 +30,19 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+
+import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 
@@ -52,11 +60,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
-import com.google.firebase.messaging.FirebaseMessaging;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -86,15 +90,20 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.conn.ssl.SSLSocketFactory;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
 import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.sketch.securityowner.GlobalClass.VolleySingleton.backOff;
 import static com.sketch.securityowner.GlobalClass.VolleySingleton.nuOfRetry;
@@ -113,22 +122,22 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
     ArrayAdapter<String> dataAdapter1;
     Spinner spinner_help;
     categoryAdapter CategoryAdapter;
-    StaffAdapter staffAdapter; ArrayList<String> array1;
-
+    StaffAdapter staffAdapter;
+    ArrayList<String> array1;
     CarAdapter carAdapter;
     LinearLayoutManager HorizontalLayout ;
     LinearLayoutManager HorizontalLayout1 ;
     LinearLayoutManager HorizontalLayout2 ;
     LinearLayoutManager HorizontalLayout3 ;
     LinearLayoutManager HorizontalLayout4 ;
-    View ChildView ;
     File p_image;
      Dialog dialog;
-
-    int RecyclerViewItemPosition ;
+    RadioButton radio1,radio2;
+    private int mYear, mMonth, mDay, mHour, mMinute,mSecond;
+    Calendar myCalendar = Calendar.getInstance();
+    RadioGroup radioSex;
     Toolbar toolbar;
-    TextView tv_animal,tv_medical,tv_thief,tv_threat,tv_lift,tv_id,tv_details_company,close,tv_details,app_setting,user_name,user_mobile,user_email;
-    View view1,view2;
+    TextView tv_time,date_picker,tv_animal,tv_medical,tv_thief,tv_threat,tv_lift,tv_id,tv_details_company,close,tv_details,app_setting,user_name,user_mobile,user_email;
     ImageView profile_image_edit,image_member;
     ProgressDialog pd;
     EditText edit_car_no,edit_parking_no,edit_name,edit_phone,edit_mail,edit_family_name,edit_family_phone;
@@ -148,11 +157,10 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
     ImageView edit;
     String category,help_id;
     TextView add_car,add_staff,add_member;
-    EditText tv_others;
+    EditText edit_name_cab,edit_phone_cab, edit_vehicle_no,tv_others;
     private final int PICK_IMAGE_CAMERA = 1, PICK_IMAGE_GALLERY = 2;
     private final int PICK_IMAGE_CAMERA_FAMILY = 3, PICK_IMAGE_GALLERY_FAMILY = 4;
     private final int PICK_IMAGE_CAMERA_CAR = 5, PICK_IMAGE_GALLERY_CAR = 6;
-
     LinearLayout ll_submit,ll_alram,ll_hide,ll_bell,button_E3,button_E1,ll_logout,ll_notification,ll_mycomplex,car1,button_activity,ll_about_us,ll_contact_us;
     private  boolean button1IsVisible = true;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
@@ -377,7 +385,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             @Override
             public void onClick(View v) {
                 Intent notification=new Intent(getApplicationContext(),NotificationManager.class);
-                notification.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|
+                notification.addFlags(FLAG_ACTIVITY_CLEAR_TOP|
                         Intent.FLAG_ACTIVITY_CLEAR_TASK |
                         Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(notification);
@@ -955,6 +963,14 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
        // set the custom dialog components - text, image and button
         close=dialog.findViewById(R.id.close);
+        date_picker=dialog.findViewById(R.id.date_picker);
+        radio1=dialog.findViewById(R.id.radioMale);
+        radio2=dialog.findViewById(R.id.radioFemale);
+        radioSex=dialog.findViewById(R.id.radioSex);
+        edit_vehicle_no=dialog.findViewById(R.id.edit_vehicle_no);
+        edit_name_cab=dialog.findViewById(R.id.edit_name);
+        edit_phone_cab=dialog.findViewById(R.id.edit_phone);
+        tv_time=dialog.findViewById(R.id.tv_time);
         tv_details_company=dialog.findViewById(R.id.tv_details_company);
         ll_submit=dialog.findViewById(R.id.ll_submit);
         tv_others=dialog.findViewById(R.id.tv_others);
@@ -962,6 +978,40 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         HorizontalLayout3 = new LinearLayoutManager(SettingActivity.this, LinearLayoutManager.HORIZONTAL, false);
 
         company_name_recycle.setLayoutManager(HorizontalLayout3);
+        date_picker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final Calendar c = Calendar.getInstance();
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                new DatePickerDialog(SettingActivity.this, datePickerListener, mYear, mMonth, mDay).show();
+
+
+            }
+
+
+        });
+
+
+
+        radioSex.setOnCheckedChangeListener((group, checkedId) -> {
+            RadioButton radioButton = dialog. findViewById(checkedId);
+            // Toast.makeText(getActivity(),radioButton.getText(), Toast.LENGTH_SHORT).show();
+            String radio_value= (String) radioButton.getText();
+            Log.d(TAG, "AddCab: "+radio_value);
+            Toast.makeText(getApplicationContext(),radio_value, Toast.LENGTH_SHORT).show();
+
+        });
+
+        tv_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timePicker2();
+            }
+        });
 
 
         ll_hide=dialog.findViewById(R.id.ll_hide);
@@ -978,8 +1028,15 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         ll_submit.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
+               int selectedId = radioSex.getCheckedRadioButtonId();
 
-           }git push -u origin master
+               // find the radiobutton by returned id
+               radio1 = dialog.findViewById(selectedId);
+
+               Toast.makeText(SettingActivity.this,
+                       radio1.getText(), Toast.LENGTH_SHORT).show();
+
+           }
        });
         tv_details_company.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1004,6 +1061,45 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         dialog.show();
 
    }
+    private DatePickerDialog.OnDateSetListener datePickerListener =
+            new DatePickerDialog.OnDateSetListener() {
+
+                public void onDateSet(DatePicker view, int selectedYear,
+                                      int selectedMonth, int selectedDay) {
+                    myCalendar.set(Calendar.YEAR, selectedYear);
+                    myCalendar.set(Calendar.MONTH, selectedMonth);
+                    myCalendar.set(Calendar.DAY_OF_MONTH, selectedDay);
+                    String myFormat = "MMM dd, yyyy";
+                    SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+                    SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+                 //   date_notify_exam = sdf1.format(myCalendar.getTime());
+                    String date_to_show = sdf.format(myCalendar.getTime());
+                   // Log.d(TAG, "date_notify_exam: "+date_notify_exam);
+                    date_picker.setText(date_to_show);
+
+                }
+            };
+
+
+    private void timePicker2(){
+        // Get Current Time
+        final Calendar c = Calendar.getInstance();
+        mHour = c.get(Calendar.HOUR_OF_DAY);
+        mMinute = c.get(Calendar.MINUTE);
+
+
+        TimePickerDialog mTimePicker;
+        mTimePicker = new TimePickerDialog(SettingActivity.this, new TimePickerDialog.OnTimeSetListener() {
+
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                tv_time.setText( ""+selectedHour + ":" + selectedMinute);
+            }
+        }, mHour, mMinute,true);
+
+        mTimePicker.show();
+    }
+
 
     public void AddDelivery(){
         final Dialog dialog = new Dialog(this);
@@ -1013,7 +1109,13 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         // set the custom dialog components - text, image and button
         delivery_recycle=dialog.findViewById(R.id.delivery_recycle);
         HorizontalLayout4 = new LinearLayoutManager(SettingActivity.this, LinearLayoutManager.HORIZONTAL, false);
-
+        date_picker=dialog.findViewById(R.id.date_picker);
+        radio1=dialog.findViewById(R.id.radioMale);
+        radio2=dialog.findViewById(R.id.radioFemale);
+        radioSex=dialog.findViewById(R.id.radioSex);
+        edit_name_cab=dialog.findViewById(R.id.edit_name);
+        edit_phone_cab=dialog.findViewById(R.id.edit_phone);
+        tv_time=dialog.findViewById(R.id.tv_time);
         delivery_recycle.setLayoutManager(HorizontalLayout4);
         close=dialog.findViewById(R.id.close);
         tv_details_company=dialog.findViewById(R.id.tv_details_company);
@@ -1025,13 +1127,53 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                 dialog.dismiss();
             }
         });
+        date_picker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final Calendar c = Calendar.getInstance();
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                new DatePickerDialog(SettingActivity.this, datePickerListener, mYear, mMonth, mDay).show();
+
+
+            }
+
+
+        });
+        tv_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timePicker2();
+            }
+        });
+
+        radioSex.setOnCheckedChangeListener((group, checkedId) -> {
+            RadioButton radioButton = dialog. findViewById(checkedId);
+            // Toast.makeText(getActivity(),radioButton.getText(), Toast.LENGTH_SHORT).show();
+            String radio_value= (String) radioButton.getText();
+            Log.d(TAG, "AddCab: "+radio_value);
+            Toast.makeText(getApplicationContext(),radio_value, Toast.LENGTH_SHORT).show();
+
+        });
+
+
         LinearLayout ll_submit=dialog.findViewById(R.id.ll_submit);
 
         // if button is clicked, close the custom dialog
         ll_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int selectedId = radioSex.getCheckedRadioButtonId();
 
+                // find the radiobutton by returned id
+                radio1 = dialog.findViewById(selectedId);
+
+                Toast.makeText(SettingActivity.this,
+                        radio1.getText(), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
         });
         tv_details_company.setOnClickListener(new View.OnClickListener() {
@@ -1066,20 +1208,65 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         close=dialog.findViewById(R.id.close);
        // tv_details_company=dialog.findViewById(R.id.tv_details_company);
         ll_hide=dialog.findViewById(R.id.ll_hide);
-
+        date_picker=dialog.findViewById(R.id.date_picker);
+        radio1=dialog.findViewById(R.id.radioMale);
+        radio2=dialog.findViewById(R.id.radioFemale);
+        radioSex=dialog.findViewById(R.id.radioSex);
+        edit_name_cab=dialog.findViewById(R.id.edit_name);
+        edit_phone_cab=dialog.findViewById(R.id.edit_phone);
+        tv_time=dialog.findViewById(R.id.tv_time);
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
             }
         });
+        date_picker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final Calendar c = Calendar.getInstance();
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                new DatePickerDialog(SettingActivity.this, datePickerListener, mYear, mMonth, mDay).show();
+
+
+            }
+
+
+        });
+        tv_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timePicker2();
+            }
+        });
+
+        radioSex.setOnCheckedChangeListener((group, checkedId) -> {
+            RadioButton radioButton = dialog. findViewById(checkedId);
+            // Toast.makeText(getActivity(),radioButton.getText(), Toast.LENGTH_SHORT).show();
+            String radio_value= (String) radioButton.getText();
+            Log.d(TAG, "AddCab: "+radio_value);
+            Toast.makeText(getApplicationContext(),radio_value, Toast.LENGTH_SHORT).show();
+
+        });
+
         LinearLayout ll_submit=dialog.findViewById(R.id.ll_submit);
 
         // if button is clicked, close the custom dialog
         ll_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int selectedId = radioSex.getCheckedRadioButtonId();
 
+                // find the radiobutton by returned id
+                radio1 = dialog.findViewById(selectedId);
+
+                Toast.makeText(SettingActivity.this,
+                        radio1.getText(), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
         });
 
@@ -1095,12 +1282,48 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         // set the custom dialog components - text, image and button
         BrowseCity();
         close=dialog.findViewById(R.id.close);
-
+        date_picker=dialog.findViewById(R.id.date_picker);
+        radio1=dialog.findViewById(R.id.radioMale);
+        radio2=dialog.findViewById(R.id.radioFemale);
+        radioSex=dialog.findViewById(R.id.radioSex);
+        edit_name_cab=dialog.findViewById(R.id.edit_name);
+        edit_phone_cab=dialog.findViewById(R.id.edit_phone);
+        tv_time=dialog.findViewById(R.id.tv_time);
         tv_details_company=dialog.findViewById(R.id.tv_details_company);
         spinner_help=dialog.findViewById(R.id.spinner_help);
         ll_hide=dialog.findViewById(R.id.ll_hide);
 
+        date_picker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                final Calendar c = Calendar.getInstance();
+                mYear = c.get(Calendar.YEAR);
+                mMonth = c.get(Calendar.MONTH);
+                mDay = c.get(Calendar.DAY_OF_MONTH);
+
+                new DatePickerDialog(SettingActivity.this, datePickerListener, mYear, mMonth, mDay).show();
+
+
+            }
+
+
+        });
+        tv_time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                timePicker2();
+            }
+        });
+
+        radioSex.setOnCheckedChangeListener((group, checkedId) -> {
+            RadioButton radioButton = dialog. findViewById(checkedId);
+            // Toast.makeText(getActivity(),radioButton.getText(), Toast.LENGTH_SHORT).show();
+            String radio_value= (String) radioButton.getText();
+            Log.d(TAG, "AddCab: "+radio_value);
+            Toast.makeText(getApplicationContext(),radio_value, Toast.LENGTH_SHORT).show();
+
+        });
         spinner_help.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
@@ -1141,7 +1364,14 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         ll_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int selectedId = radioSex.getCheckedRadioButtonId();
 
+                // find the radiobutton by returned id
+                radio1 = dialog.findViewById(selectedId);
+
+                Toast.makeText(SettingActivity.this,
+                        radio1.getText(), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
         });
         tv_details_company.setOnClickListener(new View.OnClickListener() {
@@ -1494,6 +1724,9 @@ public void Logout(){
 
                 if(status.equals("1") ) {
                               preference.clearPrefrence();
+                              Intent intent=new Intent(SettingActivity.this,LaunchActivity.class);
+                              intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                              startActivity(intent);
 
 
                 }

@@ -132,9 +132,9 @@
 
             <LinearLayout
                 android:id="@+id/ll_hide"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:orientation="vertical"
-                android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_details_company">
                 <LinearLayout
@@ -147,6 +147,7 @@
 
 
                     <EditText
+                        android:id="@+id/edit_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:hint="Enter Name"
@@ -155,6 +156,7 @@
                         android:background="@android:drawable/dialog_holo_light_frame"
                         />
                     <EditText
+                        android:id="@+id/edit_phone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
