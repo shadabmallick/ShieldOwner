@@ -114,6 +114,28 @@ public class LaunchActivity extends AppCompatActivity {
 
             }
         });
+
+
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+
+                        fcm_token = token;
+
+                        globalClass.setFcm_reg_token(token);
+
+                        // Log and toast
+                        Log.d(AppConfig.TAG, "token = "+token);
+
+                    }
+                });
     }
 
 
@@ -124,7 +146,7 @@ public class LaunchActivity extends AppCompatActivity {
         pd.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"login_otp", new Response.Listener<String>() {
+                AppConfig.login_otp, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -192,7 +214,6 @@ public class LaunchActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
 
                 params.put("phone_Number", number);
-
                 params.put("device_type", "android");
                 params.put("device_id", device_id);
 
@@ -201,6 +222,7 @@ public class LaunchActivity extends AppCompatActivity {
                 } else {
                     params.put("fcm_token",fcm_token);
                 }
+
 
                 Log.d(TAG, "getParams: "+params);
                 return params;

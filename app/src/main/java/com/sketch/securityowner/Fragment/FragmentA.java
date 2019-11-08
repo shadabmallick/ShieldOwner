@@ -202,7 +202,7 @@ public class FragmentA extends Fragment {
         //  startAnim();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"help_list", new Response.Listener<String>() {
+                AppConfig.help_list, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -514,7 +514,7 @@ public class FragmentA extends Fragment {
 
         pd.show();
 
-        String url = AppConfig.URL_DEV+"add_help";
+        String url = AppConfig.add_help;
         AsyncHttpClient cl = new AsyncHttpClient();
         RequestParams params = new RequestParams();
 

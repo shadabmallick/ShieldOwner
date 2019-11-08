@@ -95,7 +95,7 @@ public class HelpListDetails extends AppCompatActivity {
         progressDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"local_help_list", new Response.Listener<String>() {
+                AppConfig.local_help_list, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {

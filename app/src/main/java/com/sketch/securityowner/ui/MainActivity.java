@@ -697,7 +697,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
         pd.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"add_visitor", new Response.Listener<String>() {
+                AppConfig.add_visitor, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -791,7 +791,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
         pd.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"add_visitor", new Response.Listener<String>() {
+                AppConfig.add_visitor, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -888,7 +888,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
         pd.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"add_visitor", new Response.Listener<String>() {
+                AppConfig.add_visitor, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -982,7 +982,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
         pd.show();
 
         StringRequest strReq = new StringRequest(Request.Method.GET,
-                AppConfig.URL_DEV+"add_visitor", new Response.Listener<String>() {
+                AppConfig.add_visitor, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -1075,7 +1075,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
         // startAnim();
         pd.show();
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"add_panic", new Response.Listener<String>() {
+                AppConfig.add_panic, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -1277,7 +1277,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
         pd.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"company_list", new Response.Listener<String>() {
+                AppConfig.company_list, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -1383,7 +1383,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
         pd.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"company_list", new Response.Listener<String>() {
+                AppConfig.company_list, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -1488,7 +1488,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
 
 
         StringRequest strReq = new StringRequest(Request.Method.GET,
-                AppConfig.URL_DEV+"help_category_list", new Response.Listener<String>() {
+                AppConfig.help_category_list, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {

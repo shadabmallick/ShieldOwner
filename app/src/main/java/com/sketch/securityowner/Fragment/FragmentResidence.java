@@ -130,7 +130,7 @@ globalClass=(GlobalClass)getActivity().getApplicationContext();
       //  startAnim();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"block_list", new Response.Listener<String>() {
+                AppConfig.block_list, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {

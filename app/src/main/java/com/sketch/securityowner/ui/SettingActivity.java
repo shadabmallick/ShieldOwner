@@ -1406,7 +1406,9 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         pd.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"add_visitor", new Response.Listener<String>() {
+
+
+                AppConfig.add_panic, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -1501,7 +1503,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         pd.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"add_visitor", new Response.Listener<String>() {
+                AppConfig.add_visitor, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -1597,7 +1599,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         pd.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"add_visitor", new Response.Listener<String>() {
+                AppConfig.add_visitor, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -1693,7 +1695,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         pd.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"add_visitor", new Response.Listener<String>() {
+                AppConfig.add_visitor, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -1788,7 +1790,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
        // startAnim();
        pd.show();
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"add_panic", new Response.Listener<String>() {
+                AppConfig.add_visitor, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -2087,7 +2089,7 @@ public void Logout(){
     pd.show();
 
     StringRequest strReq = new StringRequest(Request.Method.POST,
-            AppConfig.URL_DEV+"logout", new Response.Listener<String>() {
+            AppConfig.logout, new Response.Listener<String>() {
 
         @Override
         public void onResponse(String response) {
@@ -2100,7 +2102,6 @@ public void Logout(){
 
             try {
 
-
                 JsonObject jobj = gson.fromJson(response, JsonObject.class);
 
                 String status = jobj.get("status").getAsString().replaceAll("\"", "");
@@ -2109,15 +2110,16 @@ public void Logout(){
                 Log.d(TAG, "Message: "+message);
 
                 if(status.equals("1") ) {
-                              preference.clearPrefrence();
-                              Intent intent=new Intent(SettingActivity.this,LaunchActivity.class);
-                              intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-                              startActivity(intent);
 
+                    preference.clearPrefrence();
+                    Intent intent=new Intent(SettingActivity.this,LaunchActivity.class);
+                    intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
 
                 }
                 else {
-                    TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                    TastyToast.makeText(getApplicationContext(),
+                            message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                 }
 
@@ -2159,14 +2161,107 @@ public void Logout(){
                             new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
 
 }
+    public void updateProfile(final String name,final String phone,final String email){
 
+         pd.show();
+
+        String url = AppConfig.profile_update;
+        AsyncHttpClient cl = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+
+
+        params.put("user_id", globalClass.getId());
+        params.put("name",name);
+        params.put("emailid", email);
+        params.put("mobile", phone);
+
+        try{
+
+            params.put("profileImage", p_image);
+
+        }catch (FileNotFoundException e){
+            e.printStackTrace();
+        }
+        cl.setSSLSocketFactory(
+                new SSLSocketFactory(Config.getSslContext(),
+                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));
+
+
+
+        Log.d(TAG , "URL "+url);
+        Log.d(TAG , "params "+params.toString());
+
+
+        int DEFAULT_TIMEOUT = 30 * 1000;
+        cl.setMaxRetriesAndTimeout(5 , DEFAULT_TIMEOUT);
+        cl.post(url,params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+                if (response != null) {
+                    Log.d(TAG, "user_profile_pic_update- " + response.toString());
+                    try {
+                        pd.dismiss();
+                        dialog.dismiss();
+
+                        int status = response.getInt("status");
+                        String message = response.getString("message");
+
+                        if (status == 1) {
+
+                            // Log.d(TAG, "name: "+name)
+
+                            JSONObject data = response.getJSONObject("data");
+
+                            String user_id = data.optString("user_id");
+                            String name = data.optString("name");
+                            String emailid = data.optString("emailid");
+                            String mobile = data.optString("mobile");
+                            String profile_pic = data.optString("profile_pic");
+
+
+                            globalClass.setId(user_id);
+                            globalClass.setEmail(emailid);
+                            globalClass.setName(name);
+                            globalClass.setPhone_number(mobile);
+                            globalClass.setProfil_pic(profile_pic);
+
+                            preference.savePrefrence();
+                            if (globalClass.getProfil_pic().equals("")) {
+                                Picasso.with(getApplicationContext()).load("http://i.imgur.com/DvpvklR.png").into(profile_image_edit);
+                            } else {
+                                Picasso.with(getApplicationContext()).load(globalClass.getProfil_pic()).into(profile_image_edit);
+                            }
+                            edit_name.setText(globalClass.getName());
+
+                        } else {
+                            TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        TastyToast.makeText(getApplicationContext(), "Error Connection", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                    }
+
+
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+        });
+
+
+}
 
 
     public void AddFamily(final String name,final String phone){
 
           pd.show();
 
-        String url = AppConfig.URL_DEV+"add_family_member";
+        String url = AppConfig.add_family_member;
         AsyncHttpClient cl = new AsyncHttpClient();
         RequestParams params = new RequestParams();
 
@@ -2251,7 +2346,7 @@ public void Logout(){
 
         pd.show();
 
-        String url = AppConfig.URL_DEV+"add_car";
+        String url = AppConfig.add_car;
         AsyncHttpClient cl = new AsyncHttpClient();
         RequestParams params = new RequestParams();
 
@@ -2328,7 +2423,7 @@ public void Logout(){
        pd.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"profile_details", new Response.Listener<String>() {
+                AppConfig.profile_details, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -2518,7 +2613,7 @@ public void Logout(){
        pd.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"company_list", new Response.Listener<String>() {
+                AppConfig.company_list, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -2620,11 +2715,10 @@ public void Logout(){
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         DeliveryList.clear();
-
        pd.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"company_list", new Response.Listener<String>() {
+                AppConfig.company_list, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -2672,8 +2766,6 @@ public void Logout(){
                         CategoryAdapter = new categoryAdapter(SettingActivity.this,
                                 DeliveryList,SettingActivity.this);
                         delivery_recycle.setAdapter(CategoryAdapter);
-
-
 
 
                     }
@@ -2730,7 +2822,7 @@ public void Logout(){
        pd.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"add_visitor", new Response.Listener<String>() {
+                AppConfig.add_visitor, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -2820,7 +2912,7 @@ public void Logout(){
         startAnim();
 
         StringRequest strReq = new StringRequest(Request.Method.GET,
-                AppConfig.URL_DEV+"help_category_list", new Response.Listener<String>() {
+                AppConfig.help_category_list, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -2925,123 +3017,6 @@ public void Logout(){
         // or avi.smoothToHide();
     }
 
-    public void updateProfile(final String name,final String phone,final String email){
-
-        pd.show();
-
-        String url = AppConfig.URL_DEV+"profile_update";
-        AsyncHttpClient cl = new AsyncHttpClient();
-        RequestParams params = new RequestParams();
-
-
-        params.put("user_id", globalClass.getId());
-        params.put("name",name);
-        params.put("emailid", email);
-        params.put("mobile", phone);
-
-        try{
-
-            params.put("profileImage", p_image);
-
-        }catch (FileNotFoundException e){
-            e.printStackTrace();
-        }
-        cl.setSSLSocketFactory(
-                new SSLSocketFactory(Config.getSslContext(),
-                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));
-
-
-
-        Log.d(TAG , "URL "+url);
-        Log.d(TAG , "params "+params.toString());
-
-
-        int DEFAULT_TIMEOUT = 30 * 1000;
-        cl.setMaxRetriesAndTimeout(5 , DEFAULT_TIMEOUT);
-        cl.post(url,params, new JsonHttpResponseHandler(){
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-
-                if (response != null) {
-                    Log.d(TAG, "user_profile_pic_update- " + response.toString());
-                    try {
-                        pd.dismiss();
-                        dialog.dismiss();
-
-                        //JSONObject result = response.getJSONObject("result");
-
-                        int status = response.getInt("status");
-                        String message = response.getString("message");
-
-                        if (status == 1) {
-
-                            // Log.d(TAG, "name: "+name)
-
-                            JSONObject data = response.getJSONObject("data");
-
-                            String user_id =data.get("user_id").toString().replaceAll("\"", "");
-                            String name=data.get("name").toString().replaceAll("\"", "");
-                            String emailid=data.get("emailid").toString().replaceAll("\"", "");
-                            String mobile=data.get("mobile").toString().replaceAll("\"", "");
-                            String profile_pic=data.get("profile_pic").toString().replaceAll("\"", "");
-
-
-
-                            globalClass.setId(user_id);
-                            globalClass.setEmail(emailid);
-                            globalClass.setName(name);
-                            globalClass.setPhone_number(mobile);
-                            globalClass.setProfil_pic(profile_pic);
-
-                            preference.savePrefrence();
-                            if(globalClass.getProfil_pic().equals("")){
-                                Picasso.with(getApplicationContext()).load("http://i.imgur.com/DvpvklR.png").into(profile_image_edit);
-                            }
-                            else {
-                                Picasso.with(getApplicationContext()).load(globalClass.getProfil_pic()).into(profile_image_edit);
-                            }
-                            edit_name.setText(globalClass.getName());
-
-                            browseJob();
-
-
-
-
-                            TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS).show();
-
-
-
-
-                        }else{
-
-                            TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS).show();
-
-
-                        }
-
-                        pd.dismiss();
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-
-
-                // pd.dismiss();
-            }
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
-                Log.d("Failed: ", ""+statusCode);
-                Log.d("Error : ", "" + throwable);
-            }
-        });
-
-
-    }
-
-
     @Override
     public void onItemClick(String s) {
         category=s;
@@ -3052,6 +3027,8 @@ public void Logout(){
 
 
     }
+
+
 /*
     private void displayFirebaseRegId() {
         FirebaseInstanceId.getInstance().getInstanceId()

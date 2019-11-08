@@ -41,7 +41,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
-
         if (remoteMessage == null)
             return;
 
@@ -228,11 +227,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
 
-    static void sendResponseToActivityScreen(Context context, String type,
-                                             String approved_by) {
+    static void sendResponseToActivityScreen(Context context, String type) {
         Intent intent = new Intent("activity_screen");
         intent.putExtra("type", type);
-        intent.putExtra("approved_by", approved_by);
         context.sendBroadcast(intent);
     }
 

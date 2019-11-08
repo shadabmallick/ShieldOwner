@@ -127,7 +127,7 @@ public class OwnerList extends AppCompatActivity implements
 
         listFloorOwner = new ArrayList<>();
 
-        String url = AppConfig.URL_DEV+"flat_list";
+        String url = AppConfig.flat_list;
 
         final Map<String, String> params = new HashMap<>();
         params.put("complex_id", globalClass.getComplex_id());

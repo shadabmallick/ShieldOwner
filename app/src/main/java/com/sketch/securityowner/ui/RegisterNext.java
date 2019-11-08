@@ -125,7 +125,7 @@ public class RegisterNext extends AppCompatActivity {
         startAnim();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"registration", new Response.Listener<String>() {
+                AppConfig.registration, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {

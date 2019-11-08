@@ -530,7 +530,7 @@ public class Activity_activity extends AppCompatActivity implements
        progressDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"add_visitor", new Response.Listener<String>() {
+                AppConfig.add_visitor, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -626,7 +626,7 @@ public class Activity_activity extends AppCompatActivity implements
         progressDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"add_visitor", new Response.Listener<String>() {
+                AppConfig.add_visitor, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -723,7 +723,7 @@ public class Activity_activity extends AppCompatActivity implements
        progressDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"add_visitor", new Response.Listener<String>() {
+                AppConfig.add_visitor, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -820,7 +820,7 @@ public class Activity_activity extends AppCompatActivity implements
        progressDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"add_visitor", new Response.Listener<String>() {
+                AppConfig.add_visitor, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -1214,7 +1214,7 @@ public class Activity_activity extends AppCompatActivity implements
         startAnim();
 
         StringRequest strReq = new StringRequest(Request.Method.GET,
-                AppConfig.URL_DEV+"help_category_list", new Response.Listener<String>() {
+                AppConfig.help_category_list, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -1317,7 +1317,7 @@ public class Activity_activity extends AppCompatActivity implements
         // startAnim();
         progressDialog.show();
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"add_panic", new Response.Listener<String>() {
+                AppConfig.add_panic, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -1519,7 +1519,7 @@ public class Activity_activity extends AppCompatActivity implements
         progressDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"company_list", new Response.Listener<String>() {
+                AppConfig.company_list, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -1626,7 +1626,7 @@ public class Activity_activity extends AppCompatActivity implements
         progressDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"company_list", new Response.Listener<String>() {
+                AppConfig.company_list, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -1925,7 +1925,7 @@ public class Activity_activity extends AppCompatActivity implements
 
         listDates = new ArrayList<>();
 
-        String url = AppConfig.URL_DEV+"activity_list";
+        String url = AppConfig.activity_list;
 
         final Map<String, String> params = new HashMap<>();
         params.put("type", "all");
@@ -2116,7 +2116,7 @@ public class Activity_activity extends AppCompatActivity implements
 
         listDates = new ArrayList<>();
 
-        String url = AppConfig.URL_DEV+"activity_list";
+        String url = AppConfig.activity_list;
 
         final Map<String, String> params = new HashMap<>();
         params.put("type", "up");
