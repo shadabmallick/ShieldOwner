@@ -114,7 +114,7 @@ public class FragmentB extends Fragment {
         //  startAnim();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"security_list", new Response.Listener<String>() {
+                AppConfig.security_list, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {

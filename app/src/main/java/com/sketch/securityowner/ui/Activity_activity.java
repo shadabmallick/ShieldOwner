@@ -768,7 +768,7 @@ public class Activity_activity extends AppCompatActivity implements
 
         listDates = new ArrayList<>();
 
-        String url = AppConfig.URL_DEV+"activity_list";
+        String url = AppConfig.activity_list;
 
         final Map<String, String> params = new HashMap<>();
         params.put("type", "all");
@@ -959,7 +959,7 @@ public class Activity_activity extends AppCompatActivity implements
 
         listDates = new ArrayList<>();
 
-        String url = AppConfig.URL_DEV+"activity_list";
+        String url = AppConfig.activity_list;
 
         final Map<String, String> params = new HashMap<>();
         params.put("type", "up");

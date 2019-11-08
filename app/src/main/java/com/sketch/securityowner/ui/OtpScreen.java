@@ -31,6 +31,8 @@ import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
 import com.wang.avi.AVLoadingIndicatorView;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,18 +66,10 @@ public class OtpScreen extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         number = bundle.getString("number");
         tv_otp_sent.setText(number);
-      /*  otp = bundle.getString("otp");
-        fcm = bundle.getString("fcm_token");
-        device_id = bundle.getString("device_id");*/
 
         otpView.setOtpCompletionListener(new OnOtpCompletionListener() {
             @Override
             public void onOtpCompleted(String otp) {
-
-                /*Intent setting=new Intent(getApplicationContext(),SettingActivity.class);
-                setting.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-                startActivity(setting);*/
 
                checkOtp(otp);
 
@@ -86,13 +80,13 @@ public class OtpScreen extends AppCompatActivity {
     }
 
     public void checkOtp(final String otp){
-        String tag_string_req = "req_login";
+
         avLoadingIndicatorView.setVisibility(View.VISIBLE);
 
         startAnim();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"login", new Response.Listener<String>() {
+                AppConfig.login, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -100,33 +94,30 @@ public class OtpScreen extends AppCompatActivity {
 
                 stopAnim();
 
-
-                Gson gson = new Gson();
-
                 try {
 
+                    JSONObject object = new JSONObject(response);
 
-                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
-                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
-                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+                    String status = object.optString("status");
+                    String message = object.optString("message");
 
-                    Log.d("jobj", "" + jobj);
                     if(status.equals("1")) {
-                       JsonObject data=jobj.getAsJsonObject("data");
-                        String user_id = data.get("user_id").getAsString().replaceAll("\"", "");
-                        String user_type = data.get("user_type").getAsString().replaceAll("\"", "");
-                        String flat_no = data.get("flat_no").getAsString().replaceAll("\"", "");
-                        String flat_name = data.get("flat_name").getAsString().replaceAll("\"", "");
-                        String block = data.get("block").getAsString().replaceAll("\"", "");
-                        String complex_name = data.get("complex_name").getAsString().replaceAll("\"", "");
-                        String complex_id = data.get("complex_id").getAsString().replaceAll("\"", "");
+                        JSONObject data = object.getJSONObject("data");
+                        String user_id = data.optString("user_id");
+                        String user_type = data.optString("user_type");
+                        String flat_no = data.optString("flat_no");
+                        String flat_name = data.optString("flat_name");
+                        String block = data.optString("block");
+                        String complex_name = data.optString("complex_name");
+                        String complex_id = data.optString("complex_id");
 
-                        String emailid = data.get("emailid").getAsString().replaceAll("\"", "");
-                        String user_name = data.get("user_name").getAsString().replaceAll("\"", "");
-                        String user_mobile = data.get("user_mobile").getAsString().replaceAll("\"", "");
-                        String user_image = data.get("user_image").getAsString().replaceAll("\"", "");
-                        String first_time_login = data.get("first_time_login").getAsString().replaceAll("\"", "");
-                        String is_login = data.get("is_login").getAsString().replaceAll("\"", "");
+                        String emailid = data.optString("emailid");
+                        String user_name = data.optString("user_name");
+                        String user_mobile = data.optString("user_mobile");
+                        String user_image = data.optString("user_image");
+                        String first_time_login = data.optString("first_time_login");
+                        String is_login = data.optString("is_login");
+
                         globalClass.setId(user_id);
                         globalClass.setName(user_name);
                         globalClass.setPhone_number(user_mobile);
@@ -153,7 +144,8 @@ public class OtpScreen extends AppCompatActivity {
 
                     }
                     else {
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                        TastyToast.makeText(getApplicationContext(),
+                                message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                     }
 
@@ -185,11 +177,11 @@ public class OtpScreen extends AppCompatActivity {
 
 
 
-                params.put("phone_Number",number);
-                params.put("otp",otp);
+                params.put("phone_Number", number);
+                params.put("otp", otp);
                 params.put("device_type","android");
                 params.put("device_id",device_id);
-                params.put("fcm_token","12222");
+                params.put("fcm_token", globalClass.getFcm_reg_token());
 
                 Log.d(TAG, "params "+params);
 
@@ -206,13 +198,12 @@ public class OtpScreen extends AppCompatActivity {
 
 
     }
+
     void startAnim(){
         avLoadingIndicatorView.show();
-        // or avi.smoothToShow();
     }
 
     void stopAnim(){
         avLoadingIndicatorView.hide();
-        // or avi.smoothToHide();
     }
 }

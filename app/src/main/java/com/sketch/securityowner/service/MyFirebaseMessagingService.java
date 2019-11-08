@@ -41,20 +41,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
-        message = remoteMessage.getNotification().getBody();
         if (remoteMessage == null)
             return;
 
-        if (remoteMessage.getNotification() != null) {
-            Log.e(TAG, "Notification : " + remoteMessage.getNotification().getBody());
-           // handleNotification(remoteMessage.getNotification().getBody());
-           // showNotification();
-        }
 
         if (remoteMessage.getData().size() > 0) {
             Log.e(TAG, "Data Payload: " + remoteMessage.getData().toString());
 
-            String message = remoteMessage.getData().get("message"); // message
+            String message = remoteMessage.getData().get("body"); // message
             String title = remoteMessage.getData().get("title"); // Notification
             String type = remoteMessage.getData().get("type"); // call/new call
 
@@ -233,11 +227,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
 
-    static void sendResponseToActivityScreen(Context context, String type,
-                                             String approved_by) {
+    static void sendResponseToActivityScreen(Context context, String type) {
         Intent intent = new Intent("activity_screen");
         intent.putExtra("type", type);
-        intent.putExtra("approved_by", approved_by);
         context.sendBroadcast(intent);
     }
 

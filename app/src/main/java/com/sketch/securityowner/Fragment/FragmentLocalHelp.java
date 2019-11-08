@@ -138,7 +138,7 @@ public class FragmentLocalHelp extends Fragment {
         startAnim();
 
         StringRequest strReq = new StringRequest(Request.Method.GET,
-                AppConfig.URL_DEV+"help_category_list", new Response.Listener<String>() {
+                AppConfig.help_category_list, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {

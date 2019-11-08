@@ -1174,7 +1174,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
        // startAnim();
        pd.show();
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"add_panic", new Response.Listener<String>() {
+                AppConfig.add_panic, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -1471,7 +1471,7 @@ public void Logout(){
     pd.show();
 
     StringRequest strReq = new StringRequest(Request.Method.POST,
-            AppConfig.URL_DEV+"logout", new Response.Listener<String>() {
+            AppConfig.logout, new Response.Listener<String>() {
 
         @Override
         public void onResponse(String response) {
@@ -1544,7 +1544,7 @@ public void Logout(){
 
          pd.show();
 
-        String url = AppConfig.URL_DEV+"profile_update";
+        String url = AppConfig.profile_update;
         AsyncHttpClient cl = new AsyncHttpClient();
         RequestParams params = new RequestParams();
 
@@ -1662,7 +1662,7 @@ public void Logout(){
 
           pd.show();
 
-        String url = AppConfig.URL_DEV+"add_family_member";
+        String url = AppConfig.add_family_member;
         AsyncHttpClient cl = new AsyncHttpClient();
         RequestParams params = new RequestParams();
 
@@ -1747,7 +1747,7 @@ public void Logout(){
 
         pd.show();
 
-        String url = AppConfig.URL_DEV+"add_car";
+        String url = AppConfig.add_car;
         AsyncHttpClient cl = new AsyncHttpClient();
         RequestParams params = new RequestParams();
 
@@ -1824,7 +1824,7 @@ public void Logout(){
        pd.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"profile_details", new Response.Listener<String>() {
+                AppConfig.profile_details, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -2014,7 +2014,7 @@ public void Logout(){
        pd.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"company_list", new Response.Listener<String>() {
+                AppConfig.company_list, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -2120,7 +2120,7 @@ public void Logout(){
        pd.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"company_list", new Response.Listener<String>() {
+                AppConfig.company_list, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -2225,7 +2225,7 @@ public void Logout(){
         startAnim();
 
         StringRequest strReq = new StringRequest(Request.Method.GET,
-                AppConfig.URL_DEV+"help_category_list", new Response.Listener<String>() {
+                AppConfig.help_category_list, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {

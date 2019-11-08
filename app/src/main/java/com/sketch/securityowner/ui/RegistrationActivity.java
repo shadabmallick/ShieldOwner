@@ -252,7 +252,7 @@ public class RegistrationActivity extends AppCompatActivity {
         startAnim();
 
         StringRequest strReq = new StringRequest(Request.Method.GET,
-                AppConfig.URL_DEV+"city_list", new Response.Listener<String>() {
+                AppConfig.city_list, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -360,7 +360,7 @@ public class RegistrationActivity extends AppCompatActivity {
         startAnim();
         complexList.clear();
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"complex_list", new Response.Listener<String>() {
+                AppConfig.complex_list, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -465,7 +465,7 @@ public class RegistrationActivity extends AppCompatActivity {
         startAnim();
         blockList.clear();
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"block_list", new Response.Listener<String>() {
+                AppConfig.block_list, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -567,7 +567,7 @@ public class RegistrationActivity extends AppCompatActivity {
         startAnim();
         flatList.clear();
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.URL_DEV+"flat_list", new Response.Listener<String>() {
+                AppConfig.flat_list, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
