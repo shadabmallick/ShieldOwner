@@ -2,7 +2,7 @@ package com.sketch.securityowner.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,49 +11,60 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.sdsmdg.tastytoast.TastyToast;
 import com.sketch.securityowner.R;
 import com.sketch.securityowner.ui.ChatAppActivity;
-import com.sketch.securityowner.ui.HelpListDetails;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class AdapterHelpDesk  extends RecyclerView.Adapter<AdapterHelpDesk.MyViewHolder> {
+public class AdapterHelpList  extends RecyclerView.Adapter<AdapterHelpList.MyViewHolder> {
 
 
     Context context;
     ArrayList<HashMap<String,String>> cityList;
 
-    public AdapterHelpDesk(Context context, ArrayList<HashMap<String,String>> cityList) {
+    public AdapterHelpList(Context context, ArrayList<HashMap<String,String>> cityList) {
         this.cityList = cityList;
         this.context=context;
     }
 
     @Override
-    public AdapterHelpDesk.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.help_adapter, parent, false);
-        AdapterHelpDesk.MyViewHolder vh = new AdapterHelpDesk.MyViewHolder(view);
+    public AdapterHelpList.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_help_list, parent, false);
+        AdapterHelpList.MyViewHolder vh = new AdapterHelpList.MyViewHolder(view);
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(final AdapterHelpDesk.MyViewHolder holder, final int position) {
+    public void onBindViewHolder(final AdapterHelpList.MyViewHolder holder, final int position) {
         Picasso.with(context).load(cityList.get(position).get("image")).
                 fit().into(holder.profile_image);
         String staff_name=cityList.get(position).get("name");
         holder.name.setText(staff_name);
+        holder.iv_call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               callPhone(cityList.get(position).get("mobile"));
+            }
+        });
+/*
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent placeorder=new Intent(context, HelpListDetails.class);
-                placeorder.putExtra("category",cityList.get(position).get("name"));
+                Intent placeorder=new Intent(context, ChatAppActivity.class);
 
                 context.startActivity(placeorder);
             }
         });
+*/
+    }
+    private void callPhone(String number){
+
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + number));// Initiates the Intent
+        context.startActivity(intent);
+
     }
 
     @Override
@@ -72,7 +83,7 @@ public class AdapterHelpDesk  extends RecyclerView.Adapter<AdapterHelpDesk.MyVie
     public class MyViewHolder extends RecyclerView.ViewHolder {
         // init the item view's
         TextView name;
-        ImageView profile_image;
+        ImageView profile_image,iv_call;
 
 
         public MyViewHolder(View itemView) {
@@ -81,6 +92,7 @@ public class AdapterHelpDesk  extends RecyclerView.Adapter<AdapterHelpDesk.MyVie
             name =  itemView.findViewById(R.id.tv_name);
 
             profile_image =  itemView.findViewById(R.id.profile_image);
+            iv_call =  itemView.findViewById(R.id.iv_call);
 
 
 

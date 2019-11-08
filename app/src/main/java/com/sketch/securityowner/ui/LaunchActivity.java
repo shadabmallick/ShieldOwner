@@ -39,6 +39,8 @@ import com.sketch.securityowner.GlobalClass.Shared_Preference;
 import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,6 +65,7 @@ public class LaunchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.launch_page);
         globalClass = (GlobalClass)getApplicationContext();
+        fcm_token = FirebaseInstanceId.getInstance().getToken();
         prefrence = new Shared_Preference(LaunchActivity.this);
         prefrence.loadPrefrence();
         pd=new ProgressDialog(LaunchActivity.this);
@@ -112,6 +115,8 @@ public class LaunchActivity extends AppCompatActivity {
             }
         });
     }
+
+
     private void checkLogin(final String number) {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
@@ -121,22 +126,18 @@ public class LaunchActivity extends AppCompatActivity {
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.URL_DEV+"login_otp", new Response.Listener<String>() {
 
-
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, "Login Response: " + response.toString());
 
                 pd.dismiss();
 
-                Gson gson = new Gson();
-
-                try
-                {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
 
 
-                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
-                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
-                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+                    String status = jsonObject.optString("status");
+                    String message = jsonObject.optString("message");
 
                     Log.d(TAG, "Message: "+message);
 
@@ -155,25 +156,22 @@ public class LaunchActivity extends AppCompatActivity {
                         pd.dismiss();
 
 
+                    } else {
 
+                        TastyToast.makeText(getApplicationContext(),
+                                message, TastyToast.LENGTH_LONG,
+                                TastyToast.WARNING).show();
                     }
-                    else {
-
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.WARNING).show();
-                    }
-
 
                     Log.d(TAG,"Token \n" +message);
 
-
-
                 }catch (Exception e) {
 
-                    Toast.makeText(getApplicationContext(),"DATA NOT FOUND", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),
+                            "DATA NOT FOUND", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
 
                 }
-
 
             }
         }, new Response.ErrorListener() {
@@ -200,8 +198,7 @@ public class LaunchActivity extends AppCompatActivity {
 
                 if (fcm_token==null){
                     params.put("fcm_token","123456");
-                }
-                else {
+                } else {
                     params.put("fcm_token",fcm_token);
                 }
 

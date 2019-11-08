@@ -18,6 +18,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -46,6 +47,7 @@ public class OtpScreen extends AppCompatActivity {
     GlobalClass globalClass;
     Shared_Preference preference;
     TextView tv_otp_sent;
+    String fcm_token;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,9 +62,11 @@ public class OtpScreen extends AppCompatActivity {
         preference.loadPrefrence();
         device_id = Settings.Secure.getString(this.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
+        fcm_token = FirebaseInstanceId.getInstance().getToken();
 
         Bundle bundle = getIntent().getExtras();
         number = bundle.getString("number");
+
         tv_otp_sent.setText(number);
       /*  otp = bundle.getString("otp");
         fcm = bundle.getString("fcm_token");
@@ -189,7 +193,7 @@ public class OtpScreen extends AppCompatActivity {
                 params.put("otp",otp);
                 params.put("device_type","android");
                 params.put("device_id",device_id);
-                params.put("fcm_token","12222");
+                params.put("fcm_token",fcm_token);
 
                 Log.d(TAG, "params "+params);
 

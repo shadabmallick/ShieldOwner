@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:card_view="http://schemas.android.com/tools"
+    >
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="4dp"
+        app:cardUseCompatPadding="true"
+        card_view:cardBackgroundColor="@color/white"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            >
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:civ_border_width="1dp"
+                app:civ_border_color="@color/orange"
+                android:src="@mipmap/profile_image"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/profile_image"
+                android:layout_toLeftOf="@+id/iv_call"
+                android:layout_centerVertical="true"
+                android:orientation="vertical"
+                android:paddingStart="8dp"
+                android:paddingEnd="5dp"
+                >
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/dark_gray"
+                    android:textStyle="bold"
+                    android:text="Sourav"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_flat_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/orange"
+                    android:text="Flat 1"
+                    />
+
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iv_call"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/circle_blue"
+                android:layout_alignParentEnd="true"
+                android:tint="@android:color/white"
+                android:src="@drawable/ic_phone_call"
+                android:layout_centerVertical="true"
+                android:padding="10dp"
+                android:contentDescription="@string/app_name"
+                />
+
+
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+</RelativeLayout>

@@ -179,6 +179,7 @@ public class Activity_activity extends AppCompatActivity implements
     View view_all_visitor,view_upcoming_visitor;
     TextView  tv_animal,tv_medical,tv_thief,tv_threat,tv_lift,tv_time,date_picker,tv_upcoming_visitor,tv_all_visitor;
     Button btn_in;
+    Dialog dialog;
     String category,help_id,date_to_push;
     ArrayAdapter<String> dataAdapter1;
     Spinner spinner_help;
@@ -377,8 +378,8 @@ public class Activity_activity extends AppCompatActivity implements
 
     }
     public void AddCab(){
-        final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.dailog_cab);
+        dialog = new Dialog(this);
+        dialog.setContentView(R.layout.cab_dilaog_for_settings);
         dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         // set the custom dialog components - text, image and button
@@ -392,7 +393,7 @@ public class Activity_activity extends AppCompatActivity implements
         edit_phone_cab=dialog.findViewById(R.id.edit_phone);
         tv_time=dialog.findViewById(R.id.tv_time);
         tv_details_company=dialog.findViewById(R.id.tv_details_company);
-        ll_submit=dialog.findViewById(R.id.ll_submit);
+        ll_submit=dialog.findViewById(R.id.ll_submit_settigns);
         tv_others=dialog.findViewById(R.id.tv_others);
         company_name_recycle=dialog.findViewById(R.id.company_name_recycle);
         HorizontalLayout3 = new LinearLayoutManager(Activity_activity.this, LinearLayoutManager.HORIZONTAL, false);
@@ -407,7 +408,7 @@ public class Activity_activity extends AppCompatActivity implements
                 mMonth = c.get(Calendar.MONTH);
                 mDay = c.get(Calendar.DAY_OF_MONTH);
 
-                new android.app.DatePickerDialog(Activity_activity.this, datePickerListener, mYear, mMonth, mDay).show();
+                new android.app.DatePickerDialog(Activity_activity.this,R.style.datepicker, datePickerListener, mYear, mMonth, mDay).show();
 
 
             }
@@ -442,7 +443,7 @@ public class Activity_activity extends AppCompatActivity implements
                 dialog.dismiss();
             }
         });
-        LinearLayout ll_submit=dialog.findViewById(R.id.ll_submit);
+
 
         // if button is clicked, close the custom dialog
         ll_submit.setOnClickListener(new View.OnClickListener() {
@@ -452,9 +453,9 @@ public class Activity_activity extends AppCompatActivity implements
 
                 // find the radiobutton by returned id
                 radio1 = dialog.findViewById(selectedId);
+                String radio_value=radio1.getText().toString();
+                AddVisitors("cab",radio_value);
 
-                Toast.makeText(Activity_activity.this,
-                        radio1.getText(), Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -492,7 +493,7 @@ public class Activity_activity extends AppCompatActivity implements
                     String myFormat = "dd MMMM, yyyy";
 
                     SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-                    SimpleDateFormat sdf1 = new SimpleDateFormat("yy-MM-dd", Locale.US);
+                    SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                     //   date_notify_exam = sdf1.format(myCalendar.getTime());
                     String date_to_show = sdf.format(myCalendar.getTime());
                      date_to_push = sdf1.format(myCalendar.getTime());
@@ -512,7 +513,7 @@ public class Activity_activity extends AppCompatActivity implements
 
 
         TimePickerDialog mTimePicker;
-        mTimePicker = new TimePickerDialog(Activity_activity.this, new TimePickerDialog.OnTimeSetListener() {
+        mTimePicker = new TimePickerDialog(Activity_activity.this, R.style.datepicker,new TimePickerDialog.OnTimeSetListener() {
 
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
@@ -522,7 +523,391 @@ public class Activity_activity extends AppCompatActivity implements
 
         mTimePicker.show();
     }
+    private void AddVisitorHelp(final String type,final String radio_value) {
+        // Tag used to cancel the request
+        String tag_string_req = "req_login";
+        HelpList.clear();
+       progressDialog.show();
 
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_DEV+"add_visitor", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+
+                progressDialog.dismiss();
+                //  dialog.dismiss();
+
+                Gson gson = new Gson();
+
+                try {
+
+
+                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
+                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
+                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+
+
+                    if(status.equals("1")) {
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+
+                        getActivityList();
+                        //array.add("Select Location");
+                      //  JsonArray jarray = jobj.getAsJsonArray("data");
+                      //  Log.d("jarray", "" + jarray.toString());
+
+                    }
+
+                    else {
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                    }
+
+
+
+                } catch (Exception e) {
+                    TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
+                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                progressDialog.dismiss();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<>();
+
+                params.put("type", type);
+                params.put("time", tv_time.getText().toString());
+                params.put("date", date_to_push);
+                params.put("flat_no", globalClass.getFlat_no());
+                params.put("complex_id", globalClass.getComplex_id());
+                params.put("visitor_name",edit_name_cab.getText().toString() );
+                params.put("visitor_mobile",edit_phone_cab.getText().toString() );
+               // params.put("vehicle_no",edit_vehicle_no.getText().toString() );
+                params.put("frequency",radio_value);
+
+                params.put("visiting_help_cat",help_id);
+                params.put("profileImage","");
+                params.put("user_id",globalClass.getId());
+
+                Log.d(TAG, "getParams: "+params);
+                return params;
+            }
+
+
+
+        };
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(Activity_activity.this)
+                .addToRequestQueue(strReq
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+
+    }
+    private void AddDelivery(final String type,final String radio_value) {
+        // Tag used to cancel the request
+        String tag_string_req = "req_login";
+        HelpList.clear();
+        progressDialog.show();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_DEV+"add_visitor", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+
+                progressDialog.dismiss();
+                //  dialog.dismiss();
+
+                Gson gson = new Gson();
+
+                try {
+
+
+                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
+                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
+                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+
+
+                    if(status.equals("1")) {
+
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                        //array.add("Select Location");
+                        //  JsonArray jarray = jobj.getAsJsonArray("data");
+                        //  Log.d("jarray", "" + jarray.toString());
+
+                    }
+
+                    else {
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                    }
+
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
+                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                progressDialog.dismiss();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<>();
+
+                params.put("type", type);
+                params.put("time", tv_time.getText().toString());
+                params.put("date", date_to_push);
+                params.put("flat_no", globalClass.getFlat_no());
+                params.put("complex_id", globalClass.getComplex_id());
+                params.put("visitor_name",edit_name_cab.getText().toString() );
+                params.put("visitor_mobile",edit_phone_cab.getText().toString() );
+                // params.put("vehicle_no",edit_vehicle_no.getText().toString() );
+                params.put("frequency",radio_value);
+                params.put("vendor_name",category);
+                params.put("visiting_help_cat","");
+                params.put("profileImage","");
+                params.put("user_id",globalClass.getId());
+
+                Log.d(TAG, "getParams: "+params);
+                return params;
+            }
+
+
+
+        };
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(Activity_activity.this)
+                .addToRequestQueue(strReq
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+
+    }
+
+    private void AddVisitors(final String type,final String radio_value) {
+        // Tag used to cancel the request
+        String tag_string_req = "req_login";
+        HelpList.clear();
+       progressDialog.show();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_DEV+"add_visitor", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+
+                progressDialog.dismiss();
+                 // dialog.dismiss();
+
+                Gson gson = new Gson();
+
+                try {
+
+
+                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
+                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
+                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+
+
+                    if(status.equals("1")) {
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+
+                        getActivityList();
+
+                        //array.add("Select Location");
+                      //  JsonArray jarray = jobj.getAsJsonArray("data");
+                      //  Log.d("jarray", "" + jarray.toString());
+
+                    }
+
+                    else {
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                    }
+
+
+
+                } catch (Exception e) {
+                    TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
+                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                progressDialog.dismiss();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<>();
+
+                params.put("type", type);
+                params.put("time", tv_time.getText().toString());
+                params.put("date", date_to_push);
+                params.put("flat_no", globalClass.getFlat_no());
+                params.put("complex_id", globalClass.getComplex_id());
+                params.put("visitor_name",edit_name_cab.getText().toString() );
+                params.put("visitor_mobile",edit_phone_cab.getText().toString() );
+                params.put("vehicle_no",edit_vehicle_no.getText().toString() );
+                params.put("frequency",radio_value);
+                params.put("vendor_name",category);
+                params.put("visiting_help_cat","");
+                params.put("profileImage","");
+                params.put("user_id",globalClass.getId());
+
+                Log.d(TAG, "getParams: "+params);
+                return params;
+            }
+
+
+
+        };
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(Activity_activity.this)
+                .addToRequestQueue(strReq
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+
+    }
+    private void AddGuest(final String type,final String radio_value) {
+        // Tag used to cancel the request
+        String tag_string_req = "req_login";
+        HelpList.clear();
+       progressDialog.show();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_DEV+"add_visitor", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+
+                progressDialog.dismiss();
+                 // dialog.dismiss();
+
+                Gson gson = new Gson();
+
+                try {
+
+
+                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
+                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
+                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+
+
+                    if(status.equals("1")) {
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+
+                        getActivityList();
+                        //array.add("Select Location");
+                      //  JsonArray jarray = jobj.getAsJsonArray("data");
+                      //  Log.d("jarray", "" + jarray.toString());
+
+                    }
+
+                    else {
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                    }
+
+
+
+                } catch (Exception e) {
+                    TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
+                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                progressDialog.dismiss();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<>();
+
+                params.put("type", type);
+                params.put("time", tv_time.getText().toString());
+                params.put("date", date_to_push);
+                params.put("flat_no", globalClass.getFlat_no());
+                params.put("complex_id", globalClass.getComplex_id());
+                params.put("visitor_name",edit_name_cab.getText().toString() );
+                params.put("visitor_mobile",edit_phone_cab.getText().toString() );
+                params.put("vehicle_no",edit_vehicle_no.getText().toString() );
+                params.put("frequency",radio_value);
+                params.put("visiting_help_cat","");
+                params.put("profileImage","");
+                params.put("user_id",globalClass.getId());
+
+                Log.d(TAG, "getParams: "+params);
+                return params;
+            }
+
+
+
+        };
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(Activity_activity.this)
+                .addToRequestQueue(strReq
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+
+    }
 
     public void AddDelivery(){
         final Dialog dialog = new Dialog(this);
@@ -559,7 +944,7 @@ public class Activity_activity extends AppCompatActivity implements
                 mMonth = c.get(Calendar.MONTH);
                 mDay = c.get(Calendar.DAY_OF_MONTH);
 
-                new android.app.DatePickerDialog(Activity_activity.this, datePickerListener, mYear, mMonth, mDay).show();
+                new android.app.DatePickerDialog(Activity_activity.this,R.style.datepicker, datePickerListener, mYear, mMonth, mDay).show();
 
 
             }
@@ -593,9 +978,10 @@ public class Activity_activity extends AppCompatActivity implements
 
                 // find the radiobutton by returned id
                 radio1 = dialog.findViewById(selectedId);
+                String radio_value=radio1.getText().toString();
+                AddDelivery("delivery",radio_value);
 
-                Toast.makeText(Activity_activity.this,
-                        radio1.getText(), Toast.LENGTH_SHORT).show();
+
                 dialog.dismiss();
             }
         });
@@ -653,7 +1039,7 @@ public class Activity_activity extends AppCompatActivity implements
                 mMonth = c.get(Calendar.MONTH);
                 mDay = c.get(Calendar.DAY_OF_MONTH);
 
-                new android.app.DatePickerDialog(Activity_activity.this, datePickerListener, mYear, mMonth, mDay).show();
+                new android.app.DatePickerDialog(Activity_activity.this,R.style.datepicker, datePickerListener, mYear, mMonth, mDay).show();
 
 
             }
@@ -687,8 +1073,8 @@ public class Activity_activity extends AppCompatActivity implements
                 // find the radiobutton by returned id
                 radio1 = dialog.findViewById(selectedId);
 
-                Toast.makeText(Activity_activity.this,
-                        radio1.getText(), Toast.LENGTH_SHORT).show();
+                String radio_value=radio1.getText().toString();
+                AddGuest("guest",radio_value);
                 dialog.dismiss();
             }
         });
@@ -725,7 +1111,7 @@ public class Activity_activity extends AppCompatActivity implements
                 mMonth = c.get(Calendar.MONTH);
                 mDay = c.get(Calendar.DAY_OF_MONTH);
 
-                new android.app.DatePickerDialog(Activity_activity.this, datePickerListener, mYear, mMonth, mDay).show();
+                new android.app.DatePickerDialog(Activity_activity.this,R.style.datepicker, datePickerListener, mYear, mMonth, mDay).show();
 
 
             }
@@ -758,7 +1144,7 @@ public class Activity_activity extends AppCompatActivity implements
                 // If user change the default selection
                 // First item is disable and it is used for hint
                 if(position !=0){
-                    help_id = HelpList.get(position-1).get("id");
+                    help_id = HelpList.get(position-1).get("name");
                     Log.d(TAG, "onItemSelected: "+help_id);
 
 
@@ -791,9 +1177,9 @@ public class Activity_activity extends AppCompatActivity implements
 
                 // find the radiobutton by returned id
                 radio1 = dialog.findViewById(selectedId);
+                String radio_value=radio1.getText().toString();
 
-                Toast.makeText(Activity_activity.this,
-                        radio1.getText(), Toast.LENGTH_SHORT).show();
+                AddVisitorHelp("visiting_help",radio_value);
                 dialog.dismiss();
             }
         });
@@ -2017,357 +2403,7 @@ public class Activity_activity extends AppCompatActivity implements
 
 
     AlertDialog alertDialog;
-/*
-    private void showVisitorDetailsDialog(ActivityChild activityChild){
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = this.getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_visitor_details, null);
-        dialogBuilder.setView(dialogView);
-        dialogBuilder.setCancelable(false);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-
-
-        TextView tv_qr_code = dialogView.findViewById(R.id.tv_qr_code);
-        EditText edt_phone = dialogView.findViewById(R.id.edt_phone);
-        EditText edt_name = dialogView.findViewById(R.id.edt_name);
-        EditText edt_to_meet = dialogView.findViewById(R.id.edt_to_meet);
-        TextView tv_block_flat = dialogView.findViewById(R.id.tv_block_flat);
-        TextView tv_type = dialogView.findViewById(R.id.tv_type);
-        TextView tv_vehicle_no = dialogView.findViewById(R.id.tv_vehicle_no);
-        tv_request_response = dialogView.findViewById(R.id.tv_request_response);
-        profile_image = dialogView.findViewById(R.id.profile_image);
-        ImageView iv_camera = dialogView.findViewById(R.id.iv_camera);
-        ImageView iv_cancel = dialogView.findViewById(R.id.iv_cancel);
-        ImageView vendor_img = dialogView.findViewById(R.id.vendor_img);
-        btn_in = dialogView.findViewById(R.id.btn_in);
-        Button btn_choose_block_flat = dialogView.findViewById(R.id.btn_choose_block_flat);
-
-        RelativeLayout rel_block_flat_selection =
-                dialogView.findViewById(R.id.rel_block_flat_selection);
-        rel_block_flat_selection.setVisibility(View.GONE);
-
-        alertDialog = dialogBuilder.create();
-        alertDialog.show();
-
-        edt_phone.setEnabled(false);
-        edt_name.setEnabled(false);
-
-        btn_in.setText("Request for Permission");
-
-
-        iv_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                approved_by = "";
-                response_value = "";
-                approve_status = false;
-                alertDialog.dismiss();
-            }
-        });
-
-
-        try {
-
-            if (activityChild.getName().isEmpty()){
-                edt_phone.setEnabled(true);
-            }
-            if (activityChild.getMobile().isEmpty()){
-                edt_name.setEnabled(true);
-            }
-            tv_vehicle_no.setVisibility(View.GONE);
-
-
-            tv_qr_code.setText("Visitor Entry:");
-            edt_phone.setText(activityChild.getMobile());
-            edt_name.setText(activityChild.getName());
-            edt_to_meet.setText(activityChild.getRequested_by());
-
-            if (activityChild.getVisitor_type().equals(AppConfig.delivery)) {
-                tv_type.setText("(Delivery)");
-            }else  if (activityChild.getVisitor_type().equals(AppConfig.cab)) {
-                tv_type.setText("(Cab)");
-                tv_vehicle_no.setVisibility(View.VISIBLE);
-                tv_vehicle_no.setText(activityChild.getVehicle_no());
-            }else  if (activityChild.getVisitor_type().equals(AppConfig.guest)) {
-                tv_type.setText("(Guest)");
-                vendor_img.setVisibility(View.GONE);
-            }else  if (activityChild.getVisitor_type().equals(AppConfig.staff)) {
-                tv_type.setText("(Staff)");
-            }else  if (activityChild.getVisitor_type().equals(AppConfig.visiting_help)) {
-                tv_type.setText("(Domestic HelpScreen)\n"
-                        + activityChild.getVisiting_help_cat());
-            }
-
-
-
-
-            tv_block_flat.setText("Block-Flat: "
-                    +activityChild.getBlock()+"-"+activityChild.getFlat_no());
-
-            if (!activityChild.getRequested_by().isEmpty()){
-                edt_to_meet.setEnabled(false);
-            }
-
-            Glide.with(Activity_activity.this)
-                    .load(activityChild.getProfile_image())
-                    .placeholder(R.mipmap.pf_icon)
-                    .into(profile_image);
-
-            Glide.with(Activity_activity.this)
-                    .load(activityChild.getVendor_image())
-                    .placeholder(R.drawable.ic_image_black_24dp)
-                    .into(vendor_img);
-
-
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        iv_camera.setOnClickListener(v -> {
-
-            checkPermission();
-
-        });
-
-        btn_in.setOnClickListener(v -> {
-
-            String phone = edt_phone.getText().toString();
-            String name = edt_name.getText().toString();
-
-            if (phone.trim().isEmpty()){
-                TastyToast.makeText(Activity_activity.this,
-                        "Enter visitor phone number",
-                        TastyToast.LENGTH_LONG, TastyToast.WARNING);
-                return;
-            }
-            if (name.trim().isEmpty()){
-                TastyToast.makeText(Activity_activity.this,
-                        "Enter visitor name",
-                        TastyToast.LENGTH_LONG, TastyToast.WARNING);
-                return;
-            }
-
-            addVisitorFromActivity(activityChild, phone, name);
-
-        });
-
-
-
-    }
-*/
-
-
-/*
-    private void addVisitorFromActivity(ActivityChild activityChild,
-                                        String phone, String name){
-
-        progressDialog.show();
-
-        String url = ApiClients.from_activity_visitor_add_by_security;
-
-        AsyncHttpClient client = new AsyncHttpClient();
-        RequestParams params = new RequestParams();
-
-
-        params.put(ApiClients.complex_id, globalClass.getComplex_id());
-        params.put(ApiClients.security_id, globalClass.getUser_id());
-        params.put(ApiClients.activity_id, activityChild.getActivity_id());
-        params.put(ApiClients.table, activityChild.getType());
-        params.put(ApiClients.visitor_name, name);
-        params.put(ApiClients.visitor_mobile, phone);
-        params.put(ApiClients.type, activityChild.getVisitor_type());
-        params.put(ApiClients.flat, activityChild.getFlat_no());
-        params.put(ApiClients.time, activityChild.getVisiting_time());
-        params.put(ApiClients.date, activityChild.getVisiting_date());
-        params.put(ApiClients.visiting_help_cat, activityChild.getVisiting_help_cat());
-        params.put(ApiClients.approve_status, approve_status);
-        params.put(ApiClients.response_value, response_value);
-        params.put(ApiClients.approved_by, approved_by);
-
-
-        Log.d(ApiClients.TAG , "from_activity_visitor_add- " + url);
-        Log.d(ApiClients.TAG , "from_activity_visitor_add- " + params.toString());
-
-
-        try{
-
-            if (p_image != null){
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-                    if (mCurrentPhotoPath != null){
-
-                        Uri uri = Uri.parse(mCurrentPhotoPath);
-
-                        File file = new File(getRealPathFromURI(uri));
-
-                        params.put(ApiClients.profileImage, file);
-                    }
-
-                }else {
-
-                    params.put(ApiClients.profileImage, p_image);
-                }
-
-            }
-
-
-        }catch (FileNotFoundException e){
-            e.printStackTrace();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        client.setSSLSocketFactory(
-                new SSLSocketFactory(Commons.getSslContext(),
-                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));
-
-
-        int DEFAULT_TIMEOUT = 15 * 1000;
-        client.setMaxRetriesAndTimeout(5 , DEFAULT_TIMEOUT);
-
-        client.post(url, params, new JsonHttpResponseHandler() {
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers,
-                                  JSONObject response) {
-
-                Log.d(ApiClients.TAG, "from_activity_visitor_add- " + response.toString());
-
-                if (response != null) {
-                    try {
-
-                        int status = response.optInt("status");
-                        String message = response.optString("message");
-
-                        if (status == 1){
-
-                            if (approve_status){
-
-                                TastyToast.makeText(Activity_activity.this,
-                                        "Visitor entry successful",
-                                        TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                                alertDialog.dismiss();
-
-                                getActivityList();
-
-                                approved_by = "";
-                                response_value = "";
-                                approve_status = false;
-
-                            }else {
-
-                                TastyToast.makeText(Activity_activity.this,
-                                        "Request sent.",
-                                        TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                                tv_request_response.setText("Waiting for Approval...");
-                                tv_request_response.setTextColor(getResources().getColor(R.color.yellow));
-                            }
-
-
-                        }else if (status == 2){
-
-                            response_value = "";
-                            approved_by = "";
-                            approve_status = false;
-
-                            TastyToast.makeText(Activity_activity.this,
-                                    message,
-                                    TastyToast.LENGTH_LONG, TastyToast.ERROR);
-
-                            alertDialog.dismiss();
-
-                            getActivityList();
-
-                        } else {
-
-                            TastyToast.makeText(Activity_activity.this,
-                                    message,
-                                    TastyToast.LENGTH_LONG, TastyToast.WARNING);
-                        }
-
-                        progressDialog.dismiss();
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers,
-                                  String res, Throwable t) {
-                Log.d(ApiClients.TAG, "new_visitor_add- " + res);
-                progressDialog.dismiss();
-
-                TastyToast.makeText(Activity_activity.this,
-                        "Server error. Try again.",
-                        TastyToast.LENGTH_LONG, TastyToast.WARNING);
-
-            }
-
-
-        });
-
-    }
-*/
-
-
-
-/*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-
-                Glide.with(Activity_activity.this)
-                        .clear(profile_image);
-
-                Uri uri = Uri.parse(mCurrentPhotoPath);
-
-                try {
-
-                    getContentResolver().notifyChange(uri, null);
-                    ContentResolver cr = getContentResolver();
-
-                    Bitmap photo = MediaStore.Images.Media.getBitmap(cr, uri);
-                    photo = Commons.RotateBitmap(photo, 90);
-                    writeBitmap(photo);
-
-                    profile_image.setImageBitmap(photo);
-
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-            } else{
-
-                try {
-
-                    Glide.with(Activity_activity.this)
-                            .clear(profile_image);
-
-                    Bitmap photo = (Bitmap) data.getExtras().get("data");
-
-                    writeBitmap(photo);
-
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-
-            }
-
-        }else if (requestCode == CAMERA_REQUEST && resultCode == RESULT_CANCELED) {
-
-            p_image = null;
-
-        }
-    }
-*/
 
 
 

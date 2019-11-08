@@ -155,7 +155,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
     ScrollView scroll_details,scroll_settings;
     RelativeLayout rel_profile,rel_middle_icon;
     ImageView edit;
-    String category,help_id;
+    String category,help_id,date_web;
     TextView add_car,add_staff,add_member;
     EditText edit_name_cab,edit_phone_cab, edit_vehicle_no,tv_others;
     private final int PICK_IMAGE_CAMERA = 1, PICK_IMAGE_GALLERY = 2;
@@ -171,31 +171,6 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
        // browseJob();
         initToolBar();
 
-/*
-        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-                // checking for type intent filter
-                if (intent.getAction().equals(Config.REGISTRATION_COMPLETE)) {
-                    // gcm successfully registered
-                    // now subscribe to `global` topic to receive app wide notifications
-                    FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);
-
-                    displayFirebaseRegId();
-
-                } else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
-                    // new push notification is received
-
-                    String message = intent.getStringExtra("message");
-
-                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
-
-                    user_email.setText(message);
-                }
-            }
-        };
-*/
 
 
         browseJob();
@@ -987,7 +962,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                 mMonth = c.get(Calendar.MONTH);
                 mDay = c.get(Calendar.DAY_OF_MONTH);
 
-                new DatePickerDialog(SettingActivity.this, datePickerListener, mYear, mMonth, mDay).show();
+                new DatePickerDialog(SettingActivity.this, R.style.datepicker,datePickerListener, mYear, mMonth, mDay).show();
 
 
             }
@@ -1022,7 +997,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                 dialog.dismiss();
             }
         });
-      LinearLayout ll_submit=dialog.findViewById(R.id.ll_submit);
+      ll_submit=dialog.findViewById(R.id.ll_submit);
 
        // if button is clicked, close the custom dialog
         ll_submit.setOnClickListener(new View.OnClickListener() {
@@ -1033,8 +1008,11 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                // find the radiobutton by returned id
                radio1 = dialog.findViewById(selectedId);
 
-               Toast.makeText(SettingActivity.this,
-                       radio1.getText(), Toast.LENGTH_SHORT).show();
+               String radio_value=radio1.getText().toString();
+               AddVisitors("cab",radio_value);
+               dialog.dismiss();
+
+
 
            }
        });
@@ -1074,6 +1052,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                     SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
                  //   date_notify_exam = sdf1.format(myCalendar.getTime());
                     String date_to_show = sdf.format(myCalendar.getTime());
+                    date_web = sdf1.format(myCalendar.getTime());
                    // Log.d(TAG, "date_notify_exam: "+date_notify_exam);
                     date_picker.setText(date_to_show);
 
@@ -1088,12 +1067,33 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         mMinute = c.get(Calendar.MINUTE);
 
 
+
         TimePickerDialog mTimePicker;
-        mTimePicker = new TimePickerDialog(SettingActivity.this, new TimePickerDialog.OnTimeSetListener() {
+        mTimePicker = new TimePickerDialog(SettingActivity.this,R.style.datepicker,
+                new TimePickerDialog.OnTimeSetListener() {
 
             @Override
-            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                tv_time.setText( ""+selectedHour + ":" + selectedMinute);
+            public void onTimeSet(TimePicker timePicker, int selectedHour,
+                                  int selectedMinute) {
+
+                String time1 = selectedHour + ":" + selectedMinute;
+                SimpleDateFormat  format1 = new SimpleDateFormat("HH:mm",
+                        Locale.ENGLISH);
+                SimpleDateFormat  format2 = new SimpleDateFormat("hh:mm:ss a",
+                        Locale.ENGLISH);
+
+                try {
+
+                    Date date = format1.parse(time1);
+
+                    tv_time.setText(format2.format(date));
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+              //  tv_time.setText( ""+selectedHour + ":" + selectedMinute);
+
             }
         }, mHour, mMinute,true);
 
@@ -1136,7 +1136,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                 mMonth = c.get(Calendar.MONTH);
                 mDay = c.get(Calendar.DAY_OF_MONTH);
 
-                new DatePickerDialog(SettingActivity.this, datePickerListener, mYear, mMonth, mDay).show();
+                new DatePickerDialog(SettingActivity.this,R.style.datepicker, datePickerListener, mYear, mMonth, mDay).show();
 
 
             }
@@ -1171,8 +1171,8 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                 // find the radiobutton by returned id
                 radio1 = dialog.findViewById(selectedId);
 
-                Toast.makeText(SettingActivity.this,
-                        radio1.getText(), Toast.LENGTH_SHORT).show();
+                String radio_value=radio1.getText().toString();
+                AddDelivery("delivery",radio_value);
                 dialog.dismiss();
             }
         });
@@ -1230,7 +1230,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                 mMonth = c.get(Calendar.MONTH);
                 mDay = c.get(Calendar.DAY_OF_MONTH);
 
-                new DatePickerDialog(SettingActivity.this, datePickerListener, mYear, mMonth, mDay).show();
+                new DatePickerDialog(SettingActivity.this,R.style.datepicker, datePickerListener, mYear, mMonth, mDay).show();
 
 
             }
@@ -1264,8 +1264,8 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                 // find the radiobutton by returned id
                 radio1 = dialog.findViewById(selectedId);
 
-                Toast.makeText(SettingActivity.this,
-                        radio1.getText(), Toast.LENGTH_SHORT).show();
+                String radio_value=radio1.getText().toString();
+                AddGuest("guest",radio_value);
                 dialog.dismiss();
             }
         });
@@ -1302,7 +1302,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                 mMonth = c.get(Calendar.MONTH);
                 mDay = c.get(Calendar.DAY_OF_MONTH);
 
-                new DatePickerDialog(SettingActivity.this, datePickerListener, mYear, mMonth, mDay).show();
+                new DatePickerDialog(SettingActivity.this,R.style.datepicker, datePickerListener, mYear, mMonth, mDay).show();
 
 
             }
@@ -1335,7 +1335,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                 // If user change the default selection
                 // First item is disable and it is used for hint
                 if(position !=0){
-                    help_id = HelpList.get(position-1).get("id");
+                    help_id = HelpList.get(position-1).get("name");
                     Log.d(TAG, "onItemSelected: "+help_id);
 
 
@@ -1369,8 +1369,9 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                 // find the radiobutton by returned id
                 radio1 = dialog.findViewById(selectedId);
 
-                Toast.makeText(SettingActivity.this,
-                        radio1.getText(), Toast.LENGTH_SHORT).show();
+                String radio_value=radio1.getText().toString();
+
+                AddVisitorHelp("visiting_help",radio_value);
                 dialog.dismiss();
             }
         });
@@ -1395,6 +1396,389 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
 
 
         dialog.show();
+
+    }
+
+    private void AddVisitorHelp(final String type,final String radio_value) {
+        // Tag used to cancel the request
+        String tag_string_req = "req_login";
+        HelpList.clear();
+        pd.show();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_DEV+"add_visitor", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+
+                pd.dismiss();
+               // dialog.dismiss();
+
+                Gson gson = new Gson();
+
+                try {
+
+
+                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
+                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
+                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+
+
+                    if(status.equals("1")) {
+
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                        //array.add("Select Location");
+                        //  JsonArray jarray = jobj.getAsJsonArray("data");
+                        //  Log.d("jarray", "" + jarray.toString());
+
+                    }
+
+                    else {
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                    }
+
+
+
+                } catch (Exception e) {
+                    TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
+                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                pd.dismiss();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<>();
+
+                params.put("type", type);
+                params.put("time", tv_time.getText().toString());
+                params.put("date", date_web);
+                params.put("flat_no", globalClass.getFlat_no());
+                params.put("complex_id", globalClass.getComplex_id());
+                params.put("visitor_name",edit_name_cab.getText().toString() );
+                params.put("visitor_mobile",edit_phone_cab.getText().toString() );
+            //    params.put("vehicle_no",edit_vehicle_no.getText().toString() );
+                params.put("frequency",radio_value);
+
+                params.put("visiting_help_cat",help_id);
+                params.put("profileImage","");
+                params.put("user_id",globalClass.getId());
+
+                Log.d(TAG, "getParams: "+params);
+                return params;
+            }
+
+
+
+        };
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(SettingActivity.this)
+                .addToRequestQueue(strReq
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+
+    }
+    private void AddDelivery(final String type,final String radio_value) {
+        // Tag used to cancel the request
+        String tag_string_req = "req_login";
+        HelpList.clear();
+        pd.show();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_DEV+"add_visitor", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+
+                pd.dismiss();
+              //  dialog.dismiss();
+
+                Gson gson = new Gson();
+
+                try {
+
+
+                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
+                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
+                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+
+
+                    if(status.equals("1")) {
+
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                        //array.add("Select Location");
+                        //  JsonArray jarray = jobj.getAsJsonArray("data");
+                        //  Log.d("jarray", "" + jarray.toString());
+
+                    }
+
+                    else {
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                    }
+
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
+                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                pd.dismiss();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<>();
+
+                params.put("type", type);
+                params.put("time", tv_time.getText().toString());
+                params.put("date", date_web);
+                params.put("flat_no", globalClass.getFlat_no());
+                params.put("complex_id", globalClass.getComplex_id());
+                params.put("visitor_name",edit_name_cab.getText().toString() );
+                params.put("visitor_mobile",edit_phone_cab.getText().toString() );
+              // params.put("vehicle_no",edit_vehicle_no.getText().toString() );
+                params.put("frequency",radio_value);
+                params.put("vendor_name",category);
+                params.put("visiting_help_cat","");
+                params.put("profileImage","");
+                params.put("user_id",globalClass.getId());
+
+                Log.d(TAG, "getParams: "+params);
+                return params;
+            }
+
+
+
+        };
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(SettingActivity.this)
+                .addToRequestQueue(strReq
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+
+    }
+    private void AddVisitors(final String type,final String radio_value) {
+        // Tag used to cancel the request
+        String tag_string_req = "req_login";
+        HelpList.clear();
+        pd.show();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_DEV+"add_visitor", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+
+                pd.dismiss();
+              //  dialog.dismiss();
+
+                Gson gson = new Gson();
+
+                try {
+
+
+                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
+                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
+                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+
+
+                    if(status.equals("1")) {
+
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                        //array.add("Select Location");
+                        //  JsonArray jarray = jobj.getAsJsonArray("data");
+                        //  Log.d("jarray", "" + jarray.toString());
+
+                    }
+
+                    else {
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                    }
+
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
+                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                pd.dismiss();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<>();
+
+                params.put("type", type);
+                params.put("time", tv_time.getText().toString());
+                params.put("date", date_web);
+                params.put("flat_no", globalClass.getFlat_no());
+                params.put("complex_id", globalClass.getComplex_id());
+                params.put("visitor_name",edit_name_cab.getText().toString() );
+                params.put("visitor_mobile",edit_phone_cab.getText().toString() );
+               params.put("vehicle_no",edit_vehicle_no.getText().toString() );
+                params.put("frequency",radio_value);
+                params.put("vendor_name",category);
+                params.put("visiting_help_cat","");
+                params.put("profileImage","");
+                params.put("user_id",globalClass.getId());
+
+                Log.d(TAG, "getParams: "+params);
+                return params;
+            }
+
+
+
+        };
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(SettingActivity.this)
+                .addToRequestQueue(strReq
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+
+    }
+    private void AddGuest(final String type,final String radio_value) {
+        // Tag used to cancel the request
+        String tag_string_req = "req_login";
+        HelpList.clear();
+        pd.show();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_DEV+"add_visitor", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+
+                pd.dismiss();
+              //  dialog.dismiss();
+
+                Gson gson = new Gson();
+
+                try {
+
+
+                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
+                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
+                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+
+
+                    if(status.equals("1")) {
+
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                        //array.add("Select Location");
+                        //  JsonArray jarray = jobj.getAsJsonArray("data");
+                        //  Log.d("jarray", "" + jarray.toString());
+
+                    }
+
+                    else {
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                    }
+
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
+                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                pd.dismiss();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<>();
+
+                params.put("type", type);
+                params.put("time", tv_time.getText().toString());
+                params.put("date", date_web);
+                params.put("flat_no", globalClass.getFlat_no());
+                params.put("complex_id", globalClass.getComplex_id());
+                params.put("visitor_name",edit_name_cab.getText().toString() );
+                params.put("visitor_mobile",edit_phone_cab.getText().toString() );
+              //  params.put("vehicle_no",edit_vehicle_no.getText().toString() );
+                params.put("frequency",radio_value);
+                params.put("visiting_help_cat","");
+                params.put("profileImage","");
+                params.put("user_id",globalClass.getId());
+
+                Log.d(TAG, "getParams: "+params);
+                return params;
+            }
+
+
+
+        };
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(SettingActivity.this)
+                .addToRequestQueue(strReq
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
 
     }
 
@@ -1424,6 +1808,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
 
 
                     if(status.equals("1")) {
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
 
                     }
@@ -1435,6 +1820,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
 
 
                 } catch (Exception e) {
+                    e.printStackTrace();
                     TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                 }
@@ -1773,121 +2159,6 @@ public void Logout(){
                             new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
 
 }
-    public void updateProfile(final String name,final String phone,final String email){
-
-         pd.show();
-
-        String url = AppConfig.URL_DEV+"profile_update";
-        AsyncHttpClient cl = new AsyncHttpClient();
-        RequestParams params = new RequestParams();
-
-
-        params.put("user_id", globalClass.getId());
-        params.put("name",name);
-        params.put("emailid", email);
-        params.put("mobile", phone);
-
-        try{
-
-            params.put("profileImage", p_image);
-
-        }catch (FileNotFoundException e){
-            e.printStackTrace();
-        }
-        cl.setSSLSocketFactory(
-                new SSLSocketFactory(Config.getSslContext(),
-                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));
-
-
-
-        Log.d(TAG , "URL "+url);
-        Log.d(TAG , "params "+params.toString());
-
-
-        int DEFAULT_TIMEOUT = 30 * 1000;
-        cl.setMaxRetriesAndTimeout(5 , DEFAULT_TIMEOUT);
-        cl.post(url,params, new JsonHttpResponseHandler(){
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-
-                if (response != null) {
-                    Log.d(TAG, "user_profile_pic_update- " + response.toString());
-                    try {
-                     pd.dismiss();
-                     dialog.dismiss();
-
-                        //JSONObject result = response.getJSONObject("result");
-
-                        int status = response.getInt("status");
-                        String message = response.getString("message");
-
-                        if (status == 1) {
-
-                            // Log.d(TAG, "name: "+name)
-
-                            JSONObject data = response.getJSONObject("data");
-
-                            String user_id =data.get("user_id").toString().replaceAll("\"", "");
-                            String name=data.get("name").toString().replaceAll("\"", "");
-                            String emailid=data.get("emailid").toString().replaceAll("\"", "");
-                            String mobile=data.get("mobile").toString().replaceAll("\"", "");
-                            String profile_pic=data.get("profile_pic").toString().replaceAll("\"", "");
-
-
-
-                            globalClass.setId(user_id);
-                            globalClass.setEmail(emailid);
-                            globalClass.setName(name);
-                           globalClass.setPhone_number(mobile);
-                            globalClass.setProfil_pic(profile_pic);
-
-                            preference.savePrefrence();
-                            if(globalClass.getProfil_pic().equals("")){
-                                Picasso.with(getApplicationContext()).load("http://i.imgur.com/DvpvklR.png").into(profile_image_edit);
-                            }
-                            else {
-                                Picasso.with(getApplicationContext()).load(globalClass.getProfil_pic()).into(profile_image_edit);
-                            }
-                            edit_name.setText(globalClass.getName());
-
-                            browseJob();
-
-
-
-
-                            TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS).show();
-
-
-
-
-                        }else{
-
-                            TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS).show();
-
-
-                        }
-
-                        pd.dismiss();
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-
-
-                // pd.dismiss();
-            }
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
-                Log.d("Failed: ", ""+statusCode);
-                Log.d("Error : ", "" + throwable);
-            }
-        });
-
-
-    }
 
 
 
@@ -2451,6 +2722,97 @@ public void Logout(){
 
 
     }
+    private void Add(final String type) {
+        // Tag used to cancel the request
+        String tag_string_req = "req_login";
+
+
+       pd.show();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.URL_DEV+"add_visitor", new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+
+                pd.dismiss();
+
+
+                Gson gson = new Gson();
+
+                try {
+
+
+                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
+
+                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
+                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+
+                    Log.d(TAG, "Message: "+message);
+
+                    if(status.equals("1") ) {
+
+
+
+
+
+
+
+
+                    }
+                    else {
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    TastyToast.makeText(getApplicationContext(), "Error Connection", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
+                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                pd.dismiss();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<>();
+
+                params.put("type", "delivery");
+                params.put("time", tv_time.getText().toString());
+                params.put("date", date_web);
+                params.put("type", type);
+                params.put("flat_no", globalClass.getFlat_no());
+                params.put("complex_id", globalClass.getComplex_id());
+                params.put("visitor_name", edit_name_cab.getText().toString());
+                params.put("visitor_mobile", edit_phone_cab.getText().toString());
+
+                Log.d(TAG, "getParams: "+params);
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(SettingActivity.this)
+                .addToRequestQueue(strReq
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+
+    }
     private void BrowseCity() {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
@@ -2563,6 +2925,121 @@ public void Logout(){
         // or avi.smoothToHide();
     }
 
+    public void updateProfile(final String name,final String phone,final String email){
+
+        pd.show();
+
+        String url = AppConfig.URL_DEV+"profile_update";
+        AsyncHttpClient cl = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+
+
+        params.put("user_id", globalClass.getId());
+        params.put("name",name);
+        params.put("emailid", email);
+        params.put("mobile", phone);
+
+        try{
+
+            params.put("profileImage", p_image);
+
+        }catch (FileNotFoundException e){
+            e.printStackTrace();
+        }
+        cl.setSSLSocketFactory(
+                new SSLSocketFactory(Config.getSslContext(),
+                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));
+
+
+
+        Log.d(TAG , "URL "+url);
+        Log.d(TAG , "params "+params.toString());
+
+
+        int DEFAULT_TIMEOUT = 30 * 1000;
+        cl.setMaxRetriesAndTimeout(5 , DEFAULT_TIMEOUT);
+        cl.post(url,params, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+                if (response != null) {
+                    Log.d(TAG, "user_profile_pic_update- " + response.toString());
+                    try {
+                        pd.dismiss();
+                        dialog.dismiss();
+
+                        //JSONObject result = response.getJSONObject("result");
+
+                        int status = response.getInt("status");
+                        String message = response.getString("message");
+
+                        if (status == 1) {
+
+                            // Log.d(TAG, "name: "+name)
+
+                            JSONObject data = response.getJSONObject("data");
+
+                            String user_id =data.get("user_id").toString().replaceAll("\"", "");
+                            String name=data.get("name").toString().replaceAll("\"", "");
+                            String emailid=data.get("emailid").toString().replaceAll("\"", "");
+                            String mobile=data.get("mobile").toString().replaceAll("\"", "");
+                            String profile_pic=data.get("profile_pic").toString().replaceAll("\"", "");
+
+
+
+                            globalClass.setId(user_id);
+                            globalClass.setEmail(emailid);
+                            globalClass.setName(name);
+                            globalClass.setPhone_number(mobile);
+                            globalClass.setProfil_pic(profile_pic);
+
+                            preference.savePrefrence();
+                            if(globalClass.getProfil_pic().equals("")){
+                                Picasso.with(getApplicationContext()).load("http://i.imgur.com/DvpvklR.png").into(profile_image_edit);
+                            }
+                            else {
+                                Picasso.with(getApplicationContext()).load(globalClass.getProfil_pic()).into(profile_image_edit);
+                            }
+                            edit_name.setText(globalClass.getName());
+
+                            browseJob();
+
+
+
+
+                            TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS).show();
+
+
+
+
+                        }else{
+
+                            TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS).show();
+
+
+                        }
+
+                        pd.dismiss();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+
+                // pd.dismiss();
+            }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                Log.d("Failed: ", ""+statusCode);
+                Log.d("Error : ", "" + throwable);
+            }
+        });
+
+
+    }
 
 
     @Override
