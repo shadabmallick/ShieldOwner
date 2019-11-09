@@ -68,6 +68,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.sdsmdg.tastytoast.TastyToast;
+import com.sketch.securityowner.Adapter.AdapterHelpDesk;
 import com.sketch.securityowner.Adapter.CarAdapter;
 import com.sketch.securityowner.Adapter.FamilyAdapter;
 import com.sketch.securityowner.Adapter.StaffAdapter;
@@ -131,6 +132,8 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
     LinearLayoutManager HorizontalLayout3 ;
     LinearLayoutManager HorizontalLayout4 ;
     File p_image;
+    ArrayList<HashMap<String,String>> cityList;
+
      Dialog dialog;
     RadioButton radio1,radio2;
     private int mYear, mMonth, mDay, mHour, mMinute,mSecond;
@@ -1023,7 +1026,8 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         edit_staff_phone=dialog.findViewById(R.id.edit_staff_phone);
         edit_image_staff=dialog.findViewById(R.id.edit_image_staff);
         edit_image_staff.setOnClickListener(v -> selectImageStaff());
-
+        BrowseCity();
+        spinner_help=dialog.findViewById(R.id.spinner_help);
        // set the custom dialog components - text, image and button
 
        LinearLayout ll_save=dialog.findViewById(R.id.ll_save);
@@ -1040,6 +1044,10 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
        dialog.show();
 
    }
+
+
+
+
     public void AddCab(){
        final Dialog dialog = new Dialog(this);
        dialog.setContentView(R.layout.dailog_cab);
@@ -2659,14 +2667,19 @@ public void Logout(){
                         user_name.setText(globalClass.getName());
                         user_email.setText(globalClass.getEmail());
                         user_mobile.setText(globalClass.getPhone_number());
-                    //    Picasso.with(getApplicationContext()).load(profile_pic).into(profile_image);
-                        Picasso.with(SettingActivity.this)
-                                .load(profile_pic) // web image url
-                                .fit().centerInside()
-                                .rotate(90)                    //if you want to rotate by 90 degrees
-                                .error(R.mipmap.profile_image)
-                                .placeholder(R.mipmap.profile_image)
-                                .into(profile_image);
+
+
+                        if (!profile_pic.isEmpty()){
+
+                            Picasso.with(SettingActivity.this)
+                                    .load(profile_pic) // web image url
+                                    .fit().centerInside()
+                                    .rotate(90)                    //if you want to rotate by 90 degrees
+                                    .error(R.mipmap.profile_image)
+                                    .placeholder(R.mipmap.profile_image)
+                                    .into(profile_image);
+                        }
+
 
                         JsonArray product = jobj.getAsJsonArray("family");
                         for (int i = 0; i < product.size(); i++) {

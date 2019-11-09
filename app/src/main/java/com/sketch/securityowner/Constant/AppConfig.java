@@ -1,15 +1,18 @@
 package com.sketch.securityowner.Constant;
 
-/**
- */
 
-public class AppConfig
-{
+public class AppConfig {
+
 
     public static final String TAG = "Shield";
 
 
+
+
     private static final String URL_DEV = "https://www.shieldapp.in/Api/";
+
+
+
 
 
     public static final String registration                 = URL_DEV + "registration";

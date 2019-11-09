@@ -127,38 +127,19 @@ import static com.sketch.securityowner.GlobalClass.VolleySingleton.timeOut;
 public class Activity_activity extends AppCompatActivity implements
         View.OnClickListener,
         ActivityListAdapterIN.ItemClickListenerIN,
-        ActivityListAdapterIN.ItemClickListenerCall,
         DatePickerDialog.OnDateSetListener,
-        SearchView.OnQueryTextListener,categoryAdapter.onItemClickListner {
+       categoryAdapter.onItemClickListner {
+
+
+
    static String TAG="Activity_activity";
     @BindView(R.id.toolbar) Toolbar toolbar;
-   /* @BindView(R.id.tv_in_list) TextView tv_in_list;
-    @BindView(R.id.tv_out_list) TextView tv_out_list;*/
-    @BindView(R.id.recycle_activity)
+    @BindView(R.id.recycle_activity) RecyclerView recycle_activity;
+    @BindView(R.id.recycle_upcoming) RecyclerView recycle_upcoming;
+    @BindView(R.id.edit) ImageView edit;
+    @BindView(R.id.profile_image) ImageView  profile_image;
+    @BindView(R.id.user_name) TextView  user_name;
 
-
-
-    RecyclerView recycle_activity;
-
-    @BindView(R.id.recycle_upcoming)
-
-    RecyclerView recycle_upcoming;
-
-    @BindView(R.id.edit)
-    ImageView edit;
-
-
-    @BindView(R.id.profile_image)
-    ImageView  profile_image;
-
-    @BindView(R.id.user_name)
-    TextView  user_name;
-
-
-
-
-  //  @BindView(R.id.fav)
-   // FloatingActionButton fav;
 
     public static final int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 1;
 
@@ -239,21 +220,25 @@ public class Activity_activity extends AppCompatActivity implements
         actionViews();
         user_name =  findViewById(R.id.user_name);
 
+        user_name.setText(globalClass.getName());
+
+        if (!globalClass.getProfil_pic().isEmpty()){
+            Picasso.with(Activity_activity.this)
+                    .load(globalClass.getProfil_pic()) // web image url
+                    .fit().centerInside()
+                    .rotate(90)                    //if you want to rotate by 90 degrees
+                    .error(R.mipmap.profile_image)
+                    .placeholder(R.mipmap.profile_image)
+                    .into(profile_image);
+        }
         DeliveryList=new ArrayList<>();
         HelpList=new ArrayList<>();
 
         Category=new ArrayList<>();
-         user_name.setText(globalClass.getName());
-
-        Picasso.with(Activity_activity.this)
-                .load(globalClass.getProfil_pic()) // web image url
-                .fit().centerInside()
-                .rotate(90)                    //if you want to rotate by 90 degrees
-                .error(R.mipmap.profile_image)
-                .placeholder(R.mipmap.profile_image)
-                .into(profile_image);
+        user_name.setText(globalClass.getName());
 
         this.registerReceiver(mMessageReceiver, new IntentFilter("activity_screen"));
+
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -261,6 +246,7 @@ public class Activity_activity extends AppCompatActivity implements
                 startActivity(setting);
             }
         });
+
         img_cab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -454,7 +440,9 @@ public class Activity_activity extends AppCompatActivity implements
             public void onClick(View view) {
 
                 ll_hide.setVisibility(ll_hide.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                if(button1IsVisible==true) {
 
+                }
             }
         });
 
@@ -1797,18 +1785,6 @@ public class Activity_activity extends AppCompatActivity implements
 
                 break;
 
-            case REQUEST_PHONE_CALL: {
-                if (grantResults.length > 0 && grantResults[0]
-                        == PackageManager.PERMISSION_GRANTED) {
-
-
-                } else {
-
-
-                }
-                return;
-            }
-
         }
     }
 
@@ -1817,8 +1793,6 @@ public class Activity_activity extends AppCompatActivity implements
     public void onClick(View v) {
 
         switch (v.getId()){
-
-
 
             default:
                 break;
@@ -1870,9 +1844,6 @@ public class Activity_activity extends AppCompatActivity implements
         getActivityList();
 
     }
-
-
-
 
 
 
@@ -1958,6 +1929,7 @@ public class Activity_activity extends AppCompatActivity implements
                                                 child.setVendor_image(obj.optString("vendor_image"));
                                                 child.setApprove_status(obj.optString("approve_status"));
                                                 child.setApprove_by(obj.optString("approve_by"));
+                                                child.setLeave_at_gate_code(obj.optString("leave_at_gate_code"));
 
 
 
@@ -2069,6 +2041,7 @@ public class Activity_activity extends AppCompatActivity implements
                                 new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
 
     }
+
     public void getActivityListUpcoming(){
         progressDialog.show();
          activityModelArrayList.clear();
@@ -2325,7 +2298,7 @@ public class Activity_activity extends AppCompatActivity implements
         activityListAdapter.notifyDataSetChanged();
 
         activityListAdapter.setClickListenerIN(this);
-        activityListAdapter.setClickListenerCall(this);
+
 
     }
 
@@ -2353,11 +2326,6 @@ public class Activity_activity extends AppCompatActivity implements
     @Override
     public void onItemClickIN(ActivityChild activityChild, String in_out) {
 
-        if (in_out.equals("in")){
-           // showVisitorDetailsDialog(activityChild);
-        }else if (in_out.equals("out")){
-           // visitorOut(activityChild.getActivity_id(), activityChild.getFlat_id());
-        }
 
     }
 
@@ -2383,40 +2351,6 @@ public class Activity_activity extends AppCompatActivity implements
 
     }
 
-/*
-    private void dispatchTakePictureIntent() {
-
-        try {
-
-            final String dir = Environment
-                    .getExternalStorageDirectory() + "/Shield";
-
-            File file = new File(dir);
-            if (!file.exists())
-                file.mkdir();
-
-
-            String files = dir + "/profile_pic" +".jpg";
-            File newfile = new File(files);
-
-            p_image = newfile;
-
-            Uri photoURI = FileProvider.getUriForFile(Activity_activity.this,
-                    "com.shield.security.provider", newfile);
-            mCurrentPhotoPath = photoURI.toString();
-
-
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            startActivityForResult(intent, CAMERA_REQUEST);
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-    }
-*/
 
     private String getRealPathFromURI(Uri contentURI) {
         String result = "";
@@ -2514,20 +2448,11 @@ public class Activity_activity extends AppCompatActivity implements
 
                     approve_status = true;
 
-                    btn_in.setText("Enter");
-                    tv_request_response.setText("Approved");
-                    tv_request_response.setTextColor(getResources().getColor(R.color.blue));
 
 
                 }else if (type.equalsIgnoreCase("rejected")){
 
                     approve_status = true;
-
-                   // btn_in.setOnClickListener(null);
-
-                    tv_request_response.setText("Rejected");
-                    tv_request_response.setTextColor(getResources().getColor(R.color.red));
-                    btn_in.setText("Submit");
 
                 }else if (type.equalsIgnoreCase("visitor added")
                         || type.equalsIgnoreCase("final status")
@@ -2550,156 +2475,6 @@ public class Activity_activity extends AppCompatActivity implements
 
 
 
-/*
-    public void visitorOut(String activity_id, String flat_id){
-
-        progressDialog.show();
-
-        String url = ApiClients.visitor_out;
-
-        final Map<String, String> params = new HashMap<>();
-
-        params.put(ApiClients.security_id, globalClass.getUser_id());
-        params.put(ApiClients.complex_id, globalClass.getComplex_id());
-        params.put(ApiClients.activity_id, activity_id);
-        params.put(ApiClients.flat_id, flat_id);
-
-        Log.d(ApiClients.TAG , "visitor_out- " + url);
-        Log.d(ApiClients.TAG , "visitor_out- " + params.toString());
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-                Log.d(ApiClients.TAG , "visitor_out- " +response);
-
-                if (response != null){
-                    try {
-
-                        JSONObject main_object = new JSONObject(response);
-
-                        int status = main_object.optInt("status");
-                        String message = main_object.optString("message");
-                        if (status == 1){
-
-                            TastyToast.makeText(getApplicationContext(),
-                                    message,
-                                    TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                            getActivityList();
-
-                        }else {
-
-                            TastyToast.makeText(getApplicationContext(),
-                                    message,
-                                    TastyToast.LENGTH_LONG, TastyToast.WARNING);
-                        }
-
-                        progressDialog.dismiss();
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //on error storing the name to sqlite with status unsynced
-
-                Log.e(ApiClients.TAG, "error - "+error);
-
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-
-                return params;
-            }
-        };
-
-        VolleySingleton.getInstance(Activity_activity.this)
-                .addToRequestQueue(stringRequest
-                        .setRetryPolicy(
-                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
-
-    }
-*/
-
-
-
-    //// call permission check and call ...
-
-
-    @Override
-    public void onItemClickCall(ActivityChild activityChild) {
-
-        checkCallPermission(activityChild.getMobile());
-    }
-
-    private static final int REQUEST_PHONE_CALL = 1212;
-    private void checkCallPermission(String number){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(Activity_activity.this,
-                    Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-
-                ActivityCompat.requestPermissions(Activity_activity.this,
-                        new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
-
-            }
-            else {
-                callPhone(number);
-            }
-        }
-        else {
-            callPhone(number);
-        }
-
-    }
-
-    private void callPhone(String number){
-
-        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + number));// Initiates the Intent
-        startActivity(intent);
-
-    }
-
-    //// search view n toolbar ...
-    SearchView searchView;
-/*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.search_menu, menu);
-
-        // Associate searchable configuration with the SearchView
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
-
-        searchView.setOnQueryTextListener(this);
-        searchView.setIconified(false);
-
-
-        return true;
-    }
-*/
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        //Toast.makeText(this, "Query Inserted", Toast.LENGTH_SHORT).show();
-
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-
-        return true;
-    }
-
     void startAnim(){
         avLoadingIndicatorView.show();
         // or avi.smoothToShow();
@@ -2709,6 +2484,7 @@ public class Activity_activity extends AppCompatActivity implements
         avLoadingIndicatorView.hide();
         // or avi.smoothToHide();
     }
+
     public void ProfileDailog(){
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dailog_settings);
@@ -2732,13 +2508,6 @@ public class Activity_activity extends AppCompatActivity implements
         user_name.setText(globalClass.getName());
         address.setText(globalClass.getComplex_name());
         block.setText(globalClass.getFlat_name()+" "+globalClass.getBlock()+" "+"block");
-
-
-        //  dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
-        // set the custom dialog components - text, image and button
-
-     //   LinearLayout ll_save=dialog.findViewById(R.id.ll_save);
 
         // if button is clicked, close the custom dialog
         ll_setting.setOnClickListener(new View.OnClickListener() {

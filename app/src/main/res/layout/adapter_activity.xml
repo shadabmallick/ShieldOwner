@@ -2,210 +2,352 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    android:background="@android:drawable/dialog_holo_light_frame">
-    <RelativeLayout
-        android:id="@+id/rel_profile"
+    xmlns:card_view="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:padding="10dp"
-        android:background="@android:color/white"
-
-
-
-        android:orientation="horizontal"
-        android:layout_height="wrap_content">
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profile_image"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding="5dp"
-            android:layout_marginTop="5dp"
-            android:src="@drawable/ic_launcher_background"
-
-            />
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="5dp"
+        card_view:cardElevation="4dp"
+        app:cardUseCompatPadding="true"
+        app:cardBackgroundColor="@color/range_white"
+        >
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_toRightOf="@+id/profile_image"
             >
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-                <TextView
-                    android:id="@+id/user_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Raju Banerjee"
-                    android:gravity="center"
-                    android:textSize="12dp"
-                    android:textColor="@color/blue"/>
+            <RelativeLayout
+                android:id="@+id/rel_profile"
+                android:layout_width="match_parent"
+                android:padding="8dp"
+                android:background="@android:color/white"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="7dp"
-                    android:visibility="gone"
-                    android:layout_marginTop="2dp"
-                    android:background="@color/light_gray"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="10dp"
-                        android:layout_height="10dp"
-                        android:src="@drawable/ic_user"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/inbox"
-                        android:textSize="10dp"
-                        android:layout_marginLeft="5dp"/>
-
-
-
-                </LinearLayout>
-
-
-
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:src="@drawable/ic_user"/>
-
-                <TextView
-                    android:id="@+id/visitor_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/inbox"
-                    android:textSize="10dp"
-                    android:layout_marginLeft="5dp"/>
-
-
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:src="@drawable/ic_calendar"/>
-
-
-
-                <TextView
-                    android:id="@+id/visiting_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="15-1-2019"
-                    android:textSize="10dp"
-                    android:layout_marginLeft="5dp"
-                    android:gravity="center"
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/ic_user_black"
+                    app:civ_border_color="@color/dark_gray"
+                    app:civ_border_width="1dp"
                     />
+
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:background="@drawable/curve_green"
-                    android:layout_marginLeft="10dp"
-
-                    android:padding="5dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_log_in"
-                        />
-
-
-
+                    android:orientation="vertical"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@+id/profile_image"
+                    android:layout_toStartOf="@+id/rel_end"
+                    >
                     <TextView
-                        android:id="@+id/in_premises"
+                        android:id="@+id/user_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="15-1-2019"
-                        android:textColor="@color/range_white"
-                        android:textSize="10dp"
-                        android:layout_marginLeft="5dp"
+                        android:text="Sourav Roy"
+                        android:textColor="@color/blue"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/iv_visitor_type"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:src="@drawable/ic_user"
+                            android:tint="@color/colorAccent"
+                            android:contentDescription="@string/app_name"
+                            />
+
+                        <TextView
+                            android:id="@+id/visitor_type_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Guest"
+                            android:textSize="12sp"
+                            android:layout_marginLeft="5dp"/>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:background="@drawable/curve_water_green"
+                            android:layout_marginStart="15dp"
+                            android:padding="5dp"
+                            android:orientation="horizontal"
+                            >
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/vendor_image"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                app:civ_border_width="0.5dp"
+                                app:civ_border_color="@color/dark_gray"
+                                android:src="@drawable/ic_user_black"
+                                />
+
+                            <TextView
+                                android:id="@+id/tv_vendor_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Uber Eats"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:paddingStart="5dp"
+                                android:paddingEnd="10dp"
+                                android:layout_marginStart="5dp"
+                                android:gravity="center"
+                                />
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal"
+                        >
+
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:src="@drawable/ic_clock"
+                            android:tint="@color/colorAccent"
+                            android:contentDescription="@string/app_name"
+                            />
+
+                        <TextView
+                            android:id="@+id/visiting_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="6:00 PM"
+                            android:textSize="10dp"
+                            android:layout_marginLeft="5dp"
+                            android:gravity="center"
+                            />
+
+                        <LinearLayout
+                            android:id="@+id/ll_in"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:background="@drawable/curve_green"
+                            android:layout_marginStart="15dp"
+                            android:padding="5dp"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:src="@drawable/ic_log_in"
+                                android:contentDescription="@string/app_name"
+                                />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="IN"
+                                android:textColor="@color/range_white"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:layout_marginStart="5dp"
+                                android:gravity="center"
+                                />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_out"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:background="@drawable/curve_green"
+                            android:layout_marginStart="15dp"
+                            android:padding="5dp"
+                            android:orientation="horizontal"
+                            android:visibility="gone"
+                            >
+
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:src="@drawable/ic_log_out"
+                                android:contentDescription="@string/app_name"
+                                />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="OUT"
+                                android:textColor="@color/range_white"
+                                android:textSize="12sp"
+                                android:textStyle="bold"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:layout_marginStart="5dp"
+                                android:gravity="center"
+                                />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_leaveat_gate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:background="@drawable/curve_yellow"
+                            android:layout_marginStart="15dp"
+                            android:padding="5dp"
+                            android:orientation="horizontal"
+                            android:visibility="visible"
+                            >
+
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:src="@mipmap/leave_at_gate"
+                                android:contentDescription="@string/app_name"
+                                />
+
+                            <TextView
+                                android:id="@+id/tv_lag_code"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="12345"
+                                android:textColor="@color/black"
+                                android:textSize="12sp"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:layout_marginStart="5dp"
+                                android:gravity="center"
+                                />
+
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:gravity="center"
-                        />
+                        android:layout_marginTop="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/approved_by"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="approved by Shadab Mallick"
+                            android:textSize="10dp"
+                            android:textColor="@android:color/black"
+                            android:layout_marginLeft="5dp"
+                            android:gravity="center"
+                            />
+
+                    </LinearLayout>
 
 
                 </LinearLayout>
 
 
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginTop="5dp"
-                android:orientation="horizontal">
-
-
-
-                <TextView
-                    android:id="@+id/approved_by"
+                <RelativeLayout
+                    android:id="@+id/rel_end"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="approved by Shadab Mallick"
-                    android:textSize="10dp"
-                    android:textColor="@android:color/black"
-                    android:layout_marginLeft="5dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:paddingStart="8dp"
+                    >
+
+                    <ImageView
+                        android:id="@+id/edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_chevron_right"
+                        android:tint="@color/blue"
+                        android:contentDescription="@string/app_name"
+                        />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:paddingBottom="8dp"
+                >
+
+                <TextView
+                    android:id="@+id/tv_accept"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:gravity="center"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/green2"
+                    android:text="@string/accept"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_reject"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/red"
+                    android:text="@string/reject"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_leave_at_gate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/yellow"
+                    android:text="@string/leave_at_gate"
                     />
 
 
             </LinearLayout>
-
 
 
         </LinearLayout>
 
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:layout_marginTop="10dp"
-            >
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_chevron_right"
-                android:id="@+id/edit"
-                android:tint="@color/blue"
-                android:layout_marginTop="10dp"
-                />
-
-
-        </RelativeLayout>
-
-    </RelativeLayout>
-
+    </androidx.cardview.widget.CardView>
 
 
 
