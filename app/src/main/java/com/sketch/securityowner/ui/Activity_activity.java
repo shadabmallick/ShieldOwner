@@ -354,18 +354,8 @@ public class Activity_activity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
 
-                if(button1IsVisible==true)
-                {
+                car1.setVisibility(car1.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
 
-                    car1.setVisibility(View.VISIBLE);
-                    button1IsVisible = false;
-                }
-                else if(button1IsVisible==false)
-                {
-                    // car1.animate().alpha(1.0f);
-                    car1.setVisibility(View.GONE);
-                    button1IsVisible = true;
-                }
             }
         });
         rl_profile.setOnClickListener(new View.OnClickListener() {
@@ -463,18 +453,8 @@ public class Activity_activity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
 
-                if(button1IsVisible==true)
-                {
+                ll_hide.setVisibility(ll_hide.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
 
-                    ll_hide.setVisibility(View.VISIBLE);
-                    button1IsVisible = false;
-                }
-                else if(button1IsVisible==false)
-                {
-                    // car1.animate().alpha(1.0f);
-                    ll_hide.setVisibility(View.GONE);
-                    button1IsVisible = true;
-                }
             }
         });
 
@@ -989,18 +969,8 @@ public class Activity_activity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
 
-                if(button1IsVisible==true)
-                {
+                ll_hide.setVisibility(ll_hide.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
 
-                    ll_hide.setVisibility(View.VISIBLE);
-                    button1IsVisible = false;
-                }
-                else if(button1IsVisible==false)
-                {
-                    // car1.animate().alpha(1.0f);
-                    ll_hide.setVisibility(View.GONE);
-                    button1IsVisible = true;
-                }
             }
         });
 
@@ -1187,18 +1157,8 @@ public class Activity_activity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
 
-                if(button1IsVisible==true)
-                {
+                ll_hide.setVisibility(ll_hide.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
 
-                    ll_hide.setVisibility(View.VISIBLE);
-                    button1IsVisible = false;
-                }
-                else if(button1IsVisible==false)
-                {
-                    // car1.animate().alpha(1.0f);
-                    ll_hide.setVisibility(View.GONE);
-                    button1IsVisible = true;
-                }
             }
         });
 

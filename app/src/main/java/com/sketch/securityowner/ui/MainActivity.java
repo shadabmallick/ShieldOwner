@@ -180,18 +180,8 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
             @Override
             public void onClick(View view) {
 
-                if(button1IsVisible==true)
-                {
+                car1.setVisibility(car1.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
 
-                    car1.setVisibility(View.VISIBLE);
-                    button1IsVisible = false;
-                }
-                else if(button1IsVisible==false)
-                {
-                    // car1.animate().alpha(1.0f);
-                    car1.setVisibility(View.GONE);
-                    button1IsVisible = true;
-                }
             }
         });
         img_cab.setOnClickListener(new View.OnClickListener() {

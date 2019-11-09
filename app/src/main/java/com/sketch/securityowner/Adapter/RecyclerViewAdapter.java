@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sdsmdg.tastytoast.TastyToast;
 import com.sketch.securityowner.R;
-import com.sketch.securityowner.ui.ChatAppActivity;
 
 import java.util.ConcurrentModificationException;
 
@@ -37,6 +36,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<TextItemViewHolder
     @Override
     public void onBindViewHolder(final TextItemViewHolder holder, int position) {
         holder.bind(items[position]);
+/*
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,6 +52,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<TextItemViewHolder
 
             }
         });
+*/
 
     }
 

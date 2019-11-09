@@ -9,7 +9,7 @@ public class AppConfig
     public static final String TAG = "Shield";
 
 
-    private static final String URL_DEV = " https://www.shieldapp.in/Api/";
+    private static final String URL_DEV = "https://www.shieldapp.in/Api/";
 
 
     public static final String registration                 = URL_DEV + "registration";
@@ -36,6 +36,10 @@ public class AppConfig
     public static final String add_visitor                  = URL_DEV + "add_visitor";
     public static final String notice                       = URL_DEV + "notice";
     public static final String local_help_list              = URL_DEV + "local_help_list";
+
+    public static final String help_id_wise_chat              = URL_DEV + "help_id_wise_chat";
+    public static final String user_chat                     = URL_DEV + "user_chat";
+
 
 
 

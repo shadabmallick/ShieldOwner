@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sketch.securityowner.R;
-import com.sketch.securityowner.ui.ChatAppActivity;
 
 public class AdapterNoticeBoard  extends RecyclerView.Adapter<TextItemViewHolder> {
 
@@ -31,6 +30,7 @@ public class AdapterNoticeBoard  extends RecyclerView.Adapter<TextItemViewHolder
     @Override
     public void onBindViewHolder(TextItemViewHolder holder, int position) {
         holder.bind(items[position]);
+/*
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,6 +40,7 @@ public class AdapterNoticeBoard  extends RecyclerView.Adapter<TextItemViewHolder
                 context.startActivity(placeorder);
             }
         });
+*/
     }
 
     @Override

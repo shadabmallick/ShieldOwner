@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sdsmdg.tastytoast.TastyToast;
 import com.sketch.securityowner.R;
-import com.sketch.securityowner.ui.ChatAppActivity;
 import com.sketch.securityowner.ui.HelpListDetails;
 import com.squareup.picasso.Picasso;
 

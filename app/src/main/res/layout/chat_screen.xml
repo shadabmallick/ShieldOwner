@@ -1,83 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
+
     <androidx.appcompat.widget.Toolbar
+        xmlns:app="http://schemas.android.com/tools"
         android:id="@+id/toolbar"
+        android:theme="@style/ToolBarStyle"
         android:layout_width="match_parent"
-        android:layout_height="58dp"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:titleTextColor="#ffffff">
-
-        <ImageView
-            android:id="@+id/img_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow_left"
-            android:tint="@android:color/white"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Help Id:23"
-            android:textSize="20dp"
-            android:textColor="@android:color/white"
-            android:layout_gravity="center"
-            android:id="@+id/toolbar_title" />
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/blue"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        />
 
 
-
-    </androidx.appcompat.widget.Toolbar>
-
-
-    <LinearLayout
-        android:layout_below="@+id/toolbar"
-        android:orientation="vertical"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-      >
+        android:layout_below="@+id/toolbar"
+        android:layout_above="@+id/view1"
+        android:paddingBottom="8dp"
+        />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/chat_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_gravity="bottom"
-        android:layout_alignParentBottom="true"
+    <View
+        android:id="@+id/view1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="1dp"
+        android:layout_above="@+id/rel_bottom"
+        android:background="@color/light_gray"
+        />
+
+    <RelativeLayout
+        android:id="@+id/rel_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="5dp">
+
         <ImageView
+            android:id="@+id/imgAttachment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_plus"/>
+            android:layout_centerVertical="true"
+            android:tint="@android:color/black"
+            android:contentDescription="@string/app_name"
+            android:padding="5dp"
+            android:src="@drawable/ic_paperclip" />
 
         <EditText
-            android:id="@+id/chat_input_msg"
-            android:layout_width="wrap_content"
+            android:id="@+id/edt_message"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="write a message."
-            android:layout_weight="1"
-            android:maxLines="2"/>
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_toRightOf="@+id/imgAttachment"
+            android:layout_toLeftOf="@+id/imgSend"
+            android:background="@android:color/transparent"
+            android:hint="@string/type_message"
+            android:maxLines="3"
+            android:padding="6dp"
+            android:layout_centerVertical="true"
+            android:scrollbars="vertical" />
 
         <ImageView
-            android:id="@+id/chat_send_msg"
+            android:id="@+id/imgSend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/app_name"
             android:src="@drawable/ic_send"
-            android:layout_gravity="center"
-            android:tint="@android:color/black"
-            android:layout_marginRight="20dp"
-            android:textAllCaps="false"/>
+            android:padding="8dp"/>
 
-    </LinearLayout>
+    </RelativeLayout>
+
 
 
 </RelativeLayout>

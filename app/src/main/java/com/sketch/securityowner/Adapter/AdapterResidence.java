@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sketch.securityowner.R;
-import com.sketch.securityowner.ui.ChatAppActivity;
 import com.sketch.securityowner.ui.OwnerList;
 
 import java.util.ArrayList;

@@ -80,7 +80,7 @@ public class FragmentNoticeBoard extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        BrowseNotice();
+      //  BrowseNotice();
     }
     private void BrowseNotice() {
         // Tag used to cancel the request

@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sketch.securityowner.R;
-import com.sketch.securityowner.ui.ChatAppActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -38,8 +37,11 @@ public class AdapterHelpList  extends RecyclerView.Adapter<AdapterHelpList.MyVie
 
     @Override
     public void onBindViewHolder(final AdapterHelpList.MyViewHolder holder, final int position) {
-        Picasso.with(context).load(cityList.get(position).get("image")).
-                fit().into(holder.profile_image);
+         if(!cityList.get(position).get("image").equals("")){
+             Picasso.with(context).load(cityList.get(position).get("image")).
+                     fit().into(holder.profile_image);
+         }
+
         String staff_name=cityList.get(position).get("name");
         holder.name.setText(staff_name);
         holder.iv_call.setOnClickListener(new View.OnClickListener() {

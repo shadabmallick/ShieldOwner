@@ -285,9 +285,9 @@
 
         <ScrollView
             android:id="@+id/scroll_settings"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:layout_below="@+id/rel_profile"
             >
 
@@ -329,14 +329,14 @@
                                 android:layout_gravity="center"
 
                                 android:weightSum="1">
-                                <de.hdodenhof.circleimageview.CircleImageView
+                                <ImageView
 
                                     android:layout_width="60dp"
                                     android:layout_height="60dp"
-                                    android:padding="5dp"
+                                    android:padding="10dp"
                                     android:layout_gravity="center"
 
-                                    android:src="@drawable/ic_launcher_background"
+                                    android:src="@mipmap/e_commerce"
 
                                     />
 
@@ -401,14 +401,14 @@
                                 android:gravity="center"
                                 android:orientation="vertical"
                                 >
-                                <de.hdodenhof.circleimageview.CircleImageView
+                                <ImageView
                                     android:id="@+id/profile_image1"
                                     android:layout_width="60dp"
                                     android:layout_height="60dp"
                                     android:padding="5dp"
                                     android:layout_gravity="center"
 
-                                    android:src="@drawable/ic_launcher_background"
+                                    android:src="@mipmap/phonenotification"
 
                                     />
 
@@ -485,14 +485,14 @@
                                 android:layout_gravity="center"
 
                                 android:weightSum="1">
-                                <de.hdodenhof.circleimageview.CircleImageView
+                                <ImageView
 
                                     android:layout_width="60dp"
                                     android:layout_height="60dp"
                                     android:padding="5dp"
                                     android:layout_gravity="center"
 
-                                    android:src="@drawable/ic_launcher_background"
+                                    android:src="@mipmap/block"
 
                                     />
 
@@ -559,14 +559,14 @@
                                 android:orientation="vertical"
                                 >
 
-                                <de.hdodenhof.circleimageview.CircleImageView
+                                <ImageView
                                     android:id="@+id/profile_image_setting1"
                                     android:layout_width="60dp"
                                     android:layout_height="63dp"
                                     android:layout_gravity="center"
                                     android:padding="5dp"
 
-                                    android:src="@drawable/ic_launcher_background"
+                                    android:src="@mipmap/aboutus"
 
                                     />
 
@@ -640,14 +640,14 @@
                                 android:layout_gravity="center"
                                 android:gravity="center"
                                 android:weightSum="1">
-                                <de.hdodenhof.circleimageview.CircleImageView
+                                <ImageView
 
                                     android:layout_width="60dp"
                                     android:layout_height="60dp"
                                     android:padding="5dp"
                                     android:layout_gravity="center"
 
-                                    android:src="@drawable/ic_launcher_background"
+                                    android:src="@mipmap/contact_us"
 
                                     />
 
@@ -713,14 +713,14 @@
                                 android:gravity="center"
                                 android:orientation="vertical"
                                 >
-                                <de.hdodenhof.circleimageview.CircleImageView
+                                <ImageView
                                     android:id="@+id/profile_image_setting"
                                     android:layout_width="60dp"
                                     android:layout_height="60dp"
                                     android:padding="5dp"
                                     android:layout_gravity="center"
 
-                                    android:src="@drawable/ic_launcher_background"
+                                    android:src="@mipmap/logout"
 
                                     />
 
