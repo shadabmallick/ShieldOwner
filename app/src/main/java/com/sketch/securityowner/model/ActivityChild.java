@@ -25,6 +25,8 @@ public class ActivityChild {
     private String requested_by;
     private String type_in_out;
     private String approve_status;
+    private String leave_at_gate_code;
+
 
     public String getUser_id() {
         return user_id;
@@ -280,6 +282,14 @@ public class ActivityChild {
 
     public void setFlat_id(String flat_id) {
         this.flat_id = flat_id;
+    }
+
+    public String getLeave_at_gate_code() {
+        return leave_at_gate_code;
+    }
+
+    public void setLeave_at_gate_code(String leave_at_gate_code) {
+        this.leave_at_gate_code = leave_at_gate_code;
     }
 }
 

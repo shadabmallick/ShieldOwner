@@ -1864,14 +1864,19 @@ public void Logout(){
                         user_name.setText(globalClass.getName());
                         user_email.setText(globalClass.getEmail());
                         user_mobile.setText(globalClass.getPhone_number());
-                    //    Picasso.with(getApplicationContext()).load(profile_pic).into(profile_image);
-                        Picasso.with(SettingActivity.this)
-                                .load(profile_pic) // web image url
-                                .fit().centerInside()
-                                .rotate(90)                    //if you want to rotate by 90 degrees
-                                .error(R.mipmap.profile_image)
-                                .placeholder(R.mipmap.profile_image)
-                                .into(profile_image);
+
+
+                        if (!profile_pic.isEmpty()){
+
+                            Picasso.with(SettingActivity.this)
+                                    .load(profile_pic) // web image url
+                                    .fit().centerInside()
+                                    .rotate(90)                    //if you want to rotate by 90 degrees
+                                    .error(R.mipmap.profile_image)
+                                    .placeholder(R.mipmap.profile_image)
+                                    .into(profile_image);
+                        }
+
 
                         JsonArray product = jobj.getAsJsonArray("family");
                         for (int i = 0; i < product.size(); i++) {

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -48,21 +49,32 @@ public class ActivityListAdapterIN extends
     }
 
     public class ChildViewHolder extends RecyclerView.ViewHolder{
-        CircleImageView profile_image, image_visitor_type;
-        TextView tv_name, approved_by, visiting_time, in_premises, visitor_type, tv_allowed_by2;
-        ImageView iv_call;
-        Switch switch_out;
-        RelativeLayout rel_1, rel_2;
-
+        CircleImageView profile_image, vendor_image;
+        TextView user_name, visitor_type_name, tv_vendor_name,
+                visiting_time, approved_by, tv_lag_code;
+        ImageView iv_visitor_type, edit;
+        LinearLayout ll_buttons, ll_in, ll_out, ll_leaveat_gate;
+        TextView tv_accept, tv_reject, tv_leave_at_gate;
 
         public ChildViewHolder(View itemView) {
             super(itemView);
             profile_image = itemView.findViewById(R.id.profile_image);
-            tv_name = itemView.findViewById(R.id.user_name);
-            approved_by = itemView.findViewById(R.id.approved_by);
-            visitor_type = itemView.findViewById(R.id.visitor_type);
+            vendor_image = itemView.findViewById(R.id.vendor_image);
+            user_name = itemView.findViewById(R.id.user_name);
+            visitor_type_name = itemView.findViewById(R.id.visitor_type_name);
+            tv_vendor_name = itemView.findViewById(R.id.tv_vendor_name);
             visiting_time = itemView.findViewById(R.id.visiting_time);
-            in_premises = itemView.findViewById(R.id.in_premises);
+            approved_by = itemView.findViewById(R.id.approved_by);
+            tv_lag_code = itemView.findViewById(R.id.tv_lag_code);
+            iv_visitor_type = itemView.findViewById(R.id.iv_visitor_type);
+            edit = itemView.findViewById(R.id.edit);
+            ll_buttons = itemView.findViewById(R.id.ll_buttons);
+            ll_in = itemView.findViewById(R.id.ll_in);
+            ll_out = itemView.findViewById(R.id.ll_out);
+            ll_leaveat_gate = itemView.findViewById(R.id.ll_leaveat_gate);
+            tv_accept = itemView.findViewById(R.id.tv_accept);
+            tv_reject = itemView.findViewById(R.id.tv_reject);
+            tv_leave_at_gate = itemView.findViewById(R.id.tv_leave_at_gate);
 
 
         }
@@ -158,71 +170,169 @@ public class ActivityListAdapterIN extends
            // holder.image_visitor_type.setImageResource(R.drawable.ic_user);
 
 
-
-
                 if (activityChild.getType().equals("master")){
-                    holder.tv_name.setText(activityChild.getName());
-                    holder.visitor_type.setText(activityChild.getVisitor_type());
-                    holder.visiting_time.setText(activityChild.getVisiting_time());
+
+                    holder.user_name.setText(activityChild.getName());
+
                     Glide.with(context)
                             .load(activityChild.getProfile_image())
                             .centerCrop()
-                            .placeholder(R.mipmap.ic_launcher_round)
+                            .placeholder(R.drawable.ic_user_black)
                             .into(holder.profile_image);
-                    if((activityChild.getActual_in_time()==null)||(activityChild.getActual_in_time().equals(""))){
 
-                        holder.in_premises.setText("In");
-                        holder.approved_by.setText("Approved By"+activityChild.getApprove_by());
+
+
+                    if (activityChild.getVisitor_type().equals(AppConfig.guest)){
+
+                        holder.tv_vendor_name.setText("Guest");
+
+                    }else  if (activityChild.getVisitor_type().equals(AppConfig.delivery)){
+
+                        holder.tv_vendor_name.setText("Delivery");
+
+                    }else  if (activityChild.getVisitor_type().equals(AppConfig.staff)){
+
+                        holder.tv_vendor_name.setText("Staff");
+
+                    } else  if (activityChild.getVisitor_type().equals(AppConfig.cab)){
+
+                        holder.tv_vendor_name.setText("Cab");
+
+                    }else  if (activityChild.getVisitor_type().equals(AppConfig.visiting_help)){
+
+                        holder.tv_vendor_name.setText("Visiting Help");
 
                     }
-                    else {
-                        holder.in_premises.setText(activityChild.getVisiting_time()+"-"+activityChild.getActual_out_time());
-                        holder.approved_by.setText("Approved By"+activityChild.getApprove_by());
 
+
+                    holder.visiting_time.setText(activityChild.getVisiting_time());
+
+
+
+                    if((activityChild.getActual_in_time() == null)
+                            ||(activityChild.getActual_in_time().equals("null"))
+                            ||(activityChild.getActual_in_time().equals(""))
+                    ){
+
+                        holder.ll_in.setVisibility(View.GONE);
+                        holder.ll_out.setVisibility(View.GONE);
+                        holder.ll_leaveat_gate.setVisibility(View.GONE);
+
+
+                    }else if (((activityChild.getActual_in_time() != null)
+                            || (!activityChild.getActual_in_time().equals("null"))
+                            || (!activityChild.getActual_in_time().equals("")))
+
+                            && ((activityChild.getActual_out_time() == null)
+                            || (activityChild.getActual_out_time().equals("null"))
+                            || (activityChild.getActual_out_time().equals("")))
+
+                    ){
+
+                        holder.ll_in.setVisibility(View.VISIBLE);
+                        holder.ll_out.setVisibility(View.GONE);
+                        holder.ll_leaveat_gate.setVisibility(View.GONE);
+
+
+                    }else if(activityChild.getActual_out_time() != null
+                            || !activityChild.getActual_out_time().equals("null")
+                            || !activityChild.getActual_out_time().equals("")
+                    ){
+
+                        holder.ll_in.setVisibility(View.GONE);
+                        holder.ll_out.setVisibility(View.VISIBLE);
+                        holder.ll_leaveat_gate.setVisibility(View.GONE);
 
                     }
+
+
+
+                    if (activityChild.getGetpass().equals("1")){
+                        holder.ll_leaveat_gate.setVisibility(View.VISIBLE);
+                        holder.tv_lag_code.setText(activityChild.getLeave_at_gate_code());
+                    }else {
+                        holder.ll_leaveat_gate.setVisibility(View.GONE);
+                    }
+
+
+                    if (activityChild.getApprove_status().equals("w")){
+
+                        holder.ll_buttons.setVisibility(View.VISIBLE);
+                        holder.tv_accept.setVisibility(View.VISIBLE);
+                        holder.tv_reject.setVisibility(View.VISIBLE);
+
+                        if (activityChild.getVisitor_type().equals(AppConfig.delivery)){
+                            holder.tv_leave_at_gate.setVisibility(View.VISIBLE);
+                        }else {
+                            holder.tv_leave_at_gate.setVisibility(View.GONE);
+                        }
+
+                    }else {
+
+                       holder.ll_buttons.setVisibility(View.GONE);
+                    }
+
+                    if (activityChild.getApprove_status().equals("y")
+                     || activityChild.getApprove_status().equals("l")){
+                        holder.approved_by.setText("Approved by "+activityChild.getApprove_by());
+                    } else {
+                        holder.approved_by.setText("");
+                    }
+
+
+
+                    holder.ll_leaveat_gate.setOnClickListener(v -> {
+
+
+                    });
+
+
+
                 }else {
-                    holder.tv_name.setText(activityChild.getName()
-                           );
+
+                    holder.ll_in.setVisibility(View.GONE);
+                    holder.ll_out.setVisibility(View.GONE);
+                    holder.ll_leaveat_gate.setVisibility(View.GONE);
+                    holder.ll_buttons.setVisibility(View.GONE);
+
+
+                    holder.user_name.setText(activityChild.getName());
+
                     Glide.with(context)
                             .load(activityChild.getVendor_image())
                             .centerCrop()
-                            .placeholder(R.mipmap.ic_launcher_round)
+                            .placeholder(R.drawable.ic_user_black)
                             .into(holder.profile_image);
-                    holder.visitor_type.setText(activityChild.getVisitor_type());
+
+
+                    if (activityChild.getVisitor_type().equals(AppConfig.guest)){
+
+                        holder.tv_vendor_name.setText("Guest");
+
+                    }else  if (activityChild.getVisitor_type().equals(AppConfig.delivery)){
+
+                        holder.tv_vendor_name.setText("Delivery");
+
+                    }else  if (activityChild.getVisitor_type().equals(AppConfig.staff)){
+
+                        holder.tv_vendor_name.setText("Staff");
+
+                    } else  if (activityChild.getVisitor_type().equals(AppConfig.cab)){
+
+                        holder.tv_vendor_name.setText("Cab");
+
+                    }else  if (activityChild.getVisitor_type().equals(AppConfig.visiting_help)){
+
+                        holder.tv_vendor_name.setText("Visiting Help");
+
+                    }
+
+
                     holder.visiting_time.setText(activityChild.getVisiting_time());
-                    holder.in_premises.setText(activityChild.getVisiting_time());
+
 
                 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-            holder.iv_call.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    itemClickListenerCall.onItemClickCall(activityChild);
-                }
-            });
-*/
 
 
 
