@@ -22,6 +22,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -46,7 +47,7 @@ public class RegisterNext extends AppCompatActivity {
     EditText edt_name,edt_phone_no,edt_email;
     GlobalClass globalClass;
     AVLoadingIndicatorView avLoadingIndicatorView;
-    String email,phone,name,city_id,block,complex_id,flat_no,deviceId,complex_name;
+    String  fcm_token, email,phone,name,city_id,block,complex_id,flat_no,deviceId,complex_name;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,7 +61,7 @@ public class RegisterNext extends AppCompatActivity {
         edt_phone_no=findViewById(R.id.edt_phone_no);
         edt_email=findViewById(R.id.edt_email);
         avLoadingIndicatorView=findViewById(R.id.avi);
-
+        fcm_token = FirebaseInstanceId.getInstance().getToken();
         Bundle bundle = getIntent().getExtras();
        city_id = bundle.getString("city_id");
          block = bundle.getString("block");
@@ -154,7 +155,7 @@ public class RegisterNext extends AppCompatActivity {
                         otpScreen.putExtra("otp", otp);
                         otpScreen.putExtra("device_id", deviceId);
 
-                        otpScreen.putExtra("fcm_token", "12345");
+                        otpScreen.putExtra("fcm_token", fcm_token);
 
                         otpScreen.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(otpScreen);
@@ -201,7 +202,7 @@ public class RegisterNext extends AppCompatActivity {
                 params.put("phone_Number",phone);
                 params.put("complex_Number",complex_id);
                 params.put("flat_id",flat_no);
-                params.put("fcm_token","12222");
+                params.put("fcm_token",globalClass.getFcm_reg_token());
                 params.put("city_id",city_id);
                 params.put("complex_name",complex_name);
                 params.put("user_type","owner");

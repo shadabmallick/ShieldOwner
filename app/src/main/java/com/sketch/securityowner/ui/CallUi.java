@@ -89,15 +89,15 @@ public class CallUi extends AppCompatActivity {
     }
 
 
-    private void actionViews(){
+    private void actionViews() {
 
         PowerManager pm = (PowerManager) getApplicationContext()
                 .getSystemService(Context.POWER_SERVICE);
         PowerManager.WakeLock wakeLock = pm.newWakeLock(
                 (PowerManager.SCREEN_BRIGHT_WAKE_LOCK
-                | PowerManager.FULL_WAKE_LOCK
-                | PowerManager.ACQUIRE_CAUSES_WAKEUP), ":TAG1");
-        wakeLock.acquire(30*1000);
+                        | PowerManager.FULL_WAKE_LOCK
+                        | PowerManager.ACQUIRE_CAUSES_WAKEUP), ":TAG1");
+        wakeLock.acquire(30 * 1000);
 
 
         globalClass = (GlobalClass) getApplicationContext();
@@ -109,18 +109,22 @@ public class CallUi extends AppCompatActivity {
 
 
         Bundle bundle = getIntent().getExtras();
-        if (bundle != null){
+        if (bundle != null) {
 
             hashMap = (HashMap<String, String>) bundle.getSerializable("hashMap");
 
             tv_name.setText(hashMap.get("message"));
             tv_vendor_name.setText(hashMap.get("type").toUpperCase());
 
-            if (hashMap.get("type").equals("new delivery call")){
-                ll_leave_at_gate.setVisibility(View.VISIBLE);
-            }else {
-                ll_leave_at_gate.setVisibility(View.GONE);
-            }
+
+            tv_vendor_name.setText(hashMap.get("type").toUpperCase());
+
+            if (hashMap.get("message").equals("new delivery call")) {
+                if (hashMap.get("type").equals("new delivery call")) {
+                    ll_leave_at_gate.setVisibility(View.VISIBLE);
+                } else {
+                    ll_leave_at_gate.setVisibility(View.GONE);
+                }
 
 
             /*String profile_image = bundle.getString("data");
@@ -131,82 +135,78 @@ public class CallUi extends AppCompatActivity {
                     .placeholder(R.drawable.ic_user)
                     .into(image_pic);*/
 
-        }
-
-
-
-
-        NotificationManager manager = (NotificationManager) getApplicationContext()
-                .getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.cancelAll();
-
-
-
-        long[] jArr = {0, 300, 200, 300, 500, 300};
-        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            try {
-                vibrator.vibrate(VibrationEffect.createWaveform(jArr,
-                        new int[]{0, 145, 0, 145, 0, 145}, -1));
-            }catch (Exception e){
-                e.printStackTrace();
             }
 
-        } else {
-            vibrator.vibrate(jArr, 0);
+
+            NotificationManager manager = (NotificationManager) getApplicationContext()
+                    .getSystemService(Context.NOTIFICATION_SERVICE);
+            manager.cancelAll();
+
+
+            long[] jArr = {0, 300, 200, 300, 500, 300};
+            Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                try {
+                    vibrator.vibrate(VibrationEffect.createWaveform(jArr,
+                            new int[]{0, 145, 0, 145, 0, 145}, -1));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                vibrator.vibrate(jArr, 0);
+            }
+
+
+            AudioManager audioManager = (AudioManager) getApplicationContext()
+                    .getSystemService(Context.AUDIO_SERVICE);
+            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+                    audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+
+
+            Uri defaultSoundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
+                    + "://" + getPackageName() + "/raw/ring1");
+
+            MediaPlayer mediaPlayer = new MediaPlayer();
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+
+            try {
+                mediaPlayer.setDataSource(getApplicationContext(), defaultSoundUri);
+                mediaPlayer.prepare();
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mediaPlayer.start();
+
+
+            rel_rejected.setOnClickListener(v -> {
+                mediaPlayer.stop();
+                vibrator.cancel();
+
+                status_update("n");
+
+            });
+
+            rel_approved.setOnClickListener(v -> {
+                mediaPlayer.stop();
+                vibrator.cancel();
+
+                status_update("y");
+
+            });
+
+            rel_leaveGate.setOnClickListener(v -> {
+                mediaPlayer.stop();
+                vibrator.cancel();
+
+                status_update("l");
+
+            });
+
         }
-
-
-        AudioManager audioManager = (AudioManager)getApplicationContext()
-                .getSystemService(Context.AUDIO_SERVICE);
-        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
-                audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
-
-
-
-        Uri defaultSoundUri =  Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
-                + "://" + getPackageName() + "/raw/ring1");
-
-        MediaPlayer mediaPlayer = new MediaPlayer();
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-
-
-        try {
-            mediaPlayer.setDataSource(getApplicationContext(), defaultSoundUri);
-            mediaPlayer.prepare();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        mediaPlayer.start();
-
-
-
-
-        rel_rejected.setOnClickListener(v -> {
-            mediaPlayer.stop();
-            vibrator.cancel();
-
-            status_update("n");
-
-        });
-
-        rel_approved.setOnClickListener(v -> {
-            mediaPlayer.stop();
-            vibrator.cancel();
-
-            status_update("y");
-
-        });
-
-        rel_leaveGate.setOnClickListener(v -> {
-            mediaPlayer.stop();
-            vibrator.cancel();
-
-            status_update("l");
-
-        });
 
     }
 

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sketch.securityowner.R;
 import com.sketch.securityowner.ui.ChatAppActivity;
+import com.sketch.securityowner.ui.OwnerList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +38,23 @@ public AdapterResidence.MyViewHolder onCreateViewHolder(ViewGroup parent, int vi
 public void onBindViewHolder(final AdapterResidence.MyViewHolder holder, final int position) {
        // holder.bind(items[position]);
         holder.name.setText("Block"+" "+blockList.get(position).get("block"));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                        Intent placeorder=new Intent(context, OwnerList.class);
+                                        placeorder.putExtra("block",blockList.get(position).get("block"));
+
+
+                                        context.startActivity(placeorder);
+                                }
+                        });
+
+                }
+        });
 
 /*
         holder.itemView.setOnClickListener(new View.OnClickListener() {

@@ -39,6 +39,7 @@
         android:id="@+id/car1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:background="@drawable/grey_curve"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="10dp"
@@ -56,6 +57,8 @@
 
 
             <ImageView
+                android:id="@+id/img_cab"
+
                 android:layout_width="60dp"
                 android:layout_height="50dp"
                 android:src="@mipmap/car_new"
@@ -67,6 +70,8 @@
 
                 android:layout_weight="1"/>
             <ImageView
+                android:id="@+id/img_delivery"
+
                 android:layout_width="60dp"
                 android:layout_height="50dp"
                 android:padding="5dp"
@@ -75,6 +80,8 @@
                 android:src="@mipmap/delivery"
                 android:layout_weight="1"/>
             <ImageView
+                android:id="@+id/img_guest"
+
                 android:layout_width="60dp"
                 android:layout_height="50dp"
                 android:src="@mipmap/guest"
@@ -84,6 +91,8 @@
                 android:layout_weight="1"/>
 
             <ImageView
+                android:id="@+id/img_help"
+
                 android:layout_width="60dp"
                 android:layout_height="50dp"
                 android:layout_margin="5dp"
@@ -93,6 +102,7 @@
                 android:layout_weight="1"/>
 
             <LinearLayout
+                android:id="@+id/ll_bell"
                 android:layout_width="60dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"

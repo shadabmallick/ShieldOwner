@@ -113,6 +113,12 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.HelpListDetails"
+            android:theme="@style/datepicker">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.CommunityActivity"
             android:theme="@style/MyTheme">
             <intent-filter>
@@ -126,12 +132,23 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.Activity_activity"
-            android:theme="@style/MyTheme1">
+        <activity android:name=".ui.OwnerList"
+            android:theme="@style/MyTheme"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.Activity_activity"
+
+            android:theme="@style/MyTheme2">
+
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+
 
 
         <activity android:theme="@style/MyNoActionBar"

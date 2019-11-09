@@ -1,109 +1,108 @@
-package com.sketch.securityowner.Fragment;
+package com.sketch.securityowner.ui;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
-
+import android.os.PersistableBundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.sketch.securityowner.Adapter.AdapterHelpDesk;
-import com.sketch.securityowner.Adapter.StaffAdapter;
+import com.sketch.securityowner.Adapter.AdapterHelpList;
 import com.sketch.securityowner.Constant.AppConfig;
+import com.sketch.securityowner.GlobalClass.GlobalClass;
+import com.sketch.securityowner.GlobalClass.Shared_Preference;
 import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
-import com.sketch.securityowner.model.GetDataAdapter;
-import com.sketch.securityowner.ui.RegistrationActivity;
-import com.sketch.securityowner.ui.SettingActivity;
-import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.sketch.securityowner.GlobalClass.VolleySingleton.backOff;
 import static com.sketch.securityowner.GlobalClass.VolleySingleton.nuOfRetry;
 import static com.sketch.securityowner.GlobalClass.VolleySingleton.timeOut;
 
-public class FragmentLocalHelp extends Fragment {
-
-    RecyclerView recyclerView;
-    ListView list;
-    GridLayoutManager gridLayoutManager;
-
-    AdapterHelpDesk adapterHelpDesk;
+public class HelpListDetails extends AppCompatActivity {
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.recycler_view)
+    RecyclerView recycler_view;
+    GlobalClass globalClass;
+    Shared_Preference prefManager;
+    ProgressDialog progressDialog;
+    AdapterHelpList adapterHelpList;
     ArrayList<HashMap<String,String>> cityList;
-    ArrayList<String> array1,array2,array3,array4;
-    AVLoadingIndicatorView avLoadingIndicatorView;
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(
-                R.layout.fragment, container, false);
-        return rootView;
+    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
+        setContentView(R.layout.help_list);
+        ButterKnife.bind(this);
+
+        actionViews();
     }
+    private void actionViews()  {
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-      //  String[] items = getResources().getStringArray(R.array.tab_A);
 
-        recyclerView =  view.findViewById(R.id.recycler_view);
-        avLoadingIndicatorView = view. findViewById(R.id.avi);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
+        globalClass = (GlobalClass) getApplicationContext();
+        prefManager = new Shared_Preference(this);
 
-        FloatingActionButton fab =  view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setMessage("Loading...");
         cityList=new ArrayList<>();
-        gridLayoutManager = new GridLayoutManager(getActivity(),3);
-        recyclerView.setLayoutManager(gridLayoutManager);
-        BrowseCity();
-    }
-    private void BrowseCity() {
-        // Tag used to cancel the request
-        String tag_string_req = "req_login";
-        cityList.clear();
-        startAnim();
 
-        StringRequest strReq = new StringRequest(Request.Method.GET,
-                AppConfig.help_category_list, new Response.Listener<String>() {
+
+        recycler_view.setLayoutManager(new LinearLayoutManager(this));
+
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null){
+
+            String block = bundle.getString("category");
+
+            getSupportActionBar().setTitle(block);
+
+            HelpListDetails(block);
+        }
+
+
+
+    }
+    private void HelpListDetails(final String category) {
+        // Tag used to cancel the request
+        cityList.clear();
+        progressDialog.show();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.local_help_list, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
 
-               stopAnim();
+               progressDialog.dismiss();
 
                 Gson gson = new Gson();
 
@@ -131,6 +130,8 @@ public class FragmentLocalHelp extends Fragment {
                             String id = jobj1.get("id").toString().replaceAll("\"", "");
                             String name = jobj1.get("name").toString().replaceAll("\"", "");
                             String image = jobj1.get("image").toString().replaceAll("\"", "");
+                            String category = jobj1.get("category").toString().replaceAll("\"", "");
+                            String mobile = jobj1.get("mobile").toString().replaceAll("\"", "");
 
                             HashMap<String, String> map_ser = new HashMap<>();
 
@@ -138,6 +139,8 @@ public class FragmentLocalHelp extends Fragment {
                             map_ser.put("id", id);
                             map_ser.put("name", name);
                             map_ser.put("image", image);
+                            map_ser.put("category", category);
+                            map_ser.put("mobile", mobile);
 
 
                             cityList.add(map_ser);
@@ -148,18 +151,18 @@ public class FragmentLocalHelp extends Fragment {
 
                         }
 
-                        adapterHelpDesk = new AdapterHelpDesk(getActivity(), cityList);
-                        recyclerView.setAdapter(adapterHelpDesk);
+                        adapterHelpList = new AdapterHelpList(HelpListDetails.this, cityList);
+                        recycler_view.setAdapter(adapterHelpList);
                     }
                     else {
-                        TastyToast.makeText(getActivity(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                     }
 
 
 
                 } catch (Exception e) {
-                    TastyToast.makeText(getActivity(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                    TastyToast.makeText(HelpListDetails.this, "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                 }
 
@@ -171,17 +174,26 @@ public class FragmentLocalHelp extends Fragment {
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(getActivity(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                TastyToast.makeText(HelpListDetails.this, "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
             }
         }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<>();
 
+                params.put("category", category);
+
+
+                return params;
+            }
 
 
         };
 
         // Adding request to request queue
-        VolleySingleton.getInstance(getActivity())
+        VolleySingleton.getInstance(HelpListDetails.this)
                 .addToRequestQueue(strReq
                         .setRetryPolicy(
                                 new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
@@ -189,13 +201,4 @@ public class FragmentLocalHelp extends Fragment {
 
     }
 
-    void startAnim(){
-        avLoadingIndicatorView.show();
-        // or avi.smoothToShow();
-    }
-
-    void stopAnim(){
-        avLoadingIndicatorView.hide();
-        // or avi.smoothToHide();
-    }
 }

@@ -65,6 +65,7 @@ public class LaunchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.launch_page);
         globalClass = (GlobalClass)getApplicationContext();
+        fcm_token = FirebaseInstanceId.getInstance().getToken();
         prefrence = new Shared_Preference(LaunchActivity.this);
         prefrence.loadPrefrence();
         pd=new ProgressDialog(LaunchActivity.this);

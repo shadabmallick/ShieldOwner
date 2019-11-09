@@ -100,7 +100,7 @@ public class FragmentA extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(
-                R.layout.fragment, container, false);
+                R.layout.help_frag, container, false);
         return rootView;
 
 
@@ -182,6 +182,13 @@ public class FragmentA extends Fragment {
              // dialog.dismiss();
               String content=edit_content.getText().toString();
               AddHelp(content);
+          }
+      });
+        ll_save.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+             dialog.dismiss();
+
           }
       });
 

@@ -6,6 +6,10 @@ public class AppConfig {
 
     public static final String TAG = "Shield";
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> f23b87bfef0b2f60e0d632354e6ce908dcda240c
     private static final String URL_DEV = " https://www.shieldapp.in/Api/";
 
 
@@ -30,6 +34,9 @@ public class AppConfig {
     public static final String add_car                      = URL_DEV + "add_car";
     public static final String profile_details              = URL_DEV + "profile_details";
     public static final String company_list                 = URL_DEV + "company_list";
+    public static final String add_visitor                  = URL_DEV + "add_visitor";
+    public static final String notice                       = URL_DEV + "notice";
+    public static final String local_help_list              = URL_DEV + "local_help_list";
 
 
 
