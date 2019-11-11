@@ -11,7 +11,11 @@
     <color name="red">#ff0000</color>
     <color name="green">#009900</color>
     <color name="green2">#1ADA1A</color>
-    <color name="yellow">#FFC107</color>
+
+    <color name="yellow">#F5D923</color>
+    <color name="bubble_1">#F0EDC4</color>
+    <color name="bubble_2">#E9FCCB</color>
+    <color name="bubble_3">#D4DDFA</color>
     <color name="water_green">#D5FFEC</color>
 
 </resources>

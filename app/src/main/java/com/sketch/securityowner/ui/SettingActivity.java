@@ -68,6 +68,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.sdsmdg.tastytoast.TastyToast;
+import com.sketch.securityowner.Adapter.AdapterHelpDesk;
 import com.sketch.securityowner.Adapter.CarAdapter;
 import com.sketch.securityowner.Adapter.FamilyAdapter;
 import com.sketch.securityowner.Adapter.StaffAdapter;
@@ -131,6 +132,8 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
     LinearLayoutManager HorizontalLayout3 ;
     LinearLayoutManager HorizontalLayout4 ;
     File p_image;
+    ArrayList<HashMap<String,String>> cityList;
+
      Dialog dialog;
     RadioButton radio1,radio2;
     private int mYear, mMonth, mDay, mHour, mMinute,mSecond;
@@ -150,17 +153,18 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
     ArrayList<HashMap<String,String>> HelpList;
     ArrayList<HashMap<String,String>> productDetaiils_sub;
     ArrayList<HashMap<String,String>> staffList;
-    ImageView profile_image,img_cab,img_delivery,img_guest,img_help;
+    ImageView edit_image_staff,profile_image,img_cab,img_delivery,img_guest,img_help,profile_image_staff;
     AVLoadingIndicatorView avLoadingIndicatorView;
     ScrollView scroll_details,scroll_settings;
     RelativeLayout rel_profile,rel_middle_icon;
     ImageView edit;
     String category,help_id,date_web;
     TextView add_car,add_staff,add_member;
-    EditText edit_name_cab,edit_phone_cab, edit_vehicle_no,tv_others;
+    EditText edit_staff_phone,edit_staff_name,edit_name_cab,edit_phone_cab, edit_vehicle_no,tv_others;
     private final int PICK_IMAGE_CAMERA = 1, PICK_IMAGE_GALLERY = 2;
     private final int PICK_IMAGE_CAMERA_FAMILY = 3, PICK_IMAGE_GALLERY_FAMILY = 4;
     private final int PICK_IMAGE_CAMERA_CAR = 5, PICK_IMAGE_GALLERY_CAR = 6;
+    private final int PICK_IMAGE_CAMERA_STAFF = 7, PICK_IMAGE_GALLERY_STAFF = 6;
     LinearLayout ll_submit,ll_alram,ll_hide,ll_bell,button_E3,button_E1,ll_logout,ll_notification,ll_mycomplex,car1,button_activity,ll_about_us,ll_contact_us;
     private  boolean button1IsVisible = true;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
@@ -360,9 +364,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             @Override
             public void onClick(View v) {
                 Intent notification=new Intent(getApplicationContext(),NotificationManager.class);
-                notification.addFlags(FLAG_ACTIVITY_CLEAR_TOP|
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                        Intent.FLAG_ACTIVITY_NEW_TASK);
+
                 startActivity(notification);
             }
         });
@@ -370,9 +372,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             @Override
             public void onClick(View v) {
                 Intent notification=new Intent(getApplicationContext(),MyComplex.class);
-                notification.addFlags(
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                        Intent.FLAG_ACTIVITY_NEW_TASK);
+
                 startActivity(notification);
             }
         });
@@ -380,9 +380,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             @Override
             public void onClick(View v) {
                 Intent notification=new Intent(getApplicationContext(),Activity_activity.class);
-                notification.addFlags(
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                        Intent.FLAG_ACTIVITY_NEW_TASK);
+
                 startActivity(notification);
             }
         });
@@ -390,9 +388,6 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             @Override
             public void onClick(View v) {
                 Intent notification=new Intent(getApplicationContext(),AboutUs.class);
-                notification.addFlags(
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                        Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(notification);
             }
         });
@@ -400,9 +395,6 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             @Override
             public void onClick(View v) {
                 Intent notification=new Intent(getApplicationContext(),ContactUs.class);
-                notification.addFlags(
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                        Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(notification);
             }
         });
@@ -410,9 +402,6 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             @Override
             public void onClick(View v) {
                 Intent notification=new Intent(getApplicationContext(),MainActivity.class);
-                notification.addFlags(
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                        Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(notification);
             }
         });
@@ -420,9 +409,6 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             @Override
             public void onClick(View v) {
                 Intent notification=new Intent(getApplicationContext(),CommunityActivity.class);
-                notification.addFlags(
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                        Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(notification);
             }
         });
@@ -432,12 +418,14 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                logoutDailog();
             }
         });
+
+
         rel_middle_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if(button1IsVisible==true)
-                {
+                car1.setVisibility(car1.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+              //  if(button1IsVisible==true)
+             /*   {
 
                     car1.setVisibility(View.VISIBLE);
                     button1IsVisible = false;
@@ -447,7 +435,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                    // car1.animate().alpha(1.0f);
                     car1.setVisibility(View.GONE);
                     button1IsVisible = true;
-                }
+                }*/
             }
         });
 
@@ -649,6 +637,46 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             e.printStackTrace();
         }
     }
+
+
+
+    private void selectImageStaff() {
+        try {
+            PackageManager pm = getPackageManager();
+            int hasPerm = pm.checkPermission(Manifest.permission.CAMERA, getPackageName());
+            if (hasPerm == PackageManager.PERMISSION_GRANTED) {
+                final CharSequence[] options = {"Take Photo", "Choose From Gallery","Cancel"};
+                AlertDialog.Builder builder = new AlertDialog.Builder(SettingActivity.this);
+                builder.setTitle("Select Option");
+                builder.setItems(options, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int item) {
+                        if (options[item].equals("Take Photo")) {
+                            dialog.dismiss();
+                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            startActivityForResult(intent, PICK_IMAGE_CAMERA_STAFF);
+                        } else if (options[item].equals("Choose From Gallery")) {
+                            dialog.dismiss();
+                            Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            startActivityForResult(pickPhoto, PICK_IMAGE_GALLERY_STAFF);
+                        } else if (options[item].equals("Cancel")) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                builder.show();
+            } else
+                Toast.makeText(SettingActivity.this, "Camera Permission error", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(SettingActivity.this, "Camera Permission error", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -891,6 +919,84 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             // iv_product_image.setImageBitmap(photo);
         }
 
+       else if (requestCode == PICK_IMAGE_GALLERY_STAFF && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+            Uri uri = data.getData();
+
+            p_image = new File(getRealPathFromURI(uri));
+
+
+            Log.d(TAG, "image = "+p_image);
+
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                // Log.d(TAG, String.valueOf(bitmap));
+                profile_image_staff.setImageBitmap(bitmap);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        else if (requestCode == PICK_IMAGE_CAMERA_STAFF && resultCode == RESULT_OK) {
+
+
+            File f = new File(Environment.getExternalStorageDirectory().toString());
+            for (File temp : f.listFiles()) {
+                if (temp.getName().equals("temp.jpg")) {
+                    f = temp;
+                    break;
+                }
+            }
+
+
+            try {
+                Bitmap bitmap;
+                BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+
+
+                bitmap = (Bitmap) data.getExtras().get("data");
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bytes);
+
+/*
+                bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(),
+                        bitmapOptions);*/
+
+                Log.d(TAG, "bitmap: "+bitmap);
+
+                profile_image_edit.setImageBitmap(bitmap);
+
+                String path = Environment.getExternalStorageDirectory()+File.separator;
+                // + File.separator
+                //   + "Phoenix" + File.separator + "default";
+                // f.delete();
+                OutputStream outFile = null;
+                File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
+                try {
+
+                    p_image = file;
+
+                    Log.d(TAG, "OutputStream: "+p_image);
+
+
+                    outFile = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outFile);
+                    outFile.flush();
+                    outFile.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // Bitmap photo = (Bitmap) data.getExtras().get("data");
+            // iv_product_image.setImageBitmap(photo);
+        }
 
 
 
@@ -915,22 +1021,33 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
        final Dialog dialog = new Dialog(this);
        dialog.setContentView(R.layout.staff_nfo);
 
-
+       profile_image_staff=dialog.findViewById(R.id.profile_image);
+        edit_staff_name=dialog.findViewById(R.id.edit_staff_name);
+        edit_staff_phone=dialog.findViewById(R.id.edit_staff_phone);
+        edit_image_staff=dialog.findViewById(R.id.edit_image_staff);
+        edit_image_staff.setOnClickListener(v -> selectImageStaff());
+        BrowseCity();
+        spinner_help=dialog.findViewById(R.id.spinner_help);
        // set the custom dialog components - text, image and button
 
        LinearLayout ll_save=dialog.findViewById(R.id.ll_save);
 
        // if button is clicked, close the custom dialog
-       ll_save.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
+       ll_save.setOnClickListener(v -> {
+            String name=edit_staff_name.getText().toString();
+            String phone=edit_staff_phone.getText().toString();
+           AddStaff(name,phone);
 
-           }
+
        });
 
        dialog.show();
 
    }
+
+
+
+
     public void AddCab(){
        final Dialog dialog = new Dialog(this);
        dialog.setContentView(R.layout.dailog_cab);
@@ -1408,7 +1525,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         StringRequest strReq = new StringRequest(Request.Method.POST,
 
 
-                AppConfig.add_panic, new Response.Listener<String>() {
+                AppConfig.add_visitor, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -1593,6 +1710,102 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
 
     }
     private void AddVisitors(final String type,final String radio_value) {
+        // Tag used to cancel the request
+        String tag_string_req = "req_login";
+        HelpList.clear();
+        pd.show();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.add_visitor, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+
+                pd.dismiss();
+              //  dialog.dismiss();
+
+                Gson gson = new Gson();
+
+                try {
+
+
+                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
+                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
+                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+
+
+                    if(status.equals("1")) {
+
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                        //array.add("Select Location");
+                        //  JsonArray jarray = jobj.getAsJsonArray("data");
+                        //  Log.d("jarray", "" + jarray.toString());
+
+                    }
+
+                    else {
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                    }
+
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
+                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                pd.dismiss();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<>();
+
+                params.put("type", type);
+                params.put("time", tv_time.getText().toString());
+                params.put("date", date_web);
+                params.put("flat_no", globalClass.getFlat_no());
+                params.put("complex_id", globalClass.getComplex_id());
+                params.put("visitor_name",edit_name_cab.getText().toString() );
+                params.put("visitor_mobile",edit_phone_cab.getText().toString() );
+               params.put("vehicle_no",edit_vehicle_no.getText().toString() );
+                params.put("frequency",radio_value);
+                params.put("vendor_name",category);
+                params.put("visiting_help_cat","");
+                params.put("profileImage","");
+                params.put("user_id",globalClass.getId());
+
+                Log.d(TAG, "getParams: "+params);
+                return params;
+            }
+
+
+
+        };
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(SettingActivity.this)
+                .addToRequestQueue(strReq
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+
+    }
+    private void AddStaff(final String type,final String radio_value) {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         HelpList.clear();
@@ -2089,58 +2302,49 @@ public void Logout(){
     pd.show();
 
     StringRequest strReq = new StringRequest(Request.Method.POST,
-            AppConfig.logout, new Response.Listener<String>() {
+            AppConfig.logout, response -> {
+                Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-        @Override
-        public void onResponse(String response) {
-            Log.d(TAG, "JOB RESPONSE: " + response.toString());
-
-            pd.dismiss();
+                pd.dismiss();
 
 
-            Gson gson = new Gson();
+                Gson gson = new Gson();
 
-            try {
+                try {
 
-                JsonObject jobj = gson.fromJson(response, JsonObject.class);
+                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
 
-                String status = jobj.get("status").getAsString().replaceAll("\"", "");
-                String message = jobj.get("message").getAsString().replaceAll("\"", "");
+                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
+                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
 
-                Log.d(TAG, "Message: "+message);
+                    Log.d(TAG, "Message: "+message);
 
-                if(status.equals("1") ) {
+                    if(status.equals("1") ) {
 
-                    preference.clearPrefrence();
-                    Intent intent=new Intent(SettingActivity.this,LaunchActivity.class);
-                    intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
+                        preference.clearPrefrence();
+                        Intent intent=new Intent(SettingActivity.this,LaunchActivity.class);
+                        intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+
+                    }
+                    else {
+                        TastyToast.makeText(getApplicationContext(),
+                                message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    TastyToast.makeText(getApplicationContext(), "Error Connection", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                 }
-                else {
-                    TastyToast.makeText(getApplicationContext(),
-                            message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                TastyToast.makeText(getApplicationContext(), "Error Connection", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-            }
 
 
-        }
-    }, new Response.ErrorListener() {
-
-        @Override
-
-        public void onErrorResponse(VolleyError error) {
-            Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-            TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-            pd.dismiss();
-        }
-    }) {
+            }, error -> {
+                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
+                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                pd.dismiss();
+            }) {
 
         @Override
         protected Map<String, String> getParams() {

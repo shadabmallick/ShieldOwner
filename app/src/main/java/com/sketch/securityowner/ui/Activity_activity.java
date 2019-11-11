@@ -110,9 +110,8 @@ import static com.sketch.securityowner.GlobalClass.VolleySingleton.timeOut;
 public class Activity_activity extends AppCompatActivity implements
         View.OnClickListener,
         ActivityListAdapterIN.ItemClickListenerIN,
-        ActivityListAdapterIN.ItemClickListenerCall,
         DatePickerDialog.OnDateSetListener,
-        categoryAdapter.onItemClickListner {
+       categoryAdapter.onItemClickListner {
 
    static String TAG="Activity_activity";
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -323,18 +322,8 @@ public class Activity_activity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
 
-                if(button1IsVisible==true)
-                {
+                car1.setVisibility(car1.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
 
-                    car1.setVisibility(View.VISIBLE);
-                    button1IsVisible = false;
-                }
-                else if(button1IsVisible==false)
-                {
-                    // car1.animate().alpha(1.0f);
-                    car1.setVisibility(View.GONE);
-                    button1IsVisible = true;
-                }
             }
         });
         rl_profile.setOnClickListener(new View.OnClickListener() {
@@ -432,16 +421,9 @@ public class Activity_activity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
 
+                ll_hide.setVisibility(ll_hide.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
                 if(button1IsVisible==true) {
 
-                    ll_hide.setVisibility(View.VISIBLE);
-                    button1IsVisible = false;
-                }
-                else if(button1IsVisible==false)
-                {
-                    // car1.animate().alpha(1.0f);
-                    ll_hide.setVisibility(View.GONE);
-                    button1IsVisible = true;
                 }
             }
         });
@@ -528,7 +510,6 @@ public class Activity_activity extends AppCompatActivity implements
 
                 try {
 
-
                     JsonObject jobj = gson.fromJson(response, JsonObject.class);
                     String status = jobj.get("status").getAsString().replaceAll("\"", "");
                     String message = jobj.get("message").getAsString().replaceAll("\"", "");
@@ -597,8 +578,8 @@ public class Activity_activity extends AppCompatActivity implements
                         .setRetryPolicy(
                                 new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
 
-
     }
+
     private void AddDelivery(final String type,final String radio_value) {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
@@ -971,18 +952,8 @@ public class Activity_activity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
 
-                if(button1IsVisible==true)
-                {
+                ll_hide.setVisibility(ll_hide.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
 
-                    ll_hide.setVisibility(View.VISIBLE);
-                    button1IsVisible = false;
-                }
-                else if(button1IsVisible==false)
-                {
-                    // car1.animate().alpha(1.0f);
-                    ll_hide.setVisibility(View.GONE);
-                    button1IsVisible = true;
-                }
             }
         });
 
@@ -1171,18 +1142,8 @@ public class Activity_activity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
 
-                if(button1IsVisible==true)
-                {
+                ll_hide.setVisibility(ll_hide.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
 
-                    ll_hide.setVisibility(View.VISIBLE);
-                    button1IsVisible = false;
-                }
-                else if(button1IsVisible==false)
-                {
-                    // car1.animate().alpha(1.0f);
-                    ll_hide.setVisibility(View.GONE);
-                    button1IsVisible = true;
-                }
             }
         });
 
@@ -1821,18 +1782,6 @@ public class Activity_activity extends AppCompatActivity implements
 
                 break;
 
-            case REQUEST_PHONE_CALL: {
-                if (grantResults.length > 0 && grantResults[0]
-                        == PackageManager.PERMISSION_GRANTED) {
-
-
-                } else {
-
-
-                }
-                return;
-            }
-
         }
     }
 
@@ -2347,7 +2296,7 @@ public class Activity_activity extends AppCompatActivity implements
         activityListAdapter.notifyDataSetChanged();
 
         activityListAdapter.setClickListenerIN(this);
-        activityListAdapter.setClickListenerCall(this);
+
 
     }
 
@@ -2376,9 +2325,7 @@ public class Activity_activity extends AppCompatActivity implements
     public void onItemClickIN(ActivityChild activityChild) {
 
 
-
     }
-
 
 
     ///// image related methods ...
@@ -2396,40 +2343,6 @@ public class Activity_activity extends AppCompatActivity implements
 
     }
 
-/*
-    private void dispatchTakePictureIntent() {
-
-        try {
-
-            final String dir = Environment
-                    .getExternalStorageDirectory() + "/Shield";
-
-            File file = new File(dir);
-            if (!file.exists())
-                file.mkdir();
-
-
-            String files = dir + "/profile_pic" +".jpg";
-            File newfile = new File(files);
-
-            p_image = newfile;
-
-            Uri photoURI = FileProvider.getUriForFile(Activity_activity.this,
-                    "com.shield.security.provider", newfile);
-            mCurrentPhotoPath = photoURI.toString();
-
-
-            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            startActivityForResult(intent, CAMERA_REQUEST);
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-    }
-*/
 
     private String getRealPathFromURI(Uri contentURI) {
         String result = "";
@@ -2554,44 +2467,6 @@ public class Activity_activity extends AppCompatActivity implements
 
 
 
-
-    //// call permission check and call ...
-
-
-    @Override
-    public void onItemClickCall(ActivityChild activityChild) {
-
-        checkCallPermission(activityChild.getMobile());
-    }
-
-    private static final int REQUEST_PHONE_CALL = 1212;
-    private void checkCallPermission(String number){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(Activity_activity.this,
-                    Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-
-                ActivityCompat.requestPermissions(Activity_activity.this,
-                        new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
-
-            }
-            else {
-                callPhone(number);
-            }
-        }
-        else {
-            callPhone(number);
-        }
-
-    }
-
-    private void callPhone(String number){
-
-        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + number));// Initiates the Intent
-        startActivity(intent);
-
-    }
-
-
     void startAnim(){
         avLoadingIndicatorView.show();
         // or avi.smoothToShow();
@@ -2601,6 +2476,7 @@ public class Activity_activity extends AppCompatActivity implements
         avLoadingIndicatorView.hide();
         // or avi.smoothToHide();
     }
+
     public void ProfileDailog(){
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dailog_settings);

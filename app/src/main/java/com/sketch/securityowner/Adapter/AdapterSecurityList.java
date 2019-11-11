@@ -16,7 +16,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sketch.securityowner.R;
-import com.sketch.securityowner.ui.ChatAppActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -51,6 +50,7 @@ public class AdapterSecurityList extends RecyclerView.Adapter<AdapterSecurityLis
                 placeholder(R.mipmap.profile_image).
                 fit().into(holder.profile_image);
 
+/*
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,6 +66,7 @@ public class AdapterSecurityList extends RecyclerView.Adapter<AdapterSecurityLis
 
             }
         });
+*/
         holder.call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

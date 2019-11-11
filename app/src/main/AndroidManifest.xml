@@ -107,14 +107,16 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+<!--
         <activity android:name=".ui.ChatAppActivity"
             android:theme="@style/MyTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+-->
         <activity android:name=".ui.HelpListDetails"
-            android:theme="@style/datepicker">
+            android:theme="@style/MyTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
@@ -140,6 +142,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.Activity_activity"
+
+            android:theme="@style/MyTheme2">
+
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.ChatGroup"
 
             android:theme="@style/MyTheme2">
 

@@ -1,3 +1,4 @@
+/*
 package com.sketch.securityowner.ui;
 
 import android.os.Bundle;
@@ -82,4 +83,4 @@ img_back=findViewById(R.id.img_back);
             }
         });
     }
-}
+}*/

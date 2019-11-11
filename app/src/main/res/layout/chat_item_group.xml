@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <RelativeLayout
+        android:visibility="visible"
+        android:id="@+id/relMy1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="2dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="3dp"
+        android:gravity="end"
+        >
+
+        <com.daasuu.bl.BubbleLayout
+            android:id="@+id/bubble_msg1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="100dp"
+            android:padding="5dp"
+            app:bl_arrowDirection="right"
+            app:bl_arrowHeight="12dp"
+            app:bl_arrowPosition="16dp"
+            app:bl_arrowWidth="8dp"
+            app:bl_cornersRadius="10dp"
+            app:bl_bubbleColor="@color/bubble_1"
+            >
+
+            <LinearLayout
+                android:id="@+id/linMsg1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/textView1"
+                    android:autoLink="web|phone"
+                    android:linksClickable="true"
+                    android:paddingRight="5dp"
+                    android:paddingLeft="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:textColor="@color/dark_gray"
+                    android:textColorLink="@color/blue" />
+
+                <TextView
+                    android:id="@+id/textView1Date"
+                    android:paddingRight="5dp"
+                    android:paddingLeft="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="end"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </com.daasuu.bl.BubbleLayout>
+
+        <com.daasuu.bl.BubbleLayout
+            android:id="@+id/bubble_image1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:padding="5dp"
+            app:bl_arrowDirection="right"
+            app:bl_arrowHeight="12dp"
+            app:bl_arrowPosition="16dp"
+            app:bl_arrowWidth="8dp"
+            app:bl_cornersRadius="10dp"
+            app:bl_bubbleColor="@color/bubble_1"
+            android:visibility="gone"
+            >
+
+            <RelativeLayout
+                android:id="@+id/relimgView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                >
+
+                <RelativeLayout
+                    android:id="@+id/rl_iv_11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    >
+
+
+                    <com.makeramen.roundedimageview.RoundedImageView
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/imageView11"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:contentDescription="@string/app_name"
+                        android:background="@color/bubble_1"
+                        app:riv_corner_radius="4dip" />
+
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/textView1ImgDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rl_iv_11"
+                    android:paddingRight="6dp"
+                    android:paddingEnd="6dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="start"
+                    android:textSize="12sp" />
+
+
+            </RelativeLayout>
+
+        </com.daasuu.bl.BubbleLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/relMy2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="2dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="3dp"
+
+
+
+        >
+
+        <com.daasuu.bl.BubbleLayout
+            android:id="@+id/bubble_msg2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="100dp"
+            android:padding="5dp"
+
+            app:bl_arrowDirection="left"
+            app:bl_arrowHeight="12dp"
+            app:bl_arrowPosition="16dp"
+
+            app:bl_arrowWidth="8dp"
+            app:bl_cornersRadius="10dp"
+            app:bl_bubbleColor="@color/blue"
+            >
+
+            <LinearLayout
+                android:id="@+id/linMsg2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+
+                >
+
+                <TextView
+                    android:id="@+id/textView2_name"
+                    android:paddingRight="5dp"
+                    android:paddingLeft="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:text="Sourav"
+                    />
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:autoLink="web|phone"
+                    android:linksClickable="true"
+                    android:paddingRight="5dp"
+                    android:paddingLeft="5dp"
+                    android:paddingTop="2dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:textColor="@color/dark_gray"
+                    android:textColorLink="@color/blue" />
+
+                <TextView
+                    android:id="@+id/textView2Date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="end"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </com.daasuu.bl.BubbleLayout>
+
+        <com.daasuu.bl.BubbleLayout
+            android:id="@+id/bubble_image2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:padding="5dp"
+            app:bl_arrowDirection="left"
+            app:bl_arrowHeight="12dp"
+            app:bl_arrowPosition="16dp"
+            app:bl_arrowWidth="8dp"
+            app:bl_cornersRadius="10dp"
+            app:bl_bubbleColor="@color/blue"
+            >
+
+            <RelativeLayout
+                android:id="@+id/relimgView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                >
+
+                <TextView
+                    android:paddingRight="5dp"
+                    android:paddingLeft="5dp"
+                    android:id="@+id/imageView2_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:text="Sourav"
+                    />
+
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:id="@+id/imageView22"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:background="@android:color/black"
+                    app:riv_corner_radius="4dip"
+                    android:layout_marginTop="2dp"
+                    android:layout_below="@+id/imageView2_name"
+                    />
+
+                <TextView
+                    android:id="@+id/textView2ImgDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/imageView22"
+                    android:paddingTop="5dp"
+                    android:paddingRight="6dp"
+                    android:paddingEnd="6dp"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="12sp"
+                    />
+
+            </RelativeLayout>
+
+        </com.daasuu.bl.BubbleLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

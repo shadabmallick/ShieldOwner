@@ -4,6 +4,9 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -50,11 +53,14 @@ public class HelpListDetails extends AppCompatActivity {
     ProgressDialog progressDialog;
     AdapterHelpList adapterHelpList;
     ArrayList<HashMap<String,String>> cityList;
+    LinearLayout ll_data_not_found;
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.help_list);
         ButterKnife.bind(this);
+
+        ll_data_not_found=findViewById(R.id.ll_data_not_found);
 
         actionViews();
     }
@@ -89,6 +95,17 @@ public class HelpListDetails extends AppCompatActivity {
 
 
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+
+        }
+        return (super.onOptionsItemSelected(menuItem));
+    }
+
     private void HelpListDetails(final String category) {
         // Tag used to cancel the request
         cityList.clear();
@@ -155,6 +172,8 @@ public class HelpListDetails extends AppCompatActivity {
                         recycler_view.setAdapter(adapterHelpList);
                     }
                     else {
+                        ll_data_not_found.setVisibility(View.VISIBLE);
+                        recycler_view.setVisibility(View.GONE);
                         TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                     }
@@ -162,7 +181,10 @@ public class HelpListDetails extends AppCompatActivity {
 
 
                 } catch (Exception e) {
-                    TastyToast.makeText(HelpListDetails.this, "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                    e.printStackTrace();
+                    ll_data_not_found.setVisibility(View.VISIBLE);
+                    recycler_view.setVisibility(View.GONE);
+                   // TastyToast.makeText(HelpListDetails.this, "DATA NOT FOUND", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                 }
 
@@ -184,7 +206,7 @@ public class HelpListDetails extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
 
                 params.put("category", category);
-
+                Log.d(TAG, "getParams: "+params);
 
                 return params;
             }

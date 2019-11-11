@@ -11,7 +11,6 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sketch.securityowner.R;
-import com.sketch.securityowner.ui.ChatAppActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -85,6 +84,7 @@ String category=blockList.get(position).get("category");
         }
         holder.tv_category.setText(blockList.get(position).get("category"));
         holder.tv_data.setText(blockList.get(position).get("date"));
+/*
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,6 +100,7 @@ String category=blockList.get(position).get("category");
 
             }
         });
+*/
 
     }
 

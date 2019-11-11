@@ -14,7 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sdsmdg.tastytoast.TastyToast;
 import com.sketch.securityowner.R;
-import com.sketch.securityowner.ui.ChatAppActivity;
+
+import com.sketch.securityowner.ui.ChatGroup;
 import com.sketch.securityowner.ui.OwnerList;
 import com.squareup.picasso.Picasso;
 
@@ -46,25 +47,17 @@ public class AdapterSecurityGuard  extends RecyclerView.Adapter<AdapterSecurityG
        holder.tv_content.setText(blockList.get(position).get("content"));
        holder.tv_help_id.setText("Help Id :"+blockList.get(position).get("help_id"));
        holder.tv_status.setText(blockList.get(position).get("status"));
-/*
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+       holder.itemView.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
 
-                        Intent placeorder=new Intent(context, OwnerList.class);
-                        placeorder.putExtra("block",blockList.get(position).get("help_id"));
+               Intent placeorder=new Intent(context, ChatGroup.class);
+               placeorder.putExtra("id",blockList.get(position).get("help_id"));
 
 
-                        context.startActivity(placeorder);
-                    }
-                });
-
-            }
-        });
-*/
+               context.startActivity(placeorder);
+           }
+       });
 
     }
 
