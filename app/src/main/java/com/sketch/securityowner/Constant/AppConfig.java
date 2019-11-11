@@ -6,10 +6,7 @@ public class AppConfig {
 
     public static final String TAG = "Shield";
 
-<<<<<<< HEAD
-=======
 
->>>>>>> f23b87bfef0b2f60e0d632354e6ce908dcda240c
     private static final String URL_DEV = " https://www.shieldapp.in/Api/";
 
 

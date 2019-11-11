@@ -5,10 +5,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.app.SearchManager;
 import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -23,16 +21,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -49,17 +40,13 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -69,10 +56,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-
 import com.borax12.materialdaterangepicker.date.DatePickerDialog;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -91,7 +75,6 @@ import com.sketch.securityowner.model.HeaderItem;
 import com.sketch.securityowner.model.ListItem;
 import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;
-
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -128,14 +111,10 @@ public class Activity_activity extends AppCompatActivity implements
         View.OnClickListener,
         ActivityListAdapterIN.ItemClickListenerIN,
         ActivityListAdapterIN.ItemClickListenerCall,
-<<<<<<< HEAD
-        DatePickerDialog.OnDateSetListener{
-
-=======
         DatePickerDialog.OnDateSetListener,
-        SearchView.OnQueryTextListener,categoryAdapter.onItemClickListner {
+        categoryAdapter.onItemClickListner {
+
    static String TAG="Activity_activity";
->>>>>>> f23b87bfef0b2f60e0d632354e6ce908dcda240c
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.recycle_activity) RecyclerView recycle_activity;
     @BindView(R.id.recycle_upcoming) RecyclerView recycle_upcoming;
@@ -223,7 +202,6 @@ public class Activity_activity extends AppCompatActivity implements
         actionViews();
         user_name =  findViewById(R.id.user_name);
 
-<<<<<<< HEAD
         user_name.setText(globalClass.getName());
 
         if (!globalClass.getProfil_pic().isEmpty()){
@@ -235,14 +213,12 @@ public class Activity_activity extends AppCompatActivity implements
                     .placeholder(R.mipmap.profile_image)
                     .into(profile_image);
         }
-=======
+
         DeliveryList=new ArrayList<>();
         HelpList=new ArrayList<>();
 
         Category=new ArrayList<>();
-         user_name.setText(globalClass.getName());
->>>>>>> f23b87bfef0b2f60e0d632354e6ce908dcda240c
-
+        user_name.setText(globalClass.getName());
 
         this.registerReceiver(mMessageReceiver, new IntentFilter("activity_screen"));
 
@@ -509,8 +485,25 @@ public class Activity_activity extends AppCompatActivity implements
 
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                tv_time.setText( ""+selectedHour + ":" + selectedMinute);
+
+                String time1 = selectedHour + ":" + selectedMinute;
+                SimpleDateFormat  format1 = new SimpleDateFormat("HH:mm",
+                        Locale.ENGLISH);
+                SimpleDateFormat  format2 = new SimpleDateFormat("hh:mm:ss a",
+                        Locale.ENGLISH);
+
+                try {
+
+                    Date date = format1.parse(time1);
+
+                    tv_time.setText(format2.format(date));
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }
+
         }, mHour, mMinute,false);
 
         mTimePicker.show();
@@ -544,20 +537,15 @@ public class Activity_activity extends AppCompatActivity implements
                     if(status.equals("1")) {
                         TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
-
                         getActivityList();
                         //array.add("Select Location");
                       //  JsonArray jarray = jobj.getAsJsonArray("data");
                       //  Log.d("jarray", "" + jarray.toString());
 
-                    }
-
-                    else {
+                    } else {
                         TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                     }
-
-
 
                 } catch (Exception e) {
                     TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
@@ -832,25 +820,27 @@ public class Activity_activity extends AppCompatActivity implements
 
 
                     if(status.equals("1")) {
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
+                        TastyToast.makeText(getApplicationContext(),
+                                message, TastyToast.LENGTH_LONG,
+                                TastyToast.SUCCESS);
 
                         getActivityList();
-                        //array.add("Select Location");
-                      //  JsonArray jarray = jobj.getAsJsonArray("data");
-                      //  Log.d("jarray", "" + jarray.toString());
 
                     }
 
                     else {
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                        TastyToast.makeText(getApplicationContext(),
+                                message, TastyToast.LENGTH_LONG,
+                                TastyToast.SUCCESS);
 
                     }
 
 
 
                 } catch (Exception e) {
-                    TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                    TastyToast.makeText(getApplicationContext(),
+                            "Some error occurred.\nPlease try again",
+                            TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                 }
 
@@ -878,7 +868,7 @@ public class Activity_activity extends AppCompatActivity implements
                 params.put("complex_id", globalClass.getComplex_id());
                 params.put("visitor_name",edit_name_cab.getText().toString() );
                 params.put("visitor_mobile",edit_phone_cab.getText().toString() );
-                params.put("vehicle_no",edit_vehicle_no.getText().toString() );
+               // params.put("vehicle_no",edit_vehicle_no.getText().toString() );
                 params.put("frequency",radio_value);
                 params.put("visiting_help_cat","");
                 params.put("profileImage","");
@@ -1000,6 +990,7 @@ public class Activity_activity extends AppCompatActivity implements
         dialog.show();
 
     }
+
     public void AddGuest(){
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_guest);
@@ -1075,6 +1066,7 @@ public class Activity_activity extends AppCompatActivity implements
         dialog.show();
 
     }
+
     public void AddHelp(){
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_help);
@@ -1851,7 +1843,6 @@ public class Activity_activity extends AppCompatActivity implements
         switch (v.getId()){
 
 
-
             default:
                 break;
 
@@ -1902,10 +1893,6 @@ public class Activity_activity extends AppCompatActivity implements
         getActivityList();
 
     }
-
-
-
-
 
 
     //// activity api call ....
@@ -2093,6 +2080,7 @@ public class Activity_activity extends AppCompatActivity implements
             protected Map<String, String> getParams() throws AuthFailureError {
 
                 return params;
+
             }
         };
 
@@ -2385,19 +2373,11 @@ public class Activity_activity extends AppCompatActivity implements
 
 
     @Override
-    public void onItemClickIN(ActivityChild activityChild, String in_out) {
+    public void onItemClickIN(ActivityChild activityChild) {
 
-        if (in_out.equals("in")){
-           // showVisitorDetailsDialog(activityChild);
-        }else if (in_out.equals("out")){
-           // visitorOut(activityChild.getActivity_id(), activityChild.getFlat_id());
-        }
+
 
     }
-
-
-    AlertDialog alertDialog;
-
 
 
 
@@ -2413,7 +2393,6 @@ public class Activity_activity extends AppCompatActivity implements
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             startActivityForResult(intent, CAMERA_REQUEST);
         }
-
 
     }
 
