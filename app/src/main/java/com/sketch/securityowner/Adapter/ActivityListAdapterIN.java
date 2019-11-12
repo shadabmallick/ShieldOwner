@@ -53,7 +53,7 @@ public class ActivityListAdapterIN extends
         TextView user_name, visitor_type_name, tv_vendor_name,
                 visiting_time, approved_by, tv_lag_code;
         ImageView iv_visitor_type, edit;
-        LinearLayout ll_buttons, ll_in, ll_out, ll_leaveat_gate;
+        LinearLayout ll_buttons, ll_in, ll_out, ll_leaveat_gate, ll_vendors;
         TextView tv_accept, tv_reject, tv_leave_at_gate;
 
         public ChildViewHolder(View itemView) {
@@ -75,6 +75,7 @@ public class ActivityListAdapterIN extends
             tv_accept = itemView.findViewById(R.id.tv_accept);
             tv_reject = itemView.findViewById(R.id.tv_reject);
             tv_leave_at_gate = itemView.findViewById(R.id.tv_leave_at_gate);
+            ll_vendors = itemView.findViewById(R.id.ll_vendors);
 
 
         }
@@ -166,11 +167,10 @@ public class ActivityListAdapterIN extends
 
         try {
             Log.d(AppConfig.TAG, "setChildData: "+activityChild.getProfile_image());
-          //  holder.profile_image.setImageResource(R.mipmap.profile_image);
-           // holder.image_visitor_type.setImageResource(R.drawable.ic_user);
-
 
                 if (activityChild.getType().equals("master")){
+
+                    holder.ll_vendors.setVisibility(View.VISIBLE);
 
                     holder.user_name.setText(activityChild.getName());
 
@@ -181,10 +181,10 @@ public class ActivityListAdapterIN extends
                             .into(holder.profile_image);
 
 
-
                     if (activityChild.getVisitor_type().equals(AppConfig.guest)){
 
                         holder.tv_vendor_name.setText("Guest");
+                        holder.ll_vendors.setVisibility(View.GONE);
 
                     }else  if (activityChild.getVisitor_type().equals(AppConfig.delivery)){
 
@@ -205,8 +205,7 @@ public class ActivityListAdapterIN extends
                     }
 
 
-                    holder.visiting_time.setText(activityChild.getVisiting_time());
-
+                    showTime(holder.visiting_time, activityChild.getVisiting_time());
 
 
                     if((activityChild.getActual_in_time() == null)
@@ -287,6 +286,11 @@ public class ActivityListAdapterIN extends
                     });
 
 
+                    holder.itemView.setOnClickListener(v -> {
+
+                        mClickListenerIn.onItemClickIN(activityChild);
+                    });
+
 
                 }else {
 
@@ -294,7 +298,7 @@ public class ActivityListAdapterIN extends
                     holder.ll_out.setVisibility(View.GONE);
                     holder.ll_leaveat_gate.setVisibility(View.GONE);
                     holder.ll_buttons.setVisibility(View.GONE);
-
+                    holder.ll_vendors.setVisibility(View.VISIBLE);
 
                     holder.user_name.setText(activityChild.getName());
 
@@ -308,6 +312,7 @@ public class ActivityListAdapterIN extends
                     if (activityChild.getVisitor_type().equals(AppConfig.guest)){
 
                         holder.tv_vendor_name.setText("Guest");
+                        holder.ll_vendors.setVisibility(View.GONE);
 
                     }else  if (activityChild.getVisitor_type().equals(AppConfig.delivery)){
 
@@ -328,11 +333,15 @@ public class ActivityListAdapterIN extends
                     }
 
 
-                    holder.visiting_time.setText(activityChild.getVisiting_time());
+                    showTime(holder.visiting_time, activityChild.getVisiting_time());
+
+
+                    holder.itemView.setOnClickListener(v -> {
+                        mClickListenerIn.onItemClickIN(activityChild);
+                    });
 
 
                 }
-
 
 
 
@@ -343,8 +352,6 @@ public class ActivityListAdapterIN extends
 
 
     }
-
-
 
 
 
@@ -353,7 +360,7 @@ public class ActivityListAdapterIN extends
         try {
 
             DateFormat originalFormat =
-                    new SimpleDateFormat("hh:mm:ss", Locale.ENGLISH);
+                    new SimpleDateFormat("hh:mm:ss a", Locale.ENGLISH);
             DateFormat targetFormat =
                     new SimpleDateFormat("hh:mm a", Locale.ENGLISH);
 
@@ -361,12 +368,13 @@ public class ActivityListAdapterIN extends
 
             String formattedDate = targetFormat.format(date);
 
-            textView.setText("Visiting Time: "+formattedDate);
+            textView.setText(formattedDate);
 
         }catch (Exception e){
             e.printStackTrace();
         }
     }
+
 
     private void showActualInTime(TextView textView, String sTime){
 
@@ -397,7 +405,7 @@ public class ActivityListAdapterIN extends
     }
 
     public interface ItemClickListenerIN {
-        void onItemClickIN(ActivityChild activityChild, String in_out);
+        void onItemClickIN(ActivityChild activityChild);
     }
 
 
