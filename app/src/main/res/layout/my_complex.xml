@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
+    android:background="@color/light_gray"
     xmlns:card_view="http://schemas.android.com/apk/res-auto">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -28,90 +29,120 @@
             android:id="@+id/toolbar_title" />
     </androidx.appcompat.widget.Toolbar>
 
-    <androidx.cardview.widget.CardView
+<LinearLayout
 
-        android:id="@+id/cardview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:background="@android:color/white">
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:contentPadding="7dp"
-
-        card_view:cardCornerRadius="7dp"
-        card_view:cardElevation="7dp"
-        android:layout_margin="10dp"
-
-
+        android:layout_marginTop="20dp"
         >
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <FrameLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:padding="20dp"
+            >
 
-            android:orientation="vertical"
-            android:background="@drawable/curve_white">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:tint="@color/light_gray"
+                android:src="@mipmap/profile_image"/>
 
-
-
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
-
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="20dp"
-                    android:background="@drawable/circle">
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:layout_width="96dp"
-                        android:layout_height="96dp"
-                        android:tint="@color/light_gray"
-                        android:src="@drawable/ic_user"/>
-
-                </FrameLayout>
+        </FrameLayout>
 
 
-            </LinearLayout>
+    </LinearLayout>
 
 
+</LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
+        android:background="@android:color/white"
 
-                android:layout_marginVertical="10dp"
-                android:hint="@string/enter_name"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginVertical="10dp"
-                android:hint="@string/enter_phone"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginVertical="10dp"
-                android:hint="@string/enter_email"/>
-
-            <LinearLayout
-                android:id="@+id/ll_save"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                />
+        >
+<ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@drawable/ic_box"
+    android:layout_marginLeft="40dp"
+    android:background="@android:color/darker_gray"></ImageView>
 
 
 
-        </LinearLayout>
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:layout_marginLeft="20dp"
+    android:text="@string/add_show_tenent"></TextView>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:padding="10dp"
+        android:background="@android:color/white"
+        android:layout_marginTop="10dp"
 
-    </androidx.cardview.widget.CardView>
+        >
+<ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@drawable/ic_box"
+    android:layout_marginLeft="40dp"
+    android:background="@android:color/darker_gray"></ImageView>
 
+
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:layout_marginLeft="20dp"
+    android:text="@string/add_new_flat"></TextView>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:background="@android:color/white"
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+
+        >
+<ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@drawable/ic_box"
+    android:layout_marginLeft="40dp"
+    android:background="@android:color/darker_gray"></ImageView>
+
+
+
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:layout_marginLeft="20dp"
+    android:text="@string/tell_a_freind"></TextView>
+    </LinearLayout>
 
 </LinearLayout>
