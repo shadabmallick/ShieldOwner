@@ -107,6 +107,24 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.Activity_details"
+            android:theme="@style/MyTheme1">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.Activity_tenants"
+            android:theme="@style/MyTheme1">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.InterphoneSettings"
+            android:theme="@style/MyTheme1">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
 <!--
         <activity android:name=".ui.ChatAppActivity"
             android:theme="@style/MyTheme">

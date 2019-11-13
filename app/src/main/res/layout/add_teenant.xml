@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        xmlns:app="http://schemas.android.com/tools"
+        android:id="@+id/toolbar"
+        android:theme="@style/ToolBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/blue"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <ImageView
+                android:layout_weight="1"
+                android:id="@+id/img_back"
+                android:layout_gravity="left"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow_left"
+                android:tint="@android:color/white">
+
+
+
+            </ImageView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="right"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:textSize="16dp"
+                android:text="My Tenants"></TextView>
+
+            <RelativeLayout
+                android:id="@+id/rl_add_tenants"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:layout_marginRight="10dp">
+
+
+                <ImageView
+                    android:tint="@android:color/white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_plus"
+
+
+                    ></ImageView>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:layout_above="@+id/view1"
+        android:paddingBottom="8dp"
+        />
+
+
+
+
+
+</RelativeLayout>

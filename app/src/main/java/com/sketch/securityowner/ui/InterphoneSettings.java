@@ -1,44 +1,46 @@
 package com.sketch.securityowner.ui;
 
-import android.content.Intent;
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-
-
-
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.sketch.securityowner.R;
 
-public class MyComplex extends AppCompatActivity {
+public class InterphoneSettings extends AppCompatActivity {
     ImageView img_back;
-    LinearLayout ll_tenants;
+    LinearLayout ll_edit;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.my_complex);
+        setContentView(R.layout.e_commerce);
         img_back = findViewById(R.id.img_back);
-        ll_tenants = findViewById(R.id.ll_tenants);
+        ll_edit = findViewById(R.id.ll_edit);
         img_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        ll_tenants.setOnClickListener(new View.OnClickListener() {
+        ll_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent tenant = new Intent(getApplicationContext(), Activity_tenants.class);
-                startActivity(tenant);
+               addPhone();
             }
         });
+    }
+    public void addPhone(){
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.add_phone);
+        dialog.setCancelable(false);
 
-
+        dialog.show();
     }
 }

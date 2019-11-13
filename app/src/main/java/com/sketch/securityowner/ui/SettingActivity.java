@@ -165,7 +165,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
     private final int PICK_IMAGE_CAMERA_FAMILY = 3, PICK_IMAGE_GALLERY_FAMILY = 4;
     private final int PICK_IMAGE_CAMERA_CAR = 5, PICK_IMAGE_GALLERY_CAR = 6;
     private final int PICK_IMAGE_CAMERA_STAFF = 7, PICK_IMAGE_GALLERY_STAFF = 6;
-    LinearLayout ll_submit,ll_alram,ll_hide,ll_bell,button_E3,button_E1,ll_logout,ll_notification,ll_mycomplex,car1,button_activity,ll_about_us,ll_contact_us;
+    LinearLayout ll_ecom,ll_submit,ll_alram,ll_hide,ll_bell,button_E3,button_E1,ll_logout,ll_notification,ll_mycomplex,car1,button_activity,ll_about_us,ll_contact_us;
     private  boolean button1IsVisible = true;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     @Override
@@ -228,6 +228,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         scroll_details =  findViewById(R.id.scroll_details);
         edit =  findViewById(R.id.edit);
         add_car =  findViewById(R.id.add_car);
+        ll_ecom =  findViewById(R.id.ll_ecom);
         add_member =  findViewById(R.id.add_member);
         add_staff =  findViewById(R.id.add_staff);
         scroll_settings =  findViewById(R.id.scroll_settings);
@@ -302,6 +303,16 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                 StaffDialog();
             }
         });
+        ll_ecom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent entercom_setting=new Intent(getApplicationContext(),InterphoneSettings.class);
+                startActivity(entercom_setting);
+
+            }
+        });
+
         img_cab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1045,7 +1056,13 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
 
    }
 
-
+public void addPhone(){
+    final Dialog dialog = new Dialog(this);
+    dialog.setContentView(R.layout.dailog_cab);
+    dialog.setCancelable(false);
+    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+    dialog.show();
+}
 
 
     public void AddCab(){

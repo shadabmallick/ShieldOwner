@@ -11,12 +11,18 @@
     <string name="enter_registration_number">Please Enter your register Number</string>
     <string name="enter_name">Enter Name</string>
     <string name="enter_phone">Enter Phone</string>
+    <string name="enter_tenant_phone">Enter Tenant Phone</string>
     <string name="enter_email">Enter Email</string>
     <string name="back">Back</string>
     <string name="otp_send">OTP Has been sent to you on</string>
     <string name="help">Help</string>
     <string name="activity">Activity</string>
     <string name="community">Community</string>
+
+    <string name="no_body">If nobody responds to the notification</string>
+    <string name="no_body_pick_up">If nobody pick up the call</string>
+    <string name="phone_Call">Then a phone call will be triggered on this given number </string>
+    <string name="phone_Call_guard">Then the guard can call you at your Register Number </string>
     <string name="setting">Settings</string>
     <string name="my_details">MY DETAILS</string>
     <string name="app_details">APP SETTINGS</string>
@@ -36,10 +42,12 @@
     <string name="member_info">MEMBER INFO</string>
     <string name="staff_info">STAFF INFO</string>
     <string name="car_info">CAR INFO</string>
+    <string name="tenants_info">Tenant Info</string>
     <string name="save">Save</string>
     <string name="staff_name">Enter Staff Name</string>
     <string name="staff_type">Choose Staff Type</string>
     <string name="enter_member_name">Enter Member Name</string>
+    <string name="enter_tenant_name">Enter Tenant Name</string>
     <string name="entercar_no">Enter Car Number</string>
     <string name="cartype">Choose Car Type</string>
     <string name="parking_number">Enter Parking Number</string>

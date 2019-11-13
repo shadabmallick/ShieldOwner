@@ -46,9 +46,14 @@ public class AdapterSecurityList extends RecyclerView.Adapter<AdapterSecurityLis
     public void onBindViewHolder(AdapterSecurityList.MyViewHolder holder, int position) {
         // holder.bind(items[position]);
         holder.tv_name.setText(blockList.get(position).get("name"));
-        Picasso.with(context).load(blockList.get(position).get("image")).
-                placeholder(R.mipmap.profile_image).
-                fit().into(holder.profile_image);
+            String image=blockList.get(position).get("image");
+
+        if(!image.isEmpty()){
+            Picasso.with(context).load(blockList.get(position).get("image")).
+                    placeholder(R.mipmap.profile_image).
+                    fit().into(holder.profile_image);
+        }
+
 
 /*
         holder.itemView.setOnClickListener(new View.OnClickListener() {
