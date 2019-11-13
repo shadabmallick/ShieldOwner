@@ -180,32 +180,44 @@ public class ActivityListAdapterIN extends
                             .placeholder(R.drawable.ic_user_black)
                             .into(holder.profile_image);
 
+                    Glide.with(context)
+                            .load(activityChild.getVendor_image())
+                            .centerCrop()
+                            .placeholder(R.drawable.ic_user_black)
+                            .into(holder.vendor_image);
+
 
                     if (activityChild.getVisitor_type().equals(AppConfig.guest)){
 
-                        holder.tv_vendor_name.setText("Guest");
+                        holder.visitor_type_name.setText("Guest");
                         holder.ll_vendors.setVisibility(View.GONE);
 
                     }else  if (activityChild.getVisitor_type().equals(AppConfig.delivery)){
 
-                        holder.tv_vendor_name.setText("Delivery");
+                        holder.visitor_type_name.setText("Delivery");
+
+                        holder.tv_vendor_name.setText(activityChild.getVendor_name());
 
                     }else  if (activityChild.getVisitor_type().equals(AppConfig.staff)){
 
-                        holder.tv_vendor_name.setText("Staff");
+                        holder.visitor_type_name.setText("Staff");
+
+                        holder.tv_vendor_name.setText(activityChild.getVendor_name());
 
                     } else  if (activityChild.getVisitor_type().equals(AppConfig.cab)){
 
-                        holder.tv_vendor_name.setText("Cab");
+                        holder.visitor_type_name.setText("Cab");
+
+                        holder.tv_vendor_name.setText(activityChild.getVendor_name());
 
                     }else  if (activityChild.getVisitor_type().equals(AppConfig.visiting_help)){
 
-                        holder.tv_vendor_name.setText("Visiting Help");
+                        holder.visitor_type_name.setText("Visiting Help");
+
+                        holder.tv_vendor_name.setText(activityChild.getVendor_name());
 
                     }
 
-
-                    showTime(holder.visiting_time, activityChild.getVisiting_time());
 
 
                     if((activityChild.getActual_in_time() == null)
@@ -233,6 +245,9 @@ public class ActivityListAdapterIN extends
                         holder.ll_leaveat_gate.setVisibility(View.GONE);
 
 
+                        showActualInTime(holder.visiting_time, activityChild.getActual_in_time());
+
+
                     }else if(activityChild.getActual_out_time() != null
                             || !activityChild.getActual_out_time().equals("null")
                             || !activityChild.getActual_out_time().equals("")
@@ -242,11 +257,13 @@ public class ActivityListAdapterIN extends
                         holder.ll_out.setVisibility(View.VISIBLE);
                         holder.ll_leaveat_gate.setVisibility(View.GONE);
 
+                        showActualInTime(holder.visiting_time, activityChild.getActual_out_time());
+
                     }
 
 
 
-                    if (activityChild.getGetpass().equals("1")){
+                    if (activityChild.getApprove_status().equals("l")){
                         holder.ll_leaveat_gate.setVisibility(View.VISIBLE);
                         holder.tv_lag_code.setText(activityChild.getLeave_at_gate_code());
                     }else {
@@ -292,6 +309,27 @@ public class ActivityListAdapterIN extends
                     });
 
 
+
+                    holder.tv_accept.setOnClickListener(v -> {
+
+                        itemClickListenerStatusUpdate.onItemClickStatusUpdate(activityChild, "y");
+
+                    });
+
+                    holder.tv_reject.setOnClickListener(v -> {
+
+                        itemClickListenerStatusUpdate.onItemClickStatusUpdate(activityChild, "n");
+
+                    });
+
+                    holder.tv_leave_at_gate.setOnClickListener(v -> {
+
+                        itemClickListenerStatusUpdate.onItemClickStatusUpdate(activityChild, "l");
+
+                    });
+
+                    showTime(holder.visiting_time, activityChild.getVisiting_time());
+
                 }else {
 
                     holder.ll_in.setVisibility(View.GONE);
@@ -300,40 +338,88 @@ public class ActivityListAdapterIN extends
                     holder.ll_buttons.setVisibility(View.GONE);
                     holder.ll_vendors.setVisibility(View.VISIBLE);
 
-                    holder.user_name.setText(activityChild.getName());
+                    if (!activityChild.getName().isEmpty()){
+                        holder.user_name.setText(activityChild.getName());
+                    }else {
+                        holder.user_name.setVisibility(View.GONE);
+                    }
+
+                    Glide.with(context)
+                            .load(activityChild.getProfile_image())
+                            .centerCrop()
+                            .placeholder(R.drawable.ic_user_black)
+                            .into(holder.profile_image);
 
                     Glide.with(context)
                             .load(activityChild.getVendor_image())
                             .centerCrop()
                             .placeholder(R.drawable.ic_user_black)
-                            .into(holder.profile_image);
-
+                            .into(holder.vendor_image);
 
                     if (activityChild.getVisitor_type().equals(AppConfig.guest)){
 
-                        holder.tv_vendor_name.setText("Guest");
+                        holder.visitor_type_name.setText("Guest");
                         holder.ll_vendors.setVisibility(View.GONE);
 
                     }else  if (activityChild.getVisitor_type().equals(AppConfig.delivery)){
 
-                        holder.tv_vendor_name.setText("Delivery");
+                        holder.visitor_type_name.setText("Delivery");
+
+                        holder.tv_vendor_name.setText(activityChild.getVendor_name());
 
                     }else  if (activityChild.getVisitor_type().equals(AppConfig.staff)){
 
-                        holder.tv_vendor_name.setText("Staff");
+                        holder.visitor_type_name.setText("Staff");
+
+                        holder.tv_vendor_name.setText(activityChild.getVendor_name());
 
                     } else  if (activityChild.getVisitor_type().equals(AppConfig.cab)){
 
-                        holder.tv_vendor_name.setText("Cab");
+                        holder.visitor_type_name.setText("Cab");
+
+                        holder.tv_vendor_name.setText(activityChild.getVendor_name());
 
                     }else  if (activityChild.getVisitor_type().equals(AppConfig.visiting_help)){
 
-                        holder.tv_vendor_name.setText("Visiting Help");
+                        holder.visitor_type_name.setText("Visiting Help");
+
+                        holder.tv_vendor_name.setText(activityChild.getVendor_name());
 
                     }
 
 
-                    showTime(holder.visiting_time, activityChild.getVisiting_time());
+
+
+                    if (activityChild.getApprove_status() != null
+                            && !activityChild.getApprove_status().equals("null")
+                            && (activityChild.getApprove_status().equals("y")
+                            || activityChild.getApprove_status().equals("l"))){
+
+                        holder.approved_by.setText("Approved by "+activityChild.getApprove_by());
+                    } else {
+                        holder.approved_by.setVisibility(View.GONE);
+                    }
+
+                    if (activityChild.getApprove_status().equals("new")){
+                        holder.approved_by.setVisibility(View.GONE);
+                    }
+
+                    if (activityChild.getApprove_status().equals("w")){
+
+                        holder.ll_buttons.setVisibility(View.VISIBLE);
+                        holder.tv_accept.setVisibility(View.VISIBLE);
+                        holder.tv_reject.setVisibility(View.VISIBLE);
+
+                        if (activityChild.getVisitor_type().equals(AppConfig.delivery)){
+                            holder.tv_leave_at_gate.setVisibility(View.VISIBLE);
+                        }else {
+                            holder.tv_leave_at_gate.setVisibility(View.GONE);
+                        }
+
+                    }else {
+
+                        holder.ll_buttons.setVisibility(View.GONE);
+                    }
 
 
                     holder.itemView.setOnClickListener(v -> {
@@ -341,6 +427,27 @@ public class ActivityListAdapterIN extends
                     });
 
 
+
+                    holder.tv_accept.setOnClickListener(v -> {
+
+                        itemClickListenerStatusUpdate.onItemClickStatusUpdate(activityChild, "y");
+
+                    });
+
+                    holder.tv_reject.setOnClickListener(v -> {
+
+                        itemClickListenerStatusUpdate.onItemClickStatusUpdate(activityChild, "n");
+
+                    });
+
+                    holder.tv_leave_at_gate.setOnClickListener(v -> {
+
+                        itemClickListenerStatusUpdate.onItemClickStatusUpdate(activityChild, "l");
+
+                    });
+
+
+                    showTime(holder.visiting_time, activityChild.getVisiting_time());
                 }
 
 
@@ -383,13 +490,13 @@ public class ActivityListAdapterIN extends
             DateFormat originalFormat =
                     new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ENGLISH);
             DateFormat targetFormat =
-                    new SimpleDateFormat("dd-MMM-yyyy hh:mm a", Locale.ENGLISH);
+                    new SimpleDateFormat(" hh:mm a", Locale.ENGLISH);
 
             Date date = originalFormat.parse(sTime);
 
             String formattedDate = targetFormat.format(date);
 
-            textView.setText("In Time: "+formattedDate);
+            textView.setText(formattedDate);
 
         }catch (Exception e){
             e.printStackTrace();
@@ -411,13 +518,13 @@ public class ActivityListAdapterIN extends
 
 /// call mode ...
 
-    private ItemClickListenerCall itemClickListenerCall;
-    public void setClickListenerCall(ItemClickListenerCall itemClickListener) {
-        this.itemClickListenerCall = itemClickListener;
+    private ItemClickListenerStatusUpdate itemClickListenerStatusUpdate;
+    public void setClickListenerStatusUpdate(ItemClickListenerStatusUpdate itemClickListener) {
+        this.itemClickListenerStatusUpdate = itemClickListener;
     }
 
-    public interface ItemClickListenerCall {
-        void onItemClickCall(ActivityChild activityChild);
+    public interface ItemClickListenerStatusUpdate {
+        void onItemClickStatusUpdate(ActivityChild activityChild, String status);
     }
 
 

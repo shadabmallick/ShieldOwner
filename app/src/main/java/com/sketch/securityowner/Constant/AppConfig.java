@@ -7,21 +7,13 @@ public class AppConfig {
     public static final String TAG = "Shield";
 
 
-<<<<<<< HEAD
-    private static final String URL_DEV = " https://www.shieldapp.in/Api/";
-=======
-
-
     private static final String URL_DEV = "https://www.shieldapp.in/Api/";
-
-
-
->>>>>>> 22d90dd49d06ef851ae9a8d85e59f620c2afe768
 
 
     public static final String registration                 = URL_DEV + "registration";
     public static final String login_otp                    = URL_DEV + "login_otp";
     public static final String login                        = URL_DEV + "login";
+    public static final String visitor_status_update        = URL_DEV + "visitor_status_update";
     public static final String new_visitor_status_update    = URL_DEV + "new_visitor_status_update";
     public static final String activity_list                = URL_DEV + "activity_list";
     public static final String help_list                    = URL_DEV + "help_list";
@@ -46,6 +38,7 @@ public class AppConfig {
 
     public static final String help_id_wise_chat              = URL_DEV + "help_id_wise_chat";
     public static final String user_chat                     = URL_DEV + "user_chat";
+
 
 
 

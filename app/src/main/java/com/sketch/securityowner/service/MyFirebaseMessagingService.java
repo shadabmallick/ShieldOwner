@@ -64,6 +64,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 String flat_id = remoteMessage.getData().get("flat_id");
                 String complex_name = remoteMessage.getData().get("complex_name");
                 String complex_id = remoteMessage.getData().get("complex_id");
+                String visitor_id = remoteMessage.getData().get("visitor_id");
 
 
                 HashMap<String, String> hashMap = new HashMap<>();
@@ -77,6 +78,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 hashMap.put("complex_id", complex_id);
                 hashMap.put("type", type);
                 hashMap.put("message", message);
+                hashMap.put("visitor_id", visitor_id);
 
                 callTo(hashMap);
             }
@@ -137,6 +139,39 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                 callTo(hashMap);
             }
+
+            if (type != null && type.equals("delivery call")){
+
+                String activity_id = remoteMessage.getData().get("activity_id");
+                String table = remoteMessage.getData().get("table");
+                String security_id = remoteMessage.getData().get("security_id");
+                String block = remoteMessage.getData().get("block");
+                String flat_name = remoteMessage.getData().get("flat_name");
+                String flat_id = remoteMessage.getData().get("flat_id");
+                String complex_name = remoteMessage.getData().get("complex_name");
+                String complex_id = remoteMessage.getData().get("complex_id");
+                String visitor_id = remoteMessage.getData().get("visitor_id");
+
+                HashMap<String, String> hashMap = new HashMap<>();
+                hashMap.put("activity_id", activity_id);
+                hashMap.put("table", table);
+                hashMap.put("security_id", security_id);
+                hashMap.put("block", block);
+                hashMap.put("flat_name", flat_name);
+                hashMap.put("flat_id", flat_id);
+                hashMap.put("complex_name", complex_name);
+                hashMap.put("complex_id", complex_id);
+                hashMap.put("visitor_id", visitor_id);
+                hashMap.put("type", type);
+                hashMap.put("message", message);
+
+                callTo(hashMap);
+            }
+
+
+
+
+            sendResponseToActivityScreen(getApplicationContext(), type);
 
         }
 
