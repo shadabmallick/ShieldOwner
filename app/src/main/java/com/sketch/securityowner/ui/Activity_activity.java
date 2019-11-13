@@ -2323,6 +2323,18 @@ public class Activity_activity extends AppCompatActivity implements
     @Override
     public void onItemClickIN(ActivityChild activityChild) {
 
+        Intent activity_details=new Intent(getApplicationContext(),Activity_details.class);
+        activity_details.putExtra("images",activityChild.getProfile_image());
+        activity_details.putExtra("number",activityChild.getMobile());
+        activity_details.putExtra("status",activityChild.getApprove_status());
+        activity_details.putExtra("date_time",activityChild.getActual_in_time());
+        activity_details.putExtra("type",activityChild.getType());
+        Log.d(TAG, "images: "+activityChild.getProfile_image());
+        Log.d(TAG, "number: "+activityChild.getMobile());
+        Log.d(TAG, "type: "+activityChild.getType());
+
+        startActivity(activity_details);
+
 
     }
 
