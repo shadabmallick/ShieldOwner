@@ -1044,6 +1044,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
        LinearLayout ll_save=dialog.findViewById(R.id.ll_save);
 
        // if button is clicked, close the custom dialog
+/*
        ll_save.setOnClickListener(v -> {
             String name=edit_staff_name.getText().toString();
             String phone=edit_staff_phone.getText().toString();
@@ -1051,18 +1052,13 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
 
 
        });
+*/
 
        dialog.show();
 
    }
 
-public void addPhone(){
-    final Dialog dialog = new Dialog(this);
-    dialog.setContentView(R.layout.dailog_cab);
-    dialog.setCancelable(false);
-    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-    dialog.show();
-}
+
 
 
     public void AddCab(){
@@ -1822,99 +1818,76 @@ public void addPhone(){
 
 
     }
-    private void AddStaff(final String type,final String radio_value) {
-        // Tag used to cancel the request
-        String tag_string_req = "req_login";
-        HelpList.clear();
+    public void AddStaff(final String name,final String phone,final String email){
+
         pd.show();
 
-        StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.add_visitor, new Response.Listener<String>() {
+        String url = AppConfig.add_visitor;
+        AsyncHttpClient cl = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
 
+
+        params.put("user_id", globalClass.getId());
+        params.put("name",name);
+        params.put("emailid", email);
+        params.put("mobile", phone);
+
+        try{
+
+            params.put("profileImage", p_image);
+
+        }catch (FileNotFoundException e){
+            e.printStackTrace();
+        }
+        cl.setSSLSocketFactory(
+                new SSLSocketFactory(Config.getSslContext(),
+                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));
+
+
+
+        Log.d(TAG , "URL "+url);
+        Log.d(TAG , "params "+params.toString());
+
+
+        int DEFAULT_TIMEOUT = 30 * 1000;
+        cl.setMaxRetriesAndTimeout(5 , DEFAULT_TIMEOUT);
+        cl.post(url,params, new JsonHttpResponseHandler() {
             @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 
-                pd.dismiss();
-              //  dialog.dismiss();
+                if (response != null) {
+                    Log.d(TAG, "user_profile_pic_update- " + response.toString());
+                    try {
+                        pd.dismiss();
+                        dialog.dismiss();
 
-                Gson gson = new Gson();
+                        int status = response.getInt("status");
+                        String message = response.getString("message");
 
-                try {
+                        if (status == 1) {
 
-
-                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
-                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
-                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+                            // Log.d(TAG, "name: "+name)
 
 
-                    if(status.equals("1")) {
 
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                        } else {
+                            TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                        }
 
-                        //array.add("Select Location");
-                        //  JsonArray jarray = jobj.getAsJsonArray("data");
-                        //  Log.d("jarray", "" + jarray.toString());
-
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        TastyToast.makeText(getApplicationContext(), "Error Connection", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
                     }
 
-                    else {
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                    }
-
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                 }
-
-
             }
-        }, new Response.ErrorListener() {
 
             @Override
-
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                pd.dismiss();
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
             }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting parameters to login url
-                Map<String, String> params = new HashMap<>();
-
-                params.put("type", type);
-                params.put("time", tv_time.getText().toString());
-                params.put("date", date_web);
-                params.put("flat_no", globalClass.getFlat_no());
-                params.put("complex_id", globalClass.getComplex_id());
-                params.put("visitor_name",edit_name_cab.getText().toString() );
-                params.put("visitor_mobile",edit_phone_cab.getText().toString() );
-               params.put("vehicle_no",edit_vehicle_no.getText().toString() );
-                params.put("frequency",radio_value);
-                params.put("vendor_name",category);
-                params.put("visiting_help_cat","");
-                params.put("profileImage","");
-                params.put("user_id",globalClass.getId());
-
-                Log.d(TAG, "getParams: "+params);
-                return params;
-            }
-
-
-
-        };
-
-        // Adding request to request queue
-        VolleySingleton.getInstance(SettingActivity.this)
-                .addToRequestQueue(strReq
-                        .setRetryPolicy(
-                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+        });
 
 
     }

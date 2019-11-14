@@ -155,13 +155,14 @@
 </ImageView>
 
                         <TextView
+                            android:id="@+id/ivr_number"
                             android:layout_width="wrap_content"
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:textSize="20dp"
                             android:layout_marginLeft="20dp"
                             android:layout_height="match_parent"
-                            android:text="9876543210"></TextView>
+                            ></TextView>
 
                         <LinearLayout
                             android:id="@+id/ll_edit"
@@ -174,6 +175,7 @@
 
 
                             <ImageView
+                                android:id="@+id/edit_ivr"
 
                                 android:layout_width="50dp"
                                android:layout_gravity="right"

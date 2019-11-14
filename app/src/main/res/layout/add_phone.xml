@@ -27,6 +27,7 @@
         </ImageView>
 
         <EditText
+            android:id="@+id/add_number"
             android:layout_width="match_parent"
             android:layout_gravity="center"
             android:gravity="center"

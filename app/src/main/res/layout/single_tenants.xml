@@ -68,7 +68,7 @@
                 android:background="@drawable/circle_blue"
                 android:layout_alignParentEnd="true"
                 android:tint="@android:color/white"
-                android:src="@drawable/ic_done_black_24dp"
+                android:src="@drawable/ic_trash_2"
                 android:layout_centerVertical="true"
                 android:padding="10dp"
                 android:contentDescription="@string/app_name"
