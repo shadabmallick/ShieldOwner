@@ -34,14 +34,12 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
@@ -110,6 +108,7 @@ import static com.sketch.securityowner.GlobalClass.VolleySingleton.timeOut;
 public class Activity_activity extends AppCompatActivity implements
         View.OnClickListener,
         ActivityListAdapterIN.ItemClickListenerIN,
+        ActivityListAdapterIN.ItemClickListenerStatusUpdate,
         DatePickerDialog.OnDateSetListener,
        categoryAdapter.onItemClickListner {
 
@@ -132,14 +131,16 @@ public class Activity_activity extends AppCompatActivity implements
     ArrayList<String> array1;
     Shared_Preference prefManager;
     RelativeLayout rel_profile,rel_middle_icon;
-   EditText tv_others,edit_car_no,edit_parking_no,edit_name,edit_phone,edit_mail,edit_name_cab,edit_phone_cab, edit_vehicle_no;
+    EditText tv_others,edit_car_no,edit_parking_no,edit_name,edit_phone,edit_mail,
+           edit_name_cab,edit_phone_cab, edit_vehicle_no;
     String type_in_out, response_value = "", approved_by = "";
-    ScrollView all_visitor,upcoming_visitor;
     AVLoadingIndicatorView avLoadingIndicatorView;
-    LinearLayout ll_alram,ll_submit,ll_bell,ll_hide,button_activity,car1,rel_upcoming_visitor,rel_all_visitor,ll_community;
+    LinearLayout ll_alram,ll_submit,ll_bell,ll_hide,button_activity,
+            car1,rel_upcoming_visitor,rel_all_visitor,ll_community;
     RelativeLayout rl_profile;
     View view_all_visitor,view_upcoming_visitor;
-    TextView  tv_animal,tv_medical,tv_thief,tv_threat,tv_lift,tv_time,date_picker,tv_upcoming_visitor,tv_all_visitor;
+    TextView  tv_animal,tv_medical,tv_thief,tv_threat,tv_lift,
+            tv_time,date_picker,tv_upcoming_visitor,tv_all_visitor;
     Button btn_in;
     Dialog dialog;
     String category,help_id,date_to_push;
@@ -152,22 +153,15 @@ public class Activity_activity extends AppCompatActivity implements
     ArrayList<HashMap<String,String>> DeliveryList;
     ArrayList<HashMap<String,String>> HelpList;
     TextView tv_id,tv_details_company,close,tv_request_response;
-     ImageView img_guest,img_delivery,img_cab,img_help;
+    ImageView img_guest,img_delivery,img_cab,img_help;
     boolean approve_status = false;
     private  boolean button1IsVisible = true;
     RadioButton radio1,radio2;
     RadioGroup radioSex;
     Calendar myCalendar = Calendar.getInstance();
-    RecyclerView.LayoutManager RecyclerViewLayoutManager;
-    RecyclerView.LayoutManager RecyclerViewLayoutManager1;
-    RecyclerView.LayoutManager RecyclerViewLayoutManager2;
-    RecyclerView.LayoutManager RecyclerViewLayoutManager3;
-    RecyclerView.LayoutManager RecyclerViewLayoutManager4;
-    LinearLayoutManager HorizontalLayout ;
-    LinearLayoutManager HorizontalLayout1 ;
-    LinearLayoutManager HorizontalLayout2 ;
-    LinearLayoutManager HorizontalLayout3 ;
-    LinearLayoutManager HorizontalLayout4 ;
+
+    LinearLayoutManager HorizontalLayout3;
+    LinearLayoutManager HorizontalLayout4;
     ArrayList<ActivityModel> activityModelArrayList;
     ArrayList<String> listDates;
     ActivityListAdapterIN activityListAdapter;
@@ -179,8 +173,7 @@ public class Activity_activity extends AppCompatActivity implements
         setContentView(R.layout.first_activity);
 
         ButterKnife.bind(this);
-        all_visitor =  findViewById(R.id.scroll_activity);
-        upcoming_visitor =  findViewById(R.id.scroll_upcoming);
+
         rel_upcoming_visitor =  findViewById(R.id.rel_upcoming_visitor);
         rel_all_visitor =  findViewById(R.id.rel_all_visitor);
         view_upcoming_visitor =  findViewById(R.id.view_upcoming_visitor);
@@ -201,6 +194,9 @@ public class Activity_activity extends AppCompatActivity implements
         actionViews();
         user_name =  findViewById(R.id.user_name);
 
+        recycle_activity.setVisibility(View.VISIBLE);
+        recycle_upcoming.setVisibility(View.GONE);
+
         user_name.setText(globalClass.getName());
 
         if (!globalClass.getProfil_pic().isEmpty()){
@@ -213,7 +209,7 @@ public class Activity_activity extends AppCompatActivity implements
                     .into(profile_image);
         }
 
-        DeliveryList=new ArrayList<>();
+        DeliveryList = new ArrayList<>();
         HelpList=new ArrayList<>();
 
         Category=new ArrayList<>();
@@ -278,8 +274,8 @@ public class Activity_activity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 getActivityList();
-                all_visitor.setVisibility(View.VISIBLE);
-                upcoming_visitor.setVisibility(View.GONE);
+                recycle_activity.setVisibility(View.VISIBLE);
+                recycle_upcoming.setVisibility(View.GONE);
                 tv_upcoming_visitor.setTypeface(null, Typeface.NORMAL); //only text style(only bold)
 
                 tv_all_visitor.setTypeface(null, Typeface.BOLD);
@@ -290,8 +286,8 @@ public class Activity_activity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 getActivityListUpcoming();
-                all_visitor.setVisibility(View.GONE);
-                upcoming_visitor.setVisibility(View.VISIBLE);
+                recycle_activity.setVisibility(View.GONE);
+                recycle_upcoming.setVisibility(View.VISIBLE);
                 tv_upcoming_visitor.setTypeface(null, Typeface.BOLD); //only text style(only bold)
 
                 tv_all_visitor.setTypeface(null, Typeface.NORMAL);
@@ -501,7 +497,7 @@ public class Activity_activity extends AppCompatActivity implements
 
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+                Log.d(TAG, "add_visitor: " + response.toString());
 
                 progressDialog.dismiss();
                 //  dialog.dismiss();
@@ -516,20 +512,22 @@ public class Activity_activity extends AppCompatActivity implements
 
 
                     if(status.equals("1")) {
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                        TastyToast.makeText(getApplicationContext(),
+                                message, TastyToast.LENGTH_LONG,
+                                TastyToast.SUCCESS);
 
                         getActivityList();
-                        //array.add("Select Location");
-                      //  JsonArray jarray = jobj.getAsJsonArray("data");
-                      //  Log.d("jarray", "" + jarray.toString());
 
                     } else {
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                        TastyToast.makeText(getApplicationContext(),
+                                message, TastyToast.LENGTH_LONG,
+                                TastyToast.SUCCESS);
 
                     }
 
                 } catch (Exception e) {
-                    TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                    TastyToast.makeText(getApplicationContext(),
+                            "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                 }
 
@@ -591,10 +589,9 @@ public class Activity_activity extends AppCompatActivity implements
 
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+                Log.d(TAG, "add_visitor: " + response.toString());
 
                 progressDialog.dismiss();
-                //  dialog.dismiss();
 
                 Gson gson = new Gson();
 
@@ -610,12 +607,9 @@ public class Activity_activity extends AppCompatActivity implements
 
                         TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
-                        //array.add("Select Location");
-                        //  JsonArray jarray = jobj.getAsJsonArray("data");
-                        //  Log.d("jarray", "" + jarray.toString());
+                        getActivityList();
 
                     }
-
                     else {
                         TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
@@ -688,7 +682,7 @@ public class Activity_activity extends AppCompatActivity implements
 
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+                Log.d(TAG, "add_visitor: " + response.toString());
 
                 progressDialog.dismiss();
                  // dialog.dismiss();
@@ -704,18 +698,14 @@ public class Activity_activity extends AppCompatActivity implements
 
 
                     if(status.equals("1")) {
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                        TastyToast.makeText(getApplicationContext(),
+                                message, TastyToast.LENGTH_LONG,
+                                TastyToast.SUCCESS);
 
 
                         getActivityList();
 
-                        //array.add("Select Location");
-                      //  JsonArray jarray = jobj.getAsJsonArray("data");
-                      //  Log.d("jarray", "" + jarray.toString());
-
-                    }
-
-                    else {
+                    } else {
                         TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                     }
@@ -774,6 +764,7 @@ public class Activity_activity extends AppCompatActivity implements
 
 
     }
+
     private void AddGuest(final String type,final String radio_value) {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
@@ -785,7 +776,7 @@ public class Activity_activity extends AppCompatActivity implements
 
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+                Log.d(TAG, "add_visitor " + response.toString());
 
                 progressDialog.dismiss();
                  // dialog.dismiss();
@@ -1255,7 +1246,6 @@ public class Activity_activity extends AppCompatActivity implements
 
     }
 
-
     private void FireAlarm(final String category) {
         String tag_string_req = "req_login";
         HelpList.clear();
@@ -1335,6 +1325,7 @@ public class Activity_activity extends AppCompatActivity implements
     }
 
     public void Alarm(){
+
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.add_alarm);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -1927,6 +1918,9 @@ public class Activity_activity extends AppCompatActivity implements
                                                 child.setApprove_status(obj.optString("approve_status"));
                                                 child.setApprove_by(obj.optString("approve_by"));
                                                 child.setLeave_at_gate_code(obj.optString("leave_at_gate_code"));
+                                                child.setBlock(obj.optString("block"));
+                                                child.setFlat_id(obj.optString("flat_id"));
+                                                child.setFlat_no(obj.optString("flat_name"));
 
 
 
@@ -1969,6 +1963,7 @@ public class Activity_activity extends AppCompatActivity implements
                                                 child.setType(obj.optString("type"));
                                                 child.setActivity_id(obj.optString("activity_id"));
                                                 child.setUser_id(obj.optString("user_id"));
+                                                child.setSecurity_id(obj.optString("security_id"));
                                                 child.setName(obj.optString("name"));
                                                 child.setMobile(obj.optString("mobile"));
                                                 child.setQr_code(obj.optString("qr_code"));
@@ -1982,7 +1977,10 @@ public class Activity_activity extends AppCompatActivity implements
                                                 child.setProfile_image(obj.optString("profile_image"));
                                                 child.setVendor_name(obj.optString("vendor_name"));
                                                 child.setVendor_image(obj.optString("vendor_image"));
-
+                                                child.setApprove_status(obj.optString("approve_status"));
+                                                child.setBlock(obj.optString("block"));
+                                                child.setFlat_id(obj.optString("flat_id"));
+                                                child.setFlat_no(obj.optString("flat_name"));
 
 
                                                 child.setType_in_out("in");
@@ -2296,6 +2294,7 @@ public class Activity_activity extends AppCompatActivity implements
         activityListAdapter.notifyDataSetChanged();
 
         activityListAdapter.setClickListenerIN(this);
+        activityListAdapter.setClickListenerStatusUpdate(this);
 
 
     }
@@ -2354,7 +2353,6 @@ public class Activity_activity extends AppCompatActivity implements
         }
 
     }
-
 
     private String getRealPathFromURI(Uri contentURI) {
         String result = "";
@@ -2463,13 +2461,12 @@ public class Activity_activity extends AppCompatActivity implements
                         || type.equalsIgnoreCase("visitor out")
                 ){
 
-                    getActivityList();
 
                 }
 
+
+                getActivityList();
             }
-
-
 
 
         }
@@ -2535,6 +2532,193 @@ public class Activity_activity extends AppCompatActivity implements
         }
         Toast.makeText(getApplicationContext(),s,Toast.LENGTH_LONG).show();
 
+
+    }
+
+
+    ///////////////
+
+
+    @Override
+    public void onItemClickStatusUpdate(ActivityChild activityChild, String status) {
+
+        if (activityChild.getUser_id().equals("0")){
+            status_updateNewCall(activityChild, status);
+        }else {
+            status_updateCall(activityChild, status);
+        }
+
+
+    }
+
+
+
+    public void status_updateNewCall(ActivityChild activityChild, String status){
+
+        progressDialog.show();
+
+        String url = AppConfig.new_visitor_status_update;
+
+        final Map<String, String> params = new HashMap<>();
+
+        params.put("user_id", globalClass.getId());
+        params.put("table", activityChild.getType());
+        params.put("activity_id", activityChild.getActivity_id());
+
+        params.put("visitor_id", activityChild.getUser_id());
+
+
+        params.put("security_id", activityChild.getSecurity_id());
+        params.put("complex_id", globalClass.getComplex_id());
+        params.put("flat_name", globalClass.getFlat_name());
+        params.put("block", activityChild.getBlock());
+        params.put("status", status);
+
+
+        Log.d(AppConfig.TAG , "status_update- " + url);
+        Log.d(AppConfig.TAG , "status_update- " + params.toString());
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d(AppConfig.TAG , "visitor_out- " +response);
+
+                        if (response != null){
+                            try {
+
+                                JSONObject main_object = new JSONObject(response);
+
+                                int status = main_object.optInt("status");
+                                String message = main_object.optString("message");
+                                if (status == 1){
+
+                                    TastyToast.makeText(getApplicationContext(),
+                                            message,
+                                            TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                                    getActivityList();
+
+                                }else {
+
+                                    TastyToast.makeText(getApplicationContext(),
+                                            message,
+                                            TastyToast.LENGTH_LONG, TastyToast.WARNING);
+                                }
+
+                                progressDialog.dismiss();
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //on error storing the name to sqlite with status unsynced
+
+                Log.e(AppConfig.TAG, "error - "+error);
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                return params;
+            }
+        };
+
+        VolleySingleton.getInstance(Activity_activity.this)
+                .addToRequestQueue(stringRequest
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+    }
+
+
+    public void status_updateCall(ActivityChild activityChild, String status){
+
+        progressDialog.show();
+
+        String url = AppConfig.visitor_status_update;
+
+        final Map<String, String> params = new HashMap<>();
+
+        params.put("user_id", globalClass.getId());
+        params.put("table", activityChild.getType());
+        params.put("activity_id", activityChild.getActivity_id());
+
+        params.put("visitor_id", activityChild.getUser_id());
+
+
+        params.put("security_id", activityChild.getSecurity_id());
+        params.put("complex_id", globalClass.getComplex_id());
+        params.put("flat_name", globalClass.getFlat_name());
+        params.put("block", activityChild.getBlock());
+        params.put("status", status);
+
+
+        Log.d(AppConfig.TAG , "status_update- " + url);
+        Log.d(AppConfig.TAG , "status_update- " + params.toString());
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d(AppConfig.TAG , "visitor_out- " +response);
+
+                        if (response != null){
+                            try {
+
+                                JSONObject main_object = new JSONObject(response);
+
+                                int status = main_object.optInt("status");
+                                String message = main_object.optString("message");
+                                if (status == 1){
+
+                                    TastyToast.makeText(getApplicationContext(),
+                                            message,
+                                            TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                                    getActivityList();
+
+                                }else {
+
+                                    TastyToast.makeText(getApplicationContext(),
+                                            message,
+                                            TastyToast.LENGTH_LONG, TastyToast.WARNING);
+                                }
+
+                                progressDialog.dismiss();
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //on error storing the name to sqlite with status unsynced
+
+                Log.e(AppConfig.TAG, "error - "+error);
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                return params;
+            }
+        };
+
+        VolleySingleton.getInstance(Activity_activity.this)
+                .addToRequestQueue(stringRequest
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
 
     }
 

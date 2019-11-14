@@ -119,12 +119,18 @@ public class CallUi extends AppCompatActivity {
 
             tv_vendor_name.setText(hashMap.get("type").toUpperCase());
 
+
+            ll_leave_at_gate.setVisibility(View.GONE);
+
+            if (hashMap.get("type").equals("new delivery call")) {
+                ll_leave_at_gate.setVisibility(View.VISIBLE);
+            } else {
+                ll_leave_at_gate.setVisibility(View.GONE);
+            }
+
+
             if (hashMap.get("message").equals("new delivery call")) {
-                if (hashMap.get("type").equals("new delivery call")) {
-                    ll_leave_at_gate.setVisibility(View.VISIBLE);
-                } else {
-                    ll_leave_at_gate.setVisibility(View.GONE);
-                }
+
 
 
             /*String profile_image = bundle.getString("data");
@@ -186,7 +192,12 @@ public class CallUi extends AppCompatActivity {
                 mediaPlayer.stop();
                 vibrator.cancel();
 
-                status_update("n");
+                if (hashMap.get("type").contains("new")) {
+                    status_updateNewCall("n");
+                }else {
+                    status_updateCall("n");
+                }
+
 
             });
 
@@ -194,7 +205,12 @@ public class CallUi extends AppCompatActivity {
                 mediaPlayer.stop();
                 vibrator.cancel();
 
-                status_update("y");
+                if (hashMap.get("type").contains("new")) {
+                    status_updateNewCall("y");
+                }else {
+                    status_updateCall("y");
+                }
+
 
             });
 
@@ -202,7 +218,12 @@ public class CallUi extends AppCompatActivity {
                 mediaPlayer.stop();
                 vibrator.cancel();
 
-                status_update("l");
+                if (hashMap.get("type").contains("new")) {
+                    status_updateNewCall("l");
+                }else {
+                    status_updateCall("l");
+                }
+
 
             });
 
@@ -224,7 +245,8 @@ public class CallUi extends AppCompatActivity {
 
 
 
-    public void status_update(String status){
+
+    public void status_updateNewCall(String status){
 
         progressDialog.show();
 
@@ -235,7 +257,103 @@ public class CallUi extends AppCompatActivity {
         params.put("user_id", globalClass.getId());
         params.put("table", hashMap.get("table"));
         params.put("activity_id", hashMap.get("activity_id"));
-        params.put("visitor_id", hashMap.get("visitor_id"));
+
+        if (hashMap.get("visitor_id") != null){
+            params.put("visitor_id", hashMap.get("visitor_id"));
+        }else {
+            params.put("visitor_id", "");
+        }
+
+        params.put("security_id", hashMap.get("security_id"));
+        params.put("complex_id", hashMap.get("complex_id"));
+        params.put("flat_name", hashMap.get("flat_name"));
+        params.put("block", hashMap.get("block"));
+        params.put("status", status);
+
+
+        Log.d(AppConfig.TAG , "status_update- " + url);
+        Log.d(AppConfig.TAG , "status_update- " + params.toString());
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        Log.d(AppConfig.TAG , "visitor_out- " +response);
+
+                        if (response != null){
+                            try {
+
+                                JSONObject main_object = new JSONObject(response);
+
+                                int status = main_object.optInt("status");
+                                String message = main_object.optString("message");
+                                if (status == 1){
+
+                                    TastyToast.makeText(getApplicationContext(),
+                                            message,
+                                            TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                                    finish();
+
+                                }else {
+
+                                    TastyToast.makeText(getApplicationContext(),
+                                            message,
+                                            TastyToast.LENGTH_LONG, TastyToast.WARNING);
+
+                                    finish();
+                                }
+
+                                progressDialog.dismiss();
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //on error storing the name to sqlite with status unsynced
+
+                Log.e(AppConfig.TAG, "error - "+error);
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+
+                return params;
+            }
+        };
+
+        VolleySingleton.getInstance(CallUi.this)
+                .addToRequestQueue(stringRequest
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+    }
+
+
+    public void status_updateCall(String status){
+
+        progressDialog.show();
+
+        String url = AppConfig.visitor_status_update;
+
+        final Map<String, String> params = new HashMap<>();
+
+        params.put("user_id", globalClass.getId());
+        params.put("table", hashMap.get("table"));
+        params.put("activity_id", hashMap.get("activity_id"));
+
+        if (hashMap.get("visitor_id") != null){
+            params.put("visitor_id", hashMap.get("visitor_id"));
+        }else {
+            params.put("visitor_id", "");
+        }
+
         params.put("security_id", hashMap.get("security_id"));
         params.put("complex_id", hashMap.get("complex_id"));
         params.put("flat_name", hashMap.get("flat_name"));

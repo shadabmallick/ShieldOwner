@@ -17,9 +17,13 @@ public class AppConfig {
 
 
 
+
+
+
     public static final String registration                 = URL_DEV + "registration";
     public static final String login_otp                    = URL_DEV + "login_otp";
     public static final String login                        = URL_DEV + "login";
+    public static final String visitor_status_update        = URL_DEV + "visitor_status_update";
     public static final String new_visitor_status_update    = URL_DEV + "new_visitor_status_update";
     public static final String activity_list                = URL_DEV + "activity_list";
     public static final String help_list                    = URL_DEV + "help_list";
@@ -49,6 +53,7 @@ public class AppConfig {
     public static final String delete_tenant                     = URL_DEV + "delete_tenant";
     public static final String ivr_number                     = URL_DEV + "ivr_number";
     public static final String update_ivr_number                     = URL_DEV + "update_ivr_number";
+
 
 
 

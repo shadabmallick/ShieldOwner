@@ -23,7 +23,7 @@ import com.sketch.securityowner.R;
 import java.util.ArrayList;
 
 public class ActivityClass extends AppCompatActivity {
-    private RecyclerView recyclerView,recycle_upcoming;
+    private RecyclerView recycle_activity,recycle_upcoming;
     private AdapterActivity mAdapter;
     private AdaptorVisitor upcomingAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -33,7 +33,6 @@ public class ActivityClass extends AppCompatActivity {
     private  boolean viwe1IsVisible = true;
     View view_all_visitor,view_upcoming_visitor;
 
-    ScrollView all_visitor,upcoming_visitor;
     ImageView setting;
 
 
@@ -41,7 +40,7 @@ public class ActivityClass extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.first_activity);
-        recyclerView =  findViewById(R.id.recycle_activity);
+        recycle_activity =  findViewById(R.id.recycle_activity);
         recycle_upcoming =  findViewById(R.id.recycle_upcoming);
         center_button =  findViewById(R.id.button_E2);
         car1 =  findViewById(R.id.car1);
@@ -50,8 +49,6 @@ public class ActivityClass extends AppCompatActivity {
         rel_all_visitor =  findViewById(R.id.rel_all_visitor);
         rel_upcoming_visitor =  findViewById(R.id.rel_upcoming_visitor);
         rel_all_visitor =  findViewById(R.id.rel_all_visitor);
-        all_visitor =  findViewById(R.id.scroll_activity);
-        upcoming_visitor =  findViewById(R.id.scroll_upcoming);
         setting =  findViewById(R.id.edit);
         ArrayList<String > aList = new ArrayList<String >();
 
@@ -73,12 +70,12 @@ public class ActivityClass extends AppCompatActivity {
         aList1.add("");
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
-        recyclerView.setHasFixedSize(true);
+        recycle_activity.setHasFixedSize(true);
         recycle_upcoming.setHasFixedSize(true);
 
         // use a linear layout manager
         layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
+        recycle_activity.setLayoutManager(layoutManager);
 
         layoutManager1 = new LinearLayoutManager(this);
         recycle_upcoming.setLayoutManager(layoutManager1);
@@ -86,7 +83,7 @@ public class ActivityClass extends AppCompatActivity {
         // specify an adapter (see also next example)
         mAdapter = new AdapterActivity(ActivityClass.this,aList);
         upcomingAdapter = new AdaptorVisitor(ActivityClass.this,aList1);
-        recyclerView.setAdapter(mAdapter);
+        recycle_activity.setAdapter(mAdapter);
         recycle_upcoming.setAdapter(upcomingAdapter);
         center_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,16 +106,16 @@ public class ActivityClass extends AppCompatActivity {
         rel_all_visitor.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
-        all_visitor.setVisibility(View.VISIBLE);
-        upcoming_visitor.setVisibility(View.GONE);
+        recycle_activity.setVisibility(View.VISIBLE);
+        recycle_upcoming.setVisibility(View.GONE);
         view_all_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.blue));
         view_upcoming_visitor.setBackgroundColor(Color.parseColor("#DCDCDC"));    }
 });
         rel_upcoming_visitor.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View v) {
-        all_visitor.setVisibility(View.GONE);
-        upcoming_visitor.setVisibility(View.VISIBLE);
+        recycle_activity.setVisibility(View.GONE);
+        recycle_upcoming.setVisibility(View.VISIBLE);
         view_upcoming_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.blue));
         view_all_visitor.setBackgroundColor(Color.parseColor("#DCDCDC"));    }
 });
