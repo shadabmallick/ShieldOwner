@@ -3,6 +3,8 @@ package com.sketch.securityowner.Adapter;
 import android.content.Context;
 
 
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,12 +63,25 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.MyViewHolder
     @Override
     public void onBindViewHolder(final StaffAdapter.MyViewHolder holder, final int position)
     {
-        Picasso.with(context).load(text.get(position).get("staffprofile_pic")).
-                fit().into(holder.profile_image);
+        String image=text.get(position).get("staffprofile_pic");
+        if(!image.isEmpty()){
+            Picasso.with(context).load(text.get(position).get("staffprofile_pic")).
+                    fit().into(holder.profile_image);
+
+        }
+
         String staff_name=text.get(position).get("staff_name");
         String staff_type=text.get(position).get("staff_type");
         holder.name.setText(staff_name);
         holder.tv_name1.setText(staff_type);
+
+        holder.iv_call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callPhone(text.get(position).get("staff_mobile"));
+
+            }
+        });
 
 
 /*
@@ -114,6 +129,12 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.MyViewHolder
 
 
     }
+    private void callPhone(String number){
+
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + number));// Initiates the Intent
+        context.startActivity(intent);
+
+    }
 
     @Override
     public int getItemCount() {
@@ -123,7 +144,7 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.MyViewHolder
     public class MyViewHolder extends RecyclerView.ViewHolder {
         // init the item view's
         TextView name,tv_name1,tv_address_2,tv_address_3;
-        ImageView profile_image,crud;
+        ImageView profile_image,iv_call;
 
 
         public MyViewHolder(View itemView) {
@@ -131,6 +152,7 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.MyViewHolder
             // get the reference of item view's
             name =  itemView.findViewById(R.id.tv_name);
             tv_name1 =  itemView.findViewById(R.id.tv_name1);
+            iv_call =  itemView.findViewById(R.id.iv_call);
             profile_image =  itemView.findViewById(R.id.profile_image);
 
 

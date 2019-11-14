@@ -73,13 +73,44 @@
 
 
         </RelativeLayout>
+        <LinearLayout
+            android:id="@+id/ll_invoice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp"
+            >
+
+            <ImageView
+                android:background="@drawable/green_circle"
+                android:layout_width="30dp"
+                android:padding="5dp"
+                android:tint="@android:color/white"
+                android:layout_gravity="center"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_file_text"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_gravity="center"
+                android:textColor="@color/green"
+                android:text="Go To Invoice"
+                />
+
+
+        </LinearLayout>
+
 
         <LinearLayout
             android:id="@+id/ll_setting"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:layout_gravity="center"
             android:orientation="horizontal"
             android:layout_marginBottom="10dp"

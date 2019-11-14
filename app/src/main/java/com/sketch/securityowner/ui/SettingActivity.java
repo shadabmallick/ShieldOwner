@@ -133,8 +133,8 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
     LinearLayoutManager HorizontalLayout4 ;
     File p_image;
     ArrayList<HashMap<String,String>> cityList;
-
-     Dialog dialog;
+    String currentDate,currentTime;
+    Dialog dialog;
     RadioButton radio1,radio2;
     private int mYear, mMonth, mDay, mHour, mMinute,mSecond;
     Calendar myCalendar = Calendar.getInstance();
@@ -174,8 +174,10 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         setContentView(R.layout.setting_activity);
        // browseJob();
         initToolBar();
-
-
+         currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
+       currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        Log.d(TAG, "onCreate: "+currentDate);
+        Log.d(TAG, "onCreate: "+currentTime);
 
         browseJob();
         //
@@ -1042,6 +1044,47 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
        // set the custom dialog components - text, image and button
 
        LinearLayout ll_save=dialog.findViewById(R.id.ll_save);
+       ll_save.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               String name=edit_staff_name.getText().toString();
+               String phone=edit_staff_phone.getText().toString();
+
+
+               AddStaff("staff",name,phone);
+               dialog.dismiss();
+           }
+       });
+
+
+
+        spinner_help.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent,
+                                       View arg1, int position, long arg3) {
+                // TODO Auto-generated method stub
+                // Locate the textviews in activity_main.xml
+                String selectedItemText = (String) parent.getItemAtPosition(position);
+                // If user change the default selection
+                // First item is disable and it is used for hint
+                if(position !=0){
+                    help_id = HelpList.get(position-1).get("name");
+                    Log.d(TAG, "onItemSelected: "+help_id);
+
+
+                    // BrowseComplex(city_id);
+
+                    // Notify the selected item text
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> arg0) {
+                // TODO Auto-generated method stub
+            }
+        });
 
        // if button is clicked, close the custom dialog
 /*
@@ -1818,7 +1861,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
 
 
     }
-    public void AddStaff(final String name,final String phone,final String email){
+    public void AddStaff(final String type,final String name,final String phone){
 
         pd.show();
 
@@ -1828,10 +1871,19 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
 
 
         params.put("user_id", globalClass.getId());
-        params.put("name",name);
-        params.put("emailid", email);
-        params.put("mobile", phone);
+        params.put("visitor_name",name);
+        params.put("type", type);
+        params.put("visitor_mobile", phone);
+        params.put("flat_no", globalClass.getFlat_no());
+        params.put("complex_id", globalClass.getComplex_id());
+        params.put("visiting_help_cat", help_id);
+        params.put("vendor_name", "");
+        params.put("vehicle_no", "");
+        params.put("frequency", "no");
+        params.put("date", currentDate);
+        params.put("time", currentTime);
 
+/*
         try{
 
             params.put("profileImage", p_image);
@@ -1839,6 +1891,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         }catch (FileNotFoundException e){
             e.printStackTrace();
         }
+*/
         cl.setSSLSocketFactory(
                 new SSLSocketFactory(Config.getSslContext(),
                         SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));
@@ -1859,14 +1912,15 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                     Log.d(TAG, "user_profile_pic_update- " + response.toString());
                     try {
                         pd.dismiss();
-                        dialog.dismiss();
+                      //  dialog.dismiss();
 
                         int status = response.getInt("status");
                         String message = response.getString("message");
 
                         if (status == 1) {
-
+                            browseJob();
                             // Log.d(TAG, "name: "+name)
+                            TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
 
 

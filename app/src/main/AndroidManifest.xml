@@ -168,7 +168,25 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.InvoiceList"
+
+            android:theme="@style/MyTheme2">
+
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.ChatGroup"
+
+            android:theme="@style/MyTheme2">
+
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.ShowInvoice"
 
             android:theme="@style/MyTheme2">
 

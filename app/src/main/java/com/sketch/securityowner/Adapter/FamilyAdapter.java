@@ -3,6 +3,8 @@ package com.sketch.securityowner.Adapter;
 import android.content.Context;
 
 
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +68,14 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.MyViewHold
         String staff_name=text.get(position).get("family_member_name");
         String staff_type=text.get(position).get("family_member_type");
         holder.name.setText(staff_name);
+        holder.iv_call.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                callPhone(text.get(position).get("family_member_mobile"));
+
+            }
+        });
        // holder.tv_name1.setText(staff_type);
        // String city=text.get(position).get("city");
 
@@ -114,6 +124,12 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.MyViewHold
 
 
     }
+    private void callPhone(String number){
+
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + number));// Initiates the Intent
+        context.startActivity(intent);
+
+    }
 
     @Override
     public int getItemCount() {
@@ -123,13 +139,14 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.MyViewHold
     public class MyViewHolder extends RecyclerView.ViewHolder {
         // init the item view's
         TextView name;
-        ImageView profile_image;
+        ImageView profile_image,iv_call;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             // get the reference of item view's
             name =  itemView.findViewById(R.id.tv_name);
             profile_image =  itemView.findViewById(R.id.profile_image);
+            iv_call =  itemView.findViewById(R.id.iv_call);
 
 
 

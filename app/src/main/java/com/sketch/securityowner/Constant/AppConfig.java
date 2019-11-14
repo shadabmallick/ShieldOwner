@@ -53,6 +53,7 @@ public class AppConfig {
     public static final String delete_tenant                     = URL_DEV + "delete_tenant";
     public static final String ivr_number                     = URL_DEV + "ivr_number";
     public static final String update_ivr_number                     = URL_DEV + "update_ivr_number";
+    public static final String inovice_list                     = URL_DEV + "inovice_list";
 
 
 

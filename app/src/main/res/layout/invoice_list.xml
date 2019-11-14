@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        xmlns:app="http://schemas.android.com/tools"
+        android:id="@+id/toolbar"
+        android:theme="@style/ToolBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/blue"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        />
+
+    <LinearLayout
+        android:id="@+id/llinvlice"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+
+
+
+
+            <TextView
+                android:id="@+id/tv_address"
+                android:layout_width="wrap_content"
+                android:textColor="@color/green"
+                android:layout_marginLeft="10dp"
+                android:layout_height="wrap_content"
+                android:text="kjdsnkjfnds">
+
+
+
+            </TextView>
+
+
+
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginLeft="20dp"
+           android:orientation="vertical"
+           android:gravity="right">
+
+           <LinearLayout
+               android:layout_marginTop="10dp"
+               android:layout_width="wrap_content"
+               android:orientation="horizontal"
+               android:weightSum="2"
+               android:layout_height="wrap_content">
+               <TextView
+                   android:layout_weight="1"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="@string/billed">
+
+
+
+               </TextView>
+               <TextView
+                   android:layout_weight="1"
+                   android:id="@+id/billed"
+                   android:text="Rs......"
+                   android:layout_marginRight="10dp"
+                   android:layout_marginLeft="20dp"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                  >
+
+
+
+               </TextView>
+
+
+           </LinearLayout>
+
+           <LinearLayout
+               android:layout_width="wrap_content"
+               android:orientation="horizontal"
+               android:weightSum="2"
+               android:layout_marginTop="10dp"
+               android:layout_height="wrap_content">
+               <TextView
+                   android:layout_weight="1"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="@string/receipt">
+
+
+
+               </TextView>
+               <TextView
+                   android:id="@+id/receipt"
+                   android:layout_weight="1"
+                   android:layout_marginRight="10dp"
+                   android:layout_marginLeft="20dp"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Rs.......">
+
+
+
+               </TextView>
+
+
+           </LinearLayout>
+           <LinearLayout
+               android:layout_marginTop="10dp"
+               android:layout_width="wrap_content"
+               android:orientation="horizontal"
+               android:layout_height="wrap_content">
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="@string/Due">
+
+
+
+               </TextView>
+               <TextView
+                   android:id="@+id/due"
+                   android:textColor="@color/red"
+                   android:layout_marginLeft="20dp"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_marginRight="10dp"
+                   android:text="Rs.......">
+
+
+
+               </TextView>
+
+
+           </LinearLayout>
+
+
+       </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="8dp"
+        android:layout_below="@+id/llinvlice"
+        />
+
+
+
+
+
+</RelativeLayout>

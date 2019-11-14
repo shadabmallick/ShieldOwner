@@ -30,7 +30,7 @@
                 android:padding="5dp"
                 android:layout_gravity="center"
 
-                android:src="@drawable/ic_launcher_background"
+                android:src="@mipmap/profile_image"
 
                 />
 
@@ -69,6 +69,7 @@
                     android:background="@drawable/circle_blue"
                     android:layout_height="30dp"
                     android:padding="10dp"
+                    android:id="@+id/iv_call"
                     android:tint="@android:color/white"
                     android:src="@drawable/ic_phone_call"/>
 
