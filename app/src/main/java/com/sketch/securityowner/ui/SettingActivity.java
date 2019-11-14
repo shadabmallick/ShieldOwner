@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -24,14 +23,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -46,7 +41,6 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -68,7 +62,6 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.sdsmdg.tastytoast.TastyToast;
-import com.sketch.securityowner.Adapter.AdapterHelpDesk;
 import com.sketch.securityowner.Adapter.CarAdapter;
 import com.sketch.securityowner.Adapter.FamilyAdapter;
 import com.sketch.securityowner.Adapter.StaffAdapter;
@@ -99,13 +92,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.conn.ssl.SSLSocketFactory;
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
-import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.sketch.securityowner.GlobalClass.VolleySingleton.backOff;
 import static com.sketch.securityowner.GlobalClass.VolleySingleton.nuOfRetry;
 import static com.sketch.securityowner.GlobalClass.VolleySingleton.timeOut;
@@ -165,9 +156,13 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
     private final int PICK_IMAGE_CAMERA_FAMILY = 3, PICK_IMAGE_GALLERY_FAMILY = 4;
     private final int PICK_IMAGE_CAMERA_CAR = 5, PICK_IMAGE_GALLERY_CAR = 6;
     private final int PICK_IMAGE_CAMERA_STAFF = 7, PICK_IMAGE_GALLERY_STAFF = 6;
-    LinearLayout ll_ecom,ll_submit,ll_alram,ll_hide,ll_bell,button_E3,button_E1,ll_logout,ll_notification,ll_mycomplex,car1,button_activity,ll_about_us,ll_contact_us;
+    LinearLayout ll_ecom,ll_submit,ll_alram,ll_hide,ll_bell,button_E3,button_E1,ll_logout,ll_notification,ll_mycomplex,ll_visitor_option,button_activity,ll_about_us,ll_contact_us;
     private  boolean button1IsVisible = true;
+
+
     private BroadcastReceiver mRegistrationBroadcastReceiver;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -242,7 +237,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         user_mobile =  findViewById(R.id.user_mobile);
         ll_mycomplex =  findViewById(R.id.ll_mycomplex);
         avLoadingIndicatorView =  findViewById(R.id.avi);
-        car1 =  findViewById(R.id.car1);
+        ll_visitor_option =  findViewById(R.id.ll_visitor_option);
         rel_middle_icon =  findViewById(R.id.rel_middle_icon);
         button_activity=  findViewById(R.id.button_E);
         ll_about_us=  findViewById(R.id.ll_about_us);
@@ -286,7 +281,8 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(SettingActivity.this, "clicking the toolbar!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SettingActivity.this,
+                                "clicking the toolbar!", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -307,7 +303,8 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             @Override
             public void onClick(View v) {
 
-                Intent entercom_setting=new Intent(getApplicationContext(),InterphoneSettings.class);
+                Intent entercom_setting=new Intent(getApplicationContext(),
+                        InterphoneSettings.class);
                 startActivity(entercom_setting);
 
             }
@@ -318,7 +315,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             public void onClick(View v) {
 
                 AddCab();
-                car1.setVisibility(View.GONE);
+                ll_visitor_option.setVisibility(View.GONE);
 
               //  dialog.dismiss();
             }
@@ -327,7 +324,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             @Override
             public void onClick(View v) {
                 Alarm();
-                car1.setVisibility(View.GONE);
+                ll_visitor_option.setVisibility(View.GONE);
 
               //  dialog.dismiss();
             }
@@ -336,7 +333,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             @Override
             public void onClick(View v) {
                AddDelivery();
-                car1.setVisibility(View.GONE);
+                ll_visitor_option.setVisibility(View.GONE);
 
 
             }
@@ -345,7 +342,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             @Override
             public void onClick(View v) {
                AddGuest();
-                car1.setVisibility(View.GONE);
+                ll_visitor_option.setVisibility(View.GONE);
 
 
             }
@@ -354,7 +351,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             @Override
             public void onClick(View v) {
                 AddHelp();
-                car1.setVisibility(View.GONE);
+                ll_visitor_option.setVisibility(View.GONE);
 
 
             }
@@ -412,7 +409,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         button_E1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent notification=new Intent(getApplicationContext(),MainActivity.class);
+                Intent notification=new Intent(getApplicationContext(), SecurityScreen.class);
                 startActivity(notification);
             }
         });
@@ -434,19 +431,9 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         rel_middle_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                car1.setVisibility(car1.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-              //  if(button1IsVisible==true)
-             /*   {
+                ll_visitor_option.setVisibility(ll_visitor_option.getVisibility()
+                        == View.VISIBLE ? View.GONE : View.VISIBLE);
 
-                    car1.setVisibility(View.VISIBLE);
-                    button1IsVisible = false;
-                }
-                else if(button1IsVisible==false)
-                {
-                   // car1.animate().alpha(1.0f);
-                    car1.setVisibility(View.GONE);
-                    button1IsVisible = true;
-                }*/
             }
         });
 
@@ -459,13 +446,17 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
        edit_name  =dialog.findViewById(R.id.edit_name);
        edit_phone=dialog.findViewById(R.id.edit_phone);
       edit_mail=dialog.findViewById(R.id.edit_mail);
-       Picasso.with(SettingActivity.this)
-               .load(globalClass.getProfil_pic()) // web image url
-               .fit().centerInside()
-               .rotate(90)                    //if you want to rotate by 90 degrees
-               .error(R.mipmap.profile_image)
-               .placeholder(R.mipmap.profile_image)
-               .into(profile_image_edit);
+
+      if (!globalClass.getProfil_pic().isEmpty()){
+          Picasso.with(SettingActivity.this)
+                  .load(globalClass.getProfil_pic()) // web image url
+                  .fit().centerInside()
+                  .rotate(90)                    //if you want to rotate by 90 degrees
+                  .error(R.mipmap.profile_image)
+                  .placeholder(R.mipmap.profile_image)
+                  .into(profile_image_edit);
+
+      }
 
          edit_name.setText(globalClass.getName());
          edit_phone.setText(globalClass.getPhone_number());
@@ -522,7 +513,6 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                 if (ContextCompat.checkSelfPermission(SettingActivity.this, permissions[i]) != PackageManager.PERMISSION_GRANTED) {
 
                     Log.d("permisssion","not granted");
-
 
                     if (shouldShowRequestPermissionRationale(permissions[i])) {
 
@@ -1162,7 +1152,7 @@ public void addPhone(){
                 }
                 else if(button1IsVisible==false)
                 {
-                    // car1.animate().alpha(1.0f);
+
                     ll_hide.setVisibility(View.GONE);
                     button1IsVisible = true;
                 }
@@ -1322,7 +1312,7 @@ public void addPhone(){
                 }
                 else if(button1IsVisible==false)
                 {
-                    // car1.animate().alpha(1.0f);
+
                     ll_hide.setVisibility(View.GONE);
                     button1IsVisible = true;
                 }
@@ -1464,7 +1454,7 @@ public void addPhone(){
             public void onItemSelected(AdapterView<?> parent,
                                        View arg1, int position, long arg3) {
                 // TODO Auto-generated method stub
-                // Locate the textviews in activity_main.xml
+                // Locate the textviews in activity_security.xml.xml
                 String selectedItemText = (String) parent.getItemAtPosition(position);
                 // If user change the default selection
                 // First item is disable and it is used for hint
@@ -1521,7 +1511,7 @@ public void addPhone(){
                 }
                 else if(button1IsVisible==false)
                 {
-                    // car1.animate().alpha(1.0f);
+
                     ll_hide.setVisibility(View.GONE);
                     button1IsVisible = true;
                 }
@@ -2095,10 +2085,10 @@ public void addPhone(){
     }
 
     public void Alarm(){
+
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.add_alarm);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        // set the custom dialog components - text, image and button
         close=dialog.findViewById(R.id.close);
         animal=dialog.findViewById(R.id.animal);
         theif=dialog.findViewById(R.id.burglary);
@@ -2172,45 +2162,6 @@ public void addPhone(){
 
             }
         });
-/*
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-*/
-    //    LinearLayout ll_submit=dialog.findViewById(R.id.ll_submit);
-
-        // if button is clicked, close the custom dialog
-/*
-        ll_submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-*/
-/*
-        tv_details_company.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if(button1IsVisible==true)
-                {
-
-                    ll_hide.setVisibility(View.VISIBLE);
-                    button1IsVisible = false;
-                }
-                else if(button1IsVisible==false)
-                {
-                    // car1.animate().alpha(1.0f);
-                    ll_hide.setVisibility(View.GONE);
-                    button1IsVisible = true;
-                }
-            }
-        });
-*/
 
 
         dialog.show();

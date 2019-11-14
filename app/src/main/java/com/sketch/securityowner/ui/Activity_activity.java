@@ -113,13 +113,8 @@ public class Activity_activity extends AppCompatActivity implements
        categoryAdapter.onItemClickListner {
 
    static String TAG="Activity_activity";
-    @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.recycle_activity) RecyclerView recycle_activity;
     @BindView(R.id.recycle_upcoming) RecyclerView recycle_upcoming;
-    @BindView(R.id.edit) ImageView edit;
-    @BindView(R.id.profile_image) ImageView  profile_image;
-    @BindView(R.id.user_name) TextView  user_name;
-
 
     public static final int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 1;
 
@@ -192,38 +187,20 @@ public class Activity_activity extends AppCompatActivity implements
         img_help =  findViewById(R.id.img_help);
         ll_bell =  findViewById(R.id.ll_bell);
         actionViews();
-        user_name =  findViewById(R.id.user_name);
 
         recycle_activity.setVisibility(View.VISIBLE);
         recycle_upcoming.setVisibility(View.GONE);
 
-        user_name.setText(globalClass.getName());
-
-        if (!globalClass.getProfil_pic().isEmpty()){
-            Picasso.with(Activity_activity.this)
-                    .load(globalClass.getProfil_pic()) // web image url
-                    .fit().centerInside()
-                    .rotate(90)                    //if you want to rotate by 90 degrees
-                    .error(R.mipmap.profile_image)
-                    .placeholder(R.mipmap.profile_image)
-                    .into(profile_image);
-        }
+        view_all_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.range_white));
+        view_upcoming_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.blue));
 
         DeliveryList = new ArrayList<>();
         HelpList=new ArrayList<>();
 
         Category=new ArrayList<>();
-        user_name.setText(globalClass.getName());
 
         this.registerReceiver(mMessageReceiver, new IntentFilter("activity_screen"));
 
-        edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent setting=new Intent(getApplicationContext(),SettingActivity.class);
-                startActivity(setting);
-            }
-        });
 
         img_cab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -279,8 +256,9 @@ public class Activity_activity extends AppCompatActivity implements
                 tv_upcoming_visitor.setTypeface(null, Typeface.NORMAL); //only text style(only bold)
 
                 tv_all_visitor.setTypeface(null, Typeface.BOLD);
-                view_all_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.blue));
-                view_upcoming_visitor.setBackgroundColor(Color.parseColor("#DCDCDC"));    }
+                view_all_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.range_white));
+                view_upcoming_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.blue));
+            }
         });
         rel_upcoming_visitor.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -291,16 +269,14 @@ public class Activity_activity extends AppCompatActivity implements
                 tv_upcoming_visitor.setTypeface(null, Typeface.BOLD); //only text style(only bold)
 
                 tv_all_visitor.setTypeface(null, Typeface.NORMAL);
-                view_upcoming_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.blue));
-                view_all_visitor.setBackgroundColor(Color.parseColor("#DCDCDC"));    }
+                view_all_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.blue));
+                view_upcoming_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.range_white));
+            }
         });
         button_activity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent notification=new Intent(getApplicationContext(),MainActivity.class);
-                notification.addFlags(
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                        Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent notification=new Intent(getApplicationContext(), SecurityScreen.class);
                 startActivity(notification);
             }
         });
@@ -308,9 +284,6 @@ public class Activity_activity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 Intent notification=new Intent(getApplicationContext(),CommunityActivity.class);
-                notification.addFlags(
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                        Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(notification);
             }
         });
@@ -318,7 +291,8 @@ public class Activity_activity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
 
-                car1.setVisibility(car1.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                car1.setVisibility(car1.getVisibility()
+                        == View.VISIBLE ? View.GONE : View.VISIBLE);
 
             }
         });
@@ -1085,7 +1059,7 @@ public class Activity_activity extends AppCompatActivity implements
             public void onItemSelected(AdapterView<?> parent,
                                        View arg1, int position, long arg3) {
                 // TODO Auto-generated method stub
-                // Locate the textviews in activity_main.xml
+                // Locate the textviews in activity_security.xml.xml
                 String selectedItemText = (String) parent.getItemAtPosition(position);
                 // If user change the default selection
                 // First item is disable and it is used for hint
@@ -2118,6 +2092,7 @@ public class Activity_activity extends AppCompatActivity implements
                                                 child.setVendor_image(obj.optString("vendor_image"));
                                                 child.setApprove_status(obj.optString("approve_status"));
                                                 child.setApprove_by(obj.optString("approve_by"));
+                                                child.setSecurity_mobile(obj.optString("security_mobile"));
 
 
 
@@ -2323,18 +2298,10 @@ public class Activity_activity extends AppCompatActivity implements
     @Override
     public void onItemClickIN(ActivityChild activityChild) {
 
-        Intent activity_details=new Intent(getApplicationContext(),Activity_details.class);
-        activity_details.putExtra("images",activityChild.getProfile_image());
-        activity_details.putExtra("number",activityChild.getMobile());
-        activity_details.putExtra("status",activityChild.getApprove_status());
-        activity_details.putExtra("date_time",activityChild.getActual_in_time());
-        activity_details.putExtra("type",activityChild.getType());
-        Log.d(TAG, "images: "+activityChild.getProfile_image());
-        Log.d(TAG, "number: "+activityChild.getMobile());
-        Log.d(TAG, "type: "+activityChild.getType());
-
+        Intent activity_details = new Intent(Activity_activity.this,
+                Activity_details.class);
+        activity_details.putExtra("info", activityChild);
         startActivity(activity_details);
-
 
     }
 
@@ -2396,8 +2363,6 @@ public class Activity_activity extends AppCompatActivity implements
         File newfile = new File(files);
 
         try {
-
-            profile_image.setImageBitmap(bitmap);
 
             newfile.delete();
             OutputStream outFile = null;
@@ -2499,13 +2464,17 @@ public class Activity_activity extends AppCompatActivity implements
         user_name=dialog.findViewById(R.id.user_name);
         block=dialog.findViewById(R.id.block);
         address=dialog.findViewById(R.id.address);
-        Picasso.with(Activity_activity.this)
-                .load(globalClass.getProfil_pic()) // web image url
-                .fit().centerInside()
-                .rotate(90)                    //if you want to rotate by 90 degrees
-                .error(R.mipmap.profile_image)
-                .placeholder(R.mipmap.profile_image)
-                .into(profile_image);
+
+        if (!globalClass.getProfil_pic().isEmpty()){
+            Picasso.with(Activity_activity.this)
+                    .load(globalClass.getProfil_pic())
+                    .fit().centerInside()
+                    .rotate(90)
+                    .error(R.mipmap.profile_image)
+                    .placeholder(R.mipmap.profile_image)
+                    .into(profile_image);
+        }
+
         user_name.setText(globalClass.getName());
         address.setText(globalClass.getComplex_name());
         block.setText(globalClass.getFlat_name()+" "+globalClass.getBlock()+" "+"block");

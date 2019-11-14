@@ -62,7 +62,7 @@ import static com.sketch.securityowner.GlobalClass.VolleySingleton.nuOfRetry;
 import static com.sketch.securityowner.GlobalClass.VolleySingleton.timeOut;
 
 
-public class MainActivity extends AppCompatActivity implements categoryAdapter.onItemClickListner {
+public class SecurityScreen extends AppCompatActivity implements categoryAdapter.onItemClickListner {
     String TAG="Security";
     TabLayout tabLayout;
     ViewPager viewPager;
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_security);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         ll_activty_class =  findViewById(R.id.button_E);
         ll_comunity =  findViewById(R.id.button_E3);
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
         car1 =  findViewById(R.id.car1);
         globalClass = (GlobalClass) getApplicationContext();
 
-        pd = new ProgressDialog(MainActivity.this);
+        pd = new ProgressDialog(SecurityScreen.this);
         pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         pd.setMessage(getResources().getString(R.string.loading));
         productDetaiils=new ArrayList<>();
@@ -150,9 +150,6 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
             @Override
             public void onClick(View v) {
                 Intent notification=new Intent(getApplicationContext(),Activity_activity.class);
-                notification.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                        Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(notification);
             }
         });
@@ -160,19 +157,13 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
             @Override
             public void onClick(View v) {
                 Intent notification=new Intent(getApplicationContext(),CommunityActivity.class);
-                notification.addFlags(
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                        Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(notification);
             }
         });
         ll_security.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent notification=new Intent(getApplicationContext(),MainActivity.class);
-                notification.addFlags(
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                        Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent notification=new Intent(getApplicationContext(), SecurityScreen.class);
                 startActivity(notification);
             }
         });
@@ -253,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
         ll_submit=dialog.findViewById(R.id.ll_submit);
         tv_others=dialog.findViewById(R.id.tv_others);
         company_name_recycle=dialog.findViewById(R.id.company_name_recycle);
-        HorizontalLayout3 = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        HorizontalLayout3 = new LinearLayoutManager(SecurityScreen.this, LinearLayoutManager.HORIZONTAL, false);
 
         company_name_recycle.setLayoutManager(HorizontalLayout3);
         date_picker.setOnClickListener(new View.OnClickListener() {
@@ -265,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
                 mMonth = c.get(Calendar.MONTH);
                 mDay = c.get(Calendar.DAY_OF_MONTH);
 
-                new DatePickerDialog(MainActivity.this,R.style.datepicker, datePickerListener, mYear, mMonth, mDay).show();
+                new DatePickerDialog(SecurityScreen.this,R.style.datepicker, datePickerListener, mYear, mMonth, mDay).show();
 
 
             }
@@ -370,7 +361,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
 
 
         TimePickerDialog mTimePicker;
-        mTimePicker = new TimePickerDialog(MainActivity.this,R.style.datepicker, new TimePickerDialog.OnTimeSetListener() {
+        mTimePicker = new TimePickerDialog(SecurityScreen.this,R.style.datepicker, new TimePickerDialog.OnTimeSetListener() {
 
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
@@ -389,7 +380,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         // set the custom dialog components - text, image and button
         delivery_recycle=dialog.findViewById(R.id.delivery_recycle);
-        HorizontalLayout4 = new LinearLayoutManager(MainActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        HorizontalLayout4 = new LinearLayoutManager(SecurityScreen.this, LinearLayoutManager.HORIZONTAL, false);
         date_picker=dialog.findViewById(R.id.date_picker);
         radio1=dialog.findViewById(R.id.radioMale);
         radio2=dialog.findViewById(R.id.radioFemale);
@@ -417,7 +408,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
                 mMonth = c.get(Calendar.MONTH);
                 mDay = c.get(Calendar.DAY_OF_MONTH);
 
-                new DatePickerDialog(MainActivity.this,R.style.datepicker, datePickerListener, mYear, mMonth, mDay).show();
+                new DatePickerDialog(SecurityScreen.this,R.style.datepicker, datePickerListener, mYear, mMonth, mDay).show();
 
 
             }
@@ -511,7 +502,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
                 mMonth = c.get(Calendar.MONTH);
                 mDay = c.get(Calendar.DAY_OF_MONTH);
 
-                new DatePickerDialog(MainActivity.this,R.style.datepicker, datePickerListener, mYear, mMonth, mDay).show();
+                new DatePickerDialog(SecurityScreen.this,R.style.datepicker, datePickerListener, mYear, mMonth, mDay).show();
 
 
             }
@@ -583,7 +574,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
                 mMonth = c.get(Calendar.MONTH);
                 mDay = c.get(Calendar.DAY_OF_MONTH);
 
-                new DatePickerDialog(MainActivity.this,R.style.datepicker, datePickerListener, mYear, mMonth, mDay).show();
+                new DatePickerDialog(SecurityScreen.this,R.style.datepicker, datePickerListener, mYear, mMonth, mDay).show();
 
 
             }
@@ -611,7 +602,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
             public void onItemSelected(AdapterView<?> parent,
                                        View arg1, int position, long arg3) {
                 // TODO Auto-generated method stub
-                // Locate the textviews in activity_main.xml
+                // Locate the textviews in activity_securityrity.xml
                 String selectedItemText = (String) parent.getItemAtPosition(position);
                 // If user change the default selection
                 // First item is disable and it is used for hint
@@ -767,7 +758,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
         };
 
         // Adding request to request queue
-        VolleySingleton.getInstance(MainActivity.this)
+        VolleySingleton.getInstance(SecurityScreen.this)
                 .addToRequestQueue(strReq
                         .setRetryPolicy(
                                 new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
@@ -863,7 +854,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
         };
 
         // Adding request to request queue
-        VolleySingleton.getInstance(MainActivity.this)
+        VolleySingleton.getInstance(SecurityScreen.this)
                 .addToRequestQueue(strReq
                         .setRetryPolicy(
                                 new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
@@ -958,7 +949,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
         };
 
         // Adding request to request queue
-        VolleySingleton.getInstance(MainActivity.this)
+        VolleySingleton.getInstance(SecurityScreen.this)
                 .addToRequestQueue(strReq
                         .setRetryPolicy(
                                 new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
@@ -1051,7 +1042,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
         };
 
         // Adding request to request queue
-        VolleySingleton.getInstance(MainActivity.this)
+        VolleySingleton.getInstance(SecurityScreen.this)
                 .addToRequestQueue(strReq
                         .setRetryPolicy(
                                 new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
@@ -1130,7 +1121,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
         };
 
         // Adding request to request queue
-        VolleySingleton.getInstance(MainActivity.this)
+        VolleySingleton.getInstance(SecurityScreen.this)
                 .addToRequestQueue(strReq
                         .setRetryPolicy(
                                 new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
@@ -1312,8 +1303,8 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
 
                         }
 
-                        CategoryAdapter = new categoryAdapter(MainActivity.this,
-                                Category,MainActivity.this);
+                        CategoryAdapter = new categoryAdapter(SecurityScreen.this,
+                                Category, SecurityScreen.this);
                         company_name_recycle.setAdapter(CategoryAdapter);
 
 
@@ -1358,7 +1349,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
         };
 
         // Adding request to request queue
-        VolleySingleton.getInstance(MainActivity.this)
+        VolleySingleton.getInstance(SecurityScreen.this)
                 .addToRequestQueue(strReq
                         .setRetryPolicy(
                                 new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
@@ -1418,8 +1409,8 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
 
                         }
 
-                        CategoryAdapter = new categoryAdapter(MainActivity.this,
-                                DeliveryList,MainActivity.this);
+                        CategoryAdapter = new categoryAdapter(SecurityScreen.this,
+                                DeliveryList, SecurityScreen.this);
                         delivery_recycle.setAdapter(CategoryAdapter);
 
 
@@ -1464,7 +1455,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
         };
 
         // Adding request to request queue
-        VolleySingleton.getInstance(MainActivity.this)
+        VolleySingleton.getInstance(SecurityScreen.this)
                 .addToRequestQueue(strReq
                         .setRetryPolicy(
                                 new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
@@ -1532,7 +1523,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
 
                         }
 
-                        dataAdapter1 = new ArrayAdapter(MainActivity.this, R.layout.item_spinner, R.id.tvCust, array1);
+                        dataAdapter1 = new ArrayAdapter(SecurityScreen.this, R.layout.item_spinner, R.id.tvCust, array1);
                         spinner_help.setAdapter(dataAdapter1);
                         spinner_help.setPrompt("Help");
                     }
@@ -1566,7 +1557,7 @@ public class MainActivity extends AppCompatActivity implements categoryAdapter.o
         };
 
         // Adding request to request queue
-        VolleySingleton.getInstance(MainActivity.this)
+        VolleySingleton.getInstance(SecurityScreen.this)
                 .addToRequestQueue(strReq
                         .setRetryPolicy(
                                 new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));

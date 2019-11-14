@@ -303,10 +303,13 @@ public class ActivityListAdapterIN extends
                     });
 
 
-                    holder.itemView.setOnClickListener(v -> {
 
-                        mClickListenerIn.onItemClickIN(activityChild);
-                    });
+                    if (!activityChild.getApprove_status().equals("w")){
+                        holder.itemView.setOnClickListener(v -> {
+                            mClickListenerIn.onItemClickIN(activityChild);
+                        });
+                    }
+
 
 
 
@@ -422,9 +425,14 @@ public class ActivityListAdapterIN extends
                     }
 
 
-                    holder.itemView.setOnClickListener(v -> {
-                        mClickListenerIn.onItemClickIN(activityChild);
-                    });
+
+                    if (!activityChild.getApprove_status().equals("w")){
+
+                        holder.itemView.setOnClickListener(v -> {
+                            mClickListenerIn.onItemClickIN(activityChild);
+                        });
+
+                    }
 
 
 

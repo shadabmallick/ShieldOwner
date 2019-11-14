@@ -26,9 +26,9 @@
     <application
         android:name=".GlobalClass.GlobalClass"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_shield"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_shield"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
@@ -101,7 +101,7 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.MainActivity"
+        <activity android:name=".ui.SecurityScreen"
             android:theme="@style/MyTheme1">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

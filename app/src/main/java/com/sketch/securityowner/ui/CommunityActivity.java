@@ -140,10 +140,7 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
         ll_security.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent notification=new Intent(getApplicationContext(),MainActivity.class);
-                notification.addFlags(
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                        Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent notification=new Intent(getApplicationContext(), SecurityScreen.class);
                 startActivity(notification);
             }
         });
@@ -151,9 +148,6 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
             @Override
             public void onClick(View v) {
                 Intent notification=new Intent(getApplicationContext(),Activity_activity.class);
-                notification.addFlags(
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK |
-                        Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(notification);
             }
         });
@@ -162,7 +156,8 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
             @Override
             public void onClick(View view) {
 
-                car1.setVisibility(car1.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                car1.setVisibility(car1.getVisibility()
+                        == View.VISIBLE ? View.GONE : View.VISIBLE);
 
             }
         });
@@ -593,7 +588,7 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
             public void onItemSelected(AdapterView<?> parent,
                                        View arg1, int position, long arg3) {
                 // TODO Auto-generated method stub
-                // Locate the textviews in activity_main.xml
+                // Locate the textviews in activity_securityrity.xml
                 String selectedItemText = (String) parent.getItemAtPosition(position);
                 // If user change the default selection
                 // First item is disable and it is used for hint

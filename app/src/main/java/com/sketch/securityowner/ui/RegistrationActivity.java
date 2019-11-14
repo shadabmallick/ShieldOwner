@@ -134,7 +134,7 @@ public class RegistrationActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent,
                                        View arg1, int position, long arg3) {
                 // TODO Auto-generated method stub
-                // Locate the textviews in activity_main.xml
+                // Locate the textviews in activity_securityrity.xml
                 String selectedItemText = (String) parent.getItemAtPosition(position);
                 // If user change the default selection
                 // First item is disable and it is used for hint
@@ -160,7 +160,7 @@ public class RegistrationActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent,
                                        View arg1, int position, long arg3) {
                 // TODO Auto-generated method stub
-                // Locate the textviews in activity_main.xml
+                // Locate the textviews in activity_security.xml.xml
                 String selectedItemText = (String) parent.getItemAtPosition(position);
                 // If user change the default selection
                 // First item is disable and it is used for hint
@@ -191,7 +191,7 @@ public class RegistrationActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent,
                                        View arg1, int position, long arg3) {
                 // TODO Auto-generated method stub
-                // Locate the textviews in activity_main.xml
+                // Locate the textviews in activity_securityrity.xml
                 String selectedItemText = (String) parent.getItemAtPosition(position);
                 // If user change the default selection
                 // First item is disable and it is used for hint
@@ -219,7 +219,7 @@ public class RegistrationActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent,
                                        View arg1, int position, long arg3) {
                 // TODO Auto-generated method stub
-                // Locate the textviews in activity_main.xml
+                // Locate the textviews in activity_securityrity.xml
                 String selectedItemText = (String) parent.getItemAtPosition(position);
                 // If user change the default selection
                 // First item is disable and it is used for hint

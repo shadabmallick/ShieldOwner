@@ -1,6 +1,8 @@
 package com.sketch.securityowner.model;
 
-public class ActivityChild {
+import java.io.Serializable;
+
+public class ActivityChild implements Serializable {
 
     private String type;
     private String activity_id;
@@ -26,6 +28,7 @@ public class ActivityChild {
     private String type_in_out;
     private String approve_status;
     private String leave_at_gate_code;
+    private String security_mobile;
 
 
     public String getUser_id() {
@@ -290,6 +293,14 @@ public class ActivityChild {
 
     public void setLeave_at_gate_code(String leave_at_gate_code) {
         this.leave_at_gate_code = leave_at_gate_code;
+    }
+
+    public String getSecurity_mobile() {
+        return security_mobile;
+    }
+
+    public void setSecurity_mobile(String security_mobile) {
+        this.security_mobile = security_mobile;
     }
 }
 

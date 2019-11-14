@@ -7,22 +7,10 @@ public class AppConfig {
     public static final String TAG = "Shield";
 
 
-<<<<<<< HEAD
     private static final String URL_DEV = "https://www.shieldapp.in/Api/";
 
 
-=======
 
-    private static final String URL_DEV = " https://www.shieldapp.in/Api/";
-
-
-
-
-
-
-
-
->>>>>>> f115c7239681dad86fbb28871bb6308cd4253065
     public static final String registration                 = URL_DEV + "registration";
     public static final String login_otp                    = URL_DEV + "login_otp";
     public static final String login                        = URL_DEV + "login";

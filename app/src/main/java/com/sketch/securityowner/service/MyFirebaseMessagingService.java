@@ -81,9 +81,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 hashMap.put("visitor_id", visitor_id);
 
                 callTo(hashMap);
-            }
 
-            if (type != null && type.equals("new call")){
+            } else if (type != null && type.equals("new call")){
 
                 String activity_id = remoteMessage.getData().get("activity_id");
                 String table = remoteMessage.getData().get("table");
@@ -110,9 +109,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 hashMap.put("message", message);
 
                 callTo(hashMap);
-            }
 
-            if (type != null && type.equals("new delivery call")){
+            } else if (type != null && type.equals("new delivery call")){
 
                 String activity_id = remoteMessage.getData().get("activity_id");
                 String table = remoteMessage.getData().get("table");
@@ -138,9 +136,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 hashMap.put("message", message);
 
                 callTo(hashMap);
-            }
 
-            if (type != null && type.equals("delivery call")){
+            }else if (type != null && type.equals("delivery call")){
 
                 String activity_id = remoteMessage.getData().get("activity_id");
                 String table = remoteMessage.getData().get("table");
@@ -259,8 +256,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         startActivity(intent);
 
     }
-
-
 
     static void sendResponseToActivityScreen(Context context, String type) {
         Intent intent = new Intent("activity_screen");

@@ -5,120 +5,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/light_gray">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="58dp"
-        android:visibility="gone"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:titleTextColor="#ffffff">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/visitor"
-        android:textSize="20dp"
-        android:textColor="@android:color/white"
-        android:layout_gravity="center"
-        android:id="@+id/toolbar_title" />
-
-    </androidx.appcompat.widget.Toolbar>
-
-    <RelativeLayout
-        android:id="@+id/rl_1"
-        android:layout_below="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white"
-         android:visibility="gone"
-        android:minHeight="?attr/actionBarSize"
-        android:titleTextColor="#ffffff">
-
-        <RelativeLayout
-            android:id="@+id/rel_profile"
-            android:layout_width="match_parent"
-            android:padding="10dp"
-            android:background="@android:color/white"
-            android:orientation="horizontal"
-            android:layout_height="wrap_content">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profile_image"
-                android:layout_width="66dp"
-                android:layout_height="66dp"
-                android:padding="5dp"
-                android:src="@drawable/ic_launcher_background"
-                />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_toRightOf="@+id/profile_image"
-                >
-
-                <TextView
-                    android:id="@+id/user_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Raju Banerjee"
-                    android:gravity="center"
-                    android:textSize="20dp"
-                    android:textColor="@color/blue"/>
-                <TextView
-                    android:id="@+id/user_mobile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="9876543210"
-                    android:textSize="12dp"
-                    android:gravity="center"
-                    />
-
-            </LinearLayout>
-
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="right"
-            android:layout_marginRight="5dp"
-            >
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_smartphone"
-                android:id="@+id/edit"
-                android:tint="@color/blue"
-                android:layout_marginTop="30dp"
-                />
-
-
-        </RelativeLayout>
-
-
-    </RelativeLayout>
-
-
-
     <RelativeLayout
         android:id="@+id/rel_upcoming"
         android:layout_width="match_parent"
-        android:gravity="center"
         android:background="@color/blue"
-        android:layout_height="60dp">
+        android:layout_height="?attr/actionBarSize">
 
         <LinearLayout
             android:id="@+id/ll_visitor"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="bottom"
-            android:layout_marginBottom="5dp"
+            android:layout_centerVertical="true"
             android:weightSum="2">
 
             <LinearLayout
@@ -137,7 +35,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:textColor="@android:color/white"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:textStyle="bold"
                     android:text="@string/all"/>
 
@@ -159,7 +57,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:textColor="@android:color/white"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     android:text="@string/upcoming"/>
 
 
@@ -168,38 +66,28 @@
         </LinearLayout>
 
         <LinearLayout
+             android:id="@+id/ll_views"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="2"
-            android:layout_below="@+id/ll_visitor">
-
+            android:layout_alignParentBottom="true">
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_marginTop="5dp"
                 android:layout_weight="1"
-
                 android:id="@+id/view_all_visitor"
-
-
                 android:background="@android:color/white"
-                ></View>
+                />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
-                android:layout_marginTop="5dp"
                 android:layout_weight="1"
                 android:id="@+id/view_upcoming_visitor"
                 android:background="@android:color/white"
-                ></View>
+                />
 
         </LinearLayout>
-
-
-
-
 
     </RelativeLayout>
 
@@ -209,20 +97,20 @@
         android:layout_width="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:paddingLeft="10dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/curve_white"
         android:layout_height="40dp">
+
         <EditText
             android:id="@+id/edt_search"
-
             android:layout_width="match_parent"
             android:hint="@string/search"
-
             android:background="@android:color/transparent"
-            android:layout_marginRight="40dp"
-            android:layout_height="wrap_content" />
+            android:paddingStart="20dp"
+            android:layout_centerVertical="true"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/rl_profile"
+            />
 
         <RelativeLayout
             android:id="@+id/rl_profile"
@@ -230,15 +118,15 @@
             android:layout_height="30dp"
             android:gravity="center"
             android:padding="5dp"
-            android:layout_marginRight="10dp"
-            android:layout_alignParentRight="true"
+            android:layout_marginEnd="10dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:background="@drawable/circle_blue">
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                  android:tint="@android:color/white"
-
-
                 android:src="@drawable/ic_user"/>
 
         </RelativeLayout>

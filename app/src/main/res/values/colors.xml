@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#3361DF</color>
-    <color name="colorPrimaryDark">#3361DF</color>
+    <color name="colorPrimaryDark">#1D44BD</color>
     <color name="colorAccent">#3361DF</color>
     <color name="blue">#3361DF</color>
     <color name="dark_gray">#757575</color>
@@ -17,5 +17,6 @@
     <color name="bubble_2">#E9FCCB</color>
     <color name="bubble_3">#D4DDFA</color>
     <color name="water_green">#D5FFEC</color>
+    <color name="alpha_black">#4D000000</color>
 
 </resources>
