@@ -2457,10 +2457,11 @@ public class Activity_activity extends AppCompatActivity implements
 
         ImageView profile_image;
         TextView user_name,block,address;
-        LinearLayout ll_setting;
+        LinearLayout ll_setting,ll_invoice;
 
         profile_image=dialog.findViewById(R.id.profile_image);
         ll_setting=dialog.findViewById(R.id.ll_setting);
+        ll_invoice=dialog.findViewById(R.id.ll_invoice);
         user_name=dialog.findViewById(R.id.user_name);
         block=dialog.findViewById(R.id.block);
         address=dialog.findViewById(R.id.address);
@@ -2485,6 +2486,15 @@ public class Activity_activity extends AppCompatActivity implements
             public void onClick(View v) {
                 dialog.dismiss();
                 Intent setting=new Intent(Activity_activity.this,SettingActivity.class);
+                startActivity(setting);
+
+            }
+        });
+        ll_invoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                Intent setting=new Intent(Activity_activity.this,InvoiceList.class);
                 startActivity(setting);
 
             }
@@ -2690,6 +2700,5 @@ public class Activity_activity extends AppCompatActivity implements
                                 new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
 
     }
-
 
 }

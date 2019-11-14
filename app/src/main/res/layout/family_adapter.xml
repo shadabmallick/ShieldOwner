@@ -57,6 +57,7 @@
                     android:background="@drawable/circle_blue"
                     android:layout_height="30dp"
                     android:padding="10dp"
+                    android:id="@+id/iv_call"
                     android:tint="@android:color/white"
                     android:src="@drawable/ic_phone_call"/>
                 <LinearLayout

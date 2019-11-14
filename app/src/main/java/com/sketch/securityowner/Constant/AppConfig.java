@@ -39,6 +39,12 @@ public class AppConfig {
 
     public static final String help_id_wise_chat              = URL_DEV + "help_id_wise_chat";
     public static final String user_chat                     = URL_DEV + "user_chat";
+    public static final String tenant_list                     = URL_DEV + "tenant_list";
+    public static final String add_tenant                     = URL_DEV + "add_tenant";
+    public static final String delete_tenant                     = URL_DEV + "delete_tenant";
+    public static final String ivr_number                     = URL_DEV + "ivr_number";
+    public static final String update_ivr_number                     = URL_DEV + "update_ivr_number";
+    public static final String inovice_list                     = URL_DEV + "inovice_list";
 
 
 
