@@ -1,5 +1,8 @@
 package com.sketch.securityowner.GlobalClass;
 
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
+
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -28,6 +31,24 @@ public class Config {
     public static final int NOTIFICATION_ID_BIG_IMAGE = 101;
 
     public static final String SHARED_PREF = "ah_firebase";
+
+
+
+
+
+
+
+    public static Bitmap RotateBitmap(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(),
+                source.getHeight(), matrix, true);
+    }
+
+
+
+
+
     public static SSLContext getSslContext() {
 
         TrustManager[] byPassTrustManagers = new TrustManager[] { new X509TrustManager() {

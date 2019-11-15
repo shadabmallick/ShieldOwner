@@ -231,6 +231,19 @@
             android:value="@string/default_notification_channel_id" />
 
 
-   </application>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.sketch.securityowner.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
+
+
+
+    </application>
 
 </manifest>

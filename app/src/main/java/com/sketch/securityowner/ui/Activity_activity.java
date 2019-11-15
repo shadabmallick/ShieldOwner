@@ -1678,8 +1678,6 @@ public class Activity_activity extends AppCompatActivity implements
         activityListAdapter = new ActivityListAdapterIN(Activity_activity.this,
                 mItems);
 
-        getActivityList();
-
 
     }
 
@@ -1887,7 +1885,7 @@ public class Activity_activity extends AppCompatActivity implements
                                                 child.setVendor_name(obj.optString("vendor_name"));
                                                 child.setGetpass(obj.optString("getpass"));
                                                 child.setDescription(obj.optString("description"));
-                                                child.setGetpass(obj.optString("getpass_image"));
+                                                child.setGetpass_image(obj.optString("getpass_image"));
                                                 child.setVendor_image(obj.optString("vendor_image"));
                                                 child.setApprove_status(obj.optString("approve_status"));
                                                 child.setApprove_by(obj.optString("approve_by"));
@@ -2388,6 +2386,13 @@ public class Activity_activity extends AppCompatActivity implements
 
 
     ///////////////////////
+
+
+    @Override
+    protected void onResume() {
+        getActivityList();
+        super.onResume();
+    }
 
     protected void onDestroy() {
         Log.d(AppConfig.TAG, "onDestroy");
