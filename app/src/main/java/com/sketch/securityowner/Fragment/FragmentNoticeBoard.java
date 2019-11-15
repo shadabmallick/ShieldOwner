@@ -55,14 +55,6 @@ public class FragmentNoticeBoard extends Fragment {
         View rootView = inflater.inflate(
                 R.layout.fragment, container, false);
         return rootView;
-
-
-        /**The below code was when the ListView was used in place of RecyclerView. **/
-
-
-
-
-
     }
 
     @Override
@@ -74,12 +66,10 @@ public class FragmentNoticeBoard extends Fragment {
         pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         pd.setMessage(getResources().getString(R.string.loading));
         String[] items = getResources().getStringArray(R.array.tab_A);
-      //  AdapterNoticeBoard adapter = new AdapterNoticeBoard(getActivity(),items);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
       //  BrowseNotice();
     }
     private void BrowseNotice() {

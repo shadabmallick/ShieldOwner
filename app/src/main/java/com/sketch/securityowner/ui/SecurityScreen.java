@@ -160,18 +160,13 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
                 startActivity(notification);
             }
         });
-        ll_security.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent notification=new Intent(getApplicationContext(), SecurityScreen.class);
-                startActivity(notification);
-            }
-        });
+
         rel_middle_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                car1.setVisibility(car1.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                car1.setVisibility(car1.getVisibility() ==
+                        View.VISIBLE ? View.GONE : View.VISIBLE);
 
             }
         });
@@ -181,8 +176,6 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
 
                 AddCab();
                 car1.setVisibility(View.GONE);
-
-                //  dialog.dismiss();
             }
         });
         ll_bell.setOnClickListener(new View.OnClickListener() {
@@ -190,8 +183,6 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
             public void onClick(View v) {
                 Alarm();
                 car1.setVisibility(View.GONE);
-
-                //  dialog.dismiss();
             }
         });
         img_delivery.setOnClickListener(new View.OnClickListener() {
@@ -199,8 +190,6 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
             public void onClick(View v) {
                 AddDelivery();
                 car1.setVisibility(View.GONE);
-
-
             }
         });
         img_guest.setOnClickListener(new View.OnClickListener() {
@@ -208,8 +197,6 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
             public void onClick(View v) {
                 AddGuest();
                 car1.setVisibility(View.GONE);
-
-
             }
         });
         img_help.setOnClickListener(new View.OnClickListener() {
@@ -217,8 +204,6 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
             public void onClick(View v) {
                 AddHelp();
                 car1.setVisibility(View.GONE);
-
-
             }
         });
 

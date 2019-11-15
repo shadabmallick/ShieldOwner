@@ -18,5 +18,6 @@
     <color name="bubble_3">#D4DDFA</color>
     <color name="water_green">#D5FFEC</color>
     <color name="alpha_black">#4D000000</color>
+    <color name="white">#FFFFFF</color>
 
 </resources>

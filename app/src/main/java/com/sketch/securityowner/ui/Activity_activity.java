@@ -2088,13 +2088,11 @@ public class Activity_activity extends AppCompatActivity implements
                                                 child.setVendor_name(obj.optString("vendor_name"));
                                                 child.setGetpass(obj.optString("getpass"));
                                                 child.setDescription(obj.optString("description"));
-                                                child.setGetpass(obj.optString("getpass_image"));
+                                                child.setGetpass_image(obj.optString("getpass_image"));
                                                 child.setVendor_image(obj.optString("vendor_image"));
                                                 child.setApprove_status(obj.optString("approve_status"));
                                                 child.setApprove_by(obj.optString("approve_by"));
                                                 child.setSecurity_mobile(obj.optString("security_mobile"));
-
-
 
 
 

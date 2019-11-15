@@ -25,9 +25,6 @@
             android:background="@android:color/white"
             android:paddingBottom="24dp">
 
-
-
-
             <TextView
                 android:id="@+id/user_profile_name"
                 android:layout_width="wrap_content"
@@ -68,17 +65,16 @@
 
             </LinearLayout>
 
-<Spinner
-    android:id="@+id/spinner_help"
-    android:layout_below="@+id/ll_date"
-    android:layout_width="match_parent"
-    android:layout_marginLeft="20dp"
-    android:layout_marginRight="20dp"
-    style="@style/SpinnerwithNoArrow"
-    android:layout_height="wrap_content">
+            <Spinner
+                android:id="@+id/spinner_help"
+                android:layout_below="@+id/ll_date"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                style="@style/SpinnerwithNoArrow"
+                android:layout_height="wrap_content">
 
-
-</Spinner>
+            </Spinner>
 
             <TextView
                 android:id="@+id/tv_details_company"
@@ -98,6 +94,7 @@
                 android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_details_company">
+
                 <LinearLayout
                     android:id="@+id/ll_name"
                     android:layout_width="match_parent"
@@ -105,7 +102,6 @@
                     android:weightSum="2"
                     android:layout_marginTop="20dp"
                     >
-
 
                     <EditText
                         android:id="@+id/edit_name"
@@ -116,6 +112,7 @@
                         android:layout_weight="1"
                         android:background="@android:drawable/dialog_holo_light_frame"
                         />
+
                     <EditText
                         android:id="@+id/edit_phone"
                         android:layout_width="wrap_content"

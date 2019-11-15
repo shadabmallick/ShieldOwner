@@ -1,9 +1,15 @@
 package com.sketch.securityowner.ui;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -11,8 +17,20 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.sdsmdg.tastytoast.TastyToast;
 import com.sketch.securityowner.Constant.AppConfig;
+import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
 import com.sketch.securityowner.model.ActivityChild;
 import com.squareup.picasso.Picasso;
@@ -20,8 +38,14 @@ import com.squareup.picasso.Target;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+
+import static com.sketch.securityowner.GlobalClass.VolleySingleton.backOff;
+import static com.sketch.securityowner.GlobalClass.VolleySingleton.nuOfRetry;
+import static com.sketch.securityowner.GlobalClass.VolleySingleton.timeOut;
 
 public class Activity_details extends AppCompatActivity {
 
@@ -32,7 +56,7 @@ public class Activity_details extends AppCompatActivity {
     TextView tv_name, tv_date_time, tv_status, visitor_type_name, tv_vendor_name, tv_message;
     LinearLayout ll_call_security, ll_generate_passcode, ll_vendors;
 
-
+    ActivityChild activityChild;
 
 
     @Override
@@ -70,7 +94,7 @@ public class Activity_details extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
 
-            ActivityChild activityChild = (ActivityChild) bundle.getSerializable("info");
+            activityChild = (ActivityChild) bundle.getSerializable("info");
 
 
             tv_name.setText(activityChild.getName());
@@ -183,11 +207,13 @@ public class Activity_details extends AppCompatActivity {
 
 
 
+            Log.d(TAG, "getpase > "+activityChild.getGetpass());
+            Log.d(TAG, "Actual_out_time > "+activityChild.getActual_out_time());
 
             if (activityChild.getGetpass().equals("0")
-                    && ((activityChild.getActual_in_time() != null)
-                            || (!activityChild.getActual_in_time().equals("null"))
-                            || (!activityChild.getActual_in_time().equals("")))){
+                    && ((activityChild.getActual_out_time() == null)
+                            || activityChild.getActual_out_time().equals("null")
+                            || activityChild.getActual_out_time().equals(null))){
 
                 ll_generate_passcode.setVisibility(View.VISIBLE);
 
@@ -195,15 +221,6 @@ public class Activity_details extends AppCompatActivity {
 
                 ll_generate_passcode.setVisibility(View.GONE);
             }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -220,7 +237,13 @@ public class Activity_details extends AppCompatActivity {
 
         rl_call_visitor.setOnClickListener(v -> {
 
+            checkCallPermission(activityChild.getMobile());
 
+        });
+
+        ll_call_security.setOnClickListener(v -> {
+
+            checkCallPermission(activityChild.getSecurity_mobile());
         });
 
         ll_generate_passcode.setOnClickListener(v -> {
@@ -250,4 +273,94 @@ public class Activity_details extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+
+    //// call user ....
+
+    private static final int REQUEST_PHONE_CALL = 1212;
+    private void checkCallPermission(String number){
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(Activity_details.this,
+                    Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(Activity_details.this,
+                        new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
+
+            } else {
+                callPhone(number);
+            }
+        } else {
+            callPhone(number);
+        }
+
+    }
+
+    private void callPhone(String number){
+
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + number));// Initiates the Intent
+        startActivity(intent);
+
+    }
+
+
+    /// generate passcode ...
+
+    private void generatePasscode() {
+        // Tag used to cancel the request
+
+        StringRequest strReq = new StringRequest(Request.Method.GET,
+                AppConfig.getpass_generate, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+
+
+                Gson gson = new Gson();
+
+                try {
+
+
+                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
+                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
+                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+
+
+                    if(status.equals("1")) {
+
+                    }
+                    else {
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                    }
+
+                } catch (Exception e) {
+                    TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
+                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+            }
+        }) {
+
+
+
+        };
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(Activity_details.this)
+                .addToRequestQueue(strReq
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+
+    }
+
 }

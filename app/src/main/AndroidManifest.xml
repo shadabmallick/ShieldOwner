@@ -31,7 +31,8 @@
         android:roundIcon="@mipmap/ic_shield"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
-        android:theme="@style/AppTheme">
+        android:largeHeap="true"
+        android:theme="@style/MyTheme">
 
 
         <uses-library
@@ -102,37 +103,30 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.SecurityScreen"
-            android:theme="@style/MyTheme1">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".ui.Activity_details"
-            android:theme="@style/MyTheme1">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".ui.Activity_tenants"
-            android:theme="@style/MyTheme1">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".ui.InterphoneSettings"
-            android:theme="@style/MyTheme1">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-            </intent-filter>
-        </activity>
-<!--
-        <activity android:name=".ui.ChatAppActivity"
             android:theme="@style/MyTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
--->
+        <activity android:name=".ui.Activity_details"
+            android:theme="@style/MyTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.Activity_tenants"
+            android:theme="@style/MyTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.InterphoneSettings"
+            android:theme="@style/MyTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+
         <activity android:name=".ui.HelpListDetails"
             android:theme="@style/MyTheme" >
             <intent-filter>
@@ -160,26 +154,20 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.Activity_activity"
-
-            android:theme="@style/MyTheme2">
-
-
+            android:theme="@style/MyTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
         <activity android:name=".ui.InvoiceList"
-
-            android:theme="@style/MyTheme2">
-
-
+            android:theme="@style/MyTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
         <activity android:name=".ui.ChatGroup"
 
-            android:theme="@style/MyTheme2">
+            android:theme="@style/MyTheme">
 
 
             <intent-filter>
@@ -188,7 +176,7 @@
         </activity>
         <activity android:name=".ui.ShowInvoice"
 
-            android:theme="@style/MyTheme2">
+            android:theme="@style/MyTheme">
 
 
             <intent-filter>

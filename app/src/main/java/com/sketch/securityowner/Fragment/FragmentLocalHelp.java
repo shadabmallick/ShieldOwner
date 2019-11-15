@@ -69,21 +69,11 @@ public class FragmentLocalHelp extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-      //  String[] items = getResources().getStringArray(R.array.tab_A);
-
         recyclerView =  view.findViewById(R.id.recycler_view);
         avLoadingIndicatorView = view. findViewById(R.id.avi);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        FloatingActionButton fab =  view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         cityList=new ArrayList<>();
         gridLayoutManager = new GridLayoutManager(getActivity(),3);
         recyclerView.setLayoutManager(gridLayoutManager);

@@ -91,13 +91,7 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
     RadioButton radio1,radio2;
     EditText edit_phone_cab,edit_vehicle_no,edit_name_cab,edit_car_no,edit_parking_no,edit_name,edit_phone,edit_mail,edit_family_name,edit_family_phone;
     LinearLayout ll_bell,ll_alram,ll_hide,ll_submit;
-    RecyclerView.LayoutManager RecyclerViewLayoutManager;
-    RecyclerView.LayoutManager RecyclerViewLayoutManager1;
-    RecyclerView.LayoutManager RecyclerViewLayoutManager2;
-    RecyclerView.LayoutManager RecyclerViewLayoutManager3;
-    LinearLayoutManager HorizontalLayout ;
-    LinearLayoutManager HorizontalLayout1 ;
-    LinearLayoutManager HorizontalLayout2 ;
+
     LinearLayoutManager HorizontalLayout3 ;
     LinearLayoutManager HorizontalLayout4 ;
     Calendar myCalendar = Calendar.getInstance();
@@ -107,7 +101,6 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.community_class);
-        Toolbar toolbar =  findViewById(R.id.toolbar);
         ll_activity=findViewById(R.id.button_E);
         ll_security=findViewById(R.id.button_E1);
         img_cab=  findViewById(R.id.img_cab);
@@ -122,32 +115,34 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
         pd = new ProgressDialog(CommunityActivity.this);
         pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         pd.setMessage(getResources().getString(R.string.loading));
+
         productDetaiils=new ArrayList<>();
         staffList=new ArrayList<>();
         productDetaiils_sub=new ArrayList<>();
         DeliveryList=new ArrayList<>();
         HelpList=new ArrayList<>();
-
         Category=new ArrayList<>();
 
 
-
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        tabLayout = findViewById(R.id.tabs);
+        viewPager = findViewById(R.id.viewPager);
         viewPagerAdapter = new ViewPagerCommunity(getSupportFragmentManager());
         viewPager.setAdapter(viewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
+
         ll_security.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent notification=new Intent(getApplicationContext(), SecurityScreen.class);
+                Intent notification=new Intent(CommunityActivity.this,
+                        SecurityScreen.class);
                 startActivity(notification);
             }
         });
         ll_activity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent notification=new Intent(getApplicationContext(),Activity_activity.class);
+                Intent notification = new Intent(CommunityActivity.this,
+                        Activity_activity.class);
                 startActivity(notification);
             }
         });
@@ -155,10 +150,8 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
         rel_middle_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 car1.setVisibility(car1.getVisibility()
                         == View.VISIBLE ? View.GONE : View.VISIBLE);
-
             }
         });
         img_cab.setOnClickListener(new View.OnClickListener() {
@@ -167,8 +160,6 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
 
                 AddCab();
                 car1.setVisibility(View.GONE);
-
-                //  dialog.dismiss();
             }
         });
         ll_bell.setOnClickListener(new View.OnClickListener() {
@@ -176,8 +167,6 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
             public void onClick(View v) {
                 Alarm();
                 car1.setVisibility(View.GONE);
-
-                //  dialog.dismiss();
             }
         });
         img_delivery.setOnClickListener(new View.OnClickListener() {
@@ -185,8 +174,6 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
             public void onClick(View v) {
                 AddDelivery();
                 car1.setVisibility(View.GONE);
-
-
             }
         });
         img_guest.setOnClickListener(new View.OnClickListener() {
@@ -194,8 +181,6 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
             public void onClick(View v) {
                 AddGuest();
                 car1.setVisibility(View.GONE);
-
-
             }
         });
         img_help.setOnClickListener(new View.OnClickListener() {
@@ -203,8 +188,6 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
             public void onClick(View v) {
                 AddHelp();
                 car1.setVisibility(View.GONE);
-
-
             }
         });
 
@@ -215,7 +198,6 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
         dialog.setContentView(R.layout.dailog_cab);
         dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        // set the custom dialog components - text, image and button
         close=dialog.findViewById(R.id.close);
         date_picker=dialog.findViewById(R.id.date_picker);
         radio1=dialog.findViewById(R.id.radioMale);
@@ -229,7 +211,8 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
         ll_submit=dialog.findViewById(R.id.ll_submit);
         tv_others=dialog.findViewById(R.id.tv_others);
         company_name_recycle=dialog.findViewById(R.id.company_name_recycle);
-        HorizontalLayout3 = new LinearLayoutManager(CommunityActivity.this, LinearLayoutManager.HORIZONTAL, false);
+        HorizontalLayout3 = new LinearLayoutManager(CommunityActivity.this,
+                LinearLayoutManager.HORIZONTAL, false);
 
         company_name_recycle.setLayoutManager(HorizontalLayout3);
         date_picker.setOnClickListener(new View.OnClickListener() {
@@ -358,7 +341,6 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
         mTimePicker.show();
     }
 
-
     public void AddDelivery(){
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_delivery);
@@ -457,14 +439,13 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
         dialog.show();
 
     }
+
     public void AddGuest(){
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_guest);
         dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        // set the custom dialog components - text, image and button
         close=dialog.findViewById(R.id.close);
-        // tv_details_company=dialog.findViewById(R.id.tv_details_company);
         ll_hide=dialog.findViewById(R.id.ll_hide);
         date_picker=dialog.findViewById(R.id.date_picker);
         radio1=dialog.findViewById(R.id.radioMale);
@@ -473,12 +454,15 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
         edit_name_cab=dialog.findViewById(R.id.edit_name);
         edit_phone_cab=dialog.findViewById(R.id.edit_phone);
         tv_time=dialog.findViewById(R.id.tv_time);
+
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
             }
         });
+
+
         date_picker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -532,6 +516,7 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
         dialog.show();
 
     }
+
     public void AddHelp(){
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_help);
@@ -1195,45 +1180,6 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
 
             }
         });
-/*
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-*/
-        //    LinearLayout ll_submit=dialog.findViewById(R.id.ll_submit);
-
-        // if button is clicked, close the custom dialog
-/*
-        ll_submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-*/
-/*
-        tv_details_company.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if(button1IsVisible==true)
-                {
-
-                    ll_hide.setVisibility(View.VISIBLE);
-                    button1IsVisible = false;
-                }
-                else if(button1IsVisible==false)
-                {
-                    // car1.animate().alpha(1.0f);
-                    ll_hide.setVisibility(View.GONE);
-                    button1IsVisible = true;
-                }
-            }
-        });
-*/
 
 
         dialog.show();

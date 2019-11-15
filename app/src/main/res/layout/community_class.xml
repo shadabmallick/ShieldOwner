@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     >
 
     <com.google.android.material.appbar.AppBarLayout
@@ -12,28 +11,26 @@
         android:layout_height="wrap_content"
         >
 
-
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
             app:tabTextColor="@android:color/darker_gray"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabGravity="fill"
-            app:tabSelectedTextColor="@android:color/white"
+            app:tabSelectedTextColor="@color/white"
             app:tabMode="fixed"
             app:tabIndicatorHeight="2dp"
-            app:tabIndicator="@android:color/white"
+            app:tabIndicator="@color/white"
             />
 
     </com.google.android.material.appbar.AppBarLayout>
-
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPager"
         android:layout_below="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="70dp"
+        android:layout_above="@id/button_layout"
         />
     <LinearLayout
         android:id="@+id/car1"
@@ -41,11 +38,8 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         android:background="@drawable/grey_curve"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="80dp">
-
+        android:layout_above="@id/button_layout"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -58,45 +52,42 @@
 
             <ImageView
                 android:id="@+id/img_cab"
-
                 android:layout_width="60dp"
                 android:layout_height="50dp"
                 android:src="@mipmap/car_new"
                 android:paddingRight="5dp"
                 android:layout_margin="5dp"
-                android:background="@android:color/white"
+                android:background="@color/white"
                 android:paddingLeft="5dp"
                 android:paddingBottom="10dp"
-
                 android:layout_weight="1"/>
+
             <ImageView
                 android:id="@+id/img_delivery"
-
                 android:layout_width="60dp"
                 android:layout_height="50dp"
                 android:padding="5dp"
-                android:background="@android:color/white"
+                android:background="@color/white"
                 android:layout_margin="5dp"
                 android:src="@mipmap/delivery"
                 android:layout_weight="1"/>
+
             <ImageView
                 android:id="@+id/img_guest"
-
                 android:layout_width="60dp"
                 android:layout_height="50dp"
                 android:src="@mipmap/guest"
                 android:padding="5dp"
-                android:background="@android:color/white"
+                android:background="@color/white"
                 android:layout_margin="5dp"
                 android:layout_weight="1"/>
 
             <ImageView
                 android:id="@+id/img_help"
-
                 android:layout_width="60dp"
                 android:layout_height="50dp"
                 android:layout_margin="5dp"
-                android:background="@android:color/white"
+                android:background="@color/white"
                 android:src="@mipmap/visiting_help"
                 android:padding="5dp"
                 android:layout_weight="1"/>
@@ -119,17 +110,13 @@
 
             </LinearLayout>
 
-
-
         </LinearLayout>
-
-
-
 
 
     </LinearLayout>
 
-    <LinearLayout   android:id="@+id/button_layout"
+    <LinearLayout
+        android:id="@+id/button_layout"
         android:orientation="horizontal"
         android:weightSum="5"
         android:layout_alignParentBottom="true"
@@ -157,11 +144,8 @@
                 android:layout_below="@+id/img_temp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12dp"
+                android:textSize="12sp"
                 android:text="@string/activity"
-
-
-
 
                 />
         </LinearLayout>
@@ -187,13 +171,9 @@
             <TextView
                 android:layout_below="@+id/img_temp"
                 android:layout_width="wrap_content"
-                android:textSize="12dp"
+                android:textSize="12sp"
                 android:layout_height="wrap_content"
                 android:text="@string/security"
-
-
-
-
                 />
         </LinearLayout>
 
@@ -203,7 +183,6 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:gravity="center"
-
 
             >
             <RelativeLayout
@@ -224,7 +203,6 @@
                     />
 
             </RelativeLayout>
-
 
         </LinearLayout>
 
@@ -252,12 +230,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/community"
                 android:textColor="@color/blue"
-
-                android:textSize="12dp"
-
-
-
-
+                android:textSize="12sp"
                 />
         </LinearLayout>
 
@@ -283,11 +256,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help"
-                android:textSize="12dp"
-
-
-
-
+                android:textSize="12sp"
                 />
         </LinearLayout>
 
