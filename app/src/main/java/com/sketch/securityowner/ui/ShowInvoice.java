@@ -1,5 +1,6 @@
 package com.sketch.securityowner.ui;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.webkit.WebView;
@@ -15,12 +16,13 @@ public class ShowInvoice extends AppCompatActivity {
   WebView  webView ;
   WebViewClient webViewClient;
     String url;
+    ProgressDialog progressBar;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_invoice);
         webView=findViewById(R.id.webView);
-
+        progressBar = ProgressDialog.show(ShowInvoice.this, "Loading the pdf", "Loading...");
         webView.getSettings().setJavaScriptEnabled(true);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -32,6 +34,9 @@ public class ShowInvoice extends AppCompatActivity {
 
         webView.setWebViewClient(new WebViewClient() {
             public void onPageFinished(WebView view, String url) {
+                if (progressBar.isShowing()) {
+                    progressBar.dismiss();
+                }
             }
         });
 
