@@ -19,5 +19,6 @@
     <color name="water_green">#D5FFEC</color>
     <color name="alpha_black">#4D000000</color>
     <color name="white">#FFFFFF</color>
+    <color name="light_blue">#AAB5FF</color>
 
 </resources>
