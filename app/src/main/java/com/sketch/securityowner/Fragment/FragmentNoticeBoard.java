@@ -28,6 +28,10 @@ import com.sketch.securityowner.Constant.AppConfig;
 import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
+import com.sketch.securityowner.dialogs.LoaderDialog;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,12 +46,12 @@ import static com.sketch.securityowner.GlobalClass.VolleySingleton.timeOut;
 public class FragmentNoticeBoard extends Fragment {
 
     RecyclerView recyclerView;
-    ListView list;
     ArrayList<HashMap<String,String>> noticeList;
-    ProgressDialog pd;
-    File p_image;
     GlobalClass globalClass;
     AdapterSecurityGuard adapter;
+
+    LoaderDialog loaderDialog;
+
 
     @Nullable
     @Override
@@ -62,81 +66,65 @@ public class FragmentNoticeBoard extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         globalClass=(GlobalClass)getActivity().getApplicationContext();
         noticeList=new ArrayList<>();
-        pd = new ProgressDialog(getActivity());
-        pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        pd.setMessage(getResources().getString(R.string.loading));
-        String[] items = getResources().getStringArray(R.array.tab_A);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+
+        loaderDialog = new LoaderDialog(getActivity(), android.R.style.Theme_Translucent,
+                false, "");
+
+        recyclerView = view.findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-      //  BrowseNotice();
+        BrowseNotice();
+
+
     }
     private void BrowseNotice() {
-        // Tag used to cancel the request
         String tag_string_req = "req_login";
         noticeList.clear();
-        //  startAnim();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.notice, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "JOB RESPONSE Help : " + response.toString());
+                Log.d(TAG, "JOB RESPONSE notice : " + response.toString());
 
 
-                // stopAnim();
+                loaderDialog.dismiss();
 
                 Gson gson = new Gson();
 
                 try {
 
 
-                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
-                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
-                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+                    JSONObject jobj = new JSONObject(response);
+                    String status = jobj.optString("status");
+                    String message = jobj.optString("message");
 
 
                     if(status.equals("1")) {
 
+                        JSONArray jarray = jobj.getJSONArray("data");
 
+                        for (int i = 0; i < jarray.length(); i++) {
+                            JSONObject jobj1 = jarray.getJSONObject(i);
 
+                            String subject = jobj1.optString("subject");
+                            String content = jobj1.optString("content");
+                            String added_by = jobj1.optString("added_by");
 
-                        JsonArray jarray = jobj.getAsJsonArray("data");
-
-
-                        for (int i = 0; i < jarray.size(); i++) {
-                            JsonObject jobj1 = jarray.get(i).getAsJsonObject();
-                            //get the object
-
-
-                            String help_id = jobj1.get("help_id").toString().replaceAll("\"", "");
-                            String content = jobj1.get("content").toString().replaceAll("\"", "");
-                            String image = jobj1.get("image").toString().replaceAll("\"", "");
-                            String date = jobj1.get("date").toString().replaceAll("\"", "");
-                            String time = jobj1.get("time").toString().replaceAll("\"", "");
-                            String status1 = jobj1.get("status").toString().replaceAll("\"", "");
-
-
+                            JSONArray files = jobj1.getJSONArray("files");
 
                             HashMap<String, String> map_ser = new HashMap<>();
 
-
-                            map_ser.put("help_id", help_id);
+                            map_ser.put("subject", subject);
                             map_ser.put("content", content);
-                            map_ser.put("image", image);
-                            map_ser.put("date", date);
-                            map_ser.put("time", time);
-                            map_ser.put("status", status1);
-
-
+                            map_ser.put("added_by", added_by);
+                            map_ser.put("files", files.toString());
 
                             noticeList.add(map_ser);
-                            Log.d(TAG, "cityList: "+noticeList);
-
-
-
+                            Log.d(TAG, "notice: "+noticeList);
 
                         }
 
@@ -147,7 +135,6 @@ public class FragmentNoticeBoard extends Fragment {
                         TastyToast.makeText(getActivity(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                     }
-
 
 
                 } catch (Exception e) {
@@ -173,11 +160,8 @@ public class FragmentNoticeBoard extends Fragment {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<>();
 
-
-
                 params.put("complex_id",globalClass.getComplex_id());
                 Log.d(TAG, "getParams: "+params);
-
 
                 return params;
             }

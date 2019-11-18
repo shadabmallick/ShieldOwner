@@ -249,14 +249,33 @@
                     </LinearLayout>
 
 
-                    <TextView
-                        android:id="@+id/approved_by"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@android:color/black"
-                        android:gravity="center"
-                        android:layout_marginTop="5dp"
-                        />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/approved_by"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/black"
+                            android:layout_marginTop="5dp"
+                            android:layout_toStartOf="@+id/tv_gatepass"
+                            />
+
+
+                        <TextView
+                            android:id="@+id/tv_gatepass"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_alignParentEnd="true"
+                            android:textColor="@color/black"
+                            android:text="GP"
+                            android:gravity="center"
+                            android:background="@drawable/circle_yellow"
+                            />
+
+                    </RelativeLayout>
+
 
                 </LinearLayout>
 

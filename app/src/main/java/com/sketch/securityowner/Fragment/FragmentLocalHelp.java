@@ -33,6 +33,7 @@ import com.sketch.securityowner.Adapter.StaffAdapter;
 import com.sketch.securityowner.Constant.AppConfig;
 import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
+import com.sketch.securityowner.dialogs.LoaderDialog;
 import com.sketch.securityowner.model.GetDataAdapter;
 import com.sketch.securityowner.ui.RegistrationActivity;
 import com.sketch.securityowner.ui.SettingActivity;
@@ -50,13 +51,13 @@ import static com.sketch.securityowner.GlobalClass.VolleySingleton.timeOut;
 public class FragmentLocalHelp extends Fragment {
 
     RecyclerView recyclerView;
-    ListView list;
     GridLayoutManager gridLayoutManager;
-
     AdapterHelpDesk adapterHelpDesk;
     ArrayList<HashMap<String,String>> cityList;
-    ArrayList<String> array1,array2,array3,array4;
-    AVLoadingIndicatorView avLoadingIndicatorView;
+
+    LoaderDialog loaderDialog;
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -69,8 +70,10 @@ public class FragmentLocalHelp extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        loaderDialog = new LoaderDialog(getActivity(), android.R.style.Theme_Translucent,
+                false, "");
+
         recyclerView =  view.findViewById(R.id.recycler_view);
-        avLoadingIndicatorView = view. findViewById(R.id.avi);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
@@ -83,7 +86,7 @@ public class FragmentLocalHelp extends Fragment {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         cityList.clear();
-        startAnim();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.GET,
                 AppConfig.help_category_list, new Response.Listener<String>() {
@@ -93,7 +96,7 @@ public class FragmentLocalHelp extends Fragment {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
 
-               stopAnim();
+               loaderDialog.dismiss();
 
                 Gson gson = new Gson();
 
@@ -107,13 +110,10 @@ public class FragmentLocalHelp extends Fragment {
 
                     if(status.equals("1")) {
 
-
-
-
                         JsonArray jarray = jobj.getAsJsonArray("data");
 
-
                         for (int i = 0; i < jarray.size(); i++) {
+
                             JsonObject jobj1 = jarray.get(i).getAsJsonObject();
                             //get the object
 
@@ -131,9 +131,7 @@ public class FragmentLocalHelp extends Fragment {
 
 
                             cityList.add(map_ser);
-                            Log.d(TAG, "cityList: "+cityList);
-
-
+                          //  Log.d(TAG, "cityList: "+cityList);
 
 
                         }
@@ -179,13 +177,4 @@ public class FragmentLocalHelp extends Fragment {
 
     }
 
-    void startAnim(){
-        avLoadingIndicatorView.show();
-        // or avi.smoothToShow();
-    }
-
-    void stopAnim(){
-        avLoadingIndicatorView.hide();
-        // or avi.smoothToHide();
-    }
 }

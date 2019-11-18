@@ -25,9 +25,6 @@
             android:background="@android:color/white"
             android:paddingBottom="24dp">
 
-
-
-
             <TextView
                 android:id="@+id/user_profile_name"
                 android:layout_width="wrap_content"
@@ -37,11 +34,6 @@
                 android:text="Approve my cab in given date and time "
                 android:textSize="16sp"
                 />
-
-
-
-
-
 
             <LinearLayout
                 android:id="@+id/ll_hide"
@@ -56,7 +48,6 @@
                     android:weightSum="2"
                     android:layout_marginTop="20dp"
                     >
-
 
                     <EditText
                         android:id="@+id/edit_name"

@@ -56,6 +56,7 @@ import com.sketch.securityowner.GlobalClass.Config;
 import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
+import com.sketch.securityowner.dialogs.LoaderDialog;
 import com.sketch.securityowner.ui.SettingActivity;
 
 import org.json.JSONException;
@@ -86,8 +87,7 @@ import static com.sketch.securityowner.GlobalClass.VolleySingleton.timeOut;
 public class FragmentA extends Fragment {
     Dialog dialog;
     RecyclerView recyclerView;
-    ListView list;
-    ProgressDialog pd;
+
     File p_image;
     GlobalClass globalClass;
     AdapterSecurityGuard adapter;
@@ -96,18 +96,15 @@ public class FragmentA extends Fragment {
     ArrayList<HashMap<String,String>> blockList;
     private final int PICK_IMAGE_CAMERA_CAR = 5;
     private final int PICK_IMAGE_GALLERY = 1;
+
+    LoaderDialog loaderDialog;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(
                 R.layout.help_frag, container, false);
         return rootView;
-
-
-        /**The below code was when the ListView was used in place of RecyclerView. **/
-
-
-
 
     }
 
@@ -116,9 +113,10 @@ public class FragmentA extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         globalClass=(GlobalClass)getActivity().getApplicationContext();
         blockList=new ArrayList<>();
-        pd = new ProgressDialog(getActivity());
-        pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        pd.setMessage(getResources().getString(R.string.loading));
+
+        loaderDialog = new LoaderDialog(getActivity(), android.R.style.Theme_Translucent,
+                false, "");
+
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(getActivity(),
                     Manifest.permission.CAMERA)
@@ -199,7 +197,7 @@ public class FragmentA extends Fragment {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         blockList.clear();
-        //  startAnim();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.help_list, new Response.Listener<String>() {
@@ -209,7 +207,7 @@ public class FragmentA extends Fragment {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
 
-                // stopAnim();
+                loaderDialog.dismiss();
 
                 Gson gson = new Gson();
 
@@ -512,7 +510,7 @@ public class FragmentA extends Fragment {
     }
     public void AddHelp(final String content){
 
-        pd.show();
+        loaderDialog.show();
 
         String url = AppConfig.add_help;
         AsyncHttpClient cl = new AsyncHttpClient();
@@ -546,7 +544,7 @@ public class FragmentA extends Fragment {
         cl.post(url,params, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                pd.dismiss();
+                loaderDialog.dismiss();
                 if (response != null) {
                     Log.d(TAG, "user_profile_pic_update- " + response.toString());
                     try {
@@ -572,7 +570,7 @@ public class FragmentA extends Fragment {
 
                         }
 
-                        pd.dismiss();
+                        loaderDialog.dismiss();
 
                     } catch (JSONException e) {
                         e.printStackTrace();

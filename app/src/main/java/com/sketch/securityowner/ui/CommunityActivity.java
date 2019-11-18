@@ -52,6 +52,7 @@ import com.sketch.securityowner.R;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -334,7 +335,21 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
 
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                tv_time.setText( ""+selectedHour + ":" + selectedMinute);
+                String time1 = selectedHour + ":" + selectedMinute;
+                SimpleDateFormat  format1 = new SimpleDateFormat("HH:mm",
+                        Locale.ENGLISH);
+                SimpleDateFormat  format2 = new SimpleDateFormat("HH:mm:ss",
+                        Locale.ENGLISH);
+
+                try {
+
+                    Date date = format1.parse(time1);
+
+                    tv_time.setText(format2.format(date));
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         }, mHour, mMinute,true);
 
@@ -378,9 +393,7 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
 
                 new DatePickerDialog(CommunityActivity.this, R.style.datepicker,datePickerListener, mYear, mMonth, mDay).show();
 
-
             }
-
 
         });
         tv_time.setOnClickListener(new View.OnClickListener() {

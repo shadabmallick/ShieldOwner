@@ -622,92 +622,21 @@
 
     </RelativeLayout>
 
+
     <LinearLayout
         android:id="@+id/ll_visitor_option"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/grey_curve"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:animateLayoutChanges="true"
         android:layout_above="@+id/button_layout"
-        android:layout_marginBottom="5dp">
+        android:orientation="vertical"
+        >
 
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:weightSum="5">
-
-
-            <ImageView
-                android:id="@+id/img_cab"
-                android:layout_width="60dp"
-                android:layout_height="50dp"
-                android:src="@mipmap/car_new"
-                android:paddingRight="5dp"
-                android:layout_margin="5dp"
-                android:background="@android:color/white"
-                android:paddingLeft="5dp"
-                android:paddingBottom="10dp"
-
-                android:layout_weight="1"/>
-            <ImageView
-                android:id="@+id/img_delivery"
-                android:layout_width="60dp"
-                android:layout_height="50dp"
-                android:padding="5dp"
-                android:background="@android:color/white"
-                android:layout_margin="5dp"
-                android:src="@mipmap/delivery"
-                android:layout_weight="1"/>
-            <ImageView
-                android:id="@+id/img_guest"
-                android:layout_width="60dp"
-                android:layout_height="50dp"
-                android:src="@mipmap/guest"
-                android:padding="5dp"
-                android:background="@android:color/white"
-                android:layout_margin="5dp"
-                android:layout_weight="1"/>
-
-            <ImageView
-                android:id="@+id/img_help"
-                android:layout_width="60dp"
-                android:layout_height="50dp"
-                android:layout_margin="5dp"
-                android:background="@android:color/white"
-                android:src="@mipmap/visiting_help"
-                android:padding="5dp"
-                android:layout_weight="1"/>
-
-            <LinearLayout
-                android:id="@+id/ll_bell"
-                android:layout_width="60dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/curve_alert"
-                android:gravity="center">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/bell"
-                    />
-
-            </LinearLayout>
-
-
-
-        </LinearLayout>
+        <include
+            layout="@layout/layout_add_visitor"/>
 
     </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/button_layout"
@@ -722,7 +651,7 @@
             android:id="@+id/button_E"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:gravity="center"
             android:orientation="vertical"
             android:layout_gravity="center_vertical"
@@ -748,7 +677,7 @@
             android:id="@+id/button_E1"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:gravity="center"
             android:orientation="vertical"
             android:layout_gravity="center_vertical"
@@ -774,7 +703,7 @@
             android:id="@+id/button_E2"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:gravity="center"
             >
             <RelativeLayout
@@ -801,7 +730,7 @@
             android:id="@+id/button_E3"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:gravity="center"
             android:orientation="vertical"
             android:layout_gravity="center_vertical"
@@ -826,7 +755,7 @@
             android:id="@+id/button_E4"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:gravity="center"
             android:orientation="vertical"
             android:layout_gravity="center_vertical"

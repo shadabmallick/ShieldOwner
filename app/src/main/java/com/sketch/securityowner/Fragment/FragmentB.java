@@ -30,6 +30,7 @@ import com.sketch.securityowner.Constant.AppConfig;
 import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
+import com.sketch.securityowner.dialogs.LoaderDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,11 +42,13 @@ import static com.sketch.securityowner.GlobalClass.VolleySingleton.nuOfRetry;
 import static com.sketch.securityowner.GlobalClass.VolleySingleton.timeOut;
 
 public class FragmentB extends Fragment {
-    ListView list;
+
     GlobalClass globalClass;
     AdapterSecurityList adapter;
     ArrayList<HashMap<String,String>> blockList;
     RecyclerView recyclerView;
+
+    LoaderDialog loaderDialog;
 
     @Nullable
     @Override
@@ -53,45 +56,6 @@ public class FragmentB extends Fragment {
         View rootView = inflater.inflate(
                 R.layout.fragment_guard, container, false);
         return rootView;
-
-        /**The below code was when the ListView was used in place of RecyclerView. **/
-
-        /*View view = inflater.inflate(R.layout.fragment_list, container, false);
-
-        list = (ListView) view.findViewById(R.id.list);
-        ArrayList stringList= new ArrayList();
-
-        stringList.add("Item 2A");
-        stringList.add("Item 2B");
-        stringList.add("Item 2C");
-        stringList.add("Item 2D");
-        stringList.add("Item 2E");
-        stringList.add("Item 2F");
-        stringList.add("Item 2G");
-        stringList.add("Item 2H");
-        stringList.add("Item 2I");
-        stringList.add("Item 2J");
-        stringList.add("Item 2K");
-        stringList.add("Item 2L");
-        stringList.add("Item 2M");
-        stringList.add("Item 2N");
-        stringList.add("Item 2O");
-        stringList.add("Item 2P");
-        stringList.add("Item 2Q");
-        stringList.add("Item 2R");
-        stringList.add("Item 2S");
-        stringList.add("Item 2T");
-        stringList.add("Item 2U");
-        stringList.add("Item 2V");
-        stringList.add("Item 2W");
-        stringList.add("Item 2X");
-        stringList.add("Item 2Y");
-        stringList.add("Item 2Z");
-
-        CustomAdapter adapter = new CustomAdapter(stringList,getActivity());
-        list.setAdapter(adapter);
-
-        return view;*/
     }
 
     @Override
@@ -99,11 +63,15 @@ public class FragmentB extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         globalClass=(GlobalClass)getActivity().getApplicationContext();
         blockList=new ArrayList<>();
-       // String[] items = getResources().getStringArray(R.array.tab_B);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        recyclerView = view.findViewById(R.id.recycler_view);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+
+        loaderDialog = new LoaderDialog(getActivity(), android.R.style.Theme_Translucent,
+                false, "");
+
+
         BrowseBlock();
     }
 
@@ -111,7 +79,8 @@ public class FragmentB extends Fragment {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         blockList.clear();
-        //  startAnim();
+
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.security_list, new Response.Listener<String>() {
@@ -121,7 +90,7 @@ public class FragmentB extends Fragment {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
 
-                // stopAnim();
+                loaderDialog.dismiss();
 
                 Gson gson = new Gson();
 

@@ -49,10 +49,12 @@ import com.sketch.securityowner.Constant.AppConfig;
 import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
+import com.sketch.securityowner.dialogs.LoaderDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -77,17 +79,11 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
     RadioButton radio1,radio2;
     EditText edit_phone_cab,edit_vehicle_no,edit_name_cab,edit_car_no,edit_parking_no,edit_name,edit_phone,edit_mail,edit_family_name,edit_family_phone;
     LinearLayout ll_bell,ll_alram,ll_hide,ll_submit;
-    RecyclerView.LayoutManager RecyclerViewLayoutManager;
-    RecyclerView.LayoutManager RecyclerViewLayoutManager1;
-    RecyclerView.LayoutManager RecyclerViewLayoutManager2;
-    RecyclerView.LayoutManager RecyclerViewLayoutManager3;
-    LinearLayoutManager HorizontalLayout ;
-    LinearLayoutManager HorizontalLayout1 ;
-    LinearLayoutManager HorizontalLayout2 ;
+
     LinearLayoutManager HorizontalLayout3 ;
     LinearLayoutManager HorizontalLayout4 ;
     Calendar myCalendar = Calendar.getInstance();
-    Dialog dialog;
+
     ImageView profile_image,img_cab,img_delivery,img_guest,img_help;
     RecyclerView company_name_recycle,delivery_recycle;
 
@@ -105,11 +101,16 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
     ArrayList<HashMap<String,String>> productDetaiils_sub;
     ArrayList<HashMap<String,String>> staffList;
     private int mYear, mMonth, mDay, mHour, mMinute,mSecond;
-    ProgressDialog pd;
+
+    LoaderDialog loaderDialog;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_security);
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         ll_activty_class =  findViewById(R.id.button_E);
         ll_comunity =  findViewById(R.id.button_E3);
@@ -127,9 +128,10 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
         car1 =  findViewById(R.id.car1);
         globalClass = (GlobalClass) getApplicationContext();
 
-        pd = new ProgressDialog(SecurityScreen.this);
-        pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        pd.setMessage(getResources().getString(R.string.loading));
+        loaderDialog = new LoaderDialog(this, android.R.style.Theme_Translucent,
+                false, "");
+
+
         productDetaiils=new ArrayList<>();
         staffList=new ArrayList<>();
         productDetaiils_sub=new ArrayList<>();
@@ -350,7 +352,23 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
 
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                tv_time.setText( ""+selectedHour + ":" + selectedMinute);
+
+
+                String time1 = selectedHour + ":" + selectedMinute;
+                SimpleDateFormat  format1 = new SimpleDateFormat("HH:mm",
+                        Locale.ENGLISH);
+                SimpleDateFormat  format2 = new SimpleDateFormat("HH:mm:ss",
+                        Locale.ENGLISH);
+
+                try {
+
+                    Date date = format1.parse(time1);
+
+                    tv_time.setText(format2.format(date));
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
         }, mHour, mMinute,true);
 
@@ -660,7 +678,7 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         HelpList.clear();
-        pd.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.add_visitor, new Response.Listener<String>() {
@@ -669,7 +687,7 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-                pd.dismiss();
+                loaderDialog.dismiss();
                // dialog.dismiss();
 
                 Gson gson = new Gson();
@@ -712,7 +730,7 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
                 TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                pd.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
             @Override
@@ -754,7 +772,7 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         HelpList.clear();
-        pd.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.add_visitor, new Response.Listener<String>() {
@@ -763,7 +781,7 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-                pd.dismiss();
+                loaderDialog.dismiss();
                 //  dialog.dismiss();
 
                 Gson gson = new Gson();
@@ -808,7 +826,7 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
                 TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                pd.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
             @Override
@@ -851,7 +869,7 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         HelpList.clear();
-        pd.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.add_visitor, new Response.Listener<String>() {
@@ -860,7 +878,7 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-                pd.dismiss();
+                loaderDialog.dismiss();
                // dialog.dismiss();
 
                 Gson gson = new Gson();
@@ -903,7 +921,7 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
                 TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                pd.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
             @Override
@@ -945,7 +963,7 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         HelpList.clear();
-        pd.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.GET,
                 AppConfig.add_visitor, new Response.Listener<String>() {
@@ -954,7 +972,7 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-                pd.dismiss();
+                loaderDialog.dismiss();
                // dialog.dismiss();
 
                 Gson gson = new Gson();
@@ -997,7 +1015,7 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
                 TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                pd.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
             @Override
@@ -1039,7 +1057,7 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
         String tag_string_req = "req_login";
         HelpList.clear();
         // startAnim();
-        pd.show();
+        loaderDialog.show();
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.add_panic, new Response.Listener<String>() {
 
@@ -1047,7 +1065,7 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-                pd.dismiss();
+                loaderDialog.dismiss();
 
 
                 Gson gson = new Gson();
@@ -1085,7 +1103,7 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
                 TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                pd.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
 
@@ -1240,7 +1258,7 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
         String tag_string_req = "req_login";
         Category.clear();
 
-        pd.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.company_list, new Response.Listener<String>() {
@@ -1249,7 +1267,7 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-                pd.dismiss();
+                loaderDialog.dismiss();
 
 
                 Gson gson = new Gson();
@@ -1316,7 +1334,7 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
                 TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                pd.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
 
@@ -1346,7 +1364,7 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
         String tag_string_req = "req_login";
         DeliveryList.clear();
 
-        pd.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.company_list, new Response.Listener<String>() {
@@ -1355,7 +1373,7 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-                pd.dismiss();
+                loaderDialog.dismiss();
 
 
                 Gson gson = new Gson();
@@ -1422,7 +1440,7 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
                 TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                pd.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
 
@@ -1533,7 +1551,7 @@ public class SecurityScreen extends AppCompatActivity implements categoryAdapter
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
                 TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                pd.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
 

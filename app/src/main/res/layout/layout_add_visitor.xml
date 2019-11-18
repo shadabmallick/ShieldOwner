@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/curve_light_white"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:weightSum="5">
+
+            <RelativeLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/circle_blue"
+                android:padding="8dp"
+                android:layout_marginEnd="5dp"
+                >
+
+                <ImageView
+                    android:id="@+id/img_cab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/car_new"
+                    android:tint="@color/white"
+                    android:layout_centerInParent="true"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/circle_blue"
+                android:padding="8dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
+                >
+                <ImageView
+                    android:id="@+id/img_delivery"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tint="@color/white"
+                    android:src="@mipmap/delivery"
+                    android:layout_centerInParent="true"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/circle_blue"
+                android:padding="8dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
+                >
+                <ImageView
+                    android:id="@+id/img_guest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/guest"
+                    android:tint="@color/white"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/circle_blue"
+                android:padding="8dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
+                >
+
+                <ImageView
+                    android:id="@+id/img_help"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:tint="@color/white"
+                    android:src="@mipmap/visiting_help"
+                  />
+
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:id="@+id/ll_bell"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/circle_red"
+                android:gravity="center"
+                android:padding="8dp"
+                android:layout_marginStart="5dp"
+                >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/bell"
+                    />
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="16dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@mipmap/down_arrow"
+        android:scaleType="fitXY"
+        android:contentDescription="@string/app_name"
+        />
+
+</LinearLayout>

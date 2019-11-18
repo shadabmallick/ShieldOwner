@@ -30,6 +30,7 @@ import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.GlobalClass.Shared_Preference;
 import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
+import com.sketch.securityowner.dialogs.LoaderDialog;
 import com.sketch.securityowner.model.FloorOwner;
 import com.sketch.securityowner.model.HeaderItem;
 import com.sketch.securityowner.model.ListItem;
@@ -60,10 +61,9 @@ public class OwnerList extends AppCompatActivity implements
     @BindView(R.id.recycler_view)
     RecyclerView recycler_view;
 
-
+    LoaderDialog loaderDialog;
     GlobalClass globalClass;
     Shared_Preference prefManager;
-    ProgressDialog progressDialog;
 
     ArrayList<FloorOwner> listFloorOwner;
     ArrayList<ListItem> mListItem;
@@ -87,12 +87,8 @@ public class OwnerList extends AppCompatActivity implements
         globalClass = (GlobalClass) getApplicationContext();
         prefManager = new Shared_Preference(this);
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setMessage("Loading...");
-
-
+        loaderDialog = new LoaderDialog(this, android.R.style.Theme_Translucent,
+                false, "");
 
         recycler_view.setLayoutManager(new LinearLayoutManager(this));
 
@@ -105,8 +101,6 @@ public class OwnerList extends AppCompatActivity implements
 
             getFlatOwnerList(block);
         }
-
-
 
     }
 
@@ -123,7 +117,7 @@ public class OwnerList extends AppCompatActivity implements
 
 
     public void getFlatOwnerList(String block){
-        progressDialog.show();
+        loaderDialog.show();
 
         listFloorOwner = new ArrayList<>();
 
@@ -190,7 +184,7 @@ public class OwnerList extends AppCompatActivity implements
 
                         }
 
-                        progressDialog.dismiss();
+                        loaderDialog.dismiss();
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -221,41 +215,6 @@ public class OwnerList extends AppCompatActivity implements
 
 
     private void setOwnerData(){
-
-     /*   ArrayList<HashMap<String, ArrayList<Owner>>> listMain = new ArrayList<>();
-        for (int i = 0; i < listFloorOwner.size(); i++){
-
-            HashMap<String, ArrayList<Owner>> map = new HashMap<>();
-
-            ArrayList<Owner> arrayList2 = listFloorOwner.get(i).getOwnerArrayList();
-
-            if (arrayList2.size() > 0){
-                map.put(listFloorOwner.get(i).getFloor(), arrayList2);
-                listMain.add(map);
-            }
-
-        }
-
-        mListItem = new ArrayList<>();
-        for (HashMap<String, ArrayList<Owner>> map1 : listMain){
-
-            for (String string : map1.keySet()) {
-
-                HeaderItem header = new HeaderItem();
-                header.setHeader(string);
-                mListItem.add(header);
-
-                for (Owner owner : map1.get(string)) {
-                    OwnerItem item = new OwnerItem();
-                    item.setOwner(owner);
-                    mListItem.add(item);
-                }
-
-            }
-
-        }*/
-
-
 
         mListItem = new ArrayList<>();
         for (FloorOwner floorOwner : listFloorOwner){

@@ -72,6 +72,7 @@ import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.GlobalClass.Shared_Preference;
 import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
+import com.sketch.securityowner.dialogs.LoaderDialog;
 import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -109,7 +110,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
     RecyclerView.LayoutManager RecyclerViewLayoutManager1;
     RecyclerView.LayoutManager RecyclerViewLayoutManager2;
     RecyclerView.LayoutManager RecyclerViewLayoutManager3;
-    RecyclerView.LayoutManager RecyclerViewLayoutManager4;
+
     FamilyAdapter RecyclerViewHorizontalAdapter;
     ArrayAdapter<String> dataAdapter1;
     Spinner spinner_help;
@@ -133,7 +134,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
     Toolbar toolbar;
     TextView tv_time,date_picker,tv_animal,tv_medical,tv_thief,tv_threat,tv_lift,tv_id,tv_details_company,close,tv_details,app_setting,user_name,user_mobile,user_email;
     ImageView profile_image_edit,image_member;
-    ProgressDialog pd;
+
     EditText edit_car_no,edit_parking_no,edit_name,edit_phone,edit_mail,edit_family_name,edit_family_phone;
     GlobalClass globalClass;
     Shared_Preference preference;
@@ -160,6 +161,8 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
     private  boolean button1IsVisible = true;
 
 
+    LoaderDialog loaderDialog;
+
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
 
@@ -167,7 +170,10 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setting_activity);
-       // browseJob();
+
+        loaderDialog = new LoaderDialog(this, android.R.style.Theme_Translucent,
+                false, "");
+
         initToolBar();
          currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
        currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
@@ -217,9 +223,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         globalClass = (GlobalClass) getApplicationContext();
         preference = new Shared_Preference(SettingActivity.this);
         preference.loadPrefrence();
-        pd = new ProgressDialog(SettingActivity.this);
-        pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        pd.setMessage(getResources().getString(R.string.loading));
+
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         scroll_details =  findViewById(R.id.scroll_details);
@@ -1223,6 +1227,9 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             };
 
 
+
+
+    String send_time;
     private void timePicker2(){
         // Get Current Time
         final Calendar c = Calendar.getInstance();
@@ -1242,20 +1249,23 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                 String time1 = selectedHour + ":" + selectedMinute;
                 SimpleDateFormat  format1 = new SimpleDateFormat("HH:mm",
                         Locale.ENGLISH);
-                SimpleDateFormat  format2 = new SimpleDateFormat("hh:mm:ss a",
+                SimpleDateFormat  format2 = new SimpleDateFormat("HH:mm:ss",
                         Locale.ENGLISH);
 
+                SimpleDateFormat  format3 = new SimpleDateFormat("hh:mm a",
+                        Locale.ENGLISH);
                 try {
 
-                    Date date = format1.parse(time1);
+                    Date date1 = format1.parse(time1);
+                    send_time = format2.format(date1);
 
-                    tv_time.setText(format2.format(date));
+
+                    Date date = format1.parse(time1);
+                    tv_time.setText(format3.format(date));
 
                 }catch (Exception e){
                     e.printStackTrace();
                 }
-
-              //  tv_time.setText( ""+selectedHour + ":" + selectedMinute);
 
             }
         }, mHour, mMinute,true);
@@ -1325,13 +1335,11 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
 
         LinearLayout ll_submit=dialog.findViewById(R.id.ll_submit);
 
-        // if button is clicked, close the custom dialog
         ll_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int selectedId = radioSex.getCheckedRadioButtonId();
 
-                // find the radiobutton by returned id
                 radio1 = dialog.findViewById(selectedId);
 
                 String radio_value=radio1.getText().toString();
@@ -1566,37 +1574,29 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         HelpList.clear();
-        pd.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-
-
                 AppConfig.add_visitor, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-                pd.dismiss();
-               // dialog.dismiss();
+                loaderDialog.dismiss();
+
 
                 Gson gson = new Gson();
 
                 try {
 
-
                     JsonObject jobj = gson.fromJson(response, JsonObject.class);
                     String status = jobj.get("status").getAsString().replaceAll("\"", "");
                     String message = jobj.get("message").getAsString().replaceAll("\"", "");
 
-
                     if(status.equals("1")) {
 
                         TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                        //array.add("Select Location");
-                        //  JsonArray jarray = jobj.getAsJsonArray("data");
-                        //  Log.d("jarray", "" + jarray.toString());
 
                     }
 
@@ -1605,13 +1605,9 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
 
                     }
 
-
-
                 } catch (Exception e) {
-                    TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                 }
-
 
             }
         }, new Response.ErrorListener() {
@@ -1621,7 +1617,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
                 TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                pd.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
             @Override
@@ -1636,9 +1632,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                 params.put("complex_id", globalClass.getComplex_id());
                 params.put("visitor_name",edit_name_cab.getText().toString() );
                 params.put("visitor_mobile",edit_phone_cab.getText().toString() );
-            //    params.put("vehicle_no",edit_vehicle_no.getText().toString() );
                 params.put("frequency",radio_value);
-
                 params.put("visiting_help_cat",help_id);
                 params.put("profileImage","");
                 params.put("user_id",globalClass.getId());
@@ -1657,13 +1651,12 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                         .setRetryPolicy(
                                 new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
 
-
     }
     private void AddDelivery(final String type,final String radio_value) {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         HelpList.clear();
-        pd.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.add_visitor, new Response.Listener<String>() {
@@ -1672,8 +1665,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-                pd.dismiss();
-              //  dialog.dismiss();
+                loaderDialog.dismiss();
 
                 Gson gson = new Gson();
 
@@ -1716,8 +1708,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                pd.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
             @Override
@@ -1726,7 +1717,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                 Map<String, String> params = new HashMap<>();
 
                 params.put("type", type);
-                params.put("time", tv_time.getText().toString());
+                params.put("time", send_time);
                 params.put("date", date_web);
                 params.put("flat_no", globalClass.getFlat_no());
                 params.put("complex_id", globalClass.getComplex_id());
@@ -1759,7 +1750,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         HelpList.clear();
-        pd.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.add_visitor, new Response.Listener<String>() {
@@ -1768,8 +1759,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-                pd.dismiss();
-              //  dialog.dismiss();
+                loaderDialog.dismiss();
 
                 Gson gson = new Gson();
 
@@ -1812,8 +1802,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                pd.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
             @Override
@@ -1853,7 +1842,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
     }
     public void AddStaff(final String type,final String name,final String phone){
 
-        pd.show();
+        loaderDialog.show();
 
         String url = AppConfig.add_visitor;
         AsyncHttpClient cl = new AsyncHttpClient();
@@ -1901,8 +1890,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                 if (response != null) {
                     Log.d(TAG, "user_profile_pic_update- " + response.toString());
                     try {
-                        pd.dismiss();
-                      //  dialog.dismiss();
+                        loaderDialog.dismiss();
 
                         int status = response.getInt("status");
                         String message = response.getString("message");
@@ -1911,8 +1899,6 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                             browseJob();
                             // Log.d(TAG, "name: "+name)
                             TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-
 
                         } else {
                             TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
@@ -1939,7 +1925,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         HelpList.clear();
-        pd.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.add_visitor, new Response.Listener<String>() {
@@ -1948,8 +1934,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-                pd.dismiss();
-              //  dialog.dismiss();
+                loaderDialog.dismiss();
 
                 Gson gson = new Gson();
 
@@ -1992,8 +1977,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                pd.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
             @Override
@@ -2034,8 +2018,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
     private void FireAlarm(final String category) {
         String tag_string_req = "req_login";
         HelpList.clear();
-       // startAnim();
-       pd.show();
+        loaderDialog.show();
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.add_visitor, new Response.Listener<String>() {
 
@@ -2043,7 +2026,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-              pd.dismiss();
+                loaderDialog.dismiss();
 
 
                 Gson gson = new Gson();
@@ -2082,8 +2065,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                pd.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
 
@@ -2229,7 +2211,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
        dialog.show();
 
    }
-   public void CarDialog(){
+    public void CarDialog(){
         dialog = new Dialog(this);
        dialog.setContentView(R.layout.car_info);
        ImageView img_edit=dialog.findViewById(R.id.edit_car);
@@ -2293,14 +2275,14 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
 
     }
 
-public void Logout(){
-    pd.show();
+    public void Logout(){
+        loaderDialog.show();
 
     StringRequest strReq = new StringRequest(Request.Method.POST,
             AppConfig.logout, response -> {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-                pd.dismiss();
+        loaderDialog.dismiss();
 
 
                 Gson gson = new Gson();
@@ -2337,8 +2319,7 @@ public void Logout(){
 
             }, error -> {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                pd.dismiss();
+                loaderDialog.dismiss();
             }) {
 
         @Override
@@ -2362,7 +2343,7 @@ public void Logout(){
 }
     public void updateProfile(final String name,final String phone,final String email){
 
-         pd.show();
+        loaderDialog.show();
 
         String url = AppConfig.profile_update;
         AsyncHttpClient cl = new AsyncHttpClient();
@@ -2400,7 +2381,7 @@ public void Logout(){
                 if (response != null) {
                     Log.d(TAG, "user_profile_pic_update- " + response.toString());
                     try {
-                        pd.dismiss();
+                        loaderDialog.dismiss();
                         dialog.dismiss();
 
                         int status = response.getInt("status");
@@ -2458,7 +2439,7 @@ public void Logout(){
 
     public void AddFamily(final String name,final String phone){
 
-          pd.show();
+        loaderDialog.show();
 
         String url = AppConfig.add_family_member;
         AsyncHttpClient cl = new AsyncHttpClient();
@@ -2494,7 +2475,7 @@ public void Logout(){
         cl.post(url,params, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    pd.dismiss();
+                loaderDialog.dismiss();
                 if (response != null) {
                     Log.d(TAG, "user_profile_pic_update- " + response.toString());
                     try {
@@ -2519,7 +2500,7 @@ public void Logout(){
 
                         }
 
-                        pd.dismiss();
+                        loaderDialog.dismiss();
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -2528,7 +2509,6 @@ public void Logout(){
                 }
 
 
-                // pd.dismiss();
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -2543,7 +2523,7 @@ public void Logout(){
 
     public void AddCar(final String number,final String parking){
 
-        pd.show();
+        loaderDialog.show();
 
         String url = AppConfig.add_car;
         AsyncHttpClient cl = new AsyncHttpClient();
@@ -2568,7 +2548,7 @@ public void Logout(){
         cl.post(url,params, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                pd.dismiss();
+                loaderDialog.dismiss();
                 if (response != null) {
                     Log.d(TAG, "user_profile_pic_update- " + response.toString());
                     try {
@@ -2593,7 +2573,7 @@ public void Logout(){
 
                         }
 
-                        pd.dismiss();
+                        loaderDialog.dismiss();
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -2601,8 +2581,6 @@ public void Logout(){
 
                 }
 
-
-                // pd.dismiss();
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
@@ -2619,7 +2597,7 @@ public void Logout(){
         // Tag used to cancel the request
         String tag_string_req = "req_login";
 
-       pd.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.profile_details, new Response.Listener<String>() {
@@ -2628,7 +2606,7 @@ public void Logout(){
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-                pd.dismiss();
+                loaderDialog.dismiss();
 
 
                 Gson gson = new Gson();
@@ -2783,8 +2761,7 @@ public void Logout(){
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                pd.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
 
@@ -2814,7 +2791,7 @@ public void Logout(){
         String tag_string_req = "req_login";
         Category.clear();
 
-       pd.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.company_list, new Response.Listener<String>() {
@@ -2823,7 +2800,7 @@ public void Logout(){
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-                pd.dismiss();
+                loaderDialog.dismiss();
 
 
                 Gson gson = new Gson();
@@ -2889,8 +2866,7 @@ public void Logout(){
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                pd.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
 
@@ -2919,7 +2895,7 @@ public void Logout(){
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         DeliveryList.clear();
-       pd.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.company_list, new Response.Listener<String>() {
@@ -2928,7 +2904,7 @@ public void Logout(){
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-                pd.dismiss();
+                loaderDialog.dismiss();
 
 
                 Gson gson = new Gson();
@@ -2972,9 +2948,9 @@ public void Logout(){
                         delivery_recycle.setAdapter(CategoryAdapter);
 
 
-                    }
-                    else {
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                    } else {
+                        TastyToast.makeText(getApplicationContext(),
+                                message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                     }
 
@@ -2984,7 +2960,6 @@ public void Logout(){
 
                 }
 
-
             }
         }, new Response.ErrorListener() {
 
@@ -2993,7 +2968,7 @@ public void Logout(){
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
                 TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                pd.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
 
@@ -3023,7 +2998,7 @@ public void Logout(){
         String tag_string_req = "req_login";
 
 
-       pd.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.add_visitor, new Response.Listener<String>() {
@@ -3032,7 +3007,7 @@ public void Logout(){
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-                pd.dismiss();
+                loaderDialog.dismiss();
 
 
                 Gson gson = new Gson();
@@ -3077,7 +3052,7 @@ public void Logout(){
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
                 TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                pd.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
 
@@ -3194,8 +3169,7 @@ public void Logout(){
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                pd.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
 
@@ -3232,33 +3206,5 @@ public void Logout(){
 
     }
 
-
-/*
-    private void displayFirebaseRegId() {
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w("TAG", "getInstanceId failed", task.getException());
-                            return;
-                        }
-
-                        // Get new Instance ID token
-                        String token = task.getResult().getToken();
-
-                        //   globalClass.setFcm_token(token);
-
-                        // Log and toast
-                        Log.d(TAG, "token = "+token);
-
-                        user_email.setText(token);
-
-                        //  threadFor();
-                    }
-                });
-
-    }
-*/
 
 }

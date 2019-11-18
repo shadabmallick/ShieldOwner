@@ -31,6 +31,7 @@ import com.sketch.securityowner.GlobalClass.Global;
 import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
+import com.sketch.securityowner.dialogs.LoaderDialog;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
@@ -48,8 +49,10 @@ public class FragmentResidence extends Fragment {
     ListView list;
     ArrayList<HashMap<String,String>> blockList;
     AdapterResidence adapter;
-    AVLoadingIndicatorView avLoadingIndicatorView;
     GlobalClass globalClass;
+
+    LoaderDialog loaderDialog;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -61,12 +64,14 @@ public class FragmentResidence extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        loaderDialog = new LoaderDialog(getActivity(), android.R.style.Theme_Translucent,
+                false, "");
+
         globalClass=(GlobalClass)getActivity().getApplicationContext();
-        String[] items = getResources().getStringArray(R.array.tab_A);
         blockList=new ArrayList<>();
 
         recyclerView = view.findViewById(R.id.recycler_view);
-        avLoadingIndicatorView =  view.findViewById(R.id.avi);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -78,7 +83,7 @@ public class FragmentResidence extends Fragment {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         blockList.clear();
-      //  startAnim();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.block_list, new Response.Listener<String>() {
@@ -88,7 +93,7 @@ public class FragmentResidence extends Fragment {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
 
-               // stopAnim();
+                loaderDialog.dismiss();
 
                 Gson gson = new Gson();
 
@@ -102,22 +107,15 @@ public class FragmentResidence extends Fragment {
 
                     if(status.equals("1")) {
 
-
-
-
                         JsonArray jarray = jobj.getAsJsonArray("data");
 
 
                         for (int i = 0; i < jarray.size(); i++) {
                             JsonObject jobj1 = jarray.get(i).getAsJsonObject();
-                            //get the object
-
 
                             String block = jobj1.get("block").toString().replaceAll("\"", "");
 
-
                             HashMap<String, String> map_ser = new HashMap<>();
-
 
                             map_ser.put("block", block);
 
@@ -182,13 +180,5 @@ public class FragmentResidence extends Fragment {
 
 
     }
-    void startAnim(){
-        avLoadingIndicatorView.show();
-        // or avi.smoothToShow();
-    }
 
-    void stopAnim(){
-        avLoadingIndicatorView.hide();
-        // or avi.smoothToHide();
-    }
 }

@@ -5,17 +5,19 @@
     android:layout_height="wrap_content">
 
 
-    <LinearLayout   android:id="@+id/button_layout"
+    <LinearLayout
+        android:id="@+id/button_layout"
         android:orientation="horizontal"
         android:weightSum="5"
         android:layout_alignParentBottom="true"
         android:layout_width="fill_parent"
         android:layout_height="70dip">
 
-        <LinearLayout   android:id="@+id/button_E"
+        <LinearLayout
+            android:id="@+id/button_E"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:gravity="center"
             android:orientation="vertical"
             android:layout_gravity="center_vertical"
@@ -36,16 +38,14 @@
                 android:text="@string/activity"
                 android:textColor="@color/blue"
 
-
-
-
                 />
         </LinearLayout>
 
-        <LinearLayout   android:id="@+id/button_E1"
+        <LinearLayout
+            android:id="@+id/button_E1"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:gravity="center"
             android:orientation="vertical"
             android:layout_gravity="center_vertical"
@@ -66,9 +66,6 @@
                 android:text="@string/help"
                 android:textColor="@color/blue"
 
-
-
-
                 />
         </LinearLayout>
 
@@ -76,10 +73,8 @@
             android:id="@+id/button_E2"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:gravity="center"
-
-
             >
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -102,10 +97,11 @@
 
         </LinearLayout>
 
-        <LinearLayout   android:id="@+id/button_E3"
+        <LinearLayout
+            android:id="@+id/button_E3"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:gravity="center"
             android:orientation="vertical"
             android:layout_gravity="center_vertical"
@@ -127,16 +123,14 @@
                 android:textColor="@color/blue"
                 android:textSize="12dp"
 
-
-
-
                 />
         </LinearLayout>
 
-        <LinearLayout   android:id="@+id/button_E4"
+        <LinearLayout
+            android:id="@+id/button_E4"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:gravity="center"
             android:orientation="vertical"
             android:layout_gravity="center_vertical"
@@ -157,9 +151,6 @@
                 android:text="@string/help"
                 android:textSize="12dp"
                 android:textColor="@color/blue"
-
-
-
 
                 />
         </LinearLayout>

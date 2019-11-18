@@ -21,6 +21,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -66,6 +68,7 @@ import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.GlobalClass.Shared_Preference;
 import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
+import com.sketch.securityowner.dialogs.LoaderDialog;
 import com.sketch.securityowner.model.ActivityChild;
 import com.sketch.securityowner.model.ActivityModel;
 import com.sketch.securityowner.model.ChildItem;
@@ -121,21 +124,18 @@ public class Activity_activity extends AppCompatActivity implements
     SimpleDateFormat df_show = new SimpleDateFormat("EEE, dd-MMM-yyyy", Locale.ENGLISH);
     SimpleDateFormat df_send = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
     RecyclerView delivery_recycle,company_name_recycle;
-    ProgressDialog progressDialog;
     GlobalClass globalClass;
     ArrayList<String> array1;
     Shared_Preference prefManager;
-    RelativeLayout rel_profile,rel_middle_icon;
-    EditText tv_others,edit_car_no,edit_parking_no,edit_name,edit_phone,edit_mail,
-           edit_name_cab,edit_phone_cab, edit_vehicle_no;
+    RelativeLayout rel_middle_icon;
+    EditText tv_others, edit_name_cab,edit_phone_cab, edit_vehicle_no;
     String type_in_out, response_value = "", approved_by = "";
-    AVLoadingIndicatorView avLoadingIndicatorView;
     LinearLayout ll_alram,ll_submit,ll_bell,ll_hide,button_activity,
             car1,rel_upcoming_visitor,rel_all_visitor,ll_community;
     RelativeLayout rl_profile;
     View view_all_visitor,view_upcoming_visitor;
     TextView  tv_animal,tv_medical,tv_thief,tv_threat,tv_lift,
-            tv_time,date_picker,tv_upcoming_visitor,tv_all_visitor;
+            tv_time,date_picker,tv_upcoming_visitor,tv_all_visitor,tv_flat_name;
     Button btn_in;
     Dialog dialog;
     String category,help_id,date_to_push;
@@ -143,11 +143,12 @@ public class Activity_activity extends AppCompatActivity implements
     Spinner spinner_help;
     CardView animal,fire,threat,lift,medical,theif;
     categoryAdapter CategoryAdapter;
+    EditText edt_search;
     private int mYear, mMonth, mDay, mHour, mMinute,mSecond;
     ArrayList<HashMap<String,String>> Category;
     ArrayList<HashMap<String,String>> DeliveryList;
     ArrayList<HashMap<String,String>> HelpList;
-    TextView tv_id,tv_details_company,close,tv_request_response;
+    TextView tv_id,tv_details_company,close;
     ImageView img_guest,img_delivery,img_cab,img_help;
     boolean approve_status = false;
     private  boolean button1IsVisible = true;
@@ -162,12 +163,33 @@ public class Activity_activity extends AppCompatActivity implements
     ActivityListAdapterIN activityListAdapter;
     ArrayList<ListItem> mItems;
 
+
+    LoaderDialog loaderDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.first_activity);
-
         ButterKnife.bind(this);
+
+        actionViews();
+
+    }
+
+
+    private void actionViews(){
+
+        if (getSupportActionBar() != null) {
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
+        globalClass = (GlobalClass) getApplicationContext();
+        prefManager = new Shared_Preference(this);
+
+
+        loaderDialog = new LoaderDialog(this, android.R.style.Theme_Translucent,
+                false, "");
+
 
         rel_upcoming_visitor =  findViewById(R.id.rel_upcoming_visitor);
         rel_all_visitor =  findViewById(R.id.rel_all_visitor);
@@ -175,7 +197,6 @@ public class Activity_activity extends AppCompatActivity implements
         view_all_visitor =  findViewById(R.id.view_all_visitor);
         tv_upcoming_visitor =  findViewById(R.id.tv_upcoming_visitor);
         tv_all_visitor =  findViewById(R.id.tv_all_visitor);
-        avLoadingIndicatorView =  findViewById(R.id.avi);
         button_activity =  findViewById(R.id.button_E1);
         ll_community =  findViewById(R.id.button_E3);
         rel_middle_icon =  findViewById(R.id.rel_middle_icon);
@@ -186,7 +207,10 @@ public class Activity_activity extends AppCompatActivity implements
         img_cab =  findViewById(R.id.img_cab);
         img_help =  findViewById(R.id.img_help);
         ll_bell =  findViewById(R.id.ll_bell);
-        actionViews();
+        tv_flat_name =  findViewById(R.id.tv_flat_name);
+        edt_search =  findViewById(R.id.edt_search);
+
+
 
         recycle_activity.setVisibility(View.VISIBLE);
         recycle_upcoming.setVisibility(View.GONE);
@@ -250,27 +274,13 @@ public class Activity_activity extends AppCompatActivity implements
         rel_all_visitor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivityList();
-                recycle_activity.setVisibility(View.VISIBLE);
-                recycle_upcoming.setVisibility(View.GONE);
-                tv_upcoming_visitor.setTypeface(null, Typeface.NORMAL); //only text style(only bold)
-
-                tv_all_visitor.setTypeface(null, Typeface.BOLD);
-                view_all_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.range_white));
-                view_upcoming_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.blue));
+                forAllVisitor();
             }
         });
         rel_upcoming_visitor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivityListUpcoming();
-                recycle_activity.setVisibility(View.GONE);
-                recycle_upcoming.setVisibility(View.VISIBLE);
-                tv_upcoming_visitor.setTypeface(null, Typeface.BOLD); //only text style(only bold)
-
-                tv_all_visitor.setTypeface(null, Typeface.NORMAL);
-                view_all_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.blue));
-                view_upcoming_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.range_white));
+                forUpcomingVisitor();
             }
         });
         button_activity.setOnClickListener(new View.OnClickListener() {
@@ -303,8 +313,79 @@ public class Activity_activity extends AppCompatActivity implements
             }
         });
 
+        recycle_activity.setLayoutManager(new LinearLayoutManager(this));
+        recycle_upcoming.setLayoutManager(new LinearLayoutManager(this));
+
+        tv_flat_name.setText(globalClass.getFlat_name());
+
+        Date c = Calendar.getInstance().getTime();
+        System.out.println("Current time => " + c);
+        String formattedDate = df_show.format(c);
+
+        from_date = df_send.format(c);
+        to_date = df_send.format(c);
+
+
+        activityModelArrayList = new ArrayList<>();
+        type_in_out = "in";
+
+        mItems = new ArrayList<>();
+        activityListAdapter = new ActivityListAdapterIN(Activity_activity.this,
+                mItems);
+
+
+        edt_search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+                if (s.toString().length() > 0){
+
+                    setData(s.toString());
+
+                }
+
+            }
+        });
+
 
     }
+
+    private void forAllVisitor(){
+
+        getActivityList();
+        recycle_activity.setVisibility(View.VISIBLE);
+        recycle_upcoming.setVisibility(View.GONE);
+        tv_upcoming_visitor.setTypeface(null, Typeface.NORMAL); //only text style(only bold)
+
+        tv_all_visitor.setTypeface(null, Typeface.BOLD);
+        view_all_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.range_white));
+        view_upcoming_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.blue));
+
+    }
+
+    private void forUpcomingVisitor(){
+
+        getActivityListUpcoming();
+        recycle_activity.setVisibility(View.GONE);
+        recycle_upcoming.setVisibility(View.VISIBLE);
+        tv_upcoming_visitor.setTypeface(null, Typeface.BOLD); //only text style(only bold)
+
+        tv_all_visitor.setTypeface(null, Typeface.NORMAL);
+        view_all_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.blue));
+        view_upcoming_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.range_white));
+    }
+
+
+
     public void AddCab(){
         dialog = new Dialog(this);
         dialog.setContentView(R.layout.cab_dilaog_for_settings);
@@ -414,10 +495,8 @@ public class Activity_activity extends AppCompatActivity implements
 
                     SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
                     SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                    //   date_notify_exam = sdf1.format(myCalendar.getTime());
                     String date_to_show = sdf.format(myCalendar.getTime());
-                     date_to_push = sdf1.format(myCalendar.getTime());
-                    // Log.d(TAG, "date_notify_exam: "+date_notify_exam);
+                    date_to_push = sdf1.format(myCalendar.getTime());
                     date_picker.setText(date_to_show);
 
                 }
@@ -441,7 +520,7 @@ public class Activity_activity extends AppCompatActivity implements
                 String time1 = selectedHour + ":" + selectedMinute;
                 SimpleDateFormat  format1 = new SimpleDateFormat("HH:mm",
                         Locale.ENGLISH);
-                SimpleDateFormat  format2 = new SimpleDateFormat("hh:mm:ss a",
+                SimpleDateFormat  format2 = new SimpleDateFormat("HH:mm:ss",
                         Locale.ENGLISH);
 
                 try {
@@ -464,7 +543,7 @@ public class Activity_activity extends AppCompatActivity implements
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         HelpList.clear();
-       progressDialog.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.add_visitor, new Response.Listener<String>() {
@@ -473,7 +552,7 @@ public class Activity_activity extends AppCompatActivity implements
             public void onResponse(String response) {
                 Log.d(TAG, "add_visitor: " + response.toString());
 
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
                 //  dialog.dismiss();
 
                 Gson gson = new Gson();
@@ -513,8 +592,7 @@ public class Activity_activity extends AppCompatActivity implements
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
             @Override
@@ -556,7 +634,7 @@ public class Activity_activity extends AppCompatActivity implements
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         HelpList.clear();
-        progressDialog.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.add_visitor, new Response.Listener<String>() {
@@ -565,7 +643,7 @@ public class Activity_activity extends AppCompatActivity implements
             public void onResponse(String response) {
                 Log.d(TAG, "add_visitor: " + response.toString());
 
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
 
                 Gson gson = new Gson();
 
@@ -605,8 +683,7 @@ public class Activity_activity extends AppCompatActivity implements
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
             @Override
@@ -649,7 +726,7 @@ public class Activity_activity extends AppCompatActivity implements
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         HelpList.clear();
-       progressDialog.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.add_visitor, new Response.Listener<String>() {
@@ -658,7 +735,7 @@ public class Activity_activity extends AppCompatActivity implements
             public void onResponse(String response) {
                 Log.d(TAG, "add_visitor: " + response.toString());
 
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
                  // dialog.dismiss();
 
                 Gson gson = new Gson();
@@ -700,7 +777,7 @@ public class Activity_activity extends AppCompatActivity implements
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
                 TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
             @Override
@@ -743,7 +820,7 @@ public class Activity_activity extends AppCompatActivity implements
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         HelpList.clear();
-       progressDialog.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.add_visitor, new Response.Listener<String>() {
@@ -752,7 +829,7 @@ public class Activity_activity extends AppCompatActivity implements
             public void onResponse(String response) {
                 Log.d(TAG, "add_visitor " + response.toString());
 
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
                  // dialog.dismiss();
 
                 Gson gson = new Gson();
@@ -799,7 +876,7 @@ public class Activity_activity extends AppCompatActivity implements
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
                 TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
             @Override
@@ -1121,7 +1198,7 @@ public class Activity_activity extends AppCompatActivity implements
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         HelpList.clear();
-        startAnim();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.GET,
                 AppConfig.help_category_list, new Response.Listener<String>() {
@@ -1130,18 +1207,15 @@ public class Activity_activity extends AppCompatActivity implements
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-                stopAnim();
-
+                loaderDialog.dismiss();
 
                 Gson gson = new Gson();
 
                 try {
 
-
                     JsonObject jobj = gson.fromJson(response, JsonObject.class);
                     String status = jobj.get("status").getAsString().replaceAll("\"", "");
                     String message = jobj.get("message").getAsString().replaceAll("\"", "");
-
 
                     if(status.equals("1")) {
 
@@ -1158,13 +1232,11 @@ public class Activity_activity extends AppCompatActivity implements
                             JsonObject jobj1 = jarray.get(i).getAsJsonObject();
                             //get the object
 
-                            //JsonObject jobj1 = jarray.get(i).getAsJsonObject();
                             String id = jobj1.get("id").toString().replaceAll("\"", "");
                             String name = jobj1.get("name").toString().replaceAll("\"", "");
                             String image = jobj1.get("image").toString().replaceAll("\"", "");
 
                             HashMap<String, String> map_ser = new HashMap<>();
-
 
                             map_ser.put("id", id);
                             map_ser.put("name", name);
@@ -1203,7 +1275,7 @@ public class Activity_activity extends AppCompatActivity implements
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
                 TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
 
@@ -1224,7 +1296,7 @@ public class Activity_activity extends AppCompatActivity implements
         String tag_string_req = "req_login";
         HelpList.clear();
         // startAnim();
-        progressDialog.show();
+        loaderDialog.show();
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.add_panic, new Response.Listener<String>() {
 
@@ -1232,7 +1304,7 @@ public class Activity_activity extends AppCompatActivity implements
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
 
 
                 Gson gson = new Gson();
@@ -1270,7 +1342,7 @@ public class Activity_activity extends AppCompatActivity implements
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
                 TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
 
@@ -1426,7 +1498,7 @@ public class Activity_activity extends AppCompatActivity implements
         String tag_string_req = "req_login";
         Category.clear();
 
-        progressDialog.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.company_list, new Response.Listener<String>() {
@@ -1435,7 +1507,7 @@ public class Activity_activity extends AppCompatActivity implements
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
 
 
                 Gson gson = new Gson();
@@ -1502,7 +1574,7 @@ public class Activity_activity extends AppCompatActivity implements
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
                 TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
 
@@ -1533,7 +1605,7 @@ public class Activity_activity extends AppCompatActivity implements
         String tag_string_req = "req_login";
         DeliveryList.clear();
 
-        progressDialog.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.company_list, new Response.Listener<String>() {
@@ -1542,7 +1614,7 @@ public class Activity_activity extends AppCompatActivity implements
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
 
 
                 Gson gson = new Gson();
@@ -1609,7 +1681,7 @@ public class Activity_activity extends AppCompatActivity implements
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
                 TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
 
@@ -1635,51 +1707,7 @@ public class Activity_activity extends AppCompatActivity implements
 
     }
 
-    private void actionViews(){
 
-        if (getSupportActionBar() != null) {
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.setDisplayHomeAsUpEnabled(false);
-        }
-       // user_name.setText(globalClass.getName());
-        globalClass = (GlobalClass) getApplicationContext();
-        prefManager = new Shared_Preference(this);
-
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setMessage("Loading...");
-
-      //  tv_in_list.setBackgroundColor(getResources().getColor(R.color.button_orange));
-      //  tv_out_list.setBackgroundColor(getResources().getColor(R.color.light_grey));
-
-        recycle_activity.setLayoutManager(new LinearLayoutManager(this));
-        recycle_upcoming.setLayoutManager(new LinearLayoutManager(this));
-
-
-       // tv_in_list.setOnClickListener(this);
-      //  tv_out_list.setOnClickListener(this);
-      //  fav.setOnClickListener(this);
-
-
-
-        Date c = Calendar.getInstance().getTime();
-        System.out.println("Current time => " + c);
-        String formattedDate = df_show.format(c);
-
-        from_date = df_send.format(c);
-        to_date = df_send.format(c);
-
-
-        activityModelArrayList = new ArrayList<>();
-        type_in_out = "in";
-
-        mItems = new ArrayList<>();
-        activityListAdapter = new ActivityListAdapterIN(Activity_activity.this,
-                mItems);
-
-
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
@@ -1809,7 +1837,7 @@ public class Activity_activity extends AppCompatActivity implements
 
     //// activity api call ....
     public void getActivityList(){
-        progressDialog.show();
+        loaderDialog.show();
         activityModelArrayList.clear();
 
         activityModelArrayList = new ArrayList<>();
@@ -1833,7 +1861,7 @@ public class Activity_activity extends AppCompatActivity implements
                     public void onResponse(String response) {
 
                         Log.d(AppConfig.TAG , "activity_list- " + response);
-                              progressDialog.dismiss();
+                        loaderDialog.dismiss();
                         if (response != null){
                             try {
 
@@ -1975,11 +2003,11 @@ public class Activity_activity extends AppCompatActivity implements
                                     }
 
 
-                                    setData();
+                                    setData("");
 
                                 }
 
-                              stopAnim();
+                              loaderDialog.dismiss();
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -2011,8 +2039,8 @@ public class Activity_activity extends AppCompatActivity implements
     }
 
     public void getActivityListUpcoming(){
-        progressDialog.show();
-         activityModelArrayList.clear();
+        loaderDialog.show();
+        activityModelArrayList.clear();
         activityModelArrayList = new ArrayList<>();
 
         listDates = new ArrayList<>();
@@ -2034,7 +2062,7 @@ public class Activity_activity extends AppCompatActivity implements
                     public void onResponse(String response) {
 
                         Log.d(AppConfig.TAG , "activity_list- " + response);
-                            progressDialog.dismiss();
+                        loaderDialog.dismiss();
                         if (response != null){
                             try {
 
@@ -2167,11 +2195,11 @@ public class Activity_activity extends AppCompatActivity implements
                                     }
 
 
-                                    setData();
+                                    setData("");
 
                                 }
 
-                                stopAnim();
+                                loaderDialog.dismiss();
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -2202,7 +2230,7 @@ public class Activity_activity extends AppCompatActivity implements
 
     }
 
-    private void setData(){
+    private void setData(String query){
 
         HashSet<String> hashSet = new HashSet<String>();
         hashSet.addAll(listDates);
@@ -2227,7 +2255,7 @@ public class Activity_activity extends AppCompatActivity implements
 
             HashMap<String, ArrayList<ActivityChild>> map = new HashMap<>();
 
-            ArrayList<ActivityChild> arrayList2 = getChildArray(listDates.get(i));
+            ArrayList<ActivityChild> arrayList2 = getChildArray(listDates.get(i), query);
 
             if (arrayList2.size() > 0){
                 map.put(listDates.get(i), arrayList2);
@@ -2270,8 +2298,7 @@ public class Activity_activity extends AppCompatActivity implements
 
     }
 
-
-    private ArrayList<ActivityChild> getChildArray(String date){
+    private ArrayList<ActivityChild> getChildArray(String date, String query){
 
         ArrayList<ActivityChild> list = new ArrayList<>();
 
@@ -2281,7 +2308,24 @@ public class Activity_activity extends AppCompatActivity implements
 
             if (date.equals(activityModel.getDate())){
 
-                list.addAll(activityModel.getListChild());
+                if (query.isEmpty()){
+                    list.addAll(activityModel.getListChild());
+                }else {
+
+                    for (ActivityChild activityChild : activityModel.getListChild()){
+
+                        if (activityChild.getName().toLowerCase().contains(query.toLowerCase())
+                                || activityChild.getMobile().toLowerCase().contains(query.toLowerCase())
+                                || activityChild.getVisitor_type().toLowerCase().contains(query.toLowerCase())
+
+                        ) {
+
+                            list.add(activityChild);
+                        }
+
+                    }
+
+                }
 
             }
 
@@ -2390,7 +2434,7 @@ public class Activity_activity extends AppCompatActivity implements
 
     @Override
     protected void onResume() {
-        getActivityList();
+        forAllVisitor();
         super.onResume();
     }
 
@@ -2442,17 +2486,6 @@ public class Activity_activity extends AppCompatActivity implements
     };
 
 
-
-
-    void startAnim(){
-        avLoadingIndicatorView.show();
-        // or avi.smoothToShow();
-    }
-
-    void stopAnim(){
-        avLoadingIndicatorView.hide();
-        // or avi.smoothToHide();
-    }
 
     public void ProfileDailog(){
         final Dialog dialog = new Dialog(this);
@@ -2537,7 +2570,7 @@ public class Activity_activity extends AppCompatActivity implements
 
     public void status_updateNewCall(ActivityChild activityChild, String status){
 
-        progressDialog.show();
+        loaderDialog.show();
 
         String url = AppConfig.new_visitor_status_update;
 
@@ -2589,7 +2622,7 @@ public class Activity_activity extends AppCompatActivity implements
                                             TastyToast.LENGTH_LONG, TastyToast.WARNING);
                                 }
 
-                                progressDialog.dismiss();
+                                loaderDialog.dismiss();
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -2622,7 +2655,7 @@ public class Activity_activity extends AppCompatActivity implements
 
     public void status_updateCall(ActivityChild activityChild, String status){
 
-        progressDialog.show();
+        loaderDialog.show();
 
         String url = AppConfig.visitor_status_update;
 
@@ -2674,7 +2707,7 @@ public class Activity_activity extends AppCompatActivity implements
                                             TastyToast.LENGTH_LONG, TastyToast.WARNING);
                                 }
 
-                                progressDialog.dismiss();
+                                loaderDialog.dismiss();
 
                             } catch (JSONException e) {
                                 e.printStackTrace();

@@ -110,6 +110,9 @@
             android:layout_centerVertical="true"
             android:layout_height="wrap_content"
             android:layout_toStartOf="@+id/rl_profile"
+            android:textColor="@color/black"
+            android:textCursorDrawable="@color/blue"
+            android:textColorHighlight="@color/blue"
             />
 
         <RelativeLayout
@@ -117,17 +120,19 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:gravity="center"
-            android:padding="5dp"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="5dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:background="@drawable/circle_blue">
 
-            <ImageView
+            <TextView
+                android:id="@+id/tv_flat_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:tint="@android:color/white"
-                android:src="@drawable/ic_user"/>
+                android:textColor="@color/white"
+                android:layout_centerInParent="true"
+                android:text="2A"
+                />
 
         </RelativeLayout>
 
@@ -164,88 +169,12 @@
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/grey_curve"
-        android:layout_alignParentBottom="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="80dp">
+        android:layout_above="@+id/button_layout"
+        android:orientation="vertical"
+        >
 
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="40dp"
-            android:layout_marginRight="40dp"
-            android:weightSum="5">
-
-
-            <ImageView
-                android:id="@+id/img_cab"
-                android:layout_width="60dp"
-                android:layout_height="50dp"
-                android:src="@mipmap/car_new"
-                android:paddingRight="5dp"
-                android:layout_margin="5dp"
-                android:background="@android:color/white"
-                android:paddingLeft="5dp"
-                android:paddingBottom="10dp"
-
-                android:layout_weight="1"/>
-            <ImageView
-                android:id="@+id/img_delivery"
-                android:layout_width="60dp"
-                android:layout_height="50dp"
-                android:padding="5dp"
-                android:background="@android:color/white"
-                android:layout_margin="5dp"
-                android:src="@mipmap/delivery"
-                android:layout_weight="1"/>
-            <ImageView
-                android:id="@+id/img_guest"
-                android:layout_width="60dp"
-                android:layout_height="50dp"
-                android:src="@mipmap/guest"
-                android:padding="5dp"
-                android:background="@android:color/white"
-                android:layout_margin="5dp"
-                android:layout_weight="1"/>
-
-            <ImageView
-                android:id="@+id/img_help"
-                android:layout_width="60dp"
-                android:layout_height="50dp"
-                android:layout_margin="5dp"
-                android:background="@android:color/white"
-                android:src="@mipmap/visiting_help"
-                android:padding="5dp"
-                android:layout_weight="1"/>
-
-            <LinearLayout
-                android:id="@+id/ll_bell"
-                android:layout_width="60dp"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/curve_alert"
-                android:gravity="center">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/bell"
-                    />
-
-            </LinearLayout>
-
-
-
-        </LinearLayout>
-
-
-
-
+        <include
+            layout="@layout/layout_add_visitor"/>
 
     </LinearLayout>
 
@@ -258,10 +187,11 @@
         android:layout_width="fill_parent"
         android:layout_height="70dip">
 
-        <LinearLayout   android:id="@+id/button_E"
+        <LinearLayout
+            android:id="@+id/button_E"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:gravity="center"
             android:orientation="vertical"
             android:layout_gravity="center_vertical"
@@ -283,16 +213,14 @@
                 android:textColor="@color/blue"
                 android:text="@string/activity"
 
-
-
-
                 />
         </LinearLayout>
 
-        <LinearLayout   android:id="@+id/button_E1"
+        <LinearLayout
+            android:id="@+id/button_E1"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:gravity="center"
             android:orientation="vertical"
             android:layout_gravity="center_vertical"
@@ -313,21 +241,18 @@
                 android:layout_height="wrap_content"
                 android:text="@string/security"
 
-
-
-
                 />
+
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/button_E2"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:gravity="center"
-
-
             >
+
             <RelativeLayout
                 android:id="@+id/rel_middle_icon"
                 android:layout_width="wrap_content"
@@ -342,18 +267,17 @@
                     android:layout_height="wrap_content"
                     android:tint="@android:color/white"
                     android:src="@drawable/ic_command"
-
                     />
 
             </RelativeLayout>
 
-
         </LinearLayout>
 
-        <LinearLayout   android:id="@+id/button_E3"
+        <LinearLayout
+            android:id="@+id/button_E3"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:gravity="center"
             android:orientation="vertical"
             android:layout_gravity="center_vertical"
@@ -373,17 +297,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/community"
                 android:textSize="12dp"
-
-
-
-
                 />
         </LinearLayout>
 
-        <LinearLayout   android:id="@+id/button_E4"
+        <LinearLayout
+            android:id="@+id/button_E4"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:gravity="center"
             android:orientation="vertical"
             android:layout_gravity="center_vertical"
@@ -403,24 +324,10 @@
                 android:layout_height="wrap_content"
                 android:text="@string/help"
                 android:textSize="12dp"
-
-
-
-
                 />
+
         </LinearLayout>
 
     </LinearLayout>
-
-    <com.wang.avi.AVLoadingIndicatorView
-        android:id="@+id/avi"
-        android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/AVLoadingIndicatorView"
-        android:visibility="gone"
-        app:indicatorName="BallPulseSyncIndicator"
-        app:indicatorColor="@color/blue"
-        />
 
 </RelativeLayout>

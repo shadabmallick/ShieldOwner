@@ -29,6 +29,7 @@ import com.sketch.securityowner.Constant.AppConfig;
 import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
+import com.sketch.securityowner.dialogs.LoaderDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,6 +47,9 @@ public class FragmentC extends Fragment {
     GlobalClass globalClass;
     AlertAdapter adapter;
     ArrayList<HashMap<String,String>> blockList;
+
+    LoaderDialog loaderDialog;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -65,13 +69,18 @@ public class FragmentC extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
+
+        loaderDialog = new LoaderDialog(getActivity(), android.R.style.Theme_Translucent,
+                false, "");
+
+
         BrowseAlertList();
     }
     private void BrowseAlertList() {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         blockList.clear();
-        //  startAnim();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.user_panic_list, new Response.Listener<String>() {
@@ -81,7 +90,7 @@ public class FragmentC extends Fragment {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
 
-                // stopAnim();
+                loaderDialog.dismiss();
 
                 Gson gson = new Gson();
 
@@ -94,9 +103,6 @@ public class FragmentC extends Fragment {
 
 
                     if(status.equals("1")) {
-
-
-
 
                         JsonArray jarray = jobj.getAsJsonArray("data");
 

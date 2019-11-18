@@ -54,7 +54,7 @@ public class ActivityListAdapterIN extends
                 visiting_time, approved_by, tv_lag_code;
         ImageView iv_visitor_type, edit;
         LinearLayout ll_buttons, ll_in, ll_out, ll_leaveat_gate, ll_vendors;
-        TextView tv_accept, tv_reject, tv_leave_at_gate;
+        TextView tv_accept, tv_reject, tv_leave_at_gate, tv_gatepass;
 
         public ChildViewHolder(View itemView) {
             super(itemView);
@@ -76,6 +76,7 @@ public class ActivityListAdapterIN extends
             tv_reject = itemView.findViewById(R.id.tv_reject);
             tv_leave_at_gate = itemView.findViewById(R.id.tv_leave_at_gate);
             ll_vendors = itemView.findViewById(R.id.ll_vendors);
+            tv_gatepass = itemView.findViewById(R.id.tv_gatepass);
 
 
         }
@@ -166,7 +167,12 @@ public class ActivityListAdapterIN extends
                               final ActivityChild activityChild){
 
         try {
+
             Log.d(AppConfig.TAG, "setChildData: "+activityChild.getProfile_image());
+
+
+            holder.tv_gatepass.setVisibility(View.GONE);
+
 
                 if (activityChild.getType().equals("master")){
 
@@ -296,6 +302,11 @@ public class ActivityListAdapterIN extends
                     }
 
 
+                    if (activityChild.getGetpass().equals("1")){
+                        holder.tv_gatepass.setVisibility(View.VISIBLE);
+                    }
+
+
 
                     holder.ll_leaveat_gate.setOnClickListener(v -> {
 
@@ -303,14 +314,11 @@ public class ActivityListAdapterIN extends
                     });
 
 
-
                     if (!activityChild.getApprove_status().equals("w")){
                         holder.itemView.setOnClickListener(v -> {
                             mClickListenerIn.onItemClickIN(activityChild);
                         });
                     }
-
-
 
 
                     holder.tv_accept.setOnClickListener(v -> {
@@ -433,7 +441,6 @@ public class ActivityListAdapterIN extends
                         });
 
                     }
-
 
 
                     holder.tv_accept.setOnClickListener(v -> {

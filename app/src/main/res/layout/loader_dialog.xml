@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@android:color/transparent"
+    >
+
+    <RelativeLayout
+        android:id="@+id/rl_11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@android:color/transparent"
+        >
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/av16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:indicatorName="BallPulseIndicator"
+            app:indicatorColor="@color/blue"
+            />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_11"
+        android:textColor="@color/dark_gray"
+        android:textSize="16sp"
+        android:visibility="visible"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="Wait a moment..."
+        />
+
+</RelativeLayout>
