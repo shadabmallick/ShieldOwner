@@ -351,6 +351,9 @@ public class Activity_activity extends AppCompatActivity implements
 
                     setData(s.toString());
 
+                }else {
+
+                    setData("");
                 }
 
             }
@@ -365,9 +368,9 @@ public class Activity_activity extends AppCompatActivity implements
         recycle_activity.setVisibility(View.VISIBLE);
         recycle_upcoming.setVisibility(View.GONE);
         tv_upcoming_visitor.setTypeface(null, Typeface.NORMAL); //only text style(only bold)
-
         tv_all_visitor.setTypeface(null, Typeface.BOLD);
-        view_all_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.range_white));
+
+        view_all_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
         view_upcoming_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.blue));
 
     }
@@ -378,10 +381,10 @@ public class Activity_activity extends AppCompatActivity implements
         recycle_activity.setVisibility(View.GONE);
         recycle_upcoming.setVisibility(View.VISIBLE);
         tv_upcoming_visitor.setTypeface(null, Typeface.BOLD); //only text style(only bold)
-
         tv_all_visitor.setTypeface(null, Typeface.NORMAL);
+
         view_all_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.blue));
-        view_upcoming_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.range_white));
+        view_upcoming_visitor.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.white));
     }
 
 

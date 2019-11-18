@@ -250,16 +250,22 @@ public class Activity_details extends AppCompatActivity {
             }
 
 
+            if (activityChild.getType().equals("master")){
 
-            Log.d(TAG, "getpase > "+activityChild.getGetpass());
-            Log.d(TAG, "Actual_out_time > "+activityChild.getActual_out_time());
+                Log.d(TAG, "getpase > "+activityChild.getGetpass());
+                Log.d(TAG, "Actual_out_time > "+activityChild.getActual_out_time());
 
-            if (activityChild.getGetpass().equals("0")
-                    && ((activityChild.getActual_out_time() == null)
-                            || activityChild.getActual_out_time().equals("null")
-                            || activityChild.getActual_out_time().equals(null))){
+                if (activityChild.getGetpass().equals("0")
+                        && ((activityChild.getActual_out_time() == null)
+                        || activityChild.getActual_out_time().equals("null")
+                        || activityChild.getActual_out_time().equals(null))){
 
-                ll_generate_passcode.setVisibility(View.VISIBLE);
+                    ll_generate_passcode.setVisibility(View.VISIBLE);
+
+                }else {
+
+                    ll_generate_passcode.setVisibility(View.GONE);
+                }
 
             }else {
 
