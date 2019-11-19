@@ -482,7 +482,7 @@ public class ActivityListAdapterIN extends
         try {
 
             DateFormat originalFormat =
-                    new SimpleDateFormat("hh:mm:ss a", Locale.ENGLISH);
+                    new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
             DateFormat targetFormat =
                     new SimpleDateFormat("hh:mm a", Locale.ENGLISH);
 

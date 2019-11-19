@@ -35,6 +35,7 @@ import com.bumptech.glide.Glide;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.sketch.securityowner.Constant.AppConfig;
 import com.sketch.securityowner.GlobalClass.GlobalClass;
+import com.sketch.securityowner.GlobalClass.Shared_Preference;
 import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
 
@@ -69,6 +70,7 @@ public class CallUi extends AppCompatActivity {
 
     ProgressDialog progressDialog;
     GlobalClass globalClass;
+    Shared_Preference shared_preference;
     HashMap<String, String> hashMap;
 
     @Override
@@ -101,6 +103,8 @@ public class CallUi extends AppCompatActivity {
 
 
         globalClass = (GlobalClass) getApplicationContext();
+        shared_preference = new Shared_Preference(this);
+        shared_preference.loadPrefrence();
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);

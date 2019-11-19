@@ -2560,10 +2560,16 @@ public class Activity_activity extends AppCompatActivity implements
     @Override
     public void onItemClickStatusUpdate(ActivityChild activityChild, String status) {
 
-        if (activityChild.getUser_id().equals("0")){
-            status_updateNewCall(activityChild, status);
-        }else {
-            status_updateCall(activityChild, status);
+        try {
+
+            if (activityChild.getUser_id().equals("0")){
+                status_updateNewCall(activityChild, status);
+            }else {
+                status_updateCall(activityChild, status);
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
 
