@@ -1099,7 +1099,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
 
 
     public void AddCab(){
-       final Dialog dialog = new Dialog(this);
+       final Dialog dialog = new Dialog(this,R.style.datepicker);
        dialog.setContentView(R.layout.dailog_cab);
        dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -1275,7 +1275,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
 
 
     public void AddDelivery(){
-        final Dialog dialog = new Dialog(this);
+        final Dialog dialog = new Dialog(this,R.style.datepicker);
         dialog.setContentView(R.layout.dialog_delivery);
         dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -1371,7 +1371,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
 
     }
     public void AddGuest(){
-        final Dialog dialog = new Dialog(this);
+        final Dialog dialog = new Dialog(this,R.style.datepicker);
         dialog.setContentView(R.layout.dialog_guest);
         dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -1446,7 +1446,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
 
     }
     public void AddHelp(){
-        final Dialog dialog = new Dialog(this);
+        final Dialog dialog = new Dialog(this,R.style.datepicker);
         dialog.setContentView(R.layout.dialog_help);
         dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -2095,7 +2095,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
 
     public void Alarm(){
 
-        final Dialog dialog = new Dialog(this);
+        final Dialog dialog = new Dialog(this,R.style.datepicker);
         dialog.setContentView(R.layout.add_alarm);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         close=dialog.findViewById(R.id.close);

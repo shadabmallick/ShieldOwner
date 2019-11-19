@@ -195,7 +195,7 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
     }
 
     public void AddCab(){
-        final Dialog dialog = new Dialog(this);
+        final Dialog dialog = new Dialog(this,R.style.datepicker);
         dialog.setContentView(R.layout.dailog_cab);
         dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -357,7 +357,7 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
     }
 
     public void AddDelivery(){
-        final Dialog dialog = new Dialog(this);
+        final Dialog dialog = new Dialog(this,R.style.datepicker);
         dialog.setContentView(R.layout.dialog_delivery);
         dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -454,7 +454,7 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
     }
 
     public void AddGuest(){
-        final Dialog dialog = new Dialog(this);
+        final Dialog dialog = new Dialog(this,R.style.datepicker);
         dialog.setContentView(R.layout.dialog_guest);
         dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -531,7 +531,7 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
     }
 
     public void AddHelp(){
-        final Dialog dialog = new Dialog(this);
+        final Dialog dialog = new Dialog(this,R.style.datepicker);
         dialog.setContentView(R.layout.dialog_help);
         dialog.setCancelable(false);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -1116,7 +1116,7 @@ public class CommunityActivity extends AppCompatActivity implements categoryAdap
     }
 
     public void Alarm(){
-        final Dialog dialog = new Dialog(this);
+        final Dialog dialog = new Dialog(this,R.style.datepicker);
         dialog.setContentView(R.layout.add_alarm);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         // set the custom dialog components - text, image and button
