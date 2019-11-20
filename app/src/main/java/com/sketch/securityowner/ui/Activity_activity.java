@@ -68,6 +68,8 @@ import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.GlobalClass.Shared_Preference;
 import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
+import com.sketch.securityowner.dialogs.DialogCabAdd;
+import com.sketch.securityowner.dialogs.DialogDeliveryAdd;
 import com.sketch.securityowner.dialogs.LoaderDialog;
 import com.sketch.securityowner.model.ActivityChild;
 import com.sketch.securityowner.model.ActivityModel;
@@ -226,15 +228,34 @@ public class Activity_activity extends AppCompatActivity implements
         this.registerReceiver(mMessageReceiver, new IntentFilter("activity_screen"));
 
 
-        img_cab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AddCab();
-                car1.setVisibility(View.GONE);
 
-                //  dialog.dismiss();
-            }
+        img_cab.setOnClickListener(v -> {
+
+            car1.setVisibility(View.GONE);
+
+            DialogCabAdd dialogCabAdd = new DialogCabAdd(Activity_activity.this);
+            dialogCabAdd.show();
+
+            dialogCabAdd.setOnDismissListener(dialog1 -> {
+                getActivityList("all");
+            });
+
         });
+
+        img_delivery.setOnClickListener(v -> {
+
+            car1.setVisibility(View.GONE);
+
+            DialogDeliveryAdd dialogDeliveryAdd = new DialogDeliveryAdd(Activity_activity.this);
+            dialogDeliveryAdd.show();
+
+            dialogDeliveryAdd.setOnDismissListener(dialog1 -> {
+                getActivityList("all");
+            });
+
+        });
+
+
         ll_bell.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -244,15 +265,7 @@ public class Activity_activity extends AppCompatActivity implements
                 //  dialog.dismiss();
             }
         });
-        img_delivery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AddDelivery();
-                car1.setVisibility(View.GONE);
 
-
-            }
-        });
         img_guest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1711,7 +1724,6 @@ public class Activity_activity extends AppCompatActivity implements
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
@@ -1853,6 +1865,7 @@ public class Activity_activity extends AppCompatActivity implements
         params.put("type", from);
         params.put("flat_no", globalClass.getFlat_no());
         params.put("complex_id", globalClass.getComplex_id());
+        params.put("user_id", globalClass.getId());
 
 
         Log.d(AppConfig.TAG , "activity_list- " + url);
@@ -2042,7 +2055,6 @@ public class Activity_activity extends AppCompatActivity implements
                                 new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
 
     }
-
 
     private void setData(String query){
 

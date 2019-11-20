@@ -65,11 +65,12 @@ public class DialogCabAdd extends Dialog implements categoryAdapter.onItemClickL
 
     private TextView tv_time, date_picker, tv_details_company;
     private RadioButton radio1, radio2;
-    private EditText edit_name_cab, edit_phone_cab;
+    private EditText edit_name_cab, edit_phone_cab, tv_others;
     private RecyclerView delivery_recycle;
+    private LinearLayout ll_hide;
 
 
-    ArrayList<HashMap<String,String>> DeliveryList;
+    private ArrayList<HashMap<String,String>> DeliveryList;
 
     private Calendar myCalendar = Calendar.getInstance();
 
@@ -97,7 +98,6 @@ public class DialogCabAdd extends Dialog implements categoryAdapter.onItemClickL
         DeliveryList = new ArrayList<>();
 
         TextView close = findViewById(R.id.close);
-        LinearLayout ll_hide = findViewById(R.id.ll_hide);
         date_picker = findViewById(R.id.date_picker);
         radio1 = findViewById(R.id.radioMale);
         radio2 = findViewById(R.id.radioFemale);
@@ -105,6 +105,7 @@ public class DialogCabAdd extends Dialog implements categoryAdapter.onItemClickL
         edit_name_cab = findViewById(R.id.edit_name);
         edit_phone_cab = findViewById(R.id.edit_phone);
         tv_time = findViewById(R.id.tv_time);
+        tv_others = findViewById(R.id.tv_others);
 
 
         delivery_recycle=findViewById(R.id.delivery_recycle);
@@ -112,6 +113,8 @@ public class DialogCabAdd extends Dialog implements categoryAdapter.onItemClickL
         delivery_recycle.setLayoutManager(layoutManager);
 
         tv_details_company=findViewById(R.id.tv_details_company);
+        ll_hide=findViewById(R.id.ll_hide);
+        ll_hide.setVisibility(View.GONE);
 
 
         close.setOnClickListener(new View.OnClickListener() {
@@ -145,30 +148,38 @@ public class DialogCabAdd extends Dialog implements categoryAdapter.onItemClickL
 
         radioSex.setOnCheckedChangeListener((group, checkedId) -> {
             RadioButton radioButton = findViewById(checkedId);
-            // Toast.makeText(getActivity(),radioButton.getText(), Toast.LENGTH_SHORT).show();
             String radio_value= (String) radioButton.getText();
             Log.d(AppConfig.TAG, "Guest: "+radio_value);
             Toast.makeText(context,radio_value, Toast.LENGTH_SHORT).show();
 
         });
 
-        LinearLayout ll_submit = findViewById(R.id.ll_submit);
 
-        // if button is clicked, close the custom dialog
-        ll_submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int selectedId = radioSex.getCheckedRadioButtonId();
+        tv_details_company.setText("Driver Details");
+        tv_details_company.setOnClickListener(v -> {
 
-                radio1 = findViewById(selectedId);
+            ll_hide.setVisibility(ll_hide.getVisibility()
+                    == View.VISIBLE ? View.GONE : View.VISIBLE);
 
-                String radio_value = radio1.getText().toString();
-
-                AddDelivery("cab", radio_value);
-
-            }
         });
 
+        LinearLayout ll_submit = findViewById(R.id.ll_submit);
+
+        ll_submit.setOnClickListener(v -> {
+
+            int selectedId = radioSex.getCheckedRadioButtonId();
+
+            radio1 = findViewById(selectedId);
+
+            String radio_value = radio1.getText().toString();
+
+            AddCab("cab", radio_value);
+
+        });
+
+
+
+        companyList();
 
     }
 
@@ -234,8 +245,7 @@ public class DialogCabAdd extends Dialog implements categoryAdapter.onItemClickL
         mTimePicker.show();
     }
 
-
-    private void DeliveryList() {
+    private void companyList() {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         DeliveryList.clear();
@@ -309,7 +319,7 @@ public class DialogCabAdd extends Dialog implements categoryAdapter.onItemClickL
             protected Map<String, String> getParams() {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<>();
-                params.put("type", "delivery");
+                params.put("type", "cab");
 
                 Log.d(AppConfig.TAG, "getParams: "+params);
                 return params;
@@ -330,17 +340,20 @@ public class DialogCabAdd extends Dialog implements categoryAdapter.onItemClickL
         categoryAdapter CategoryAdapter = new categoryAdapter(context,
                 DeliveryList,this);
         delivery_recycle.setAdapter(CategoryAdapter);
-
     }
 
     @Override
-    public void onItemClick(String category) {
+    public void onItemClick(String s) {
+        category = s;
+        if (category.equals("Others")){
+            tv_others.setVisibility(View.VISIBLE);
+        }
+        Toast.makeText(context,s,Toast.LENGTH_LONG).show();
 
     }
 
 
-
-    private void AddDelivery(final String type,final String radio_value) {
+    private void AddCab(final String type,final String radio_value) {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
 

@@ -64,7 +64,7 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
 
     private TextView tv_time, date_picker, tv_details_company;
     private RadioButton radio1, radio2;
-    private EditText edit_name_cab, edit_phone_cab;
+    private EditText edit_name_cab, edit_phone_cab, tv_others;
     private RecyclerView delivery_recycle;
 
 
@@ -97,6 +97,7 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
 
         TextView close = findViewById(R.id.close);
         LinearLayout ll_hide = findViewById(R.id.ll_hide);
+        ll_hide.setVisibility(View.GONE);
         date_picker = findViewById(R.id.date_picker);
         radio1 = findViewById(R.id.radioMale);
         radio2 = findViewById(R.id.radioFemale);
@@ -104,6 +105,7 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
         edit_name_cab = findViewById(R.id.edit_name);
         edit_phone_cab = findViewById(R.id.edit_phone);
         tv_time = findViewById(R.id.tv_time);
+        tv_others = findViewById(R.id.tv_others);
 
 
         delivery_recycle=findViewById(R.id.delivery_recycle);
@@ -111,40 +113,34 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
         delivery_recycle.setLayoutManager(layoutManager);
 
         tv_details_company=findViewById(R.id.tv_details_company);
-
-
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
+        tv_details_company.setText("Delivery boy details");
+        tv_details_company.setOnClickListener(v -> {
+            ll_hide.setVisibility(ll_hide.getVisibility()
+                    == View.VISIBLE ? View.GONE : View.VISIBLE);
         });
 
-        date_picker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                final Calendar c = Calendar.getInstance();
-                mYear = c.get(Calendar.YEAR);
-                mMonth = c.get(Calendar.MONTH);
-                mDay = c.get(Calendar.DAY_OF_MONTH);
-
-                new DatePickerDialog(context,R.style.datepicker,
-                        datePickerListener, mYear, mMonth, mDay).show();
-
-            }
-
+        close.setOnClickListener(v -> {
+            dismiss();
         });
-        tv_time.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                timePicker2();
-            }
+
+        date_picker.setOnClickListener(v -> {
+
+            final Calendar c = Calendar.getInstance();
+            mYear = c.get(Calendar.YEAR);
+            mMonth = c.get(Calendar.MONTH);
+            mDay = c.get(Calendar.DAY_OF_MONTH);
+
+            new DatePickerDialog(context,R.style.datepicker,
+                    datePickerListener, mYear, mMonth, mDay).show();
+        });
+
+        tv_time.setOnClickListener(v -> {
+            timePicker2();
         });
 
         radioSex.setOnCheckedChangeListener((group, checkedId) -> {
             RadioButton radioButton = findViewById(checkedId);
-            // Toast.makeText(getActivity(),radioButton.getText(), Toast.LENGTH_SHORT).show();
             String radio_value= (String) radioButton.getText();
             Log.d(AppConfig.TAG, "Guest: "+radio_value);
             Toast.makeText(context,radio_value, Toast.LENGTH_SHORT).show();
@@ -152,22 +148,21 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
         });
 
         LinearLayout ll_submit = findViewById(R.id.ll_submit);
+        ll_submit.setOnClickListener(v -> {
 
-        // if button is clicked, close the custom dialog
-        ll_submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int selectedId = radioSex.getCheckedRadioButtonId();
+            int selectedId = radioSex.getCheckedRadioButtonId();
 
-                radio1 = findViewById(selectedId);
+            radio1 = findViewById(selectedId);
 
-                String radio_value = radio1.getText().toString();
+            String radio_value = radio1.getText().toString();
 
-                AddDelivery("delivery", radio_value);
+            AddDelivery("delivery", radio_value);
 
-            }
         });
 
+
+
+        companyList();
 
     }
 
@@ -234,7 +229,7 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
     }
 
 
-    private void DeliveryList() {
+    private void companyList() {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         DeliveryList.clear();
@@ -333,8 +328,13 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
     }
 
     @Override
-    public void onItemClick(String category) {
+    public void onItemClick(String s) {
 
+        category = s;
+        if (category.equals("Others")){
+            tv_others.setVisibility(View.VISIBLE);
+        }
+        Toast.makeText(context,s,Toast.LENGTH_LONG).show();
     }
 
 
