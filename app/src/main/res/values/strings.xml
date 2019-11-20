@@ -18,7 +18,7 @@
     <string name="help">Help</string>
     <string name="activity">Activity</string>
     <string name="community">Community</string>
-
+     <string name="invitation">Invitation</string>
     <string name="no_body">If nobody responds to the notification</string>
     <string name="no_body_pick_up">If nobody pick up the call</string>
     <string name="phone_Call">Then a phone call will be triggered on this given number </string>

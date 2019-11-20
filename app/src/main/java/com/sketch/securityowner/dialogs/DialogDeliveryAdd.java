@@ -1,6 +1,5 @@
 package com.sketch.securityowner.dialogs;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -54,7 +53,7 @@ import static com.sketch.securityowner.GlobalClass.VolleySingleton.nuOfRetry;
 import static com.sketch.securityowner.GlobalClass.VolleySingleton.timeOut;
 
 
-public class DialogCabAdd extends Dialog implements categoryAdapter.onItemClickListner {
+public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemClickListner {
 
     private Context context;
     private GlobalClass globalClass;
@@ -73,7 +72,7 @@ public class DialogCabAdd extends Dialog implements categoryAdapter.onItemClickL
 
     private Calendar myCalendar = Calendar.getInstance();
 
-    public DialogCabAdd(@NonNull Context context) {
+    public DialogDeliveryAdd(@NonNull Context context) {
         super(context);
         this.context = context;
 
@@ -164,7 +163,7 @@ public class DialogCabAdd extends Dialog implements categoryAdapter.onItemClickL
 
                 String radio_value = radio1.getText().toString();
 
-                AddDelivery("cab", radio_value);
+                AddDelivery("delivery", radio_value);
 
             }
         });
