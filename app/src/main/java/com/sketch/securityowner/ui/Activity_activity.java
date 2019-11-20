@@ -364,7 +364,7 @@ public class Activity_activity extends AppCompatActivity implements
 
     private void forAllVisitor(){
 
-        getActivityList();
+        getActivityList("all");
         recycle_activity.setVisibility(View.VISIBLE);
         recycle_upcoming.setVisibility(View.GONE);
         tv_upcoming_visitor.setTypeface(null, Typeface.NORMAL); //only text style(only bold)
@@ -377,7 +377,7 @@ public class Activity_activity extends AppCompatActivity implements
 
     private void forUpcomingVisitor(){
 
-        getActivityListUpcoming();
+        getActivityList("up");
         recycle_activity.setVisibility(View.GONE);
         recycle_upcoming.setVisibility(View.VISIBLE);
         tv_upcoming_visitor.setTypeface(null, Typeface.BOLD); //only text style(only bold)
@@ -572,7 +572,7 @@ public class Activity_activity extends AppCompatActivity implements
                                 message, TastyToast.LENGTH_LONG,
                                 TastyToast.SUCCESS);
 
-                        getActivityList();
+                        getActivityList("all");
 
                     } else {
                         TastyToast.makeText(getApplicationContext(),
@@ -662,7 +662,7 @@ public class Activity_activity extends AppCompatActivity implements
 
                         TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
-                        getActivityList();
+                        getActivityList("all");
 
                     }
                     else {
@@ -757,7 +757,7 @@ public class Activity_activity extends AppCompatActivity implements
                                 TastyToast.SUCCESS);
 
 
-                        getActivityList();
+                        getActivityList("all");
 
                     } else {
                         TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
@@ -850,7 +850,7 @@ public class Activity_activity extends AppCompatActivity implements
                                 message, TastyToast.LENGTH_LONG,
                                 TastyToast.SUCCESS);
 
-                        getActivityList();
+                        getActivityList("all");
 
                     }
 
@@ -1833,16 +1833,16 @@ public class Activity_activity extends AppCompatActivity implements
             e.printStackTrace();
         }
 
-        getActivityList();
+        getActivityList("all");
 
     }
 
 
     //// activity api call ....
-    public void getActivityList(){
+    public void getActivityList(String from){
         loaderDialog.show();
-        activityModelArrayList.clear();
 
+        activityModelArrayList.clear();
         activityModelArrayList = new ArrayList<>();
 
         listDates = new ArrayList<>();
@@ -1850,7 +1850,7 @@ public class Activity_activity extends AppCompatActivity implements
         String url = AppConfig.activity_list;
 
         final Map<String, String> params = new HashMap<>();
-        params.put("type", "all");
+        params.put("type", from);
         params.put("flat_no", globalClass.getFlat_no());
         params.put("complex_id", globalClass.getComplex_id());
 
@@ -1899,6 +1899,7 @@ public class Activity_activity extends AppCompatActivity implements
                                                 child.setType(obj.optString("type"));
                                                 child.setActivity_id(obj.optString("activity_id"));
                                                 child.setVisitor_id(obj.optString("visitor_id"));
+                                                child.setUser_id(obj.optString("user_id"));
                                                 child.setName(obj.optString("name"));
                                                 child.setMobile(obj.optString("mobile"));
                                                 child.setQr_code(obj.optString("qr_code"));
@@ -1920,6 +1921,7 @@ public class Activity_activity extends AppCompatActivity implements
                                                 child.setVendor_image(obj.optString("vendor_image"));
                                                 child.setApprove_status(obj.optString("approve_status"));
                                                 child.setApprove_by(obj.optString("approve_by"));
+                                                child.setSecurity_mobile(obj.optString("security_mobile"));
                                                 child.setLeave_at_gate_code(obj.optString("leave_at_gate_code"));
                                                 child.setBlock(obj.optString("block"));
                                                 child.setFlat_id(obj.optString("flat_id"));
@@ -2041,197 +2043,6 @@ public class Activity_activity extends AppCompatActivity implements
 
     }
 
-    public void getActivityListUpcoming(){
-        loaderDialog.show();
-        activityModelArrayList.clear();
-        activityModelArrayList = new ArrayList<>();
-
-        listDates = new ArrayList<>();
-
-        String url = AppConfig.activity_list;
-
-        final Map<String, String> params = new HashMap<>();
-        params.put("type", "up");
-        params.put("flat_no", globalClass.getFlat_no());
-        params.put("complex_id", globalClass.getComplex_id());
-
-
-        Log.d(AppConfig.TAG , "activity_list- " + url);
-        Log.d(AppConfig.TAG , "activity_list- " + params.toString());
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        Log.d(AppConfig.TAG , "activity_list- " + response);
-                        loaderDialog.dismiss();
-                        if (response != null){
-                            try {
-
-                                ArrayList<ActivityChild> childArrayList;
-                                ActivityModel activityModel;
-
-                                JSONObject main_object = new JSONObject(response);
-
-                                int status = main_object.optInt("status");
-                                if (status == 1){
-
-                                    if (main_object.has("data_master")) {
-
-                                        JSONArray data_master =
-                                                main_object.optJSONArray("data_master");
-
-                                        for (int i = 0; i < data_master.length(); i++){
-                                            JSONObject object = data_master.getJSONObject(i);
-
-                                            String visiting_hour = object.optString("visiting_hour");
-                                            JSONArray data = object.optJSONArray("data");
-
-                                            listDates.add(visiting_hour);
-
-
-                                            childArrayList = new ArrayList<>();
-                                            for (int j = 0; j < data.length(); j++) {
-                                                JSONObject obj = data.getJSONObject(j);
-
-
-                                                ActivityChild child = new ActivityChild();
-                                                child.setType(obj.optString("type"));
-                                                child.setActivity_id(obj.optString("activity_id"));
-                                                child.setVisitor_id(obj.optString("visitor_id"));
-                                                child.setName(obj.optString("name"));
-                                                child.setMobile(obj.optString("mobile"));
-                                                child.setQr_code(obj.optString("qr_code"));
-                                                child.setQr_code_image(obj.optString("qr_code_image"));
-                                                child.setActivity_type(obj.optString("activity_type"));
-                                                child.setSecurity_id(obj.optString("security_id"));
-                                                child.setVisitor_type(obj.optString("visitor_type"));
-                                                child.setActual_in_time(obj.optString("actual_in_time"));
-                                                child.setActual_out_time(obj.optString("actual_out_time"));
-                                                child.setVisiting_time(obj.optString("visiting_time"));
-                                                child.setVisiting_date(visiting_hour);
-                                                child.setVisiting_help_cat(obj.optString("visiting_help_cat"));
-                                                child.setVehicle_no(obj.optString("vehicle_no"));
-                                                child.setProfile_image(obj.optString("profile_image"));
-                                                child.setVendor_name(obj.optString("vendor_name"));
-                                                child.setGetpass(obj.optString("getpass"));
-                                                child.setDescription(obj.optString("description"));
-                                                child.setGetpass_image(obj.optString("getpass_image"));
-                                                child.setVendor_image(obj.optString("vendor_image"));
-                                                child.setApprove_status(obj.optString("approve_status"));
-                                                child.setApprove_by(obj.optString("approve_by"));
-                                                child.setSecurity_mobile(obj.optString("security_mobile"));
-
-
-
-                                                childArrayList.add(child);
-
-                                            }
-
-                                            activityModel = new ActivityModel();
-                                            activityModel.setDate(visiting_hour);
-                                            activityModel.setListChild(childArrayList);
-
-                                            activityModelArrayList.add(activityModel);
-                                        }
-
-
-                                    }
-
-
-
-                                    if (main_object.has("data_temp")) {
-
-                                        JSONArray data_temp =
-                                                main_object.optJSONArray("data_temp");
-
-                                        for (int i = 0; i < data_temp.length(); i++){
-                                            JSONObject object = data_temp.getJSONObject(i);
-
-                                            String visiting_hour = object.optString("visiting_hour");
-                                            JSONArray data = object.optJSONArray("data");
-                                            listDates.add(visiting_hour);
-
-                                            childArrayList = new ArrayList<>();
-                                            for (int j = 0; j < data.length(); j++) {
-                                                JSONObject obj = data.getJSONObject(j);
-
-
-                                                ActivityChild child = new ActivityChild();
-                                                child.setType(obj.optString("type"));
-                                                child.setActivity_id(obj.optString("activity_id"));
-                                                child.setUser_id(obj.optString("user_id"));
-                                                child.setName(obj.optString("name"));
-                                                child.setMobile(obj.optString("mobile"));
-                                                child.setQr_code(obj.optString("qr_code"));
-                                                child.setQr_code_image(obj.optString("qr_code_image"));
-                                                child.setActivity_type(obj.optString("activity_type"));
-                                                child.setVisitor_type(obj.optString("visitor_type"));
-                                                child.setVisiting_time(obj.optString("visiting_time"));
-                                                child.setVisiting_date(visiting_hour);
-                                                child.setVisiting_help_cat(obj.optString("visiting_help_cat"));
-                                                child.setVehicle_no(obj.optString("vehicle_no"));
-                                                child.setProfile_image(obj.optString("profile_image"));
-                                                child.setVendor_name(obj.optString("vendor_name"));
-                                                child.setVendor_image(obj.optString("vendor_image"));
-
-
-
-                                                child.setType_in_out("in");
-
-
-                                                childArrayList.add(child);
-
-                                            }
-
-
-                                            activityModel = new ActivityModel();
-                                            activityModel.setDate(visiting_hour);
-                                            activityModel.setListChild(childArrayList);
-
-                                            activityModelArrayList.add(activityModel);
-                                            Log.d(AppConfig.TAG, "onResponse: "+activityModelArrayList.size());
-
-                                        }
-
-                                    }
-
-
-                                    setData("");
-
-                                }
-
-                                loaderDialog.dismiss();
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //on error storing the name to sqlite with status unsynced
-
-                        Log.e(AppConfig.TAG, "error - "+error);
-
-                    }
-                }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-
-                return params;
-            }
-        };
-
-        VolleySingleton.getInstance(Activity_activity.this)
-                .addToRequestQueue(stringRequest
-                        .setRetryPolicy(
-                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
-
-    }
 
     private void setData(String query){
 
@@ -2457,32 +2268,37 @@ public class Activity_activity extends AppCompatActivity implements
             //do other stuff here
             Log.d(AppConfig.TAG, "Act type = "+type);
 
-            if (type != null && !type.equals("null")){
+            try {
 
-                response_value = type;
+                if (type != null && !type.equals("null")){
 
-                if (type.equalsIgnoreCase("approved")){
+                    response_value = type;
 
-                    approve_status = true;
+                    if (type.equalsIgnoreCase("approved")){
 
-
-
-                }else if (type.equalsIgnoreCase("rejected")){
-
-                    approve_status = true;
-
-                }else if (type.equalsIgnoreCase("visitor added")
-                        || type.equalsIgnoreCase("final status")
-                        || type.equalsIgnoreCase("visitor out")
-                ){
+                        approve_status = true;
 
 
+
+                    }else if (type.equalsIgnoreCase("rejected")){
+
+                        approve_status = true;
+
+                    }else if (type.equalsIgnoreCase("visitor added")
+                            || type.equalsIgnoreCase("final status")
+                            || type.equalsIgnoreCase("visitor out")
+                    ){
+
+
+                    }
+
+
+                    getActivityList("all");
                 }
 
-
-                getActivityList();
+            }catch (Exception e){
+                e.printStackTrace();
             }
-
 
         }
 
@@ -2622,7 +2438,7 @@ public class Activity_activity extends AppCompatActivity implements
                                             message,
                                             TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
-                                    getActivityList();
+                                    getActivityList("all");
 
                                 }else {
 
@@ -2707,7 +2523,7 @@ public class Activity_activity extends AppCompatActivity implements
                                             message,
                                             TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
-                                    getActivityList();
+                                    getActivityList("all");
 
                                 }else {
 

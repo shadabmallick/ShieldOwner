@@ -215,9 +215,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         expandedView.setOnClickPendingIntent(R.id.image_view_expanded, clickPendingIntent);
 
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
-                //.setCustomContentView(collapsedView)
-                //.setCustomBigContentView(expandedView)
+                .setSmallIcon(R.mipmap.ic_shield)
                 .setContentTitle(title)
                 .setContentText(message)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(message))
