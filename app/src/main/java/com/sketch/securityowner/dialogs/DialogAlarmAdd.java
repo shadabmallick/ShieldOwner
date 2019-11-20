@@ -1,0 +1,289 @@
+package com.sketch.securityowner.dialogs;
+
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.sdsmdg.tastytoast.TastyToast;
+import com.sketch.securityowner.Adapter.categoryAdapter;
+import com.sketch.securityowner.Constant.AppConfig;
+import com.sketch.securityowner.GlobalClass.GlobalClass;
+import com.sketch.securityowner.GlobalClass.VolleySingleton;
+import com.sketch.securityowner.R;
+import com.sketch.securityowner.ui.SettingActivity;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
+import static com.sketch.securityowner.GlobalClass.VolleySingleton.backOff;
+import static com.sketch.securityowner.GlobalClass.VolleySingleton.nuOfRetry;
+import static com.sketch.securityowner.GlobalClass.VolleySingleton.timeOut;
+
+
+public class DialogAlarmAdd extends Dialog implements categoryAdapter.onItemClickListner {
+
+    private Context context;
+    private GlobalClass globalClass;
+    private ProgressDialog progressDialog;
+    CardView animal,fire,threat,lift,medical,theif;
+    LinearLayout ll_alram,ll_hide;
+    private int mYear, mMonth, mDay, mHour, mMinute,mSecond;
+    private String date_web, send_time, category;
+    TextView tv_time,date_picker,tv_animal,tv_medical,tv_thief,tv_threat,tv_lift,tv_id,tv_details_company,close,tv_details,app_setting,user_name,user_mobile,user_email;
+
+
+    private RadioButton radio1, radio2;
+    private EditText edit_name_cab, edit_phone_cab;
+    private RecyclerView delivery_recycle;
+
+
+    ArrayList<HashMap<String,String>> HelpList;
+
+    private Calendar myCalendar = Calendar.getInstance();
+
+    public DialogAlarmAdd(@NonNull Context context) {
+        super(context);
+        this.context = context;
+
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.add_alarm);
+        getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        setCancelable(false);
+
+        globalClass = (GlobalClass) context.getApplicationContext();
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setMessage("Loading...");
+
+        HelpList = new ArrayList<>();
+
+        close=findViewById(R.id.close);
+        animal=findViewById(R.id.animal);
+        theif=findViewById(R.id.burglary);
+        lift=findViewById(R.id.lift);
+        medical=findViewById(R.id.medical);
+        threat=findViewById(R.id.threat);
+        tv_details_company=findViewById(R.id.tv_details_company);
+        tv_id=findViewById(R.id.tv_fire);
+        tv_lift=findViewById(R.id.tv_lift);
+        tv_threat=findViewById(R.id.tv_threat);
+        tv_thief=findViewById(R.id.tv_thief);
+        tv_medical=findViewById(R.id.tv_medical);
+        tv_animal=findViewById(R.id.tv_animal);
+        threat=findViewById(R.id.threat);
+        ll_alram=findViewById(R.id.ll_alram);
+        ll_hide=findViewById(R.id.ll_hide);
+        fire=findViewById(R.id.fire);
+
+
+        delivery_recycle=findViewById(R.id.delivery_recycle);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        delivery_recycle.setLayoutManager(layoutManager);
+
+        tv_details_company=findViewById(R.id.tv_details_company);
+        fire.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String category=tv_id.getText().toString();
+                FireAlarm(category);
+                //dialog.dismiss();
+
+            }
+        });
+        lift.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String category=tv_lift.getText().toString();
+                FireAlarm(category);
+               // dialog.dismiss();
+
+            }
+        });
+        threat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String category=tv_threat.getText().toString();
+                FireAlarm(category);
+               // dialog.dismiss();
+
+            }
+        });
+        theif.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String category=tv_thief.getText().toString();
+                FireAlarm(category);
+              //  dialog.dismiss();
+
+            }
+        });
+        medical.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String category=tv_medical.getText().toString();
+                FireAlarm(category);
+              //  dialog.dismiss();
+
+            }
+        });
+        animal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String category=tv_animal.getText().toString();
+
+                FireAlarm(category);
+              //  dialog.dismiss();
+
+            }
+        });
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+
+
+
+
+        // if button is clicked, close the custom dialog
+
+
+    }
+
+
+
+
+
+    private void FireAlarm(final String category) {
+        String tag_string_req = "req_login";
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.add_visitor, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+
+                progressDialog.dismiss();
+
+
+                Gson gson = new Gson();
+
+                try {
+
+
+                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
+                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
+                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+
+
+                    if(status.equals("1")) {
+                        TastyToast.makeText(context, message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+
+                    }
+                    else {
+                        TastyToast.makeText(context, message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                    }
+
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    TastyToast.makeText(context, "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
+                progressDialog.dismiss();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<>();
+
+                params.put("user_id", globalClass.getId());
+                params.put("category", category);
+                params.put("complex_id", globalClass.getComplex_id());
+                params.put("flat_id", globalClass.getFlat_no());
+
+                Log.d(TAG, "getParams: "+params);
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(context)
+                .addToRequestQueue(strReq
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+    }
+
+
+    @Override
+    public void onItemClick(String category) {
+
+    }
+
+
+
+
+
+}

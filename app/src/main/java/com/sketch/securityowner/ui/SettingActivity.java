@@ -1757,7 +1757,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
 
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+                Log.d(TAG, "CAB DETAILS: " + response.toString());
 
                 loaderDialog.dismiss();
 
