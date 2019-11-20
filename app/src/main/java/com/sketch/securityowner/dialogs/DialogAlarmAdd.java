@@ -56,26 +56,16 @@ import static com.sketch.securityowner.GlobalClass.VolleySingleton.nuOfRetry;
 import static com.sketch.securityowner.GlobalClass.VolleySingleton.timeOut;
 
 
-public class DialogAlarmAdd extends Dialog implements categoryAdapter.onItemClickListner {
+public class DialogAlarmAdd extends Dialog {
 
     private Context context;
     private GlobalClass globalClass;
     private ProgressDialog progressDialog;
-    CardView animal,fire,threat,lift,medical,theif;
-    LinearLayout ll_alram,ll_hide;
-    private int mYear, mMonth, mDay, mHour, mMinute,mSecond;
-    private String date_web, send_time, category;
-    TextView tv_time,date_picker,tv_animal,tv_medical,tv_thief,tv_threat,tv_lift,tv_id,tv_details_company,close,tv_details,app_setting,user_name,user_mobile,user_email;
+    private CardView animal,fire,threat,lift,medical,theif;
 
+    private TextView tv_animal,tv_medical,tv_thief,tv_threat,
+            tv_lift,tv_id;
 
-    private RadioButton radio1, radio2;
-    private EditText edit_name_cab, edit_phone_cab;
-    private RecyclerView delivery_recycle;
-
-
-    ArrayList<HashMap<String,String>> HelpList;
-
-    private Calendar myCalendar = Calendar.getInstance();
 
     public DialogAlarmAdd(@NonNull Context context) {
         super(context);
@@ -90,7 +80,6 @@ public class DialogAlarmAdd extends Dialog implements categoryAdapter.onItemClic
         setContentView(R.layout.add_alarm);
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        setCancelable(false);
 
         globalClass = (GlobalClass) context.getApplicationContext();
         progressDialog = new ProgressDialog(context);
@@ -98,15 +87,12 @@ public class DialogAlarmAdd extends Dialog implements categoryAdapter.onItemClic
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setMessage("Loading...");
 
-        HelpList = new ArrayList<>();
 
-        close=findViewById(R.id.close);
         animal=findViewById(R.id.animal);
         theif=findViewById(R.id.burglary);
         lift=findViewById(R.id.lift);
         medical=findViewById(R.id.medical);
         threat=findViewById(R.id.threat);
-        tv_details_company=findViewById(R.id.tv_details_company);
         tv_id=findViewById(R.id.tv_fire);
         tv_lift=findViewById(R.id.tv_lift);
         tv_threat=findViewById(R.id.tv_threat);
@@ -114,23 +100,16 @@ public class DialogAlarmAdd extends Dialog implements categoryAdapter.onItemClic
         tv_medical=findViewById(R.id.tv_medical);
         tv_animal=findViewById(R.id.tv_animal);
         threat=findViewById(R.id.threat);
-        ll_alram=findViewById(R.id.ll_alram);
-        ll_hide=findViewById(R.id.ll_hide);
+
         fire=findViewById(R.id.fire);
 
 
-        delivery_recycle=findViewById(R.id.delivery_recycle);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-        delivery_recycle.setLayoutManager(layoutManager);
 
-        tv_details_company=findViewById(R.id.tv_details_company);
         fire.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String category=tv_id.getText().toString();
                 FireAlarm(category);
-                //dialog.dismiss();
-
             }
         });
         lift.setOnClickListener(new View.OnClickListener() {
@@ -138,8 +117,6 @@ public class DialogAlarmAdd extends Dialog implements categoryAdapter.onItemClic
             public void onClick(View v) {
                 String category=tv_lift.getText().toString();
                 FireAlarm(category);
-               // dialog.dismiss();
-
             }
         });
         threat.setOnClickListener(new View.OnClickListener() {
@@ -147,8 +124,6 @@ public class DialogAlarmAdd extends Dialog implements categoryAdapter.onItemClic
             public void onClick(View v) {
                 String category=tv_threat.getText().toString();
                 FireAlarm(category);
-               // dialog.dismiss();
-
             }
         });
         theif.setOnClickListener(new View.OnClickListener() {
@@ -156,41 +131,27 @@ public class DialogAlarmAdd extends Dialog implements categoryAdapter.onItemClic
             public void onClick(View v) {
                 String category=tv_thief.getText().toString();
                 FireAlarm(category);
-              //  dialog.dismiss();
-
             }
         });
         medical.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String category=tv_medical.getText().toString();
                 FireAlarm(category);
-              //  dialog.dismiss();
-
             }
         });
         animal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String category=tv_animal.getText().toString();
-
                 FireAlarm(category);
-              //  dialog.dismiss();
 
             }
         });
 
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
 
-
-
-
-        // if button is clicked, close the custom dialog
 
 
     }
@@ -202,8 +163,10 @@ public class DialogAlarmAdd extends Dialog implements categoryAdapter.onItemClic
     private void FireAlarm(final String category) {
         String tag_string_req = "req_login";
 
+        progressDialog.show();
+
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.add_visitor, new Response.Listener<String>() {
+                AppConfig.add_panic, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -211,11 +174,9 @@ public class DialogAlarmAdd extends Dialog implements categoryAdapter.onItemClic
 
                 progressDialog.dismiss();
 
-
                 Gson gson = new Gson();
 
                 try {
-
 
                     JsonObject jobj = gson.fromJson(response, JsonObject.class);
                     String status = jobj.get("status").getAsString().replaceAll("\"", "");
@@ -225,6 +186,7 @@ public class DialogAlarmAdd extends Dialog implements categoryAdapter.onItemClic
                     if(status.equals("1")) {
                         TastyToast.makeText(context, message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
+                        dismiss();
 
                     }
                     else {
@@ -275,14 +237,6 @@ public class DialogAlarmAdd extends Dialog implements categoryAdapter.onItemClic
                                 new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
 
     }
-
-
-    @Override
-    public void onItemClick(String category) {
-
-    }
-
-
 
 
 

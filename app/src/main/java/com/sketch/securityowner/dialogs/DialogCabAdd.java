@@ -75,7 +75,7 @@ public class DialogCabAdd extends Dialog implements categoryAdapter.onItemClickL
     private Calendar myCalendar = Calendar.getInstance();
 
     public DialogCabAdd(@NonNull Context context) {
-        super(context);
+        super(context, R.style.datepicker);
         this.context = context;
 
     }
