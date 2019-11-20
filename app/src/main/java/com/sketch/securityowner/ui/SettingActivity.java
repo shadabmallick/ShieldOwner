@@ -2020,7 +2020,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         HelpList.clear();
         loaderDialog.show();
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.add_visitor, new Response.Listener<String>() {
+                AppConfig.add_panic, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {

@@ -58,6 +58,7 @@
                     android:layout_height="30dp"
                     android:padding="10dp"
                     android:id="@+id/iv_call"
+                    android:layout_marginTop="5dp"
                     android:tint="@android:color/white"
                     android:src="@drawable/ic_phone_call"/>
                 <LinearLayout
@@ -66,9 +67,9 @@
                     android:gravity="right">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:tint="@color/black"
                         android:layout_marginTop="5dp"
                         android:src="@drawable/ic_share_2"/>
 
