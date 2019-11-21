@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.sketch.securityowner">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -32,7 +33,9 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:largeHeap="true"
-        android:theme="@style/MyTheme">
+        android:theme="@style/MyTheme"
+        tools:replace="android:allowBackup,icon,theme,label,usesCleartextTraffic"
+        >
 
 
         <uses-library
@@ -165,31 +168,32 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+
         <activity android:name=".ui.InvoiceList"
             android:theme="@style/MyTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+
         <activity android:name=".ui.ChatGroup"
-
             android:theme="@style/MyTheme">
-
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+
         <activity android:name=".ui.ShowInvoice"
-
             android:theme="@style/MyTheme">
-
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.PayUMoneyPayment"
+            android:theme="@style/MyTheme">
+        </activity>
 
 
         <activity android:theme="@style/MyNoActionBar"
@@ -202,6 +206,10 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
+
+
+
+
 
 
 

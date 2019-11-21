@@ -45,10 +45,11 @@ public class AppConfig {
     public static final String ivr_number                   = URL_DEV + "ivr_number";
     public static final String update_ivr_number            = URL_DEV + "update_ivr_number";
     public static final String inovice_list                 = URL_DEV + "inovice_list";
-    public static final String getpass_generate                 = URL_DEV + "getpass_generate";
-    public static final String registration_flat_list                 = URL_DEV + "registration_flat_list";
-    public static final String multi_registration_login                 = URL_DEV + "multi_registration_login";
-
+    public static final String getpass_generate             = URL_DEV + "getpass_generate";
+    public static final String registration_flat_list       = URL_DEV + "registration_flat_list";
+    public static final String multi_registration_login     = URL_DEV + "multi_registration_login";
+    public static final String payumoney_hash_for           = URL_DEV + "payumoney_hash_for";
+    public static final String user_complex_flat_list       = URL_DEV + "user_complex_flat_list";
 
 
 

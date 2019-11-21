@@ -1,6 +1,7 @@
 package com.sketch.securityowner.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.R;
+import com.sketch.securityowner.ui.PayUMoneyPayment;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -20,11 +22,13 @@ import java.util.HashMap;
 public class AdapterOnvoiceList extends RecyclerView.Adapter<AdapterOnvoiceList.MyViewHolder> {
 
 
-    Context context;
-    ArrayList<HashMap<String,String>> cityList;
-    int index = -1;
-    GlobalClass globalClass;
-    public AdapterOnvoiceList(Context context, ArrayList<HashMap<String,String>> cityList, AdapterOnvoiceList.onItemClickListner mListner) {
+    private Context context;
+    private ArrayList<HashMap<String,String>> cityList;
+    private int index = -1;
+    private GlobalClass globalClass;
+
+    public AdapterOnvoiceList(Context context, ArrayList<HashMap<String,
+            String>> cityList, AdapterOnvoiceList.onItemClickListner mListner) {
         this.cityList = cityList;
         this.context=context;
         this.mListner=mListner;
@@ -45,6 +49,7 @@ public class AdapterOnvoiceList extends RecyclerView.Adapter<AdapterOnvoiceList.
        holder.tv_date1.setText(cityList.get(position).get("invoice_name"));
        holder.tv_date2.setText(cityList.get(position).get("date"));
        holder.status.setText(cityList.get(position).get("invoicestatus"));
+
         holder.invoice.setOnClickListener(v -> {
 
             index = position;
@@ -52,6 +57,12 @@ public class AdapterOnvoiceList extends RecyclerView.Adapter<AdapterOnvoiceList.
             String invoice_link=cityList.get(position).get("invoice_link");
 
             mListner.onItemClick(invoice_link);
+        });
+
+        holder.tv_pay.setOnClickListener(v -> {
+
+            mListner.onClickForPay(cityList.get(position));
+
         });
     }
 
@@ -70,8 +81,8 @@ public class AdapterOnvoiceList extends RecyclerView.Adapter<AdapterOnvoiceList.
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         // init the item view's
-        TextView tv_amout,tv_date1,tv_date2,tv_number,status;
-        ImageView profile_image,iv_delete;
+        TextView tv_amout, tv_date1, tv_date2, tv_number, status, tv_pay;
+        ImageView profile_image, iv_delete;
         LinearLayout invoice;
 
 
@@ -84,6 +95,7 @@ public class AdapterOnvoiceList extends RecyclerView.Adapter<AdapterOnvoiceList.
             tv_date2 =  itemView.findViewById(R.id.tv_date2);
             status =  itemView.findViewById(R.id.status);
             invoice =  itemView.findViewById(R.id.invoice);
+            tv_pay =  itemView.findViewById(R.id.tv_pay);
 
             profile_image =  itemView.findViewById(R.id.profile_image);
 
@@ -94,6 +106,10 @@ public class AdapterOnvoiceList extends RecyclerView.Adapter<AdapterOnvoiceList.
     private AdapterOnvoiceList.onItemClickListner mListner;
     public interface onItemClickListner{
         void onItemClick(String category);
+        void onClickForPay(HashMap<String, String> hashMap);
     }
+
+
+
 
 }

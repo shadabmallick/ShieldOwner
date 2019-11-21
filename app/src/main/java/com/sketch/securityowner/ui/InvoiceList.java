@@ -31,6 +31,7 @@ import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.GlobalClass.Shared_Preference;
 import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
+import com.sketch.securityowner.dialogs.LoaderDialog;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -48,14 +49,13 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
 
     RecyclerView recycler_view;
     GlobalClass globalClass;
-    Shared_Preference prefManager;
-    ProgressDialog progressDialog;
     AdapterOnvoiceList adapterOnvoiceList;
     ArrayList<HashMap<String,String>> invoice_list;
     TextView tv_address,billed,receipt,tv_due;
     Shared_Preference preference;
-    ProgressDialog pd;
     Toolbar toolbar;
+    LoaderDialog loaderDialog;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,9 +73,10 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
         globalClass = (GlobalClass) getApplicationContext();
         preference = new Shared_Preference(InvoiceList.this);
         preference.loadPrefrence();
-        pd = new ProgressDialog(InvoiceList.this);
-        pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        pd.setMessage(getResources().getString(R.string.loading));
+
+        loaderDialog = new LoaderDialog(this, android.R.style.Theme_Translucent,
+                false, "");
+
         recycler_view.setLayoutManager(new LinearLayoutManager(this));
 
         InvoiceList();
@@ -96,7 +97,7 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
     private void InvoiceList() {
         // Tag used to cancel the request
         invoice_list.clear();
-        pd.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.inovice_list, new Response.Listener<String>() {
@@ -106,7 +107,6 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
 
-                pd.dismiss();
 
                 Gson gson = new Gson();
 
@@ -123,11 +123,7 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
 
                     if(status.equals("1")) {
 
-
-
-
                         JsonArray jarray = jobj.getAsJsonArray("data");
-
 
                         for (int i = 0; i < jarray.size(); i++) {
                             JsonObject jobj1 = jarray.get(i).getAsJsonObject();
@@ -185,24 +181,21 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
                         tv_due.setText(due);
                         tv_address.setText(globalClass.getComplex_name()+" "+globalClass.getFlat_name()+" "+globalClass.getBlock()+" "+"block");
 
-                        adapterOnvoiceList = new AdapterOnvoiceList(getApplicationContext(), invoice_list,InvoiceList.this);
+                        adapterOnvoiceList = new AdapterOnvoiceList(InvoiceList.this,
+                                invoice_list,InvoiceList.this);
                         recycler_view.setAdapter(adapterOnvoiceList);
                     }
                     else {
-                       // ll_data_not_found.setVisibility(View.VISIBLE);
-                     //   recycler_view.setVisibility(View.GONE);
+
                         TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                     }
 
 
+                    loaderDialog.dismiss();
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                  //  ll_data_not_found.setVisibility(View.VISIBLE);
-                 //   recycler_view.setVisibility(View.GONE);
-                    // TastyToast.makeText(HelpListDetails.this, "DATA NOT FOUND", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
                 }
 
 
@@ -223,6 +216,7 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
                 Map<String, String> params = new HashMap<>();
 
                 params.put("flat_id", "4");
+
                 Log.d(TAG, "getParams: "+params);
 
                 return params;
@@ -260,12 +254,25 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
     }
 
     @Override
-    public void onItemClick(String category) {
+    public void onItemClick(String url) {
 
-        Intent show_invoice=new Intent(getApplicationContext(),ShowInvoice.class);
-        show_invoice.putExtra("url",category);
-        Log.d(TAG, "onItemClick: "+category);
+        Intent show_invoice=new Intent(getApplicationContext(), ShowInvoice.class);
+        show_invoice.putExtra("url",url);
+        Log.d(TAG, "onItemClick: "+url);
         startActivity(show_invoice);
 
     }
+
+
+    @Override
+    public void onClickForPay(HashMap<String, String> hashMap) {
+
+        Intent intent = new Intent(InvoiceList.this, PayUMoneyPayment.class);
+        intent.putExtra("hashmap", hashMap);
+        startActivity(intent);
+
+    }
+
+
+
 }

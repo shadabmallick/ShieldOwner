@@ -85,8 +85,6 @@ public class Shared_Preference {
     private static final String preffirst_time_login="preffirst_time_login";
 
 
-
-
     public Shared_Preference(Context context) {
         this.context = context;
 
@@ -96,7 +94,6 @@ public class Shared_Preference {
 
         this.sharedPreferences2 = context.getSharedPreferences(PREFS_NAME2, Context.MODE_PRIVATE);
         this.editor2 = sharedPreferences2.edit();
-
 
 
     }

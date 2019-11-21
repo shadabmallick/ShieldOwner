@@ -19,11 +19,16 @@ import com.loopj.android.http.RequestParams;
 import com.payumoney.core.PayUmoneySdkInitializer;
 import com.payumoney.core.entity.TransactionResponse;
 import com.payumoney.sdkui.ui.utils.PayUmoneyFlowManager;
+import com.sdsmdg.tastytoast.TastyToast;
 import com.sketch.securityowner.Constant.AppConfig;
+import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.R;
+import com.sketch.securityowner.dialogs.LoaderDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -33,12 +38,14 @@ public class PayUMoneyPayment extends AppCompatActivity {
     PayUmoneySdkInitializer.PaymentParam.Builder builder;
     //declare paymentParam object
     PayUmoneySdkInitializer.PaymentParam paymentParam = null;
-    private ProgressDialog pDialog;
+    private LoaderDialog loaderDialog;
 
 
     String amount, name, email, phone, prodname, txnid;
-    private String merchantKey = "ueXP5x4B";
-    private String merchant_id = "6712375";
+    private String merchantKey = "H0Afr8df";
+    private String merchant_id = "5466792";
+
+    private GlobalClass globalClass;
 
 
     @SuppressLint({"AddJavascriptInterface", "SetJavaScriptEnabled"})
@@ -55,25 +62,30 @@ public class PayUMoneyPayment extends AppCompatActivity {
         webSettings.setAppCacheMaxSize(100 * 1000 * 1000);
         mWebView.setWebChromeClient(new WebChromeClient());
 
-        pDialog  = new ProgressDialog(PayUMoneyPayment.this);
-        pDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        pDialog.setMessage("Please wait...");
-
-
 
         builder = new PayUmoneySdkInitializer.PaymentParam.Builder();
+
+        loaderDialog = new LoaderDialog(this, android.R.style.Theme_Translucent,
+                false, "");
+
+        globalClass = (GlobalClass) getApplicationContext();
+
+
+
+        txnid = String.valueOf(System.currentTimeMillis());
+        name = globalClass.getName();
+        email = globalClass.getEmail();
+        phone = globalClass.getPhone_number();
+
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null){
 
-            amount = bundle.getString("amount");
-            name = bundle.getString("name");
-            email = bundle.getString("email");
-            phone = bundle.getString("phone");
+            HashMap<String, String> hashMap =
+                    (HashMap<String, String>) bundle.getSerializable("hashmap");
 
-            txnid = String.valueOf(System.currentTimeMillis());
-
-            prodname = "product_name";
+            amount = hashMap.get("billing_amount");
+            prodname = hashMap.get("invoice_no");
 
             startpay();
         }
@@ -82,12 +94,12 @@ public class PayUMoneyPayment extends AppCompatActivity {
 
     public void startpay(){
 
-        builder.setAmount(amount)                          // Payment amount
-                .setTxnId(txnid)                     // Transaction ID
-                .setPhone(phone)                   // User Phone number
-                .setProductName(prodname)          // Product Name or description
+        builder.setAmount(amount)              // Payment amount
+                .setTxnId(txnid)               // Transaction ID
+                .setPhone(phone)               // User Phone number
+                .setProductName(prodname)      // Product Name or description
                 .setFirstName(name)            // User First name
-                .setEmail(email)              // User Email ID
+                .setEmail(email)               // User Email ID
                 .setsUrl("https://www.payumoney.com/mobileapp/payumoney/success.php")     // Success URL (surl)
                 .setfUrl("https://www.payumoney.com/mobileapp/payumoney/failure.php")     //Failure URL (furl)
                 .setUdf1("")
@@ -100,8 +112,8 @@ public class PayUMoneyPayment extends AppCompatActivity {
                 .setUdf8("")
                 .setUdf9("")
                 .setUdf10("")
-                .setIsDebug(false)                              // Integration environment - true (Debug)/ false(Production)
-                .setKey(merchantKey)                        // Merchant key
+                .setIsDebug(true)             // Integration environment - true (Debug)/ false(Production)
+                .setKey(merchantKey)          // Merchant key
                 .setMerchantId(merchant_id);
 
 
@@ -113,9 +125,11 @@ public class PayUMoneyPayment extends AppCompatActivity {
         } catch (Exception e) {
             Log.e(AppConfig.TAG, " error str: "+e.toString());
 
-           /* Toasty.info(PayUMoneyPayment.this,
-                    "Phone number is invalid.", Toast.LENGTH_LONG,
-                    true).show();*/
+
+            TastyToast.makeText(getApplicationContext(),
+                    "Phone number is invalid.",
+                    TastyToast.LENGTH_LONG, TastyToast.WARNING);
+
         }
 
     }
@@ -124,9 +138,9 @@ public class PayUMoneyPayment extends AppCompatActivity {
 
     private void getHashkey() {
 
-        pDialog.show();
+        loaderDialog.show();
 
-        String url = "";
+        String url = AppConfig.payumoney_hash_for;
 
         AsyncHttpClient cl = new AsyncHttpClient();
         RequestParams params = new RequestParams();
@@ -151,19 +165,18 @@ public class PayUMoneyPayment extends AppCompatActivity {
                     Log.d("TAG", "PayumoneyHash- " + response.toString());
                     try {
 
-                        JSONObject result = response.getJSONObject("result");
-
-                        int status = result.getInt("status");
+                        int status = response.getInt("status");
 
                         if (status == 1) {
 
-                            String data = result.optString("data");
+                            String hash = response.optString("hash");
 
-                            paymentParam.setMerchantHash(data);
+                            paymentParam.setMerchantHash(hash);
 
-                            pDialog.dismiss();
+                            loaderDialog.dismiss();
 
-                            PayUmoneyFlowManager.startPayUMoneyFlow(paymentParam, PayUMoneyPayment.this,
+                            PayUmoneyFlowManager.startPayUMoneyFlow(paymentParam,
+                                    PayUMoneyPayment.this,
                                     R.style.AppTheme_default, true);
 
                         }
@@ -181,10 +194,9 @@ public class PayUMoneyPayment extends AppCompatActivity {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 Log.d("TAG", "PayumoneyHash- " + errorResponse.toString());
 
-                pDialog.dismiss();
+                loaderDialog.dismiss();
             }
         });
-
 
 
     }
@@ -237,22 +249,23 @@ public class PayUMoneyPayment extends AppCompatActivity {
                     if (status.equals("success")){
 
 
-                       /* Toasty.success(PayUMoneyPayment.this,
-                                "Payment successful", Toast.LENGTH_SHORT,
-                                true).show();*/
+                        TastyToast.makeText(getApplicationContext(),
+                                "Payment successful",
+                                TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
-                        Intent intent = new Intent();
+
+                       /* Intent intent = new Intent();
                         intent.putExtra("txn_id", txnid);
                         intent.putExtra("amount", amount);
-                        setResult(Activity.RESULT_OK, intent);
+                        setResult(Activity.RESULT_OK, intent);*/
 
                         finish();
 
                     }else {
 
-                       /* Toasty.info(PayUMoneyPayment.this,
-                                "Payment failed. Try again.", Toast.LENGTH_LONG,
-                                true).show();*/
+                        TastyToast.makeText(getApplicationContext(),
+                                "Payment failed. Try again.",
+                                TastyToast.LENGTH_LONG, TastyToast.WARNING);
 
                         finish();
 
@@ -266,9 +279,9 @@ public class PayUMoneyPayment extends AppCompatActivity {
 
         }else {
 
-           /* Toasty.info(PayUMoneyPayment.this,
-                    "Payment failed. Try again.", Toast.LENGTH_SHORT,
-                    true).show();*/
+            TastyToast.makeText(getApplicationContext(),
+                    "Payment failed. Try again.",
+                    TastyToast.LENGTH_LONG, TastyToast.WARNING);
 
             finish();
         }

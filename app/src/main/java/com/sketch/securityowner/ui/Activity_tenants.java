@@ -48,6 +48,7 @@ import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.GlobalClass.Shared_Preference;
 import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
+import com.sketch.securityowner.dialogs.LoaderDialog;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
@@ -77,7 +78,6 @@ RecyclerView recycler_view;
     ImageView img_back;
     GlobalClass globalClass;
     Shared_Preference prefManager;
-    ProgressDialog progressDialog;
     AdapterTenant adapterTenant;
     ImageView image_member;
     EditText edit_phone,edit_name;
@@ -85,6 +85,7 @@ RecyclerView recycler_view;
     String tenant_id;
     File p_image;
     ArrayList<HashMap<String,String>> tenantList;
+    LoaderDialog loaderDialog;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,10 +97,9 @@ RecyclerView recycler_view;
         globalClass = (GlobalClass) getApplicationContext();
         prefManager = new Shared_Preference(this);
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setMessage("Loading...");
+        loaderDialog = new LoaderDialog(this, android.R.style.Theme_Translucent,
+                false, "");
+
         tenantList=new ArrayList<>();
         recycler_view.setLayoutManager(new LinearLayoutManager(this));
         TenantList();
@@ -155,7 +155,7 @@ RecyclerView recycler_view;
     private void TenantList() {
         // Tag used to cancel the request
         tenantList.clear();
-        progressDialog.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.tenant_list, new Response.Listener<String>() {
@@ -165,7 +165,7 @@ RecyclerView recycler_view;
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
 
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
 
                 Gson gson = new Gson();
 
@@ -396,7 +396,7 @@ RecyclerView recycler_view;
     }
     public void AddTenant(final String name,final String phone){
 
-        progressDialog.show();
+        loaderDialog.show();
 
         String url = AppConfig.add_tenant;
         AsyncHttpClient cl = new AsyncHttpClient();
@@ -435,7 +435,7 @@ RecyclerView recycler_view;
                 if (response != null) {
                     Log.d(TAG, "user_profile_pic_update- " + response.toString());
                     try {
-                        progressDialog.dismiss();
+                        loaderDialog.dismiss();
                         dialog.dismiss();
 
                         int status = response.getInt("status");
@@ -474,7 +474,7 @@ RecyclerView recycler_view;
 
     public void DeleteTenant(final String tenant_id){
 
-        progressDialog.show();
+        loaderDialog.show();
 
         String url = AppConfig.delete_tenant;
         AsyncHttpClient cl = new AsyncHttpClient();
@@ -503,7 +503,7 @@ RecyclerView recycler_view;
                 if (response != null) {
                     Log.d(TAG, "user_profile_pic_update- " + response.toString());
                     try {
-                        progressDialog.dismiss();
+                        loaderDialog.dismiss();
                        // dialog.dismiss();
 
                         int status = response.getInt("status");

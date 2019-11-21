@@ -59,6 +59,7 @@ import com.sketch.securityowner.dialogs.DialogCabAdd;
 import com.sketch.securityowner.dialogs.DialogDeliveryAdd;
 import com.sketch.securityowner.dialogs.DialogGuestAdd;
 import com.sketch.securityowner.dialogs.DialogHelpAdd;
+import com.sketch.securityowner.dialogs.DialogProfile;
 import com.sketch.securityowner.dialogs.LoaderDialog;
 import com.sketch.securityowner.model.ActivityChild;
 import com.sketch.securityowner.model.ActivityModel;
@@ -264,7 +265,6 @@ public class Activity_activity extends AppCompatActivity implements
 
 
 
-
         rel_all_visitor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -300,10 +300,25 @@ public class Activity_activity extends AppCompatActivity implements
 
             }
         });
+
         rl_profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ProfileDailog();
+
+                DialogProfile dialogProfile = new DialogProfile(Activity_activity.this);
+                dialogProfile.show();
+
+                dialogProfile.setOnDismissListener(dialog -> {
+
+                    if (dialogProfile.is_clicked){
+
+                        tv_flat_name.setText(globalClass.getFlat_name());
+
+                        getActivityList("all");
+                    }
+
+                });
+
             }
         });
 
@@ -313,7 +328,7 @@ public class Activity_activity extends AppCompatActivity implements
         tv_flat_name.setText(globalClass.getFlat_name());
 
         Date c = Calendar.getInstance().getTime();
-        System.out.println("Current time => " + c);
+        //System.out.println("Current time => " + c);
         String formattedDate = df_show.format(c);
 
         from_date = df_send.format(c);
@@ -454,7 +469,6 @@ public class Activity_activity extends AppCompatActivity implements
     public void onClick(View v) {
 
         switch (v.getId()){
-
 
             default:
                 break;

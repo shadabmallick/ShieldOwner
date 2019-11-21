@@ -126,7 +126,6 @@ public class SettingActivity extends AppCompatActivity {
     ArrayList<HashMap<String,String>> productDetaiils_sub;
     ArrayList<HashMap<String,String>> staffList;
     ImageView edit_image_staff,profile_image,img_cab,img_delivery,img_guest,img_help,profile_image_staff;
-    AVLoadingIndicatorView avLoadingIndicatorView;
     ScrollView scroll_details,scroll_settings;
     RelativeLayout rel_profile,rel_middle_icon;
     ImageView edit;
@@ -218,7 +217,6 @@ public class SettingActivity extends AppCompatActivity {
         ll_notification =  findViewById(R.id.ll_notification);
         user_mobile =  findViewById(R.id.user_mobile);
         ll_mycomplex =  findViewById(R.id.ll_mycomplex);
-        avLoadingIndicatorView =  findViewById(R.id.avi);
         ll_visitor_option =  findViewById(R.id.ll_visitor_option);
         rel_middle_icon =  findViewById(R.id.rel_middle_icon);
         button_activity=  findViewById(R.id.button_E);
@@ -420,6 +418,7 @@ public class SettingActivity extends AppCompatActivity {
         });
 
     }
+
     public void profileDialog(){
         dialog = new Dialog(this);
         dialog.setContentView(R.layout.edit_profile_dialog);
@@ -486,6 +485,7 @@ public class SettingActivity extends AppCompatActivity {
 
 
     }
+
     public boolean checkForPermission(final String[] permissions, final int permRequestCode) {
 
         final List<String> permissionsNeeded = new ArrayList<>();
@@ -523,6 +523,7 @@ public class SettingActivity extends AppCompatActivity {
         }
 
     }
+
     private void selectImage() {
         try {
             PackageManager pm = getPackageManager();
@@ -555,6 +556,7 @@ public class SettingActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
     private void selectImageFamily() {
         try {
             PackageManager pm = getPackageManager();
@@ -621,8 +623,6 @@ public class SettingActivity extends AppCompatActivity {
         }
     }
 
-
-
     private void selectImageStaff() {
         try {
             PackageManager pm = getPackageManager();
@@ -655,7 +655,6 @@ public class SettingActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -1567,7 +1566,7 @@ public class SettingActivity extends AppCompatActivity {
     private void browseJob() {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
-
+        productDetaiils_sub = new ArrayList<>();
         loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
@@ -1649,6 +1648,8 @@ public class SettingActivity extends AppCompatActivity {
 
                         RecyclerViewHorizontalAdapter = new FamilyAdapter(SettingActivity.this, productDetaiils);
                         recyclerView.setAdapter(RecyclerViewHorizontalAdapter);
+
+
                         JsonArray product_sub = jobj.getAsJsonArray("car");
                         for (int j = 0; j < product_sub.size(); j++) {
                             JsonObject images1_sub = product_sub.get(j).getAsJsonObject();

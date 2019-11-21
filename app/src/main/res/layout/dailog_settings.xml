@@ -1,26 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-
-    android:layout_height="match_parent"
-
+    android:layout_height="wrap_content"
     >
-
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="10dp"
         >
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             >
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
                 android:layout_width="70dp"
@@ -28,7 +25,6 @@
                 android:padding="5dp"
                 android:layout_marginTop="5dp"
                 android:src="@mipmap/profile_image"
-
                 />
 
             <LinearLayout
@@ -40,13 +36,12 @@
                 android:orientation="vertical"
                 android:layout_toRightOf="@id/profile_image"
 
-               >
+                >
 
 
                 <TextView
                     android:id="@+id/user_name"
                     android:textSize="16sp"
-
                     android:text="xcvcxvcxv"
                     android:textColor="@color/blue"
                     android:layout_width="wrap_content"
@@ -56,28 +51,32 @@
                     android:layout_width="wrap_content"
                     android:text="2019-10-23"
                     android:layout_marginTop="5dp"
-
                     android:layout_height="wrap_content" />
                 <TextView
                     android:id="@+id/address"
                     android:layout_width="wrap_content"
                     android:text="2019-10-23"
                     android:textColor="@android:color/holo_green_dark"
-
                     android:layout_height="wrap_content" />
-
 
             </LinearLayout>
 
 
-
-
         </RelativeLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_user_flats"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_10dp"/>
+
+
         <LinearLayout
             android:id="@+id/ll_invoice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="30dp"
             android:layout_gravity="center"
             android:orientation="horizontal"
@@ -101,7 +100,6 @@
                 android:text="Go To Invoice"
                 />
 
-
         </LinearLayout>
 
 
@@ -109,7 +107,7 @@
             android:id="@+id/ll_setting"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:layout_gravity="center"
             android:orientation="horizontal"
@@ -132,8 +130,12 @@
                 android:text="Go To Settings"
                 />
 
-
         </LinearLayout>
 
     </LinearLayout>
+
+
+
 </RelativeLayout>
+
+

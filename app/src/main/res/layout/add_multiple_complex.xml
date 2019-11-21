@@ -17,6 +17,7 @@
         android:textColor="@color/blue"
         android:gravity="center"
         android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
         android:background="@drawable/next_curve"/>
 
 
@@ -34,12 +35,8 @@
             android:layout_marginTop="10dp"
             android:id="@+id/edt_city_name"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
-
-
-
-
             />
 
         <View
@@ -48,33 +45,32 @@
             android:layout_height="1dp"
             android:layout_below="@+id/edt_city_name"
             android:background="@android:color/white"
-            ></View>
+            />
+
         <Spinner
             android:id="@+id/edt_complex_name"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_marginTop="10dp"
             android:layout_below="@+id/view1"
-
-
             />
+
         <View
             android:id="@+id/view2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_below="@+id/edt_complex_name"
             android:background="@android:color/white"
-            ></View>
+            />
 
         <Spinner
             android:id="@+id/edt_block_name"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_marginTop="10dp"
             android:layout_below="@+id/view2"
-
             android:textColor="@android:color/white"
             android:hint="@string/block_name"/>
 
@@ -84,16 +80,15 @@
             android:layout_height="1dp"
             android:layout_below="@+id/edt_block_name"
             android:background="@android:color/white"
-            ></View>
+            />
 
         <Spinner
             android:id="@+id/edt_flat_no"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_marginTop="10dp"
             android:layout_below="@+id/view3"
-
             android:textColor="@android:color/white"
             />
         <View
@@ -102,30 +97,9 @@
             android:layout_height="1dp"
             android:layout_below="@+id/edt_flat_no"
             android:background="@android:color/white"
-            ></View>
-
-
-<!--
-        <Spinner
-            android:id="@+id/edt_floor_no"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_below="@+id/view5"
-
-            android:textColor="@android:color/white"
             />
--->
-<!--
-        <View
-            android:id="@+id/view4"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@+id/edt_floor_no"
-            android:background="@android:color/white"
-            ></View>
--->
+
+
 
         <RelativeLayout
             android:id="@+id/rel_next"
