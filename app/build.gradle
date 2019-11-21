@@ -54,5 +54,8 @@ dependencies {
     implementation 'com.makeramen:roundedimageview:2.2.1'
     implementation 'com.jakewharton:butterknife:10.0.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
+
+    implementation 'com.payumoney.sdkui:plug-n-play:1.5.0'
+    implementation 'com.payu.india:payu-sdk:4.4.1'
 }
 apply plugin: 'com.google.gms.google-services'
