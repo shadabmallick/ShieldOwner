@@ -1,50 +1,35 @@
 package com.sketch.securityowner.ui;
 
 import android.Manifest;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.app.TimePickerDialog;
-import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
-
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
-
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -54,7 +39,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -72,6 +56,11 @@ import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.GlobalClass.Shared_Preference;
 import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
+import com.sketch.securityowner.dialogs.DialogAlarmAdd;
+import com.sketch.securityowner.dialogs.DialogCabAdd;
+import com.sketch.securityowner.dialogs.DialogDeliveryAdd;
+import com.sketch.securityowner.dialogs.DialogGuestAdd;
+import com.sketch.securityowner.dialogs.DialogHelpAdd;
 import com.sketch.securityowner.dialogs.LoaderDialog;
 import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -87,7 +76,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -102,10 +90,10 @@ import static com.sketch.securityowner.GlobalClass.VolleySingleton.backOff;
 import static com.sketch.securityowner.GlobalClass.VolleySingleton.nuOfRetry;
 import static com.sketch.securityowner.GlobalClass.VolleySingleton.timeOut;
 
-public class SettingActivity extends AppCompatActivity implements categoryAdapter.onItemClickListner {
+public class SettingActivity extends AppCompatActivity {
     String TAG="Setting";
-    RecyclerView delivery_recycle,company_name_recycle,recyclerView,recyclerViewStaff,recyclerViewCar;
-    ArrayList<String> Number;
+
+    RecyclerView recyclerView,recyclerViewStaff,recyclerViewCar;
     RecyclerView.LayoutManager RecyclerViewLayoutManager;
     RecyclerView.LayoutManager RecyclerViewLayoutManager1;
     RecyclerView.LayoutManager RecyclerViewLayoutManager2;
@@ -114,31 +102,23 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
     FamilyAdapter RecyclerViewHorizontalAdapter;
     ArrayAdapter<String> dataAdapter1;
     Spinner spinner_help;
-    categoryAdapter CategoryAdapter;
     StaffAdapter staffAdapter;
     ArrayList<String> array1;
     CarAdapter carAdapter;
     LinearLayoutManager HorizontalLayout ;
     LinearLayoutManager HorizontalLayout1 ;
     LinearLayoutManager HorizontalLayout2 ;
-    LinearLayoutManager HorizontalLayout3 ;
-    LinearLayoutManager HorizontalLayout4 ;
+
     File p_image;
-    ArrayList<HashMap<String,String>> cityList;
     String currentDate,currentTime;
     Dialog dialog;
-    RadioButton radio1,radio2;
-    private int mYear, mMonth, mDay, mHour, mMinute,mSecond;
-    Calendar myCalendar = Calendar.getInstance();
-    RadioGroup radioSex;
     Toolbar toolbar;
-    TextView tv_time,date_picker,tv_animal,tv_medical,tv_thief,tv_threat,tv_lift,tv_id,tv_details_company,close,tv_details,app_setting,user_name,user_mobile,user_email;
+    TextView tv_details,app_setting,user_name,user_mobile,user_email;
     ImageView profile_image_edit,image_member;
 
     EditText edit_car_no,edit_parking_no,edit_name,edit_phone,edit_mail,edit_family_name,edit_family_phone;
     GlobalClass globalClass;
     Shared_Preference preference;
-    CardView animal,fire,threat,lift,medical,theif;
     ArrayList<HashMap<String,String>> productDetaiils;
     ArrayList<HashMap<String,String>> Category;
     ArrayList<HashMap<String,String>> DeliveryList;
@@ -150,21 +130,17 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
     ScrollView scroll_details,scroll_settings;
     RelativeLayout rel_profile,rel_middle_icon;
     ImageView edit;
-    String category,help_id,date_web;
+    String help_id;
     TextView add_car,add_staff,add_member;
-    EditText edit_staff_phone,edit_staff_name,edit_name_cab,edit_phone_cab, edit_vehicle_no,tv_others;
+    EditText edit_staff_phone,edit_staff_name,tv_others;
     private final int PICK_IMAGE_CAMERA = 1, PICK_IMAGE_GALLERY = 2;
     private final int PICK_IMAGE_CAMERA_FAMILY = 3, PICK_IMAGE_GALLERY_FAMILY = 4;
     private final int PICK_IMAGE_CAMERA_CAR = 5, PICK_IMAGE_GALLERY_CAR = 6;
     private final int PICK_IMAGE_CAMERA_STAFF = 7, PICK_IMAGE_GALLERY_STAFF = 6;
-    LinearLayout ll_ecom,ll_submit,ll_alram,ll_hide,ll_bell,button_E3,button_E1,ll_logout,ll_notification,ll_mycomplex,ll_visitor_option,button_activity,ll_about_us,ll_contact_us;
-    private  boolean button1IsVisible = true;
+    LinearLayout ll_ecom,ll_bell,button_E3,button_E1,ll_logout,ll_notification,ll_mycomplex,ll_visitor_option,button_activity,ll_about_us,ll_contact_us;
 
 
     LoaderDialog loaderDialog;
-
-    private BroadcastReceiver mRegistrationBroadcastReceiver;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,15 +151,15 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                 false, "");
 
         initToolBar();
-         currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
-       currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
+        currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         Log.d(TAG, "onCreate: "+currentDate);
         Log.d(TAG, "onCreate: "+currentTime);
 
         browseJob();
         //
 
-       // view1.setVisibility(View.VISIBLE);
+        // view1.setVisibility(View.VISIBLE);
         tv_details.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -316,52 +292,52 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             }
         });
 
-        img_cab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                AddCab();
-                ll_visitor_option.setVisibility(View.GONE);
+        img_cab.setOnClickListener(v -> {
 
-              //  dialog.dismiss();
-            }
+            ll_visitor_option.setVisibility(View.GONE);
+
+            DialogCabAdd dialogCabAdd = new DialogCabAdd(SettingActivity.this);
+            dialogCabAdd.show();
+
         });
-        ll_bell.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Alarm();
-                ll_visitor_option.setVisibility(View.GONE);
 
-              //  dialog.dismiss();
-            }
+        img_delivery.setOnClickListener(v -> {
+
+            ll_visitor_option.setVisibility(View.GONE);
+
+            DialogDeliveryAdd dialogDeliveryAdd = new DialogDeliveryAdd(SettingActivity.this);
+            dialogDeliveryAdd.show();
+
         });
-        img_delivery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               AddDelivery();
-                ll_visitor_option.setVisibility(View.GONE);
 
 
-            }
+        img_guest.setOnClickListener(v -> {
+            ll_visitor_option.setVisibility(View.GONE);
+
+            DialogGuestAdd dialogGuestAdd = new DialogGuestAdd(SettingActivity.this);
+            dialogGuestAdd.show();
+
         });
-        img_guest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               AddGuest();
-                ll_visitor_option.setVisibility(View.GONE);
+
+        img_help.setOnClickListener(v -> {
+            ll_visitor_option.setVisibility(View.GONE);
+
+            DialogHelpAdd dialogHelpAdd = new DialogHelpAdd(SettingActivity.this);
+            dialogHelpAdd.show();
 
 
-            }
         });
-        img_help.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AddHelp();
-                ll_visitor_option.setVisibility(View.GONE);
 
+        ll_bell.setOnClickListener(v -> {
 
-            }
+            ll_visitor_option.setVisibility(View.GONE);
+
+            DialogAlarmAdd dialogAlarmAdd = new DialogAlarmAdd(SettingActivity.this);
+            dialogAlarmAdd.show();
         });
+
+
         add_member.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -429,7 +405,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         ll_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               logoutDailog();
+                logoutDailog();
             }
         });
 
@@ -444,72 +420,72 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         });
 
     }
-   public void profileDialog(){
+    public void profileDialog(){
         dialog = new Dialog(this);
-       dialog.setContentView(R.layout.edit_profile_dialog);
-       profile_image_edit  =dialog.findViewById(R.id.profile_image_edit);
+        dialog.setContentView(R.layout.edit_profile_dialog);
+        profile_image_edit  =dialog.findViewById(R.id.profile_image_edit);
         ImageView img_edit=dialog.findViewById(R.id.img_edit);
-       edit_name  =dialog.findViewById(R.id.edit_name);
-       edit_phone=dialog.findViewById(R.id.edit_phone);
-      edit_mail=dialog.findViewById(R.id.edit_mail);
+        edit_name  =dialog.findViewById(R.id.edit_name);
+        edit_phone=dialog.findViewById(R.id.edit_phone);
+        edit_mail=dialog.findViewById(R.id.edit_mail);
 
-      if (!globalClass.getProfil_pic().isEmpty()){
-          Picasso.with(SettingActivity.this)
-                  .load(globalClass.getProfil_pic()) // web image url
-                  .fit().centerInside()
-                  .rotate(90)                    //if you want to rotate by 90 degrees
-                  .error(R.mipmap.profile_image)
-                  .placeholder(R.mipmap.profile_image)
-                  .into(profile_image_edit);
+        if (!globalClass.getProfil_pic().isEmpty()){
+            Picasso.with(SettingActivity.this)
+                    .load(globalClass.getProfil_pic()) // web image url
+                    .fit().centerInside()
+                    .rotate(90)                    //if you want to rotate by 90 degrees
+                    .error(R.mipmap.profile_image)
+                    .placeholder(R.mipmap.profile_image)
+                    .into(profile_image_edit);
 
-      }
+        }
 
-         edit_name.setText(globalClass.getName());
-         edit_phone.setText(globalClass.getPhone_number());
-         edit_mail.setText(globalClass.getEmail());
-       // set the custom dialog components - text, image and button
-       img_edit.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               selectImage();
-           }
-       });
-       LinearLayout ll_save=dialog.findViewById(R.id.ll_save);
+        edit_name.setText(globalClass.getName());
+        edit_phone.setText(globalClass.getPhone_number());
+        edit_mail.setText(globalClass.getEmail());
+        // set the custom dialog components - text, image and button
+        img_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectImage();
+            }
+        });
+        LinearLayout ll_save=dialog.findViewById(R.id.ll_save);
 
-       // if button is clicked, close the custom dialog
-       ll_save.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               String name=edit_name.getText().toString();
-               String phone=edit_phone.getText().toString();
-               String email=edit_mail.getText().toString();
-
-
-               updateProfile(name,phone,email);
-
-                 // dialog.dismiss();
-           }
-       });
-
-       dialog.show();
-       if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-           if (ContextCompat.checkSelfPermission(SettingActivity.this,
-                   Manifest.permission.CAMERA)
-                   == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(SettingActivity.this,
-                   Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                   == PackageManager.PERMISSION_GRANTED) {
-           }
-           else{
-               if(checkForPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                       Manifest.permission.CAMERA}, 124)){
-
-               }
-
-           }
-       }
+        // if button is clicked, close the custom dialog
+        ll_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name=edit_name.getText().toString();
+                String phone=edit_phone.getText().toString();
+                String email=edit_mail.getText().toString();
 
 
-   }
+                updateProfile(name,phone,email);
+
+                // dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(SettingActivity.this,
+                    Manifest.permission.CAMERA)
+                    == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(SettingActivity.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+            }
+            else{
+                if(checkForPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.CAMERA}, 124)){
+
+                }
+
+            }
+        }
+
+
+    }
     public boolean checkForPermission(final String[] permissions, final int permRequestCode) {
 
         final List<String> permissionsNeeded = new ArrayList<>();
@@ -681,10 +657,6 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
     }
 
 
-
-
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -740,7 +712,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                 String path = Environment.getExternalStorageDirectory()+File.separator;
                 // + File.separator
                 //   + "Phoenix" + File.separator + "default";
-               // f.delete();
+                // f.delete();
                 OutputStream outFile = null;
                 File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
                 try {
@@ -768,7 +740,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             // Bitmap photo = (Bitmap) data.getExtras().get("data");
             // iv_product_image.setImageBitmap(photo);
         }
-       else if (requestCode == PICK_IMAGE_GALLERY_FAMILY && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        else if (requestCode == PICK_IMAGE_GALLERY_FAMILY && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
             Uri uri = data.getData();
 
@@ -786,7 +758,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
                 e.printStackTrace();
             }
         }
-         else if (requestCode == PICK_IMAGE_CAMERA_CAR && resultCode == RESULT_OK) {
+        else if (requestCode == PICK_IMAGE_CAMERA_CAR && resultCode == RESULT_OK) {
 
 
             File f = new File(Environment.getExternalStorageDirectory().toString());
@@ -926,7 +898,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             // iv_product_image.setImageBitmap(photo);
         }
 
-       else if (requestCode == PICK_IMAGE_GALLERY_STAFF && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        else if (requestCode == PICK_IMAGE_GALLERY_STAFF && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
             Uri uri = data.getData();
 
@@ -1011,7 +983,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         if(globalClass.isNetworkAvailable()){
             // user_profile_pic_update_url();
         }else{
-        TastyToast.makeText(getApplicationContext(),"Network Connection",TastyToast.LENGTH_LONG,TastyToast.WARNING).show();
+            TastyToast.makeText(getApplicationContext(),"Network Connection",TastyToast.LENGTH_LONG,TastyToast.WARNING).show();
         }
 
     }
@@ -1025,30 +997,30 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
     }
 
     public void StaffDialog(){
-       final Dialog dialog = new Dialog(this);
-       dialog.setContentView(R.layout.staff_nfo);
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.staff_nfo);
 
-       profile_image_staff=dialog.findViewById(R.id.profile_image);
+        profile_image_staff=dialog.findViewById(R.id.profile_image);
         edit_staff_name=dialog.findViewById(R.id.edit_staff_name);
         edit_staff_phone=dialog.findViewById(R.id.edit_staff_phone);
         edit_image_staff=dialog.findViewById(R.id.edit_image_staff);
         edit_image_staff.setOnClickListener(v -> selectImageStaff());
         BrowseCity();
         spinner_help=dialog.findViewById(R.id.spinner_help);
-       // set the custom dialog components - text, image and button
+        // set the custom dialog components - text, image and button
 
-       LinearLayout ll_save=dialog.findViewById(R.id.ll_save);
-       ll_save.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               String name=edit_staff_name.getText().toString();
-               String phone=edit_staff_phone.getText().toString();
+        LinearLayout ll_save=dialog.findViewById(R.id.ll_save);
+        ll_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name=edit_staff_name.getText().toString();
+                String phone=edit_staff_phone.getText().toString();
 
 
-               AddStaff("staff",name,phone);
-               dialog.dismiss();
-           }
-       });
+                AddStaff("staff",name,phone);
+                dialog.dismiss();
+            }
+        });
 
 
 
@@ -1080,7 +1052,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             }
         });
 
-       // if button is clicked, close the custom dialog
+        // if button is clicked, close the custom dialog
 /*
        ll_save.setOnClickListener(v -> {
             String name=edit_staff_name.getText().toString();
@@ -1091,755 +1063,11 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
        });
 */
 
-       dialog.show();
-
-   }
-
-
-
-
-    public void AddCab(){
-       final Dialog dialog = new Dialog(this,R.style.datepicker);
-       dialog.setContentView(R.layout.dailog_cab);
-       dialog.setCancelable(false);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-       // set the custom dialog components - text, image and button
-        close=dialog.findViewById(R.id.close);
-        date_picker=dialog.findViewById(R.id.date_picker);
-        radio1=dialog.findViewById(R.id.radioMale);
-        radio2=dialog.findViewById(R.id.radioFemale);
-        radioSex=dialog.findViewById(R.id.radioSex);
-        edit_vehicle_no=dialog.findViewById(R.id.edit_vehicle_no);
-        edit_name_cab=dialog.findViewById(R.id.edit_name);
-        edit_phone_cab=dialog.findViewById(R.id.edit_phone);
-        tv_time=dialog.findViewById(R.id.tv_time);
-        tv_details_company=dialog.findViewById(R.id.tv_details_company);
-        ll_submit=dialog.findViewById(R.id.ll_submit);
-        tv_others=dialog.findViewById(R.id.tv_others);
-        company_name_recycle=dialog.findViewById(R.id.company_name_recycle);
-        HorizontalLayout3 = new LinearLayoutManager(SettingActivity.this, LinearLayoutManager.HORIZONTAL, false);
-
-        company_name_recycle.setLayoutManager(HorizontalLayout3);
-        date_picker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                final Calendar c = Calendar.getInstance();
-                mYear = c.get(Calendar.YEAR);
-                mMonth = c.get(Calendar.MONTH);
-                mDay = c.get(Calendar.DAY_OF_MONTH);
-
-                new DatePickerDialog(SettingActivity.this, R.style.datepicker,datePickerListener, mYear, mMonth, mDay).show();
-
-
-            }
-
-
-        });
-
-
-
-        radioSex.setOnCheckedChangeListener((group, checkedId) -> {
-            RadioButton radioButton = dialog. findViewById(checkedId);
-            // Toast.makeText(getActivity(),radioButton.getText(), Toast.LENGTH_SHORT).show();
-            String radio_value= (String) radioButton.getText();
-            Log.d(TAG, "AddCab: "+radio_value);
-            Toast.makeText(getApplicationContext(),radio_value, Toast.LENGTH_SHORT).show();
-
-        });
-
-        tv_time.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                timePicker2();
-            }
-        });
-
-
-        ll_hide=dialog.findViewById(R.id.ll_hide);
-        CategoryList();
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-      ll_submit=dialog.findViewById(R.id.ll_submit);
-
-       // if button is clicked, close the custom dialog
-        ll_submit.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               int selectedId = radioSex.getCheckedRadioButtonId();
-
-               // find the radiobutton by returned id
-               radio1 = dialog.findViewById(selectedId);
-
-               String radio_value=radio1.getText().toString();
-               AddVisitors("cab",radio_value);
-               dialog.dismiss();
-
-
-
-           }
-       });
-        tv_details_company.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if(button1IsVisible==true)
-                {
-
-                    ll_hide.setVisibility(View.VISIBLE);
-                    button1IsVisible = false;
-                }
-                else if(button1IsVisible==false)
-                {
-
-                    ll_hide.setVisibility(View.GONE);
-                    button1IsVisible = true;
-                }
-            }
-        });
-
-
-        dialog.show();
-
-   }
-    private DatePickerDialog.OnDateSetListener datePickerListener =
-            new DatePickerDialog.OnDateSetListener() {
-
-                public void onDateSet(DatePicker view, int selectedYear,
-                                      int selectedMonth, int selectedDay) {
-                    myCalendar.set(Calendar.YEAR, selectedYear);
-                    myCalendar.set(Calendar.MONTH, selectedMonth);
-                    myCalendar.set(Calendar.DAY_OF_MONTH, selectedDay);
-                    String myFormat = "MMM dd, yyyy";
-                    SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-                    SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-                 //   date_notify_exam = sdf1.format(myCalendar.getTime());
-                    String date_to_show = sdf.format(myCalendar.getTime());
-                    date_web = sdf1.format(myCalendar.getTime());
-                   // Log.d(TAG, "date_notify_exam: "+date_notify_exam);
-                    date_picker.setText(date_to_show);
-
-                }
-            };
-
-
-
-
-    String send_time;
-    private void timePicker2(){
-        // Get Current Time
-        final Calendar c = Calendar.getInstance();
-        mHour = c.get(Calendar.HOUR_OF_DAY);
-        mMinute = c.get(Calendar.MINUTE);
-
-
-
-        TimePickerDialog mTimePicker;
-        mTimePicker = new TimePickerDialog(SettingActivity.this,R.style.datepicker,
-                new TimePickerDialog.OnTimeSetListener() {
-
-            @Override
-            public void onTimeSet(TimePicker timePicker, int selectedHour,
-                                  int selectedMinute) {
-
-                String time1 = selectedHour + ":" + selectedMinute;
-                SimpleDateFormat  format1 = new SimpleDateFormat("HH:mm",
-                        Locale.ENGLISH);
-                SimpleDateFormat  format2 = new SimpleDateFormat("HH:mm:ss",
-                        Locale.ENGLISH);
-
-                SimpleDateFormat  format3 = new SimpleDateFormat("hh:mm a",
-                        Locale.ENGLISH);
-                try {
-
-                    Date date1 = format1.parse(time1);
-                    send_time = format2.format(date1);
-
-
-                    Date date = format1.parse(time1);
-                    tv_time.setText(format3.format(date));
-
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-
-            }
-        }, mHour, mMinute,true);
-
-        mTimePicker.show();
-    }
-
-
-    public void AddDelivery(){
-        final Dialog dialog = new Dialog(this,R.style.datepicker);
-        dialog.setContentView(R.layout.dialog_delivery);
-        dialog.setCancelable(false);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        // set the custom dialog components - text, image and button
-        delivery_recycle=dialog.findViewById(R.id.delivery_recycle);
-        HorizontalLayout4 = new LinearLayoutManager(SettingActivity.this, LinearLayoutManager.HORIZONTAL, false);
-        date_picker=dialog.findViewById(R.id.date_picker);
-        radio1=dialog.findViewById(R.id.radioMale);
-        radio2=dialog.findViewById(R.id.radioFemale);
-        radioSex=dialog.findViewById(R.id.radioSex);
-        edit_name_cab=dialog.findViewById(R.id.edit_name);
-        edit_phone_cab=dialog.findViewById(R.id.edit_phone);
-        tv_time=dialog.findViewById(R.id.tv_time);
-        delivery_recycle.setLayoutManager(HorizontalLayout4);
-        close=dialog.findViewById(R.id.close);
-        tv_details_company=dialog.findViewById(R.id.tv_details_company);
-        ll_hide=dialog.findViewById(R.id.ll_hide);
-        DeliveryList();
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        date_picker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                final Calendar c = Calendar.getInstance();
-                mYear = c.get(Calendar.YEAR);
-                mMonth = c.get(Calendar.MONTH);
-                mDay = c.get(Calendar.DAY_OF_MONTH);
-
-                new DatePickerDialog(SettingActivity.this,R.style.datepicker, datePickerListener, mYear, mMonth, mDay).show();
-
-
-            }
-
-
-        });
-        tv_time.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                timePicker2();
-            }
-        });
-
-        radioSex.setOnCheckedChangeListener((group, checkedId) -> {
-            RadioButton radioButton = dialog. findViewById(checkedId);
-            // Toast.makeText(getActivity(),radioButton.getText(), Toast.LENGTH_SHORT).show();
-            String radio_value= (String) radioButton.getText();
-            Log.d(TAG, "AddCab: "+radio_value);
-            Toast.makeText(getApplicationContext(),radio_value, Toast.LENGTH_SHORT).show();
-
-        });
-
-
-        LinearLayout ll_submit=dialog.findViewById(R.id.ll_submit);
-
-        ll_submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int selectedId = radioSex.getCheckedRadioButtonId();
-
-                radio1 = dialog.findViewById(selectedId);
-
-                String radio_value=radio1.getText().toString();
-                AddDelivery("delivery",radio_value);
-                dialog.dismiss();
-            }
-        });
-        tv_details_company.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if(button1IsVisible==true)
-                {
-
-                    ll_hide.setVisibility(View.VISIBLE);
-                    button1IsVisible = false;
-                }
-                else if(button1IsVisible==false)
-                {
-
-                    ll_hide.setVisibility(View.GONE);
-                    button1IsVisible = true;
-                }
-            }
-        });
-
-
-        dialog.show();
-
-    }
-    public void AddGuest(){
-        final Dialog dialog = new Dialog(this,R.style.datepicker);
-        dialog.setContentView(R.layout.dialog_guest);
-        dialog.setCancelable(false);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        // set the custom dialog components - text, image and button
-        close=dialog.findViewById(R.id.close);
-       // tv_details_company=dialog.findViewById(R.id.tv_details_company);
-        ll_hide=dialog.findViewById(R.id.ll_hide);
-        date_picker=dialog.findViewById(R.id.date_picker);
-        radio1=dialog.findViewById(R.id.radioMale);
-        radio2=dialog.findViewById(R.id.radioFemale);
-        radioSex=dialog.findViewById(R.id.radioSex);
-        edit_name_cab=dialog.findViewById(R.id.edit_name);
-        edit_phone_cab=dialog.findViewById(R.id.edit_phone);
-        tv_time=dialog.findViewById(R.id.tv_time);
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        date_picker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                final Calendar c = Calendar.getInstance();
-                mYear = c.get(Calendar.YEAR);
-                mMonth = c.get(Calendar.MONTH);
-                mDay = c.get(Calendar.DAY_OF_MONTH);
-
-                new DatePickerDialog(SettingActivity.this,R.style.datepicker, datePickerListener, mYear, mMonth, mDay).show();
-
-
-            }
-
-
-        });
-        tv_time.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                timePicker2();
-            }
-        });
-
-        radioSex.setOnCheckedChangeListener((group, checkedId) -> {
-            RadioButton radioButton = dialog. findViewById(checkedId);
-            // Toast.makeText(getActivity(),radioButton.getText(), Toast.LENGTH_SHORT).show();
-            String radio_value= (String) radioButton.getText();
-            Log.d(TAG, "AddCab: "+radio_value);
-            Toast.makeText(getApplicationContext(),radio_value, Toast.LENGTH_SHORT).show();
-
-        });
-
-        LinearLayout ll_submit=dialog.findViewById(R.id.ll_submit);
-
-        // if button is clicked, close the custom dialog
-        ll_submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int selectedId = radioSex.getCheckedRadioButtonId();
-
-                // find the radiobutton by returned id
-                radio1 = dialog.findViewById(selectedId);
-
-                String radio_value=radio1.getText().toString();
-                AddGuest("guest",radio_value);
-                dialog.dismiss();
-            }
-        });
-
-
-        dialog.show();
-
-    }
-    public void AddHelp(){
-        final Dialog dialog = new Dialog(this,R.style.datepicker);
-        dialog.setContentView(R.layout.dialog_help);
-        dialog.setCancelable(false);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        // set the custom dialog components - text, image and button
-        BrowseCity();
-        close=dialog.findViewById(R.id.close);
-        date_picker=dialog.findViewById(R.id.date_picker);
-        radio1=dialog.findViewById(R.id.radioMale);
-        radio2=dialog.findViewById(R.id.radioFemale);
-        radioSex=dialog.findViewById(R.id.radioSex);
-        edit_name_cab=dialog.findViewById(R.id.edit_name);
-        edit_phone_cab=dialog.findViewById(R.id.edit_phone);
-        tv_time=dialog.findViewById(R.id.tv_time);
-        tv_details_company=dialog.findViewById(R.id.tv_details_company);
-        spinner_help=dialog.findViewById(R.id.spinner_help);
-        ll_hide=dialog.findViewById(R.id.ll_hide);
-
-        date_picker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                final Calendar c = Calendar.getInstance();
-                mYear = c.get(Calendar.YEAR);
-                mMonth = c.get(Calendar.MONTH);
-                mDay = c.get(Calendar.DAY_OF_MONTH);
-
-                new DatePickerDialog(SettingActivity.this,R.style.datepicker, datePickerListener, mYear, mMonth, mDay).show();
-
-
-            }
-
-
-        });
-        tv_time.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                timePicker2();
-            }
-        });
-
-        radioSex.setOnCheckedChangeListener((group, checkedId) -> {
-            RadioButton radioButton = dialog. findViewById(checkedId);
-            // Toast.makeText(getActivity(),radioButton.getText(), Toast.LENGTH_SHORT).show();
-            String radio_value= (String) radioButton.getText();
-            Log.d(TAG, "AddCab: "+radio_value);
-            Toast.makeText(getApplicationContext(),radio_value, Toast.LENGTH_SHORT).show();
-
-        });
-        spinner_help.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> parent,
-                                       View arg1, int position, long arg3) {
-                // TODO Auto-generated method stub
-                // Locate the textviews in activity_security.xml.xml
-                String selectedItemText = (String) parent.getItemAtPosition(position);
-                // If user change the default selection
-                // First item is disable and it is used for hint
-                if(position !=0){
-                    help_id = HelpList.get(position-1).get("name");
-                    Log.d(TAG, "onItemSelected: "+help_id);
-
-
-                   // BrowseComplex(city_id);
-
-                    // Notify the selected item text
-
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> arg0) {
-                // TODO Auto-generated method stub
-            }
-        });
-
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-        LinearLayout ll_submit=dialog.findViewById(R.id.ll_submit);
-
-        // if button is clicked, close the custom dialog
-        ll_submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int selectedId = radioSex.getCheckedRadioButtonId();
-
-                // find the radiobutton by returned id
-                radio1 = dialog.findViewById(selectedId);
-
-                String radio_value=radio1.getText().toString();
-
-                AddVisitorHelp("visiting_help",radio_value);
-                dialog.dismiss();
-            }
-        });
-        tv_details_company.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if(button1IsVisible==true)
-                {
-
-                    ll_hide.setVisibility(View.VISIBLE);
-                    button1IsVisible = false;
-                }
-                else if(button1IsVisible==false)
-                {
-
-                    ll_hide.setVisibility(View.GONE);
-                    button1IsVisible = true;
-                }
-            }
-        });
-
-
         dialog.show();
 
     }
 
-    private void AddVisitorHelp(final String type,final String radio_value) {
-        // Tag used to cancel the request
-        String tag_string_req = "req_login";
-        HelpList.clear();
-        loaderDialog.show();
 
-        StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.add_visitor, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "JOB RESPONSE: " + response.toString());
-
-                loaderDialog.dismiss();
-
-
-                Gson gson = new Gson();
-
-                try {
-
-                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
-                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
-                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
-
-                    if(status.equals("1")) {
-
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                    }
-
-                    else {
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                    }
-
-                } catch (Exception e) {
-
-                }
-
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                loaderDialog.dismiss();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting parameters to login url
-                Map<String, String> params = new HashMap<>();
-
-                params.put("type", type);
-                params.put("time", tv_time.getText().toString());
-                params.put("date", date_web);
-                params.put("flat_no", globalClass.getFlat_no());
-                params.put("complex_id", globalClass.getComplex_id());
-                params.put("visitor_name",edit_name_cab.getText().toString() );
-                params.put("visitor_mobile",edit_phone_cab.getText().toString() );
-                params.put("frequency",radio_value);
-                params.put("visiting_help_cat",help_id);
-                params.put("profileImage","");
-                params.put("user_id",globalClass.getId());
-
-                Log.d(TAG, "getParams: "+params);
-                return params;
-            }
-
-
-
-        };
-
-        // Adding request to request queue
-        VolleySingleton.getInstance(SettingActivity.this)
-                .addToRequestQueue(strReq
-                        .setRetryPolicy(
-                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
-
-    }
-    private void AddDelivery(final String type,final String radio_value) {
-        // Tag used to cancel the request
-        String tag_string_req = "req_login";
-        HelpList.clear();
-        loaderDialog.show();
-
-        StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.add_visitor, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "JOB RESPONSE: " + response.toString());
-
-                loaderDialog.dismiss();
-
-                Gson gson = new Gson();
-
-                try {
-
-
-                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
-                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
-                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
-
-
-                    if(status.equals("1")) {
-
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                        //array.add("Select Location");
-                        //  JsonArray jarray = jobj.getAsJsonArray("data");
-                        //  Log.d("jarray", "" + jarray.toString());
-
-                    }
-
-                    else {
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                    }
-
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                }
-
-
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                loaderDialog.dismiss();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting parameters to login url
-                Map<String, String> params = new HashMap<>();
-
-                params.put("type", type);
-                params.put("time", send_time);
-                params.put("date", date_web);
-                params.put("flat_no", globalClass.getFlat_no());
-                params.put("complex_id", globalClass.getComplex_id());
-                params.put("visitor_name",edit_name_cab.getText().toString() );
-                params.put("visitor_mobile",edit_phone_cab.getText().toString() );
-              // params.put("vehicle_no",edit_vehicle_no.getText().toString() );
-                params.put("frequency",radio_value);
-                params.put("vendor_name",category);
-                params.put("visiting_help_cat","");
-                params.put("profileImage","");
-                params.put("user_id",globalClass.getId());
-
-                Log.d(TAG, "getParams: "+params);
-                return params;
-            }
-
-
-
-        };
-
-        // Adding request to request queue
-        VolleySingleton.getInstance(SettingActivity.this)
-                .addToRequestQueue(strReq
-                        .setRetryPolicy(
-                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
-
-
-    }
-    private void AddVisitors(final String type,final String radio_value) {
-        // Tag used to cancel the request
-        String tag_string_req = "req_login";
-        HelpList.clear();
-        loaderDialog.show();
-
-        StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.add_visitor, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "CAB DETAILS: " + response.toString());
-
-                loaderDialog.dismiss();
-
-                Gson gson = new Gson();
-
-                try {
-
-
-                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
-                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
-                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
-
-
-                    if(status.equals("1")) {
-
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                        //array.add("Select Location");
-                        //  JsonArray jarray = jobj.getAsJsonArray("data");
-                        //  Log.d("jarray", "" + jarray.toString());
-
-                    }
-
-                    else {
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                    }
-
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                }
-
-
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                loaderDialog.dismiss();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting parameters to login url
-                Map<String, String> params = new HashMap<>();
-
-                params.put("type", type);
-                params.put("time", tv_time.getText().toString());
-                params.put("date", date_web);
-                params.put("flat_no", globalClass.getFlat_no());
-                params.put("complex_id", globalClass.getComplex_id());
-                params.put("visitor_name",edit_name_cab.getText().toString() );
-                params.put("visitor_mobile",edit_phone_cab.getText().toString() );
-               params.put("vehicle_no",edit_vehicle_no.getText().toString() );
-                params.put("frequency",radio_value);
-                params.put("vendor_name",category);
-                params.put("visiting_help_cat","");
-                params.put("profileImage","");
-                params.put("user_id",globalClass.getId());
-
-                Log.d(TAG, "getParams: "+params);
-                return params;
-            }
-
-
-
-        };
-
-        // Adding request to request queue
-        VolleySingleton.getInstance(SettingActivity.this)
-                .addToRequestQueue(strReq
-                        .setRetryPolicy(
-                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
-
-
-    }
     public void AddStaff(final String type,final String name,final String phone){
 
         loaderDialog.show();
@@ -1921,329 +1149,72 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
 
 
     }
-    private void AddGuest(final String type,final String radio_value) {
-        // Tag used to cancel the request
-        String tag_string_req = "req_login";
-        HelpList.clear();
-        loaderDialog.show();
 
-        StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.add_visitor, new Response.Listener<String>() {
+    public void MemberDialog(){
+        dialog = new Dialog(this);
+        dialog.setContentView(R.layout.member_info);
+        ImageView img_edit=dialog.findViewById(R.id.img_edit_member);
+        edit_family_name=dialog.findViewById(R.id.edit_name);
+        edit_family_phone=dialog.findViewById(R.id.edit_phone);
+        image_member=dialog.findViewById(R.id.image_member);
 
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "JOB RESPONSE: " + response.toString());
-
-                loaderDialog.dismiss();
-
-                Gson gson = new Gson();
-
-                try {
-
-
-                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
-                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
-                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
-
-
-                    if(status.equals("1")) {
-
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                        //array.add("Select Location");
-                        //  JsonArray jarray = jobj.getAsJsonArray("data");
-                        //  Log.d("jarray", "" + jarray.toString());
-
-                    }
-
-                    else {
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                    }
-
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                }
-
-
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                loaderDialog.dismiss();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting parameters to login url
-                Map<String, String> params = new HashMap<>();
-
-                params.put("type", type);
-                params.put("time", tv_time.getText().toString());
-                params.put("date", date_web);
-                params.put("flat_no", globalClass.getFlat_no());
-                params.put("complex_id", globalClass.getComplex_id());
-                params.put("visitor_name",edit_name_cab.getText().toString() );
-                params.put("visitor_mobile",edit_phone_cab.getText().toString() );
-              //  params.put("vehicle_no",edit_vehicle_no.getText().toString() );
-                params.put("frequency",radio_value);
-                params.put("visiting_help_cat","");
-                params.put("profileImage","");
-                params.put("user_id",globalClass.getId());
-
-                Log.d(TAG, "getParams: "+params);
-                return params;
-            }
-
-
-
-        };
-
-        // Adding request to request queue
-        VolleySingleton.getInstance(SettingActivity.this)
-                .addToRequestQueue(strReq
-                        .setRetryPolicy(
-                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
-
-
-    }
-
-    private void FireAlarm(final String category) {
-        String tag_string_req = "req_login";
-        HelpList.clear();
-        loaderDialog.show();
-        StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.add_panic, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "JOB RESPONSE: " + response.toString());
-
-                loaderDialog.dismiss();
-
-
-                Gson gson = new Gson();
-
-                try {
-
-
-                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
-                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
-                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
-
-
-                    if(status.equals("1")) {
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-
-                    }
-                    else {
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                    }
-
-
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                }
-
-
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                loaderDialog.dismiss();
-            }
-        }) {
-
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting parameters to login url
-                Map<String, String> params = new HashMap<>();
-
-                params.put("user_id", globalClass.getId());
-                params.put("category", category);
-                params.put("complex_id", globalClass.getComplex_id());
-                params.put("flat_id", globalClass.getFlat_no());
-
-                Log.d(TAG, "getParams: "+params);
-                return params;
-            }
-
-        };
-
-        // Adding request to request queue
-        VolleySingleton.getInstance(SettingActivity.this)
-                .addToRequestQueue(strReq
-                        .setRetryPolicy(
-                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
-
-    }
-
-    public void Alarm(){
-
-        final Dialog dialog = new Dialog(this,R.style.datepicker);
-        dialog.setContentView(R.layout.add_alarm);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        close=dialog.findViewById(R.id.close);
-        animal=dialog.findViewById(R.id.animal);
-        theif=dialog.findViewById(R.id.burglary);
-        lift=dialog.findViewById(R.id.lift);
-        medical=dialog.findViewById(R.id.medical);
-        threat=dialog.findViewById(R.id.threat);
-        tv_details_company=dialog.findViewById(R.id.tv_details_company);
-        tv_id=dialog.findViewById(R.id.tv_fire);
-        tv_lift=dialog.findViewById(R.id.tv_lift);
-        tv_threat=dialog.findViewById(R.id.tv_threat);
-        tv_thief=dialog.findViewById(R.id.tv_thief);
-        tv_medical=dialog.findViewById(R.id.tv_medical);
-        tv_animal=dialog.findViewById(R.id.tv_animal);
-        threat=dialog.findViewById(R.id.threat);
-        ll_alram=dialog.findViewById(R.id.ll_alram);
-        ll_hide=dialog.findViewById(R.id.ll_hide);
-        fire=dialog.findViewById(R.id.fire);
-
-        fire.setOnClickListener(new View.OnClickListener() {
+        img_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String category=tv_id.getText().toString();
-                FireAlarm(category);
-                dialog.dismiss();
-
-            }
-        });
-        lift.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String category=tv_lift.getText().toString();
-                FireAlarm(category);
-                dialog.dismiss();
-
-            }
-        });
-        threat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String category=tv_threat.getText().toString();
-                FireAlarm(category);
-                dialog.dismiss();
-
-            }
-        });
-        theif.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String category=tv_thief.getText().toString();
-                FireAlarm(category);
-                dialog.dismiss();
-
-            }
-        });
-        medical.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String category=tv_medical.getText().toString();
-                FireAlarm(category);
-                dialog.dismiss();
-
-            }
-        });
-        animal.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String category=tv_animal.getText().toString();
-
-                FireAlarm(category);
-                dialog.dismiss();
-
+                selectImageFamily();
             }
         });
 
+        // set the custom dialog components - text, image and button
+
+        LinearLayout ll_save=dialog.findViewById(R.id.ll_save);
+
+        // if button is clicked, close the custom dialog
+        ll_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String family_name=edit_family_name.getText().toString();
+                String family_phone=edit_family_phone.getText().toString();
+                AddFamily(family_name,family_phone);
+            }
+        });
 
         dialog.show();
 
     }
-
-
-
-    public void MemberDialog(){
-        dialog = new Dialog(this);
-       dialog.setContentView(R.layout.member_info);
-       ImageView img_edit=dialog.findViewById(R.id.img_edit_member);
-        edit_family_name=dialog.findViewById(R.id.edit_name);
-       edit_family_phone=dialog.findViewById(R.id.edit_phone);
-       image_member=dialog.findViewById(R.id.image_member);
-
-       img_edit.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               selectImageFamily();
-           }
-       });
-
-       // set the custom dialog components - text, image and button
-
-       LinearLayout ll_save=dialog.findViewById(R.id.ll_save);
-
-       // if button is clicked, close the custom dialog
-       ll_save.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               String family_name=edit_family_name.getText().toString();
-               String family_phone=edit_family_phone.getText().toString();
-               AddFamily(family_name,family_phone);
-           }
-       });
-
-       dialog.show();
-
-   }
     public void CarDialog(){
         dialog = new Dialog(this);
-       dialog.setContentView(R.layout.car_info);
-       ImageView img_edit=dialog.findViewById(R.id.edit_car);
+        dialog.setContentView(R.layout.car_info);
+        ImageView img_edit=dialog.findViewById(R.id.edit_car);
         edit_car_no=dialog.findViewById(R.id.edit_car_no);
         edit_parking_no=dialog.findViewById(R.id.edit_parking_no);
 
-       img_edit.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
+        img_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
 
-               selectImageCar();
-           }
-       });
+                selectImageCar();
+            }
+        });
 
-       // set the custom dialog components - text, image and button
+        // set the custom dialog components - text, image and button
 
-       LinearLayout ll_save=dialog.findViewById(R.id.ll_save);
+        LinearLayout ll_save=dialog.findViewById(R.id.ll_save);
 
-       // if button is clicked, close the custom dialog
-       ll_save.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               String car_no=edit_car_no.getText().toString();
-               String parking_no=edit_parking_no.getText().toString();
-               AddCar(car_no,parking_no);
-           }
-       });
+        // if button is clicked, close the custom dialog
+        ll_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String car_no=edit_car_no.getText().toString();
+                String parking_no=edit_parking_no.getText().toString();
+                AddCar(car_no,parking_no);
+            }
+        });
 
-       dialog.show();
+        dialog.show();
 
-   }
+    }
 
     public void logoutDailog(){
         final Dialog dialog = new Dialog(this);
@@ -2278,69 +1249,69 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
     public void Logout(){
         loaderDialog.show();
 
-    StringRequest strReq = new StringRequest(Request.Method.POST,
-            AppConfig.logout, response -> {
-                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.logout, response -> {
+            Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-        loaderDialog.dismiss();
+            loaderDialog.dismiss();
 
 
-                Gson gson = new Gson();
+            Gson gson = new Gson();
 
-                try {
+            try {
 
-                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
+                JsonObject jobj = gson.fromJson(response, JsonObject.class);
 
-                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
-                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+                String status = jobj.get("status").getAsString().replaceAll("\"", "");
+                String message = jobj.get("message").getAsString().replaceAll("\"", "");
 
-                    Log.d(TAG, "Message: "+message);
+                Log.d(TAG, "Message: "+message);
 
-                    if(status.equals("1") ) {
+                if(status.equals("1") ) {
 
-                        preference.clearPrefrence();
-                        Intent intent=new Intent(SettingActivity.this,LaunchActivity.class);
-                        intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
+                    preference.clearPrefrence();
+                    Intent intent=new Intent(SettingActivity.this,LaunchActivity.class);
+                    intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
 
-                    }
-                    else {
-                        TastyToast.makeText(getApplicationContext(),
-                                message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    TastyToast.makeText(getApplicationContext(), "Error Connection", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                }
+                else {
+                    TastyToast.makeText(getApplicationContext(),
+                            message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                 }
 
+            } catch (Exception e) {
+                e.printStackTrace();
+                TastyToast.makeText(getApplicationContext(), "Error Connection", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
-            }, error -> {
-                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                loaderDialog.dismiss();
-            }) {
+            }
 
-        @Override
-        protected Map<String, String> getParams() {
-            // Posting parameters to login url
-            Map<String, String> params = new HashMap<>();
 
-            params.put("user_id", globalClass.getId());
-            Log.d(TAG, "getParams: "+params);
-            return params;
-        }
+        }, error -> {
+            Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
+            loaderDialog.dismiss();
+        }) {
 
-    };
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<>();
 
-    // Adding request to request queue
-    VolleySingleton.getInstance(SettingActivity.this)
-            .addToRequestQueue(strReq
-                    .setRetryPolicy(
-                            new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+                params.put("user_id", globalClass.getId());
+                Log.d(TAG, "getParams: "+params);
+                return params;
+            }
 
-}
+        };
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(SettingActivity.this)
+                .addToRequestQueue(strReq
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+    }
     public void updateProfile(final String name,final String phone,final String email){
 
         loaderDialog.show();
@@ -2434,7 +1405,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
         });
 
 
-}
+    }
 
 
     public void AddFamily(final String name,final String phone){
@@ -2487,9 +1458,9 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
 
                         if (status == 1) {
 
-                             dialog.dismiss();
+                            dialog.dismiss();
                             TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS).show();
-                              browseJob();
+                            browseJob();
 
 
 
@@ -2786,309 +1757,11 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
 
 
     }
-    private void CategoryList() {
-        // Tag used to cancel the request
-        String tag_string_req = "req_login";
-        Category.clear();
-
-        loaderDialog.show();
-
-        StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.company_list, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "JOB RESPONSE: " + response.toString());
-
-                loaderDialog.dismiss();
-
-
-                Gson gson = new Gson();
-
-                try {
-
-
-                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
-
-                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
-                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
-
-                    Log.d(TAG, "Message: "+message);
-
-                    if(status.equals("1") ) {
-
-
-
-                        JsonArray product = jobj.getAsJsonArray("data");
-                        for (int i = 0; i < product.size(); i++) {
-                            JsonObject images1 = product.get(i).getAsJsonObject();
-                            String id = images1.get("id").toString().replaceAll("\"", "");
-                            String company = images1.get("company").toString().replaceAll("\"", "");
-                            String type = images1.get("type").toString().replaceAll("\"", "");
-                            String icon = images1.get("icon").toString().replaceAll("\"", "");
-
-
-                            HashMap<String, String> hashMap = new HashMap<>();
-                            hashMap.put("id", id);
-                            hashMap.put("company", company);
-                            hashMap.put("type", type);
-                            hashMap.put("icon", icon);
-
-                            Category.add(hashMap);
-                            Log.d(TAG, "Hashmap " + hashMap);
-
-                        }
-
-                        CategoryAdapter = new categoryAdapter(SettingActivity.this,
-                                        Category,SettingActivity.this);
-                        company_name_recycle.setAdapter(CategoryAdapter);
-
-
-
-
-                    }
-                    else {
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    TastyToast.makeText(getApplicationContext(), "Error Connection", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                }
-
-
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                loaderDialog.dismiss();
-            }
-        }) {
-
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting parameters to login url
-                Map<String, String> params = new HashMap<>();
-
-                params.put("type", "cab");
-
-                Log.d(TAG, "getParams: "+params);
-                return params;
-            }
-
-        };
-
-        // Adding request to request queue
-        VolleySingleton.getInstance(SettingActivity.this)
-                .addToRequestQueue(strReq
-                        .setRetryPolicy(
-                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
-
-
-    }
-    private void DeliveryList() {
-        // Tag used to cancel the request
-        String tag_string_req = "req_login";
-        DeliveryList.clear();
-        loaderDialog.show();
-
-        StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.company_list, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "JOB RESPONSE: " + response.toString());
-
-                loaderDialog.dismiss();
-
-
-                Gson gson = new Gson();
-
-                try {
-
-
-                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
-
-                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
-                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
-
-                    Log.d(TAG, "Message: "+message);
-
-                    if(status.equals("1") ) {
-
-
-
-                        JsonArray product = jobj.getAsJsonArray("data");
-                        for (int i = 0; i < product.size(); i++) {
-                            JsonObject images1 = product.get(i).getAsJsonObject();
-                            String id = images1.get("id").toString().replaceAll("\"", "");
-                            String company = images1.get("company").toString().replaceAll("\"", "");
-                            String type = images1.get("type").toString().replaceAll("\"", "");
-                            String icon = images1.get("icon").toString().replaceAll("\"", "");
-
-
-                            HashMap<String, String> hashMap = new HashMap<>();
-                            hashMap.put("id", id);
-                            hashMap.put("company", company);
-                            hashMap.put("type", type);
-                            hashMap.put("icon", icon);
-
-                            DeliveryList.add(hashMap);
-                            Log.d(TAG, "Hashmap " + hashMap);
-
-                        }
-
-                        CategoryAdapter = new categoryAdapter(SettingActivity.this,
-                                DeliveryList,SettingActivity.this);
-                        delivery_recycle.setAdapter(CategoryAdapter);
-
-
-                    } else {
-                        TastyToast.makeText(getApplicationContext(),
-                                message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    TastyToast.makeText(getApplicationContext(), "Error Connection", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                }
-
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                loaderDialog.dismiss();
-            }
-        }) {
-
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting parameters to login url
-                Map<String, String> params = new HashMap<>();
-
-                params.put("type", "delivery");
-
-                Log.d(TAG, "getParams: "+params);
-                return params;
-            }
-
-        };
-
-        // Adding request to request queue
-        VolleySingleton.getInstance(SettingActivity.this)
-                .addToRequestQueue(strReq
-                        .setRetryPolicy(
-                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
-
-
-    }
-    private void Add(final String type) {
-        // Tag used to cancel the request
-        String tag_string_req = "req_login";
-
-
-        loaderDialog.show();
-
-        StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.add_visitor, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "JOB RESPONSE: " + response.toString());
-
-                loaderDialog.dismiss();
-
-
-                Gson gson = new Gson();
-
-                try {
-
-
-                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
-
-                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
-                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
-
-                    Log.d(TAG, "Message: "+message);
-
-                    if(status.equals("1") ) {
-
-
-
-
-
-
-
-
-                    }
-                    else {
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    TastyToast.makeText(getApplicationContext(), "Error Connection", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                }
-
-
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                loaderDialog.dismiss();
-            }
-        }) {
-
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting parameters to login url
-                Map<String, String> params = new HashMap<>();
-
-                params.put("type", "delivery");
-                params.put("time", tv_time.getText().toString());
-                params.put("date", date_web);
-                params.put("type", type);
-                params.put("flat_no", globalClass.getFlat_no());
-                params.put("complex_id", globalClass.getComplex_id());
-                params.put("visitor_name", edit_name_cab.getText().toString());
-                params.put("visitor_mobile", edit_phone_cab.getText().toString());
-
-                Log.d(TAG, "getParams: "+params);
-                return params;
-            }
-
-        };
-
-        // Adding request to request queue
-        VolleySingleton.getInstance(SettingActivity.this)
-                .addToRequestQueue(strReq
-                        .setRetryPolicy(
-                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
-
-
-    }
     private void BrowseCity() {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         HelpList.clear();
-        startAnim();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.GET,
                 AppConfig.help_category_list, new Response.Listener<String>() {
@@ -3097,7 +1770,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-                stopAnim();
+                loaderDialog.dismiss();
 
 
                 Gson gson = new Gson();
@@ -3185,26 +1858,7 @@ public class SettingActivity extends AppCompatActivity implements categoryAdapte
 
 
     }
-    void startAnim(){
-        avLoadingIndicatorView.show();
-        // or avi.smoothToShow();
-    }
 
-    void stopAnim(){
-        avLoadingIndicatorView.hide();
-        // or avi.smoothToHide();
-    }
-
-    @Override
-    public void onItemClick(String s) {
-        category=s;
-        if (category.equals("Others")){
-            tv_others.setVisibility(View.VISIBLE);
-        }
-        Toast.makeText(getApplicationContext(),s,Toast.LENGTH_LONG).show();
-
-
-    }
 
 
 }

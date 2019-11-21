@@ -63,8 +63,13 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.MyViewHold
     @Override
     public void onBindViewHolder(final FamilyAdapter.MyViewHolder holder, final int position)
     {
-        Picasso.with(context).load(text.get(position).get("profile_pic_family")).
-                fit().into(holder.profile_image);
+        String profile_pic_family=text.get(position).get("profile_pic_family");
+        if(!profile_pic_family.isEmpty()){
+            Picasso.with(context).load(text.get(position).get("profile_pic_family")).
+                    fit().into(holder.profile_image);
+        }
+
+
         String staff_name=text.get(position).get("family_member_name");
         String staff_type=text.get(position).get("family_member_type");
         holder.name.setText(staff_name);

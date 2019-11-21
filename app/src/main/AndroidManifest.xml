@@ -54,6 +54,12 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.AddMultipleFlat"
+            android:theme="@style/MyTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.RegisterNext"
             android:theme="@style/MyTheme">
             <intent-filter>

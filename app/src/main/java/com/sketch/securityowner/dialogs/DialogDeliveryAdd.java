@@ -73,7 +73,7 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
     private Calendar myCalendar = Calendar.getInstance();
 
     public DialogDeliveryAdd(@NonNull Context context) {
-        super(context);
+        super(context, R.style.datepicker);
         this.context = context;
 
     }

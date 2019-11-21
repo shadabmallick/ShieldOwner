@@ -65,7 +65,7 @@ public class DialogGuestAdd extends Dialog {
     private Calendar myCalendar = Calendar.getInstance();
 
     public DialogGuestAdd(@NonNull Context context) {
-        super(context);
+        super(context, R.style.datepicker);
         this.context = context;
 
     }

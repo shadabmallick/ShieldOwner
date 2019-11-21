@@ -67,14 +67,16 @@ public class DialogHelpAdd extends Dialog {
     private TextView close,tv_details_company,tv_time, date_picker;
     private RadioButton radio1, radio2;
     private EditText edit_name_cab, edit_phone_cab;
-    ArrayAdapter<String> dataAdapter1;
     ArrayList<String> array1;
     LinearLayout ll_hide;
     private  boolean button1IsVisible = true;
     private Calendar myCalendar = Calendar.getInstance();
     Spinner spinner_help;
+
+
+
     public DialogHelpAdd(@NonNull Context context) {
-        super(context);
+        super(context, R.style.datepicker);
         this.context = context;
 
     }
@@ -145,19 +147,11 @@ public class DialogHelpAdd extends Dialog {
             @Override
             public void onItemSelected(AdapterView<?> parent,
                                        View arg1, int position, long arg3) {
-                // TODO Auto-generated method stub
-                // Locate the textviews in activity_security.xml.xml
                 String selectedItemText = (String) parent.getItemAtPosition(position);
-                // If user change the default selection
-                // First item is disable and it is used for hint
                 if(position !=0){
+
                     help_id = HelpList.get(position-1).get("name");
                     Log.d(TAG, "onItemSelected: "+help_id);
-
-
-                    // BrowseComplex(city_id);
-
-                    // Notify the selected item text
 
                 }
             }
@@ -171,38 +165,39 @@ public class DialogHelpAdd extends Dialog {
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // dialog.dismiss();
+              dismiss();
             }
         });
+
+
         LinearLayout ll_submit=findViewById(R.id.ll_submit);
 
-        // if button is clicked, close the custom dialog
         ll_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int selectedId = radioSex.getCheckedRadioButtonId();
 
-                // find the radiobutton by returned id
                 radio1 = findViewById(selectedId);
 
                 String radio_value=radio1.getText().toString();
 
                 AddVisitorHelp("visiting_help",radio_value);
-               // dialog.dismiss();
             }
         });
+
+
+
+
         tv_details_company.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                if(button1IsVisible==true)
-                {
+                if(button1IsVisible==true) {
 
                     ll_hide.setVisibility(View.VISIBLE);
                     button1IsVisible = false;
                 }
-                else if(button1IsVisible==false)
-                {
+                else if(button1IsVisible==false) {
 
                     ll_hide.setVisibility(View.GONE);
                     button1IsVisible = true;
@@ -216,6 +211,8 @@ public class DialogHelpAdd extends Dialog {
                 dismiss();
             }
         });
+
+
         date_picker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -231,12 +228,15 @@ public class DialogHelpAdd extends Dialog {
             }
 
         });
+
+
         tv_time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 timePicker2();
             }
         });
+
 
         radioSex.setOnCheckedChangeListener((group, checkedId) -> {
             RadioButton radioButton = findViewById(checkedId);
@@ -247,23 +247,8 @@ public class DialogHelpAdd extends Dialog {
 
         });
 
-      //  LinearLayout ll_submit = findViewById(R.id.ll_submit);
 
-        // if button is clicked, close the custom dialog
-        ll_submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int selectedId = radioSex.getCheckedRadioButtonId();
-
-                radio1 = findViewById(selectedId);
-
-                String radio_value=radio1.getText().toString();
-                AddGuest("guest",radio_value);
-
-            }
-        });
-
-
+        visitingHelpCat();
 
 
     }
@@ -332,96 +317,10 @@ public class DialogHelpAdd extends Dialog {
     }
 
 
-    private void AddGuest(final String type,final String radio_value) {
-        // Tag used to cancel the request
-        String tag_string_req = "req_login";
-        progressDialog.show();
-
-        StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.add_visitor, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                Log.d(AppConfig.TAG, "JOB RESPONSE: " + response.toString());
-
-                Gson gson = new Gson();
-                try {
-
-
-                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
-                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
-                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
-
-
-                    if(status.equals("1")) {
-
-                        TastyToast.makeText(context, message,
-                                TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                        dismiss();
-
-                    } else {
-                        TastyToast.makeText(context, message,
-                                TastyToast.LENGTH_LONG, TastyToast.ERROR);
-
-                    }
-
-                    progressDialog.dismiss();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-
-            public void onErrorResponse(VolleyError error) {
-                Log.e(AppConfig.TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(context, "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                progressDialog.dismiss();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting parameters to login url
-                Map<String, String> params = new HashMap<>();
-
-                params.put("type", type);
-                params.put("time", send_time);
-                params.put("date", date_web);
-                params.put("flat_no", globalClass.getFlat_no());
-                params.put("complex_id", globalClass.getComplex_id());
-                params.put("visitor_name", edit_name_cab.getText().toString() );
-                params.put("visitor_mobile", edit_phone_cab.getText().toString() );
-                params.put("frequency",radio_value);
-                params.put("visiting_help_cat","");
-                params.put("profileImage","");
-                params.put("user_id",globalClass.getId());
-
-
-                Log.d(AppConfig.TAG, "getParams: "+params);
-                return params;
-            }
-
-        };
-
-        // Adding request to request queue
-        VolleySingleton.getInstance(context)
-                .addToRequestQueue(strReq
-                        .setRetryPolicy(
-                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
-
-    }
-
-
-    private void BrowseCity() {
+    private void visitingHelpCat() {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         HelpList.clear();
-    //    startAnim();
 
         StringRequest strReq = new StringRequest(Request.Method.GET,
                 AppConfig.help_category_list, new Response.Listener<String>() {
@@ -430,13 +329,9 @@ public class DialogHelpAdd extends Dialog {
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-               // stopAnim();
-
-
                 Gson gson = new Gson();
 
                 try {
-
 
                     JsonObject jobj = gson.fromJson(response, JsonObject.class);
                     String status = jobj.get("status").getAsString().replaceAll("\"", "");
@@ -475,10 +370,10 @@ public class DialogHelpAdd extends Dialog {
 
                             array1.add(name);
 
-
                         }
 
-                        dataAdapter1 = new ArrayAdapter(context, R.layout.item_spinner, R.id.tvCust, array1);
+                        ArrayAdapter dataAdapter1 = new ArrayAdapter(context,
+                                R.layout.item_spinner, R.id.tvCust, array1);
                         spinner_help.setAdapter(dataAdapter1);
                         spinner_help.setPrompt("Help");
                     }
@@ -490,8 +385,7 @@ public class DialogHelpAdd extends Dialog {
 
 
                 } catch (Exception e) {
-                    TastyToast.makeText(context, "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
+                    e.printStackTrace();
                 }
 
 
@@ -502,7 +396,7 @@ public class DialogHelpAdd extends Dialog {
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                //loaderDialog.dismiss();
+                TastyToast.makeText(context, "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
             }
         }) {
 
@@ -524,17 +418,12 @@ public class DialogHelpAdd extends Dialog {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         HelpList.clear();
-       // loaderDialog.show();
-
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.add_visitor, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
-
-              //  loaderDialog.dismiss();
-
 
                 Gson gson = new Gson();
 
@@ -545,6 +434,8 @@ public class DialogHelpAdd extends Dialog {
                     String message = jobj.get("message").getAsString().replaceAll("\"", "");
 
                     if(status.equals("1")) {
+
+                        dismiss();
 
                         TastyToast.makeText(context, message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
@@ -567,7 +458,6 @@ public class DialogHelpAdd extends Dialog {
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
                 TastyToast.makeText(context, "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-               // loaderDialog.dismiss();
             }
         }) {
             @Override
