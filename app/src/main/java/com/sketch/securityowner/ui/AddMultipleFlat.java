@@ -55,9 +55,14 @@ public class AddMultipleFlat extends AppCompatActivity {
     ArrayList<HashMap<String,String>>flatList;
     ArrayList<String> array1,array2,array3,array4;
     ArrayAdapter<String> dataAdapter1,dataadpter2,dataadpater3,dataadapter4,dataadapter5;
+<<<<<<< HEAD
     Spinner edt_floor_no, edt_city_name, edt_complex_name, edt_block_name, edt_flat_no;
     String city_id,item,complex_id,block_name,flat_no,complex_name;
 
+=======
+    Spinner edt_floor_no, edt_city_name,edt_complex_name,edt_block_name,edt_flat_no;
+        String city_id,item,complex_id,block_name,flat_id,complex_name;
+>>>>>>> 0b5e3a3aca14957b6a6abd2aeb854da80b2f3ba1
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,6 +176,17 @@ public class AddMultipleFlat extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent,
                                        View arg1, int position, long arg3) {
+<<<<<<< HEAD
+=======
+                // TODO Auto-generated method stub
+                // Locate the textviews in activity_securityrity.xml
+                String selectedItemText = (String) parent.getItemAtPosition(position);
+                // If user change the default selection
+                // First item is disable and it is used for hint
+                if(position !=0){
+                    flat_id = flatList.get(position-1).get("id");
+                    Log.d(TAG, "onItemSelected: "+flat_id);
+>>>>>>> 0b5e3a3aca14957b6a6abd2aeb854da80b2f3ba1
 
                 String selectedItemText = (String) parent.getItemAtPosition(position);
 
@@ -798,7 +814,7 @@ public class AddMultipleFlat extends AppCompatActivity {
 
                 params.put("complex_id",complex_id);
                 params.put("user_id",globalClass.getId());
-                params.put("flat_id",flat_no);
+                params.put("flat_id",flat_id);
                 Log.d(TAG, "params "+params);
 
                 return params;

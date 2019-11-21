@@ -104,6 +104,19 @@
                 android:layout_below="@+id/tv_company_name"
                 android:layout_height="wrap_content"/>
 
+
+            <EditText
+                android:id="@+id/edt_car_no"
+                android:background="@android:drawable/dialog_holo_light_frame"
+                android:padding="20dp"
+                android:hint="@string/entercar_no"
+                android:layout_marginLeft="20dp"
+
+                android:layout_width="match_parent"
+                android:layout_marginRight="20dp"
+                android:layout_below="@+id/delivery_recycle"
+                android:layout_height="wrap_content"></EditText>
+
             <TextView
                 android:id="@+id/tv_details_company"
                 android:layout_width="match_parent"
@@ -112,7 +125,7 @@
                 android:gravity="center"
                 android:textColor="@color/blue"
                 android:layout_marginTop="20dp"
-                android:layout_below="@+id/delivery_recycle"/>
+                android:layout_below="@+id/edt_car_no"/>
 
 
             <LinearLayout
