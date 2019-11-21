@@ -56,7 +56,7 @@ public class AddMultipleFlat extends AppCompatActivity {
     ArrayList<String> array1,array2,array3,array4;
     ArrayAdapter<String> dataAdapter1,dataadpter2,dataadpater3,dataadapter4,dataadapter5;
     Spinner edt_floor_no, edt_city_name,edt_complex_name,edt_block_name,edt_flat_no;
-        String city_id,item,complex_id,block_name,flat_no,complex_name;
+        String city_id,item,complex_id,block_name,flat_id,complex_name;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -199,7 +199,8 @@ public class AddMultipleFlat extends AppCompatActivity {
                 // If user change the default selection
                 // First item is disable and it is used for hint
                 if(position !=0){
-                    flat_no = flatList.get(position-1).get("id");
+                    flat_id = flatList.get(position-1).get("id");
+                    Log.d(TAG, "onItemSelected: "+flat_id);
 
 
                    // BrowseComplex(city_id);
@@ -866,7 +867,7 @@ public class AddMultipleFlat extends AppCompatActivity {
 
                 params.put("complex_id",complex_id);
                 params.put("user_id",globalClass.getId());
-                params.put("flat_id",flat_no);
+                params.put("flat_id",flat_id);
                 Log.d(TAG, "params "+params);
 
                 return params;
