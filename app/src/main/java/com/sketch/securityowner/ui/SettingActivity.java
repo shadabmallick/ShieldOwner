@@ -151,15 +151,15 @@ public class SettingActivity extends AppCompatActivity {
                 false, "");
 
         initToolBar();
-         currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
-       currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
+        currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         Log.d(TAG, "onCreate: "+currentDate);
         Log.d(TAG, "onCreate: "+currentTime);
 
         browseJob();
         //
 
-       // view1.setVisibility(View.VISIBLE);
+        // view1.setVisibility(View.VISIBLE);
         tv_details.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -405,7 +405,7 @@ public class SettingActivity extends AppCompatActivity {
         ll_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               logoutDailog();
+                logoutDailog();
             }
         });
 
@@ -420,72 +420,72 @@ public class SettingActivity extends AppCompatActivity {
         });
 
     }
-   public void profileDialog(){
+    public void profileDialog(){
         dialog = new Dialog(this);
-       dialog.setContentView(R.layout.edit_profile_dialog);
-       profile_image_edit  =dialog.findViewById(R.id.profile_image_edit);
+        dialog.setContentView(R.layout.edit_profile_dialog);
+        profile_image_edit  =dialog.findViewById(R.id.profile_image_edit);
         ImageView img_edit=dialog.findViewById(R.id.img_edit);
-       edit_name  =dialog.findViewById(R.id.edit_name);
-       edit_phone=dialog.findViewById(R.id.edit_phone);
-      edit_mail=dialog.findViewById(R.id.edit_mail);
+        edit_name  =dialog.findViewById(R.id.edit_name);
+        edit_phone=dialog.findViewById(R.id.edit_phone);
+        edit_mail=dialog.findViewById(R.id.edit_mail);
 
-      if (!globalClass.getProfil_pic().isEmpty()){
-          Picasso.with(SettingActivity.this)
-                  .load(globalClass.getProfil_pic()) // web image url
-                  .fit().centerInside()
-                  .rotate(90)                    //if you want to rotate by 90 degrees
-                  .error(R.mipmap.profile_image)
-                  .placeholder(R.mipmap.profile_image)
-                  .into(profile_image_edit);
+        if (!globalClass.getProfil_pic().isEmpty()){
+            Picasso.with(SettingActivity.this)
+                    .load(globalClass.getProfil_pic()) // web image url
+                    .fit().centerInside()
+                    .rotate(90)                    //if you want to rotate by 90 degrees
+                    .error(R.mipmap.profile_image)
+                    .placeholder(R.mipmap.profile_image)
+                    .into(profile_image_edit);
 
-      }
+        }
 
-         edit_name.setText(globalClass.getName());
-         edit_phone.setText(globalClass.getPhone_number());
-         edit_mail.setText(globalClass.getEmail());
-       // set the custom dialog components - text, image and button
-       img_edit.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               selectImage();
-           }
-       });
-       LinearLayout ll_save=dialog.findViewById(R.id.ll_save);
+        edit_name.setText(globalClass.getName());
+        edit_phone.setText(globalClass.getPhone_number());
+        edit_mail.setText(globalClass.getEmail());
+        // set the custom dialog components - text, image and button
+        img_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectImage();
+            }
+        });
+        LinearLayout ll_save=dialog.findViewById(R.id.ll_save);
 
-       // if button is clicked, close the custom dialog
-       ll_save.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               String name=edit_name.getText().toString();
-               String phone=edit_phone.getText().toString();
-               String email=edit_mail.getText().toString();
-
-
-               updateProfile(name,phone,email);
-
-                 // dialog.dismiss();
-           }
-       });
-
-       dialog.show();
-       if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-           if (ContextCompat.checkSelfPermission(SettingActivity.this,
-                   Manifest.permission.CAMERA)
-                   == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(SettingActivity.this,
-                   Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                   == PackageManager.PERMISSION_GRANTED) {
-           }
-           else{
-               if(checkForPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                       Manifest.permission.CAMERA}, 124)){
-
-               }
-
-           }
-       }
+        // if button is clicked, close the custom dialog
+        ll_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name=edit_name.getText().toString();
+                String phone=edit_phone.getText().toString();
+                String email=edit_mail.getText().toString();
 
 
-   }
+                updateProfile(name,phone,email);
+
+                // dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(SettingActivity.this,
+                    Manifest.permission.CAMERA)
+                    == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(SettingActivity.this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+            }
+            else{
+                if(checkForPermission(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.CAMERA}, 124)){
+
+                }
+
+            }
+        }
+
+
+    }
     public boolean checkForPermission(final String[] permissions, final int permRequestCode) {
 
         final List<String> permissionsNeeded = new ArrayList<>();
@@ -712,7 +712,7 @@ public class SettingActivity extends AppCompatActivity {
                 String path = Environment.getExternalStorageDirectory()+File.separator;
                 // + File.separator
                 //   + "Phoenix" + File.separator + "default";
-               // f.delete();
+                // f.delete();
                 OutputStream outFile = null;
                 File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
                 try {
@@ -740,7 +740,7 @@ public class SettingActivity extends AppCompatActivity {
             // Bitmap photo = (Bitmap) data.getExtras().get("data");
             // iv_product_image.setImageBitmap(photo);
         }
-       else if (requestCode == PICK_IMAGE_GALLERY_FAMILY && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        else if (requestCode == PICK_IMAGE_GALLERY_FAMILY && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
             Uri uri = data.getData();
 
@@ -758,7 +758,7 @@ public class SettingActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-         else if (requestCode == PICK_IMAGE_CAMERA_CAR && resultCode == RESULT_OK) {
+        else if (requestCode == PICK_IMAGE_CAMERA_CAR && resultCode == RESULT_OK) {
 
 
             File f = new File(Environment.getExternalStorageDirectory().toString());
@@ -898,7 +898,7 @@ public class SettingActivity extends AppCompatActivity {
             // iv_product_image.setImageBitmap(photo);
         }
 
-       else if (requestCode == PICK_IMAGE_GALLERY_STAFF && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        else if (requestCode == PICK_IMAGE_GALLERY_STAFF && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
             Uri uri = data.getData();
 
@@ -983,7 +983,7 @@ public class SettingActivity extends AppCompatActivity {
         if(globalClass.isNetworkAvailable()){
             // user_profile_pic_update_url();
         }else{
-        TastyToast.makeText(getApplicationContext(),"Network Connection",TastyToast.LENGTH_LONG,TastyToast.WARNING).show();
+            TastyToast.makeText(getApplicationContext(),"Network Connection",TastyToast.LENGTH_LONG,TastyToast.WARNING).show();
         }
 
     }
@@ -997,30 +997,30 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     public void StaffDialog(){
-       final Dialog dialog = new Dialog(this);
-       dialog.setContentView(R.layout.staff_nfo);
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.staff_nfo);
 
-       profile_image_staff=dialog.findViewById(R.id.profile_image);
+        profile_image_staff=dialog.findViewById(R.id.profile_image);
         edit_staff_name=dialog.findViewById(R.id.edit_staff_name);
         edit_staff_phone=dialog.findViewById(R.id.edit_staff_phone);
         edit_image_staff=dialog.findViewById(R.id.edit_image_staff);
         edit_image_staff.setOnClickListener(v -> selectImageStaff());
         BrowseCity();
         spinner_help=dialog.findViewById(R.id.spinner_help);
-       // set the custom dialog components - text, image and button
+        // set the custom dialog components - text, image and button
 
-       LinearLayout ll_save=dialog.findViewById(R.id.ll_save);
-       ll_save.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               String name=edit_staff_name.getText().toString();
-               String phone=edit_staff_phone.getText().toString();
+        LinearLayout ll_save=dialog.findViewById(R.id.ll_save);
+        ll_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name=edit_staff_name.getText().toString();
+                String phone=edit_staff_phone.getText().toString();
 
 
-               AddStaff("staff",name,phone);
-               dialog.dismiss();
-           }
-       });
+                AddStaff("staff",name,phone);
+                dialog.dismiss();
+            }
+        });
 
 
 
@@ -1052,7 +1052,7 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-       // if button is clicked, close the custom dialog
+        // if button is clicked, close the custom dialog
 /*
        ll_save.setOnClickListener(v -> {
             String name=edit_staff_name.getText().toString();
@@ -1063,9 +1063,9 @@ public class SettingActivity extends AppCompatActivity {
        });
 */
 
-       dialog.show();
+        dialog.show();
 
-   }
+    }
 
 
     public void AddStaff(final String type,final String name,final String phone){
@@ -1152,69 +1152,69 @@ public class SettingActivity extends AppCompatActivity {
 
     public void MemberDialog(){
         dialog = new Dialog(this);
-       dialog.setContentView(R.layout.member_info);
-       ImageView img_edit=dialog.findViewById(R.id.img_edit_member);
+        dialog.setContentView(R.layout.member_info);
+        ImageView img_edit=dialog.findViewById(R.id.img_edit_member);
         edit_family_name=dialog.findViewById(R.id.edit_name);
-       edit_family_phone=dialog.findViewById(R.id.edit_phone);
-       image_member=dialog.findViewById(R.id.image_member);
+        edit_family_phone=dialog.findViewById(R.id.edit_phone);
+        image_member=dialog.findViewById(R.id.image_member);
 
-       img_edit.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               selectImageFamily();
-           }
-       });
+        img_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectImageFamily();
+            }
+        });
 
-       // set the custom dialog components - text, image and button
+        // set the custom dialog components - text, image and button
 
-       LinearLayout ll_save=dialog.findViewById(R.id.ll_save);
+        LinearLayout ll_save=dialog.findViewById(R.id.ll_save);
 
-       // if button is clicked, close the custom dialog
-       ll_save.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               String family_name=edit_family_name.getText().toString();
-               String family_phone=edit_family_phone.getText().toString();
-               AddFamily(family_name,family_phone);
-           }
-       });
+        // if button is clicked, close the custom dialog
+        ll_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String family_name=edit_family_name.getText().toString();
+                String family_phone=edit_family_phone.getText().toString();
+                AddFamily(family_name,family_phone);
+            }
+        });
 
-       dialog.show();
+        dialog.show();
 
-   }
+    }
     public void CarDialog(){
         dialog = new Dialog(this);
-       dialog.setContentView(R.layout.car_info);
-       ImageView img_edit=dialog.findViewById(R.id.edit_car);
+        dialog.setContentView(R.layout.car_info);
+        ImageView img_edit=dialog.findViewById(R.id.edit_car);
         edit_car_no=dialog.findViewById(R.id.edit_car_no);
         edit_parking_no=dialog.findViewById(R.id.edit_parking_no);
 
-       img_edit.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
+        img_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
 
-               selectImageCar();
-           }
-       });
+                selectImageCar();
+            }
+        });
 
-       // set the custom dialog components - text, image and button
+        // set the custom dialog components - text, image and button
 
-       LinearLayout ll_save=dialog.findViewById(R.id.ll_save);
+        LinearLayout ll_save=dialog.findViewById(R.id.ll_save);
 
-       // if button is clicked, close the custom dialog
-       ll_save.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               String car_no=edit_car_no.getText().toString();
-               String parking_no=edit_parking_no.getText().toString();
-               AddCar(car_no,parking_no);
-           }
-       });
+        // if button is clicked, close the custom dialog
+        ll_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String car_no=edit_car_no.getText().toString();
+                String parking_no=edit_parking_no.getText().toString();
+                AddCar(car_no,parking_no);
+            }
+        });
 
-       dialog.show();
+        dialog.show();
 
-   }
+    }
 
     public void logoutDailog(){
         final Dialog dialog = new Dialog(this);
@@ -1249,69 +1249,69 @@ public class SettingActivity extends AppCompatActivity {
     public void Logout(){
         loaderDialog.show();
 
-    StringRequest strReq = new StringRequest(Request.Method.POST,
-            AppConfig.logout, response -> {
-                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.logout, response -> {
+            Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-        loaderDialog.dismiss();
+            loaderDialog.dismiss();
 
 
-                Gson gson = new Gson();
+            Gson gson = new Gson();
 
-                try {
+            try {
 
-                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
+                JsonObject jobj = gson.fromJson(response, JsonObject.class);
 
-                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
-                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+                String status = jobj.get("status").getAsString().replaceAll("\"", "");
+                String message = jobj.get("message").getAsString().replaceAll("\"", "");
 
-                    Log.d(TAG, "Message: "+message);
+                Log.d(TAG, "Message: "+message);
 
-                    if(status.equals("1") ) {
+                if(status.equals("1") ) {
 
-                        preference.clearPrefrence();
-                        Intent intent=new Intent(SettingActivity.this,LaunchActivity.class);
-                        intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
+                    preference.clearPrefrence();
+                    Intent intent=new Intent(SettingActivity.this,LaunchActivity.class);
+                    intent.addFlags(FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
 
-                    }
-                    else {
-                        TastyToast.makeText(getApplicationContext(),
-                                message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    TastyToast.makeText(getApplicationContext(), "Error Connection", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                }
+                else {
+                    TastyToast.makeText(getApplicationContext(),
+                            message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                 }
 
+            } catch (Exception e) {
+                e.printStackTrace();
+                TastyToast.makeText(getApplicationContext(), "Error Connection", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
-            }, error -> {
-                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                loaderDialog.dismiss();
-            }) {
+            }
 
-        @Override
-        protected Map<String, String> getParams() {
-            // Posting parameters to login url
-            Map<String, String> params = new HashMap<>();
 
-            params.put("user_id", globalClass.getId());
-            Log.d(TAG, "getParams: "+params);
-            return params;
-        }
+        }, error -> {
+            Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
+            loaderDialog.dismiss();
+        }) {
 
-    };
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<>();
 
-    // Adding request to request queue
-    VolleySingleton.getInstance(SettingActivity.this)
-            .addToRequestQueue(strReq
-                    .setRetryPolicy(
-                            new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+                params.put("user_id", globalClass.getId());
+                Log.d(TAG, "getParams: "+params);
+                return params;
+            }
 
-}
+        };
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(SettingActivity.this)
+                .addToRequestQueue(strReq
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+    }
     public void updateProfile(final String name,final String phone,final String email){
 
         loaderDialog.show();
@@ -1405,7 +1405,7 @@ public class SettingActivity extends AppCompatActivity {
         });
 
 
-}
+    }
 
 
     public void AddFamily(final String name,final String phone){
@@ -1458,9 +1458,9 @@ public class SettingActivity extends AppCompatActivity {
 
                         if (status == 1) {
 
-                             dialog.dismiss();
+                            dialog.dismiss();
                             TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS).show();
-                              browseJob();
+                            browseJob();
 
 
 

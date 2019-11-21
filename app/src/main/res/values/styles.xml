@@ -14,7 +14,7 @@
         <item name="android:windowFullscreen">false</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="windowNoTitle">true</item>
-       <!-- <item name="otpViewStyle">@style/OtpWidget.OtpView</item>-->
+        <item name="otpViewStyle">@style/OtpWidget.OtpView</item>
 
         <item name="colorPrimary">@color/blue</item>
         <item name="colorPrimaryDark">@color/blue</item>

@@ -3,16 +3,14 @@ package com.sketch.securityowner.ui;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-
-
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
-
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,15 +25,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sdsmdg.tastytoast.TastyToast;
-import com.sketch.securityowner.Adapter.CityAdapter;
-import com.sketch.securityowner.Adapter.FamilyAdapter;
-import com.sketch.securityowner.Adapter.StaffAdapter;
 import com.sketch.securityowner.Constant.AppConfig;
 import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.GlobalClass.Shared_Preference;
 import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
-
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
@@ -46,39 +40,42 @@ import static com.sketch.securityowner.GlobalClass.VolleySingleton.backOff;
 import static com.sketch.securityowner.GlobalClass.VolleySingleton.nuOfRetry;
 import static com.sketch.securityowner.GlobalClass.VolleySingleton.timeOut;
 
-public class RegistrationActivity extends AppCompatActivity {
+public class AddMultipleFlat extends AppCompatActivity {
     String TAG="RegistrationActivity";
     RecyclerView recyclerView;
     RelativeLayout rel_next,rel_login;
     AVLoadingIndicatorView avLoadingIndicatorView;
     GlobalClass globalClass;
     Shared_Preference preference;
+    TextView tv_back;
     ProgressDialog pd;
     ArrayList<HashMap<String,String>> cityList;
     ArrayList<HashMap<String,String>> complexList;
     ArrayList<HashMap<String,String>> blockList;
     ArrayList<HashMap<String,String>>flatList;
     ArrayList<String> array1,array2,array3,array4;
-    ArrayAdapter<String> dataAdapter1,dataadpter2,dataadpater3,dataadapter4;
-    Spinner edt_city_name,edt_complex_name,edt_block_name,edt_flat_no;
+    ArrayAdapter<String> dataAdapter1,dataadpter2,dataadpater3,dataadapter4,dataadapter5;
+    Spinner edt_floor_no, edt_city_name,edt_complex_name,edt_block_name,edt_flat_no;
         String city_id,item,complex_id,block_name,flat_no,complex_name;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.add_multiple_complex);
         globalClass = (GlobalClass) getApplicationContext();
-        preference = new Shared_Preference(RegistrationActivity.this);
+        preference = new Shared_Preference(AddMultipleFlat.this);
         preference.loadPrefrence();
-        pd = new ProgressDialog(RegistrationActivity.this);
+        pd = new ProgressDialog(AddMultipleFlat.this);
         pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         pd.setMessage(getResources().getString(R.string.loading));
         rel_next=findViewById(R.id.rel_next);
         edt_city_name=findViewById(R.id.edt_city_name);
+       // edt_floor_no=findViewById(R.id.edt_floor_no);
         edt_complex_name=findViewById(R.id.edt_complex_name);
         edt_block_name=findViewById(R.id.edt_block_name);
         edt_flat_no=findViewById(R.id.edt_flat_no);
         avLoadingIndicatorView=findViewById(R.id.avi);
         rel_login=findViewById(R.id.rel_login);
+        tv_back=findViewById(R.id.tv_back);
 
         cityList=new ArrayList<>();
         complexList=new ArrayList<>();
@@ -97,36 +94,14 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
         }
+        tv_back.setOnClickListener(v -> {
 
+            finish();
 
-        rel_next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if(city_id!=null && complex_id!=null && block_name!=null && flat_no!=null ){
-                    Intent register_next=new Intent(getApplicationContext(),RegisterNext.class);
-                    register_next.putExtra("city_id", city_id);
-                    register_next.putExtra("block", block_name);
-                    register_next.putExtra("complex_name", complex_name);
-
-                    register_next.putExtra("complex_id", complex_id);
-                    register_next.putExtra("flat_no", flat_no);
-                    startActivity(register_next);
-                }
-                else {
-                    TastyToast.makeText(getApplicationContext(), "Please select the required field", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                }
-
-            }
         });
-        rel_login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent register_next=new Intent(getApplicationContext(),LaunchActivity.class);
-                    startActivity(register_next);
-            }
-        });
+
+        rel_next.setOnClickListener(v -> AddComplex());
+
 
         edt_city_name.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -224,7 +199,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 // If user change the default selection
                 // First item is disable and it is used for hint
                 if(position !=0){
-                    flat_no = flatList.get(position-1).get("flat_no");
+                    flat_no = flatList.get(position-1).get("id");
 
 
                    // BrowseComplex(city_id);
@@ -308,7 +283,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
                         }
 
-                        dataAdapter1 = new ArrayAdapter(RegistrationActivity.this, R.layout.item_spinner, R.id.tvCust, array1);
+                        dataAdapter1 = new ArrayAdapter(AddMultipleFlat.this, R.layout.item_spinner, R.id.tvCust, array1);
                         edt_city_name.setAdapter(dataAdapter1);
                     }
                     else {
@@ -341,7 +316,7 @@ public class RegistrationActivity extends AppCompatActivity {
         };
 
         // Adding request to request queue
-        VolleySingleton.getInstance(RegistrationActivity.this)
+        VolleySingleton.getInstance(AddMultipleFlat.this)
                 .addToRequestQueue(strReq
                         .setRetryPolicy(
                                 new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
@@ -406,7 +381,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
                         }
 
-                        dataadpter2 = new ArrayAdapter(RegistrationActivity.this, R.layout.item_spinner, R.id.tvCust, array2);
+                        dataadpter2 = new ArrayAdapter(AddMultipleFlat.this, R.layout.item_spinner, R.id.tvCust, array2);
                         edt_complex_name.setAdapter(dataadpter2);
 
                     }
@@ -510,7 +485,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
                       }
 
-                      dataadpater3 = new ArrayAdapter(RegistrationActivity.this, R.layout.item_spinner, R.id.tvCust, array3);
+                      dataadpater3 = new ArrayAdapter(AddMultipleFlat.this, R.layout.item_spinner, R.id.tvCust, array3);
                       edt_block_name.setAdapter(dataadpater3);
 
                   }
@@ -625,7 +600,131 @@ public class RegistrationActivity extends AppCompatActivity {
 
 
                             }
-                            dataadapter4 = new ArrayAdapter(RegistrationActivity.this, R.layout.item_spinner, R.id.tvCust, array4);
+                            dataadapter4 = new ArrayAdapter(AddMultipleFlat.this, R.layout.item_spinner, R.id.tvCust, array4);
+                            edt_flat_no.setAdapter(dataadapter4);
+                        }
+
+
+
+
+                    }
+
+
+
+
+
+                    else {
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                    }
+
+
+
+                } catch (Exception e) {
+                    TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
+                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                pd.dismiss();
+            }
+        }){
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<>();
+
+
+
+                params.put("complex_id",complex_id);
+                params.put("block",block_name);
+                Log.d(TAG, "city_id: "+params);
+
+                return params;
+            }
+
+        };
+        // Adding request to request queue
+        GlobalClass.getInstance().addToRequestQueue(strReq, tag_string_req);
+        strReq.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 10, 1.0f));
+
+    }
+    private void FLoorNumber(final String complex_id,final String block_name) {
+        // Tag used to cancel the request
+        String tag_string_req = "req_login";
+
+        startAnim();
+        flatList.clear();
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.registration_flat_list, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+
+                stopAnim();
+
+
+                Gson gson = new Gson();
+
+                try {
+
+
+                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
+                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
+                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+
+                    Log.d("jobj", "" + jobj);
+
+                    if(status.equals("1")) {
+                        //array.add("Select Location");
+                        JsonArray all_data = jobj.getAsJsonArray("all_data");
+
+                        for (int j = 0; j < all_data.size(); j++) {
+
+                            JsonObject flat = all_data.get(j).getAsJsonObject();
+                            String floor = flat.get("floor").getAsString().replaceAll("\"", "");
+                            JsonArray data = flat.getAsJsonArray("all_data");
+
+                            Log.d("jarray", "" + flat.toString());
+                             array4 = new ArrayList<>();
+                            array4.add("Flat Number");
+                            for (int i = 0; i < data.size(); i++) {
+                                JsonObject jobj1 = data.get(i).getAsJsonObject();
+                                //get the object
+
+                                //JsonObject jobj1 = jarray.get(i).getAsJsonObject();
+                                String id = jobj1.get("id").toString().replaceAll("\"", "");
+                                String flat_no = jobj1.get("flat_no").toString().replaceAll("\"", "");
+                                String name = jobj1.get("name").toString().replaceAll("\"", "");
+                                String mobile = jobj1.get("mobile").toString().replaceAll("\"", "");
+                                String emailid = jobj1.get("emailid").toString().replaceAll("\"", "");
+
+                                HashMap<String, String> map_ser = new HashMap<>();
+
+
+                                map_ser.put("id", id);
+                                map_ser.put("name", name);
+                                map_ser.put("flat_no", flat_no);
+                                map_ser.put("mobile", mobile);
+                                map_ser.put("emailid", emailid);
+
+                                flatList.add(map_ser);
+
+                                array4.add(flat_no);
+
+
+                            }
+                            dataadapter5 = new ArrayAdapter(AddMultipleFlat.this, R.layout.item_spinner, R.id.tvCust, array4);
                             edt_flat_no.setAdapter(dataadapter4);
                         }
 
@@ -693,4 +792,96 @@ public class RegistrationActivity extends AppCompatActivity {
         avLoadingIndicatorView.hide();
         // or avi.smoothToHide();
     }
+
+    public void AddComplex(){
+        String tag_string_req = "req_login";
+        avLoadingIndicatorView.setVisibility(View.VISIBLE);
+
+        startAnim();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.multi_registration_login, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+
+                stopAnim();
+
+
+                Gson gson = new Gson();
+
+                try {
+
+
+                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
+                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
+                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+
+                    Log.d("jobj", "" + jobj);
+                    if(status.equals("1")) {
+
+                        //array.add("Select Location");
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                         finish();
+                       // String otp = jobj.get("otp").getAsString().replaceAll("\"", "");
+                        Log.d(TAG, "onResponse: "+message);
+
+
+
+                    }
+                    else {
+                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                    }
+
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    TastyToast.makeText(getApplicationContext(), "DATA NOT FOUND", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                }
+
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
+                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+            }
+        }){
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<>();
+
+
+
+
+                params.put("complex_id",complex_id);
+                params.put("user_id",globalClass.getId());
+                params.put("flat_id",flat_no);
+                Log.d(TAG, "params "+params);
+
+                return params;
+            }
+
+        };
+        // Adding request to request queue
+        VolleySingleton.getInstance(AddMultipleFlat.this)
+                .addToRequestQueue(strReq
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+
+
+    }
+
+
 }

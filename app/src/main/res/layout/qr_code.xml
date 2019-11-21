@@ -13,7 +13,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="57dp"
-        android:background="#f00"
         android:orientation="vertical" >
         <RelativeLayout
             android:id="@+id/profile_layout"
