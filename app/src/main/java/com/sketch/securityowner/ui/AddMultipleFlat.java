@@ -55,15 +55,23 @@ public class AddMultipleFlat extends AppCompatActivity {
     ArrayList<HashMap<String,String>>flatList;
     ArrayList<String> array1,array2,array3,array4;
     ArrayAdapter<String> dataAdapter1,dataadpter2,dataadpater3,dataadapter4,dataadapter5;
+<<<<<<< HEAD
+    Spinner edt_floor_no, edt_city_name, edt_complex_name, edt_block_name, edt_flat_no;
+    String city_id,item,complex_id,block_name,flat_no,complex_name;
+
+=======
     Spinner edt_floor_no, edt_city_name,edt_complex_name,edt_block_name,edt_flat_no;
         String city_id,item,complex_id,block_name,flat_id,complex_name;
+>>>>>>> 0b5e3a3aca14957b6a6abd2aeb854da80b2f3ba1
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_multiple_complex);
+
         globalClass = (GlobalClass) getApplicationContext();
         preference = new Shared_Preference(AddMultipleFlat.this);
         preference.loadPrefrence();
+
         pd = new ProgressDialog(AddMultipleFlat.this);
         pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         pd.setMessage(getResources().getString(R.string.loading));
@@ -81,14 +89,11 @@ public class AddMultipleFlat extends AppCompatActivity {
         complexList=new ArrayList<>();
         blockList=new ArrayList<>();
         flatList=new ArrayList<>();
+
+
         if (globalClass.isNetworkAvailable()) {
 
             BrowseCity();
-
-
-
-            //  getCategory_list();
-            // getLocation(globalClass.Location);
 
         } else {
 
@@ -108,18 +113,12 @@ public class AddMultipleFlat extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent,
                                        View arg1, int position, long arg3) {
-                // TODO Auto-generated method stub
-                // Locate the textviews in activity_securityrity.xml
+
                 String selectedItemText = (String) parent.getItemAtPosition(position);
-                // If user change the default selection
-                // First item is disable and it is used for hint
                 if(position !=0){
                     city_id = cityList.get(position-1).get("id");
 
-
                     BrowseComplex(city_id);
-
-                    // Notify the selected item text
 
                 }
             }
@@ -134,24 +133,13 @@ public class AddMultipleFlat extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent,
                                        View arg1, int position, long arg3) {
-                // TODO Auto-generated method stub
-                // Locate the textviews in activity_security.xml.xml
-                String selectedItemText = (String) parent.getItemAtPosition(position);
-                // If user change the default selection
-                // First item is disable and it is used for hint
 
+                String selectedItemText = (String) parent.getItemAtPosition(position);
                     if (position != 0) {
                         complex_id = complexList.get(position-1).get("id");
                         complex_name = complexList.get(position-1).get("name");
 
-
-
                         BrowseBlock(complex_id);
-                        // BrowseComplex(city_id);
-
-                        // Notify the selected item text
-
-
                 }
             }
 
@@ -165,20 +153,15 @@ public class AddMultipleFlat extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent,
                                        View arg1, int position, long arg3) {
-                // TODO Auto-generated method stub
-                // Locate the textviews in activity_securityrity.xml
+
                 String selectedItemText = (String) parent.getItemAtPosition(position);
-                // If user change the default selection
-                // First item is disable and it is used for hint
+
                 if(position !=0){
                     block_name = blockList.get(position-1).get("block");
 
                     Toast.makeText(getApplicationContext(),block_name,Toast.LENGTH_LONG).show();
 
                     FlatComplex(complex_id,block_name);
-                   // BrowseComplex(city_id);
-
-                    // Notify the selected item text
 
                 }
             }
@@ -193,6 +176,8 @@ public class AddMultipleFlat extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent,
                                        View arg1, int position, long arg3) {
+<<<<<<< HEAD
+=======
                 // TODO Auto-generated method stub
                 // Locate the textviews in activity_securityrity.xml
                 String selectedItemText = (String) parent.getItemAtPosition(position);
@@ -201,11 +186,13 @@ public class AddMultipleFlat extends AppCompatActivity {
                 if(position !=0){
                     flat_id = flatList.get(position-1).get("id");
                     Log.d(TAG, "onItemSelected: "+flat_id);
+>>>>>>> 0b5e3a3aca14957b6a6abd2aeb854da80b2f3ba1
 
+                String selectedItemText = (String) parent.getItemAtPosition(position);
 
-                   // BrowseComplex(city_id);
+                if(position != 0){
 
-                    // Notify the selected item text
+                    flat_no = flatList.get(position-1).get("id");
 
                 }
             }
@@ -325,9 +312,6 @@ public class AddMultipleFlat extends AppCompatActivity {
 
     }
 
-
-
-
     private void BrowseComplex(final String city_id) {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
@@ -430,8 +414,6 @@ public class AddMultipleFlat extends AppCompatActivity {
         strReq.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 10, 1.0f));
 
     }
-
-
 
     private void BrowseBlock(final String complex_id) {
         // Tag used to cancel the request
@@ -546,35 +528,34 @@ public class AddMultipleFlat extends AppCompatActivity {
 
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+                Log.d(TAG, "flat_list: " + response.toString());
 
                 stopAnim();
-
 
                 Gson gson = new Gson();
 
                 try {
 
-
                     JsonObject jobj = gson.fromJson(response, JsonObject.class);
                     String status = jobj.get("status").getAsString().replaceAll("\"", "");
                     String message = jobj.get("message").getAsString().replaceAll("\"", "");
 
-                    Log.d("jobj", "" + jobj);
+                    Log.d("flat_list", "" + jobj);
 
                     if(status.equals("1")) {
                         //array.add("Select Location");
                         JsonArray all_data = jobj.getAsJsonArray("all_data");
 
-                        for (int j = 0; j < all_data.size(); j++) {
+                        array4 = new ArrayList<>();
+                        array4.add("Flat Number");
 
+                        for (int j = 0; j < all_data.size(); j++) {
                             JsonObject flat = all_data.get(j).getAsJsonObject();
+
                             String floor = flat.get("floor").getAsString().replaceAll("\"", "");
                             JsonArray data = flat.getAsJsonArray("data");
 
-                            Log.d("jarray", "" + flat.toString());
-                             array4 = new ArrayList<>();
-                            array4.add("Flat Number");
+
                             for (int i = 0; i < data.size(); i++) {
                                 JsonObject jobj1 = data.get(i).getAsJsonObject();
                                 //get the object
@@ -588,7 +569,6 @@ public class AddMultipleFlat extends AppCompatActivity {
 
                                 HashMap<String, String> map_ser = new HashMap<>();
 
-
                                 map_ser.put("id", id);
                                 map_ser.put("name", name);
                                 map_ser.put("flat_no", flat_no);
@@ -599,33 +579,24 @@ public class AddMultipleFlat extends AppCompatActivity {
 
                                 array4.add(flat_no);
 
-
                             }
-                            dataadapter4 = new ArrayAdapter(AddMultipleFlat.this, R.layout.item_spinner, R.id.tvCust, array4);
-                            edt_flat_no.setAdapter(dataadapter4);
+
                         }
 
+                        dataadapter4 = new ArrayAdapter(AddMultipleFlat.this,
+                                R.layout.item_spinner, R.id.tvCust, array4);
+                        edt_flat_no.setAdapter(dataadapter4);
 
 
-
-                    }
-
-
-
-
-
-                    else {
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                    } else {
+                        TastyToast.makeText(getApplicationContext(),
+                                message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                     }
-
-
 
                 } catch (Exception e) {
-                    TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
+                    e.printStackTrace();
                 }
-
 
             }
         }, new Response.ErrorListener() {
@@ -634,7 +605,6 @@ public class AddMultipleFlat extends AppCompatActivity {
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
                 pd.dismiss();
             }
         }){
@@ -644,10 +614,9 @@ public class AddMultipleFlat extends AppCompatActivity {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<>();
 
-
-
                 params.put("complex_id",complex_id);
                 params.put("block",block_name);
+
                 Log.d(TAG, "city_id: "+params);
 
                 return params;
@@ -659,12 +628,12 @@ public class AddMultipleFlat extends AppCompatActivity {
         strReq.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 10, 1.0f));
 
     }
+
     private void FLoorNumber(final String complex_id,final String block_name) {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
 
         startAnim();
-        flatList.clear();
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.registration_flat_list, new Response.Listener<String>() {
 
@@ -697,7 +666,7 @@ public class AddMultipleFlat extends AppCompatActivity {
                             JsonArray data = flat.getAsJsonArray("all_data");
 
                             Log.d("jarray", "" + flat.toString());
-                             array4 = new ArrayList<>();
+                            array4 = new ArrayList<>();
                             array4.add("Flat Number");
                             for (int i = 0; i < data.size(); i++) {
                                 JsonObject jobj1 = data.get(i).getAsJsonObject();
@@ -719,31 +688,22 @@ public class AddMultipleFlat extends AppCompatActivity {
                                 map_ser.put("mobile", mobile);
                                 map_ser.put("emailid", emailid);
 
-                                flatList.add(map_ser);
 
                                 array4.add(flat_no);
 
 
                             }
-                            dataadapter5 = new ArrayAdapter(AddMultipleFlat.this, R.layout.item_spinner, R.id.tvCust, array4);
+
+                            dataadapter5 = new ArrayAdapter(AddMultipleFlat.this,
+                                    R.layout.item_spinner, R.id.tvCust, array4);
                             edt_flat_no.setAdapter(dataadapter4);
                         }
 
+                    } else {
 
-
-
-                    }
-
-
-
-
-
-                    else {
                         TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                     }
-
-
 
                 } catch (Exception e) {
                     TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
@@ -814,7 +774,6 @@ public class AddMultipleFlat extends AppCompatActivity {
 
                 try {
 
-
                     JsonObject jobj = gson.fromJson(response, JsonObject.class);
                     String status = jobj.get("status").getAsString().replaceAll("\"", "");
                     String message = jobj.get("message").getAsString().replaceAll("\"", "");
@@ -822,28 +781,20 @@ public class AddMultipleFlat extends AppCompatActivity {
                     Log.d("jobj", "" + jobj);
                     if(status.equals("1")) {
 
-                        //array.add("Select Location");
                         TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
                          finish();
-                       // String otp = jobj.get("otp").getAsString().replaceAll("\"", "");
                         Log.d(TAG, "onResponse: "+message);
 
-
-
-                    }
-                    else {
+                    } else {
                         TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                     }
-
-
 
                 } catch (Exception e) {
                     e.printStackTrace();
                     TastyToast.makeText(getApplicationContext(), "DATA NOT FOUND", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                 }
-
 
             }
         }, new Response.ErrorListener() {
@@ -852,8 +803,6 @@ public class AddMultipleFlat extends AppCompatActivity {
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(getApplicationContext(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
             }
         }){
 
@@ -861,8 +810,6 @@ public class AddMultipleFlat extends AppCompatActivity {
             protected Map<String, String> getParams() {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<>();
-
-
 
 
                 params.put("complex_id",complex_id);
@@ -879,7 +826,6 @@ public class AddMultipleFlat extends AppCompatActivity {
                 .addToRequestQueue(strReq
                         .setRetryPolicy(
                                 new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
-
 
 
     }

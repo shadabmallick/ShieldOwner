@@ -21,22 +21,14 @@
         android:gravity="center"
         android:layout_height="wrap_content">
 
-
-
-
-            <TextView
-                android:id="@+id/tv_address"
-                android:layout_width="wrap_content"
-                android:textColor="@color/green"
-                android:layout_marginLeft="10dp"
-                android:layout_height="wrap_content"
-                android:text="kjdsnkjfnds">
-
-
-
-            </TextView>
-
-
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="wrap_content"
+            android:textColor="@color/green"
+            android:layout_marginLeft="10dp"
+            android:layout_height="wrap_content"
+            android:text="">
+        </TextView>
 
 
        <LinearLayout
@@ -56,11 +48,8 @@
                    android:layout_weight="1"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:text="@string/billed">
+                   android:text="@string/billed"/>
 
-
-
-               </TextView>
                <TextView
                    android:layout_weight="1"
                    android:id="@+id/billed"
@@ -69,12 +58,7 @@
                    android:layout_marginLeft="20dp"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                  >
-
-
-
-               </TextView>
-
+                  />
 
            </LinearLayout>
 
@@ -90,8 +74,6 @@
                    android:layout_height="wrap_content"
                    android:text="@string/receipt">
 
-
-
                </TextView>
                <TextView
                    android:id="@+id/receipt"
@@ -102,10 +84,7 @@
                    android:layout_height="wrap_content"
                    android:text="Rs.......">
 
-
-
                </TextView>
-
 
            </LinearLayout>
            <LinearLayout
@@ -117,8 +96,6 @@
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:text="@string/Due">
-
-
 
                </TextView>
                <TextView

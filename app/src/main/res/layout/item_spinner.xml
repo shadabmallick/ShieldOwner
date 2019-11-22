@@ -2,21 +2,18 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-
-
-   >
+    >
 
     <TextView
-        android:background="@color/black"
+        android:background="@color/alpha_black"
         android:id="@+id/tvCust"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
        android:gravity="center"
         android:textColor="#ffffff"
         android:textSize="16sp"
+        android:padding="10dp"
         android:text="skdjfsdnfjdh"
-
         />
-
 
 </RelativeLayout>
