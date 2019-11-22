@@ -373,7 +373,7 @@ public class DialogHelpAdd extends Dialog {
                         }
 
                         ArrayAdapter dataAdapter1 = new ArrayAdapter(context,
-                                R.layout.item_spinner, R.id.tvCust, array1);
+                                R.layout.help_spinner, R.id.tvCust, array1);
                         spinner_help.setAdapter(dataAdapter1);
                         spinner_help.setPrompt("Help");
                     }
@@ -417,6 +417,7 @@ public class DialogHelpAdd extends Dialog {
     private void AddVisitorHelp(final String type,final String radio_value) {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
+        progressDialog.show();
         HelpList.clear();
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.add_visitor, new Response.Listener<String>() {
@@ -426,18 +427,25 @@ public class DialogHelpAdd extends Dialog {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
                 Gson gson = new Gson();
-
+              progressDialog.dismiss();
                 try {
 
                     JsonObject jobj = gson.fromJson(response, JsonObject.class);
                     String status = jobj.get("status").getAsString().replaceAll("\"", "");
                     String message = jobj.get("message").getAsString().replaceAll("\"", "");
+                    String qr_code = jobj.get("qr_code").getAsString().replaceAll("\"", "");
+                    String qr_code_image = jobj.get("qr_code_image").getAsString().replaceAll("\"", "");
+
 
                     if(status.equals("1")) {
 
-                        dismiss();
+                        TastyToast.makeText(context, message,
+                                TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                        if(!((qr_code.equals("")) && (qr_code_image.equals("")))){
+                            showDialog(qr_code,qr_code_image);
+                        }
 
-                        TastyToast.makeText(context, message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
 
                     }
 
@@ -490,6 +498,22 @@ public class DialogHelpAdd extends Dialog {
                 .addToRequestQueue(strReq
                         .setRetryPolicy(
                                 new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+    }
+    private void showDialog(final String qr_code,final String image){
+
+
+        DialogQrCode dialogQrCode = new DialogQrCode(context,qr_code,image);
+
+
+
+        dialogQrCode.show();
+
+
+        dialogQrCode.setOnDismissListener(dialog -> {
+
+            dismiss();
+        });
 
     }
 

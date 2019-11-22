@@ -235,16 +235,23 @@ public class DialogGuestAdd extends Dialog {
                     JsonObject jobj = gson.fromJson(response, JsonObject.class);
                     String status = jobj.get("status").getAsString().replaceAll("\"", "");
                     String message = jobj.get("message").getAsString().replaceAll("\"", "");
+                    String qr_code = jobj.get("qr_code").getAsString().replaceAll("\"", "");
+                    String qr_code_image = jobj.get("qr_code_image").getAsString().replaceAll("\"", "");
 
 
                     if(status.equals("1")) {
 
                         TastyToast.makeText(context, message,
                                 TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                        if(!((qr_code.equals("")) && (qr_code_image.equals("")))){
+                            showDialog(qr_code,qr_code_image);
+                        }
 
-                        dismiss();
 
-                    } else {
+
+                    }
+
+                    else {
                         TastyToast.makeText(context, message,
                                 TastyToast.LENGTH_LONG, TastyToast.ERROR);
 
@@ -299,4 +306,23 @@ public class DialogGuestAdd extends Dialog {
                                 new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
 
     }
+
+
+    private void showDialog(final String qr_code,final String image){
+
+
+        DialogQrCode dialogQrCode = new DialogQrCode(context,qr_code,image);
+
+
+
+        dialogQrCode.show();
+
+
+        dialogQrCode.setOnDismissListener(dialog -> {
+
+            dismiss();
+        });
+
+    }
+
 }

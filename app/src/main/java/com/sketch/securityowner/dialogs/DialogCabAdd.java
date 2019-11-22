@@ -40,6 +40,7 @@ import com.sketch.securityowner.Constant.AppConfig;
 import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
+import com.sketch.securityowner.ui.Activity_activity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -367,21 +368,26 @@ public class DialogCabAdd extends Dialog implements categoryAdapter.onItemClickL
             public void onResponse(String response) {
                 Log.d(AppConfig.TAG, "JOB RESPONSE: " + response.toString());
                 Gson gson = new Gson();
-
+                progressDialog.dismiss();
                 try {
 
 
                     JsonObject jobj = gson.fromJson(response, JsonObject.class);
                     String status = jobj.get("status").getAsString().replaceAll("\"", "");
                     String message = jobj.get("message").getAsString().replaceAll("\"", "");
+                    String qr_code = jobj.get("qr_code").getAsString().replaceAll("\"", "");
+                    String qr_code_image = jobj.get("qr_code_image").getAsString().replaceAll("\"", "");
 
 
                     if(status.equals("1")) {
 
                         TastyToast.makeText(context, message,
                                 TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                        if(!((qr_code.equals("")) && (qr_code_image.equals("")))){
+                            showDialog(qr_code,qr_code_image);
+                        }
 
-                        dismiss();
+
 
                     }
 
@@ -441,5 +447,22 @@ public class DialogCabAdd extends Dialog implements categoryAdapter.onItemClickL
 
     }
 
+
+    private void showDialog(final String qr_code,final String image){
+
+
+        DialogQrCode dialogQrCode = new DialogQrCode(context,qr_code,image);
+
+
+
+        dialogQrCode.show();
+
+
+        dialogQrCode.setOnDismissListener(dialog -> {
+
+            dismiss();
+        });
+
+    }
 
 }
