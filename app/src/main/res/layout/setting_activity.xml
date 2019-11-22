@@ -170,26 +170,42 @@
                         android:paddingBottom="5dp"
                         android:text="@string/add"/>
 
+                </RelativeLayout>
 
 
+                <RelativeLayout
+                    android:id="@+id/relfamily"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rel_add_family"
+                    >
 
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rec_family"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    </androidx.recyclerview.widget.RecyclerView>
+
+
+                    <ImageView
+                        android:id="@+id/iv_no_data1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:contentDescription="@string/app_name"
+                        android:src="@mipmap/nodata"
+                        />
 
                 </RelativeLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rec_family"
-                    android:layout_below="@+id/rel_add_family"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                </androidx.recyclerview.widget.RecyclerView>
 
                 <RelativeLayout
                     android:id="@+id/rel_add_staff"
                     android:layout_width="match_parent"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
-                    android:layout_below="@+id/rec_family"
+                    android:layout_below="@+id/relfamily"
                     android:layout_height="wrap_content">
 
                     <TextView
@@ -198,6 +214,7 @@
                         android:textColor="@android:color/black"
                         android:textStyle="bold"
                         android:text="@string/my_staff"/>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_alignParentRight="true"
@@ -211,25 +228,39 @@
                         android:textStyle="bold"
                         android:text="@string/add"/>
 
-
-
-
-
                 </RelativeLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rec_staff"
-                    android:layout_below="@+id/rel_add_staff"
+
+                <RelativeLayout
+                    android:id="@+id/relstaff"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                </androidx.recyclerview.widget.RecyclerView>
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rel_add_staff"
+                    >
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rec_staff"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    </androidx.recyclerview.widget.RecyclerView>
+
+                    <ImageView
+                        android:id="@+id/iv_no_data2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:contentDescription="@string/app_name"
+                        android:src="@mipmap/nodata"
+                        />
+
+                </RelativeLayout>
 
                 <RelativeLayout
                     android:id="@+id/rel_add_car"
                     android:layout_width="match_parent"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="10dp"
-                    android:layout_below="@+id/rec_staff"
+                    android:layout_below="@+id/relstaff"
                     android:layout_height="wrap_content">
 
                     <TextView
@@ -238,6 +269,7 @@
                         android:textColor="@android:color/black"
                         android:layout_height="wrap_content"
                         android:text="@string/my_car"/>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_alignParentRight="true"
@@ -251,18 +283,31 @@
                         android:paddingBottom="5dp"
                         android:text="@string/add"/>
 
+                </RelativeLayout>
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rel_add_car"
+                    >
 
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rec_car"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    </androidx.recyclerview.widget.RecyclerView>
 
+                    <ImageView
+                        android:id="@+id/iv_no_data3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:contentDescription="@string/app_name"
+                        android:src="@mipmap/nodata"
+                        />
 
                 </RelativeLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rec_car"
-                    android:layout_below="@+id/rel_add_car"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                </androidx.recyclerview.widget.RecyclerView>
 
             </RelativeLayout>
 
@@ -618,7 +663,6 @@
 
 
         </ScrollView>
-
 
     </RelativeLayout>
 

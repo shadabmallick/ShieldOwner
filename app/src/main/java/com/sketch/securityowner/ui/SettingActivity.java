@@ -49,7 +49,6 @@ import com.sdsmdg.tastytoast.TastyToast;
 import com.sketch.securityowner.Adapter.CarAdapter;
 import com.sketch.securityowner.Adapter.FamilyAdapter;
 import com.sketch.securityowner.Adapter.StaffAdapter;
-import com.sketch.securityowner.Adapter.categoryAdapter;
 import com.sketch.securityowner.Constant.AppConfig;
 import com.sketch.securityowner.GlobalClass.Config;
 import com.sketch.securityowner.GlobalClass.GlobalClass;
@@ -63,7 +62,6 @@ import com.sketch.securityowner.dialogs.DialogGuestAdd;
 import com.sketch.securityowner.dialogs.DialogHelpAdd;
 import com.sketch.securityowner.dialogs.LoaderDialog;
 import com.squareup.picasso.Picasso;
-import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -119,16 +117,16 @@ public class SettingActivity extends AppCompatActivity {
     EditText edit_car_no,edit_parking_no,edit_name,edit_phone,edit_mail,edit_family_name,edit_family_phone;
     GlobalClass globalClass;
     Shared_Preference preference;
-    ArrayList<HashMap<String,String>> productDetaiils;
+    ArrayList<HashMap<String,String>> listFamilyMembers;
     ArrayList<HashMap<String,String>> Category;
     ArrayList<HashMap<String,String>> DeliveryList;
     ArrayList<HashMap<String,String>> HelpList;
-    ArrayList<HashMap<String,String>> productDetaiils_sub;
+    ArrayList<HashMap<String,String>> listCars;
     ArrayList<HashMap<String,String>> staffList;
     ImageView edit_image_staff,profile_image,img_cab,img_delivery,img_guest,img_help,profile_image_staff;
     ScrollView scroll_details,scroll_settings;
     RelativeLayout rel_profile,rel_middle_icon;
-    ImageView edit;
+    ImageView edit, iv_no_data1, iv_no_data2, iv_no_data3;
     String help_id;
     TextView add_car,add_staff,add_member;
     EditText edit_staff_phone,edit_staff_name,tv_others;
@@ -155,7 +153,7 @@ public class SettingActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: "+currentDate);
         Log.d(TAG, "onCreate: "+currentTime);
 
-        browseJob();
+        profile_details_api_call();
         //
 
         // view1.setVisibility(View.VISIBLE);
@@ -188,9 +186,9 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     public void initToolBar() {
-        productDetaiils=new ArrayList<>();
+        listFamilyMembers =new ArrayList<>();
         staffList=new ArrayList<>();
-        productDetaiils_sub=new ArrayList<>();
+        listCars =new ArrayList<>();
         DeliveryList=new ArrayList<>();
         HelpList=new ArrayList<>();
 
@@ -231,11 +229,18 @@ public class SettingActivity extends AppCompatActivity {
         img_delivery=  findViewById(R.id.img_delivery);
         img_help=  findViewById(R.id.img_help);
 
+        iv_no_data1=  findViewById(R.id.iv_no_data1);
+        iv_no_data2=  findViewById(R.id.iv_no_data2);
+        iv_no_data3=  findViewById(R.id.iv_no_data3);
+        iv_no_data1.setVisibility(View.GONE);
+        iv_no_data2.setVisibility(View.GONE);
+        iv_no_data3.setVisibility(View.GONE);
+
 
         toolbar.setTitle("");
-        recyclerView = (RecyclerView)findViewById(R.id.rec_family);
-        recyclerViewStaff = (RecyclerView)findViewById(R.id.rec_staff);
-        recyclerViewCar = (RecyclerView)findViewById(R.id.rec_car);
+        recyclerView = findViewById(R.id.rec_family);
+        recyclerViewStaff = findViewById(R.id.rec_staff);
+        recyclerViewCar = findViewById(R.id.rec_car);
 
         RecyclerViewLayoutManager = new LinearLayoutManager(getApplicationContext());
         RecyclerViewLayoutManager1 = new LinearLayoutManager(getApplicationContext());
@@ -917,7 +922,6 @@ public class SettingActivity extends AppCompatActivity {
         }
         else if (requestCode == PICK_IMAGE_CAMERA_STAFF && resultCode == RESULT_OK) {
 
-
             File f = new File(Environment.getExternalStorageDirectory().toString());
             for (File temp : f.listFiles()) {
                 if (temp.getName().equals("temp.jpg")) {
@@ -926,19 +930,14 @@ public class SettingActivity extends AppCompatActivity {
                 }
             }
 
-
             try {
                 Bitmap bitmap;
                 BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-
 
                 bitmap = (Bitmap) data.getExtras().get("data");
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bytes);
 
-/*
-                bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(),
-                        bitmapOptions);*/
 
                 Log.d(TAG, "bitmap: "+bitmap);
 
@@ -1022,25 +1021,15 @@ public class SettingActivity extends AppCompatActivity {
         });
 
 
-
         spinner_help.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent,
                                        View arg1, int position, long arg3) {
-                // TODO Auto-generated method stub
-                // Locate the textviews in activity_main.xml
                 String selectedItemText = (String) parent.getItemAtPosition(position);
-                // If user change the default selection
-                // First item is disable and it is used for hint
                 if(position !=0){
                     help_id = HelpList.get(position-1).get("name");
                     Log.d(TAG, "onItemSelected: "+help_id);
-
-
-                    // BrowseComplex(city_id);
-
-                    // Notify the selected item text
 
                 }
             }
@@ -1051,16 +1040,6 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-        // if button is clicked, close the custom dialog
-/*
-       ll_save.setOnClickListener(v -> {
-            String name=edit_staff_name.getText().toString();
-            String phone=edit_staff_phone.getText().toString();
-           AddStaff(name,phone);
-
-
-       });
-*/
 
         dialog.show();
 
@@ -1089,19 +1068,9 @@ public class SettingActivity extends AppCompatActivity {
         params.put("date", currentDate);
         params.put("time", currentTime);
 
-/*
-        try{
-
-            params.put("profileImage", p_image);
-
-        }catch (FileNotFoundException e){
-            e.printStackTrace();
-        }
-*/
         cl.setSSLSocketFactory(
                 new SSLSocketFactory(Config.getSslContext(),
                         SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));
-
 
 
         Log.d(TAG , "URL "+url);
@@ -1123,7 +1092,7 @@ public class SettingActivity extends AppCompatActivity {
                         String message = response.getString("message");
 
                         if (status == 1) {
-                            browseJob();
+                            profile_details_api_call();
                             // Log.d(TAG, "name: "+name)
                             TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
@@ -1164,11 +1133,9 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-        // set the custom dialog components - text, image and button
 
         LinearLayout ll_save=dialog.findViewById(R.id.ll_save);
 
-        // if button is clicked, close the custom dialog
         ll_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1181,6 +1148,7 @@ public class SettingActivity extends AppCompatActivity {
         dialog.show();
 
     }
+
     public void CarDialog(){
         dialog = new Dialog(this);
         dialog.setContentView(R.layout.car_info);
@@ -1311,6 +1279,7 @@ public class SettingActivity extends AppCompatActivity {
                                 new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
 
     }
+
     public void updateProfile(final String name,final String phone,final String email){
 
         loaderDialog.show();
@@ -1327,7 +1296,9 @@ public class SettingActivity extends AppCompatActivity {
 
         try{
 
-            params.put("profileImage", p_image);
+            if (p_image != null){
+                params.put("profileImage", p_image);
+            }
 
         }catch (FileNotFoundException e){
             e.printStackTrace();
@@ -1406,7 +1377,6 @@ public class SettingActivity extends AppCompatActivity {
 
     }
 
-
     public void AddFamily(final String name,final String phone){
 
         loaderDialog.show();
@@ -1459,7 +1429,7 @@ public class SettingActivity extends AppCompatActivity {
 
                             dialog.dismiss();
                             TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS).show();
-                            browseJob();
+                            profile_details_api_call();
 
 
 
@@ -1532,7 +1502,7 @@ public class SettingActivity extends AppCompatActivity {
 
                             dialog.dismiss();
                             TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS).show();
-                            browseJob();
+                            profile_details_api_call();
 
 
 
@@ -1563,10 +1533,10 @@ public class SettingActivity extends AppCompatActivity {
 
     }
 
-    private void browseJob() {
+    private void profile_details_api_call() {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
-        productDetaiils_sub = new ArrayList<>();
+        listCars = new ArrayList<>();
         loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
@@ -1577,7 +1547,6 @@ public class SettingActivity extends AppCompatActivity {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
                 loaderDialog.dismiss();
-
 
                 Gson gson = new Gson();
 
@@ -1641,13 +1610,19 @@ public class SettingActivity extends AppCompatActivity {
                             hashMap.put("family_member_mobile", family_member_mobile);
                             hashMap.put("profile_pic_family", profile_pic_family);
 
-                            productDetaiils.add(hashMap);
+                            listFamilyMembers.add(hashMap);
                             Log.d(TAG, "Hashmap " + hashMap);
 
                         }
 
-                        RecyclerViewHorizontalAdapter = new FamilyAdapter(SettingActivity.this, productDetaiils);
+                        RecyclerViewHorizontalAdapter =
+                                new FamilyAdapter(SettingActivity.this,
+                                        listFamilyMembers);
                         recyclerView.setAdapter(RecyclerViewHorizontalAdapter);
+
+                        if (listFamilyMembers.size() == 0){
+                            iv_no_data1.setVisibility(View.VISIBLE);
+                        }
 
 
                         JsonArray product_sub = jobj.getAsJsonArray("car");
@@ -1683,12 +1658,18 @@ public class SettingActivity extends AppCompatActivity {
                             hashMap.put("is_active", is_active);
                             hashMap.put("entry_date", entry_date);
                             hashMap.put("modified_date", modified_date);
-                            productDetaiils_sub.add(hashMap);
+
+                            listCars.add(hashMap);
                             Log.d(TAG, "Hashmap1 " + hashMap);
 
                         }
-                        carAdapter = new CarAdapter(SettingActivity.this, productDetaiils_sub);
+                        carAdapter = new CarAdapter(SettingActivity.this, listCars);
                         recyclerViewCar.setAdapter(carAdapter);
+
+
+                        if (listCars.size() == 0){
+                            iv_no_data3.setVisibility(View.VISIBLE);
+                        }
 
 
                         JsonArray staff = jobj.getAsJsonArray("staff");
@@ -1713,8 +1694,12 @@ public class SettingActivity extends AppCompatActivity {
                         }
                         staffAdapter = new StaffAdapter(SettingActivity.this, staffList);
                         recyclerViewStaff.setAdapter(staffAdapter);
-                    }
-                    else {
+
+                        if (staffList.size() == 0){
+                            iv_no_data2.setVisibility(View.VISIBLE);
+                        }
+
+                    } else {
                         TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                     }
@@ -1758,6 +1743,7 @@ public class SettingActivity extends AppCompatActivity {
 
 
     }
+
     private void BrowseCity() {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
@@ -1859,7 +1845,6 @@ public class SettingActivity extends AppCompatActivity {
 
 
     }
-
 
 
 }

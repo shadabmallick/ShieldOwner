@@ -1,7 +1,6 @@
 package com.sketch.securityowner.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.R;
-import com.sketch.securityowner.ui.PayUMoneyPayment;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,13 +20,13 @@ public class AdapterOnvoiceList extends RecyclerView.Adapter<AdapterOnvoiceList.
 
 
     private Context context;
-    private ArrayList<HashMap<String,String>> cityList;
+    private ArrayList<HashMap<String,String>> hashMapArrayList;
     private int index = -1;
     private GlobalClass globalClass;
 
     public AdapterOnvoiceList(Context context, ArrayList<HashMap<String,
             String>> cityList, AdapterOnvoiceList.onItemClickListner mListner) {
-        this.cityList = cityList;
+        this.hashMapArrayList = cityList;
         this.context=context;
         this.mListner=mListner;
         globalClass = ((GlobalClass) context.getApplicationContext());
@@ -37,7 +34,8 @@ public class AdapterOnvoiceList extends RecyclerView.Adapter<AdapterOnvoiceList.
 
     @Override
     public AdapterOnvoiceList.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_invoice, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.adapter_invoice, parent, false);
         AdapterOnvoiceList.MyViewHolder vh = new AdapterOnvoiceList.MyViewHolder(view);
         return vh;
     }
@@ -45,23 +43,27 @@ public class AdapterOnvoiceList extends RecyclerView.Adapter<AdapterOnvoiceList.
     @Override
     public void onBindViewHolder(final AdapterOnvoiceList.MyViewHolder holder, final int position) {
 
-       holder.tv_amout.setText(cityList.get(position).get("billing_amount"));
-       holder.tv_date1.setText(cityList.get(position).get("invoice_name"));
-       holder.tv_date2.setText(cityList.get(position).get("date"));
-       holder.status.setText(cityList.get(position).get("invoicestatus"));
+       holder.tv_amout.setText("Billing Amount: "+
+               hashMapArrayList.get(position).get("billing_amount"));
+
+       holder.tv_date1.setText(hashMapArrayList.get(position).get("invoice_name"));
+       holder.tv_date2.setText("Date: "+hashMapArrayList.get(position).get("date"));
+       holder.status.setText(hashMapArrayList.get(position).get("invoicestatus"));
+       holder.tv_invoice_no.setText("Invoice No: "
+               +hashMapArrayList.get(position).get("invoice_no"));
 
         holder.invoice.setOnClickListener(v -> {
 
             index = position;
             notifyDataSetChanged();
-            String invoice_link=cityList.get(position).get("invoice_link");
+            String invoice_link= hashMapArrayList.get(position).get("invoice_link");
 
             mListner.onItemClick(invoice_link);
         });
 
         holder.tv_pay.setOnClickListener(v -> {
 
-            mListner.onClickForPay(cityList.get(position));
+            mListner.onClickForPay(hashMapArrayList.get(position));
 
         });
     }
@@ -73,7 +75,7 @@ public class AdapterOnvoiceList extends RecyclerView.Adapter<AdapterOnvoiceList.
 
     @Override
     public int getItemCount() {
-        return cityList.size();
+        return hashMapArrayList.size();
 
 
 
@@ -81,7 +83,7 @@ public class AdapterOnvoiceList extends RecyclerView.Adapter<AdapterOnvoiceList.
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         // init the item view's
-        TextView tv_amout, tv_date1, tv_date2, tv_number, status, tv_pay;
+        TextView tv_amout, tv_date1, tv_date2, tv_number, status, tv_pay, tv_invoice_no;
         ImageView profile_image, iv_delete;
         LinearLayout invoice;
 
@@ -96,6 +98,7 @@ public class AdapterOnvoiceList extends RecyclerView.Adapter<AdapterOnvoiceList.
             status =  itemView.findViewById(R.id.status);
             invoice =  itemView.findViewById(R.id.invoice);
             tv_pay =  itemView.findViewById(R.id.tv_pay);
+            tv_invoice_no =  itemView.findViewById(R.id.tv_invoice_no);
 
             profile_image =  itemView.findViewById(R.id.profile_image);
 

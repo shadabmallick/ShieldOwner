@@ -124,18 +124,7 @@
         </RelativeLayout>
 
 
-
-
     </RelativeLayout>
-    <com.wang.avi.AVLoadingIndicatorView
-        android:id="@+id/avi"
-        android:layout_centerInParent="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/AVLoadingIndicatorView"
-        android:visibility="visible"
-        app:indicatorName="BallPulseSyncIndicator"
-        app:indicatorColor="@color/blue"
-        />
+
 
 </RelativeLayout>

@@ -22,7 +22,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,8 +43,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.borax12.materialdaterangepicker.date.DatePickerDialog;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.sketch.securityowner.Adapter.ActivityListAdapterIN;
 import com.sketch.securityowner.Adapter.categoryAdapter;
@@ -201,7 +198,6 @@ public class Activity_activity extends AppCompatActivity implements
         Category=new ArrayList<>();
 
         this.registerReceiver(mMessageReceiver, new IntentFilter("activity_screen"));
-
 
 
         img_cab.setOnClickListener(v -> {
@@ -978,7 +974,7 @@ public class Activity_activity extends AppCompatActivity implements
 
     public void ProfileDailog(){
         final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.dailog_settings);
+        dialog.setContentView(R.layout.dailog_profile);
 
         ImageView profile_image;
         TextView user_name,block,address;

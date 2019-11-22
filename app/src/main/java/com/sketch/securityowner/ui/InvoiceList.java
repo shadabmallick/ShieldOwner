@@ -1,12 +1,11 @@
 package com.sketch.securityowner.ui;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -24,7 +23,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sdsmdg.tastytoast.TastyToast;
-import com.sketch.securityowner.Adapter.AdapterHelpList;
 import com.sketch.securityowner.Adapter.AdapterOnvoiceList;
 import com.sketch.securityowner.Constant.AppConfig;
 import com.sketch.securityowner.GlobalClass.GlobalClass;
@@ -55,6 +53,9 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
     Shared_Preference preference;
     Toolbar toolbar;
     LoaderDialog loaderDialog;
+    ImageView iv_no_data;
+
+    private static final int REQUEST_FOR_PAYMENT = 2323;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,12 +65,16 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Invoice");
+
         tv_address=findViewById(R.id.tv_address);
         recycler_view=findViewById(R.id.recycler_view);
         billed=findViewById(R.id.billed);
         receipt=findViewById(R.id.receipt);
         tv_due=findViewById(R.id.due);
+        iv_no_data=findViewById(R.id.iv_no_data);
+        iv_no_data.setVisibility(View.GONE);
         invoice_list=new ArrayList<>();
+
         globalClass = (GlobalClass) getApplicationContext();
         preference = new Shared_Preference(InvoiceList.this);
         preference.loadPrefrence();
@@ -112,14 +117,12 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
 
                 try {
 
-
                     JsonObject jobj = gson.fromJson(response, JsonObject.class);
                     String status = jobj.get("status").getAsString().replaceAll("\"", "");
                     String message = jobj.get("message").getAsString().replaceAll("\"", "");
                     String invoice_total = jobj.get("invoice_total").getAsString().replaceAll("\"", "");
                     String total_paid = jobj.get("total_paid").getAsString().replaceAll("\"", "");
                     String due = jobj.get("due").getAsString().replaceAll("\"", "");
-
 
                     if(status.equals("1")) {
 
@@ -128,7 +131,6 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
                         for (int i = 0; i < jarray.size(); i++) {
                             JsonObject jobj1 = jarray.get(i).getAsJsonObject();
                             //get the object
-
 
                             String id = jobj1.get("id").toString().replaceAll("\"", "");
                             String invoice_id = jobj1.get("invoice_id").toString().replaceAll("\"", "");
@@ -167,30 +169,30 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
                             map_ser.put("invoice_name", invoice_name);
                             map_ser.put("note", note);
 
-
                             invoice_list.add(map_ser);
-                            Log.d(TAG, "cityList: "+invoice_list);
-
-
-
 
                         }
 
                         billed.setText(invoice_total);
                         receipt.setText(total_paid);
                         tv_due.setText(due);
-                        tv_address.setText(globalClass.getComplex_name()+" "+globalClass.getFlat_name()+" "+globalClass.getBlock()+" "+"block");
+                        tv_address.setText(globalClass.getComplex_name()
+                                +"/"+globalClass.getFlat_name()
+                                +"/"+globalClass.getBlock()+" "+"block");
 
                         adapterOnvoiceList = new AdapterOnvoiceList(InvoiceList.this,
                                 invoice_list,InvoiceList.this);
                         recycler_view.setAdapter(adapterOnvoiceList);
-                    }
-                    else {
+
+                    } else {
 
                         TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                     }
 
+                    if (invoice_list.size() == 0){
+                        iv_no_data.setVisibility(View.VISIBLE);
+                    }
 
                     loaderDialog.dismiss();
 
@@ -269,10 +271,99 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
 
         Intent intent = new Intent(InvoiceList.this, PayUMoneyPayment.class);
         intent.putExtra("hashmap", hashMap);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_FOR_PAYMENT);
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQUEST_FOR_PAYMENT  && resultCode == RESULT_OK) {
+
+            String txnid = data.getStringExtra("txnid");
+            String amount = data.getStringExtra("amount");
+            String cardnum = data.getStringExtra("cardnum");
+            String paymentId = data.getStringExtra("paymentId");
+            String mode = data.getStringExtra("mode");
+            String bank_ref_num = data.getStringExtra("bank_ref_num");
+            String status = data.getStringExtra("status");
+            String invoice_no = data.getStringExtra("invoice_no");
+            String invoice_id = data.getStringExtra("invoice_id");
+
+            finalPaymentReceive2(txnid, amount, cardnum, paymentId,
+                    mode, bank_ref_num, status, invoice_no, invoice_id);
+
+
+        }
+    }
+
+
+    private void finalPaymentReceive2(String txnid, String amount, String cardnum,
+                                      String paymentId, String mode, String bank_ref_num,
+                                      String status, String invoice_no, String invoice_id) {
+        // Tag used to cancel the request
+        String tag_string_req = "req_login";
+        loaderDialog.show();
+
+        final Map<String, String> params = new HashMap<>();
+
+        params.put("txnid", txnid);
+        params.put("cardnum", cardnum);
+        params.put("bank_ref_num", bank_ref_num);
+        params.put("amount", amount);
+        params.put("paymentId", paymentId);
+        params.put("mode", mode);
+        params.put("status", status);
+        params.put("user_id", globalClass.getId());
+        params.put("invoice_id", invoice_id);
+        params.put("firstname", globalClass.getName());
+        params.put("email", globalClass.getEmail());
+        params.put("phone", globalClass.getPhone_number());
+        params.put("flat_id", globalClass.getFlat_no());
+        params.put("complex_id", globalClass.getComplex_id());
+
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.payment_receive, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "payment_receive RESPONSE: " +response);
+
+
+                try {
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                loaderDialog.dismiss();
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+
+                Log.d(TAG, "getParams: "+params);
+                return params;
+            }
+
+        };
+
+        VolleySingleton.getInstance(InvoiceList.this)
+                .addToRequestQueue(strReq
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+    }
 
 
 }

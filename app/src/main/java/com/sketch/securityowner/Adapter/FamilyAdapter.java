@@ -34,16 +34,16 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.MyViewHold
     ArrayList<Boolean> booleansarr;
     String selected = "";
 
-    public FamilyAdapter(Context c,ArrayList<HashMap<String,String>> text
+    public FamilyAdapter(Context context ,ArrayList<HashMap<String,String>> text
     ) {
-        this.context = c;
+        this.context = context;
 
         this.text = text;
 
-        globalClass = ((GlobalClass) c.getApplicationContext());
+        globalClass = ((GlobalClass) context.getApplicationContext());
         preference = new Shared_Preference(context);
 
-        inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 
     }

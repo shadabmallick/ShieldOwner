@@ -16,30 +16,43 @@
         >
 
         <RelativeLayout
-
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp"
             >
+
+            <TextView
+                android:id="@+id/tv_invoice_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="Sourav"
+                android:layout_marginLeft="10dp"
+                android:padding="5dp"
+                />
+
             <TextView
                 android:id="@+id/tv_amout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/green"
-                android:text="Sourav"
-                android:textSize="16dp"
+                android:text="0.00"
+                android:textSize="16sp"
                 android:layout_marginLeft="10dp"
+                android:layout_below="@+id/tv_invoice_no"
                 android:padding="5dp"
                 />
+
+
+
             <TextView
                 android:id="@+id/tv_date1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:layout_below="@+id/tv_amout"
-                android:text="Sourav"
-
+                android:text="dd-MM-yyyy"
                 android:layout_marginLeft="10dp"
                 android:padding="5dp"
                 />
@@ -50,10 +63,10 @@
                 android:textStyle="bold"
                 android:layout_below="@+id/tv_date1"
                 android:text="Sourav"
-
                 android:layout_marginLeft="10dp"
                 android:padding="5dp"
                 />
+
             <LinearLayout
                 android:id="@+id/ll_lst"
                 android:layout_marginLeft="10dp"
@@ -63,9 +76,6 @@
                 android:layout_height="wrap_content">
 
 
-
-
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -73,7 +83,7 @@
                     android:paddingRight="20dp"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
-                    ></TextView>
+                    />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -90,7 +100,7 @@
                         android:textColor="@color/blue"
                         android:paddingTop="5dp"
                         android:paddingBottom="5dp"
-                       ></TextView>
+                       />
 
                 </LinearLayout>
 
@@ -132,14 +142,12 @@
                    android:paddingRight="20dp"
                    android:paddingTop="5dp"
                    android:paddingBottom="5dp"
-                   android:background="@drawable/border_blue"></TextView>
+                   android:background="@drawable/border_blue"/>
 
            </LinearLayout>
 
 
             </LinearLayout>
-
-
 
 
         </RelativeLayout>

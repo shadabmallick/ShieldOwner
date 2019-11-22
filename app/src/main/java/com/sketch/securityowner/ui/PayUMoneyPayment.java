@@ -47,6 +47,7 @@ public class PayUMoneyPayment extends AppCompatActivity {
 
     private GlobalClass globalClass;
 
+    private HashMap<String, String> hashMap;
 
     @SuppressLint({"AddJavascriptInterface", "SetJavaScriptEnabled"})
     @Override
@@ -74,21 +75,29 @@ public class PayUMoneyPayment extends AppCompatActivity {
 
         txnid = String.valueOf(System.currentTimeMillis());
         name = globalClass.getName();
-        email = globalClass.getEmail();
-        phone = globalClass.getPhone_number();
+        email = globalClass.getEmail().trim();
+        //phone = globalClass.getPhone_number();
+        phone = "8240253745";
 
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null){
 
-            HashMap<String, String> hashMap =
-                    (HashMap<String, String>) bundle.getSerializable("hashmap");
+            hashMap = (HashMap<String, String>) bundle.getSerializable("hashmap");
 
             amount = hashMap.get("billing_amount");
-            prodname = hashMap.get("invoice_no");
+        //    prodname = hashMap.get("invoice_no");
+            prodname = "shield_invoice";
 
             startpay();
         }
+
+        Log.d("TAG", "txnid "+txnid);
+        Log.d("TAG", "name "+name);
+        Log.d("TAG", "email "+email);
+        Log.d("TAG", "phone "+phone);
+        Log.d("TAG", "amount "+amount);
+        Log.d("TAG", "prodname "+prodname);
 
     }
 
@@ -245,6 +254,11 @@ public class PayUMoneyPayment extends AppCompatActivity {
                     String status = result.optString("status");
                     String txnid = result.optString("txnid");
                     String cardnum = result.optString("cardnum");
+                    String paymentId = result.optString("paymentId");
+                    String mode = result.optString("mode");
+                    String bank_ref_num = result.optString("bank_ref_num");
+                    String productinfo = result.optString("productinfo");
+
 
                     if (status.equals("success")){
 
@@ -254,10 +268,18 @@ public class PayUMoneyPayment extends AppCompatActivity {
                                 TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
 
-                       /* Intent intent = new Intent();
-                        intent.putExtra("txn_id", txnid);
+                        Intent intent = new Intent();
+                        intent.putExtra("txnid", txnid);
                         intent.putExtra("amount", amount);
-                        setResult(Activity.RESULT_OK, intent);*/
+                        intent.putExtra("cardnum", cardnum);
+                        intent.putExtra("paymentId", paymentId);
+                        intent.putExtra("mode", mode);
+                        intent.putExtra("bank_ref_num", bank_ref_num);
+                        intent.putExtra("status", "y");
+                        intent.putExtra("invoice_no", productinfo);
+                        intent.putExtra("invoice_id", hashMap.get("invoice_id"));
+
+                        setResult(Activity.RESULT_OK, intent);
 
                         finish();
 
@@ -266,6 +288,19 @@ public class PayUMoneyPayment extends AppCompatActivity {
                         TastyToast.makeText(getApplicationContext(),
                                 "Payment failed. Try again.",
                                 TastyToast.LENGTH_LONG, TastyToast.WARNING);
+
+                        Intent intent = new Intent();
+                        intent.putExtra("txn_id", txnid);
+                        intent.putExtra("amount", amount);
+                        intent.putExtra("cardnum", cardnum);
+                        intent.putExtra("paymentId", paymentId);
+                        intent.putExtra("mode", mode);
+                        intent.putExtra("bank_ref_num", bank_ref_num);
+                        intent.putExtra("invoice_no", productinfo);
+                        intent.putExtra("status", "n");
+                        intent.putExtra("invoice_id", hashMap.get("invoice_id"));
+
+                        setResult(Activity.RESULT_OK, intent);
 
                         finish();
 

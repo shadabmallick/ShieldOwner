@@ -30,28 +30,25 @@ public class CarAdapter  extends RecyclerView.Adapter<CarAdapter.MyViewHolder> {
     ArrayList<Boolean> booleansarr;
     String selected = "";
 
-    public CarAdapter(Context c,ArrayList<HashMap<String,String>> text
+    public CarAdapter(Context context,ArrayList<HashMap<String,String>> text
     ) {
-        this.context = c;
+        this.context = context;
 
         this.text = text;
 
-        globalClass = ((GlobalClass) c.getApplicationContext());
+        globalClass = ((GlobalClass) context.getApplicationContext());
         preference = new Shared_Preference(context);
 
-        inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //setBooleanValue();
-
+        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     }
 
 
     @Override
     public CarAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.car_adapter, parent, false);
-        // set the view's size, margins, paddings and layout parameters
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.car_adapter, parent, false);
 
-// pass the view to View Holder
         CarAdapter.MyViewHolder vh = new CarAdapter.MyViewHolder(v);
         return vh;
 
@@ -59,54 +56,10 @@ public class CarAdapter  extends RecyclerView.Adapter<CarAdapter.MyViewHolder> {
 
 
     @Override
-    public void onBindViewHolder(final CarAdapter.MyViewHolder holder, final int position)
-    {
+    public void onBindViewHolder(final CarAdapter.MyViewHolder holder, final int position) {
 
         String city=text.get(position).get("car_no");
         holder.name.setText(city);
-/*
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-                setSelectedData(position,true);
-
-                String address_id = text.get(position).get("id");
-                String fname = text.get(position).get("address");
-                String lname = text.get(position).get("pin");
-                String address= text.get(position).get("city");
-                String city =  text.get(position).get("city");
-                String country = text.get(position).get("state");
-                String mobile = text.get(position).get("phone_number");
-                String ship_name = text.get(position).get("ship_name");
-
-                //   String state = address_list.get(position).get("state");
-                //   String zip = address_list.get(position).get("zip");
-
-               */
-/*  lat= Double.valueOf(address_list.get(position).get("lat"));
-                lng= Double.valueOf(address_list.get(position).get("lng"));*//*
-
-
-
-                Log.d(TAG, "onClick: "+address_id);
-
-                globalClass.setAddressid(address_id);
-
-                preference.savePrefrence();
-
-
-            }
-        });
-*/
-
-
-/*
-        Picasso.with(context).load(listProduct.get(position)).
-                fit().into(holder.image);*/
-
-
 
     }
 

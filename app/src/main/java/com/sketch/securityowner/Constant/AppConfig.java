@@ -50,6 +50,7 @@ public class AppConfig {
     public static final String multi_registration_login     = URL_DEV + "multi_registration_login";
     public static final String payumoney_hash_for           = URL_DEV + "payumoney_hash_for";
     public static final String user_complex_flat_list       = URL_DEV + "user_complex_flat_list";
+    public static final String payment_receive              = URL_DEV + "payment_receive";
 
 
 

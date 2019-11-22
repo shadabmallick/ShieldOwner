@@ -1,30 +1,16 @@
 package com.sketch.securityowner.dialogs;
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,15 +21,11 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.sketch.securityowner.Adapter.ProfileFlatAdapter;
 import com.sketch.securityowner.Constant.AppConfig;
 import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.GlobalClass.Shared_Preference;
-import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
 import com.sketch.securityowner.ui.InvoiceList;
 import com.sketch.securityowner.ui.SettingActivity;
@@ -52,18 +34,11 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
-import static com.sketch.securityowner.GlobalClass.VolleySingleton.backOff;
-import static com.sketch.securityowner.GlobalClass.VolleySingleton.nuOfRetry;
-import static com.sketch.securityowner.GlobalClass.VolleySingleton.timeOut;
 
 
 public class DialogProfile extends Dialog implements ProfileFlatAdapter.ViewClickListener {
@@ -94,7 +69,7 @@ public class DialogProfile extends Dialog implements ProfileFlatAdapter.ViewClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.dailog_settings);
+        setContentView(R.layout.dailog_profile);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         globalClass = (GlobalClass) context.getApplicationContext();

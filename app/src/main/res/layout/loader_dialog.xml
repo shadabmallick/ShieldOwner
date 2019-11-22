@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="visible"
-            app:indicatorName="BallPulseIndicator"
+            app:indicatorName="BallPulseSyncIndicator"
             app:indicatorColor="@color/blue"
             />
 
