@@ -64,7 +64,7 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
 
     private TextView tv_time, date_picker, tv_details_company;
     private RadioButton radio1, radio2;
-    private EditText edit_name_cab, edit_phone_cab, tv_others;
+    private EditText edt_car_no,edit_name_cab, edit_phone_cab, tv_others;
     private RecyclerView delivery_recycle;
 
 
@@ -103,10 +103,11 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
         radio2 = findViewById(R.id.radioFemale);
         RadioGroup radioSex = findViewById(R.id.radioSex);
         edit_name_cab = findViewById(R.id.edit_name);
+        edt_car_no = findViewById(R.id.edt_car_no);
         edit_phone_cab = findViewById(R.id.edit_phone);
         tv_time = findViewById(R.id.tv_time);
         tv_others = findViewById(R.id.tv_others);
-
+        edt_car_no.setVisibility(View.GONE);
 
         delivery_recycle=findViewById(R.id.delivery_recycle);
         LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
@@ -359,14 +360,19 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
                     JsonObject jobj = gson.fromJson(response, JsonObject.class);
                     String status = jobj.get("status").getAsString().replaceAll("\"", "");
                     String message = jobj.get("message").getAsString().replaceAll("\"", "");
+                    String qr_code = jobj.get("qr_code").getAsString().replaceAll("\"", "");
+                    String qr_code_image = jobj.get("qr_code_image").getAsString().replaceAll("\"", "");
 
 
                     if(status.equals("1")) {
 
                         TastyToast.makeText(context, message,
                                 TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                        if(!((qr_code.equals("")) && (qr_code_image.equals("")))){
+                            showDialog(qr_code,qr_code_image);
+                        }
 
-                        dismiss();
+
 
                     }
 
@@ -426,5 +432,21 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
 
     }
 
+    private void showDialog(final String qr_code,final String image){
+
+
+        DialogQrCode dialogQrCode = new DialogQrCode(context,qr_code,image);
+
+
+
+        dialogQrCode.show();
+
+
+        dialogQrCode.setOnDismissListener(dialog -> {
+
+            dismiss();
+        });
+
+    }
 
 }

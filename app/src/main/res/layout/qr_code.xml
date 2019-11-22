@@ -74,9 +74,7 @@
                 android:layout_height="200dp"
                 android:layout_below="@+id/tv_or"
                 android:layout_margin="20dp"
-                android:tint="@android:color/white"
-                android:src="@mipmap/delivery_man"
-                android:scaleType="centerCrop"
+                android:src="@mipmap/profile_image"
                 />
 
 
@@ -118,6 +116,7 @@
         android:layout_marginRight="40dp"
         >
         <ImageView
+            android:id="@+id/img_share"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:tint="@color/black"
