@@ -46,6 +46,7 @@ import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.GlobalClass.Shared_Preference;
 import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
+import com.sketch.securityowner.dialogs.LoaderDialog;
 import com.sketch.securityowner.model.ChatData;
 import com.sketch.securityowner.model.ChatListData;
 import com.sketch.securityowner.util.ConnectivityReceiver;
@@ -89,7 +90,7 @@ public class ChatGroup extends AppCompatActivity implements
 
 
     ChatListData chatListData;
-    ProgressDialog progressDialog;
+
     ArrayList<ChatData> chatListDataArrayList;
 
     GlobalClass globalClass;
@@ -104,6 +105,7 @@ public class ChatGroup extends AppCompatActivity implements
     private static final int CAMERA_REQUEST = 1888;
     public static final int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 333;
 
+    LoaderDialog loaderDialog;
 
     String TAG = "group chat list";
 
@@ -124,9 +126,9 @@ public class ChatGroup extends AppCompatActivity implements
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setMessage("Loading...");
+        loaderDialog = new LoaderDialog(this, android.R.style.Theme_Translucent,
+                false, "");
+
 
         globalClass = (GlobalClass) getApplicationContext();
         prefManager = new Shared_Preference(this);
@@ -205,7 +207,7 @@ public class ChatGroup extends AppCompatActivity implements
 
     private void getChatList() {
 
-        progressDialog.show();
+        loaderDialog.show();
 
         chatListDataArrayList = new ArrayList<>();
 
@@ -271,11 +273,11 @@ public class ChatGroup extends AppCompatActivity implements
                     }
 
 
-                    progressDialog.dismiss();
+                    loaderDialog.dismiss();
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    progressDialog.dismiss();
+                    loaderDialog.dismiss();
                 }
 
 
@@ -286,7 +288,7 @@ public class ChatGroup extends AppCompatActivity implements
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(AppConfig.TAG, "DATA NOT FOUND: " + error.getMessage());
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
 

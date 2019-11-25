@@ -48,9 +48,31 @@ public class AdapterOnvoiceList extends RecyclerView.Adapter<AdapterOnvoiceList.
 
        holder.tv_date1.setText(hashMapArrayList.get(position).get("invoice_name"));
        holder.tv_date2.setText("Date: "+hashMapArrayList.get(position).get("date"));
-       holder.status.setText(hashMapArrayList.get(position).get("invoicestatus"));
+
        holder.tv_invoice_no.setText("Invoice No: "
                +hashMapArrayList.get(position).get("invoice_no"));
+
+       // holder.status.setText(hashMapArrayList.get(position).get("invoicestatus"));
+
+
+        String status = hashMapArrayList.get(position).get("status");
+        if (status.equals("paid")){
+            holder.tv_pay.setVisibility(View.INVISIBLE);
+
+            holder.status.setText("Paid");
+
+        }else if (status.equals("unpaid")){
+            holder.tv_pay.setVisibility(View.VISIBLE);
+
+            holder.status.setText("Unpaid");
+
+        }else if (status.equals("partial_paid")){
+            holder.tv_pay.setVisibility(View.VISIBLE);
+
+            holder.status.setText("Partial paid");
+
+        }
+
 
         holder.invoice.setOnClickListener(v -> {
 
@@ -76,8 +98,6 @@ public class AdapterOnvoiceList extends RecyclerView.Adapter<AdapterOnvoiceList.
     @Override
     public int getItemCount() {
         return hashMapArrayList.size();
-
-
 
     }
 

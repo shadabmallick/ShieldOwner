@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -54,13 +55,15 @@ public class DialogProfile extends Dialog implements ProfileFlatAdapter.ViewClic
 
 
     private LoaderDialog loaderDialog;
-    ArrayList<HashMap<String, String>> mapArrayList;
+    ArrayList<HashMap<String, String>> listOwnerFlat;
 
     public boolean is_clicked = false;
 
-    public DialogProfile(@NonNull Context context) {
+    public DialogProfile(@NonNull Context context,
+                         ArrayList<HashMap<String, String>> listOwnerFlat) {
         super(context, R.style.datepicker);
         this.context = context;
+        this.listOwnerFlat = listOwnerFlat;
 
     }
 
@@ -71,6 +74,14 @@ public class DialogProfile extends Dialog implements ProfileFlatAdapter.ViewClic
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dailog_profile);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+        WindowManager.LayoutParams wmlp = getWindow().getAttributes();
+
+        wmlp.gravity = Gravity.TOP | Gravity.CENTER;
+        wmlp.x = 100;   //x position
+        wmlp.y = 300;   //y position
+
+
 
         globalClass = (GlobalClass) context.getApplicationContext();
         preference = new Shared_Preference(context);
@@ -124,11 +135,11 @@ public class DialogProfile extends Dialog implements ProfileFlatAdapter.ViewClic
         });
 
 
-        mapArrayList = new ArrayList<>();
+
         recycler_user_flats.setLayoutManager(new LinearLayoutManager(context));
+        setData();
 
-
-        getFlatListOwnerWise();
+        //getFlatListOwnerWise();
 
     }
 
@@ -179,7 +190,7 @@ public class DialogProfile extends Dialog implements ProfileFlatAdapter.ViewClic
                             map_ser.put("block", block);
                             map_ser.put("floor", floor);
 
-                            mapArrayList.add(map_ser);
+                           // mapArrayList.add(map_ser);
                         }
 
 
@@ -230,7 +241,7 @@ public class DialogProfile extends Dialog implements ProfileFlatAdapter.ViewClic
 
     private void setData(){
         ProfileFlatAdapter profileFlatAdapter =
-                new ProfileFlatAdapter(context, mapArrayList);
+                new ProfileFlatAdapter(context, listOwnerFlat);
         recycler_user_flats.setAdapter(profileFlatAdapter);
         profileFlatAdapter.setViewClickListener(this);
 

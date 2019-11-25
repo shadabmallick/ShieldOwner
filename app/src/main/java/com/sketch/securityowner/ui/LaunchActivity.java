@@ -38,6 +38,7 @@ import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.GlobalClass.Shared_Preference;
 import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
+import com.sketch.securityowner.dialogs.LoaderDialog;
 
 import org.json.JSONObject;
 
@@ -53,12 +54,10 @@ public class LaunchActivity extends AppCompatActivity {
     RelativeLayout rel_register,rel_login;
     GlobalClass globalClass;
     Shared_Preference prefrence;
-    ProgressDialog pd;
+    LoaderDialog loaderDialog;
     String device_id,name;
     EditText edt_register_no_name;
     String fcm_token;
-
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,16 +67,27 @@ public class LaunchActivity extends AppCompatActivity {
         fcm_token = FirebaseInstanceId.getInstance().getToken();
         prefrence = new Shared_Preference(LaunchActivity.this);
         prefrence.loadPrefrence();
-        pd=new ProgressDialog(LaunchActivity.this);
-        pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        pd.setMessage("Loading...");
+
+        loaderDialog = new LoaderDialog(this, android.R.style.Theme_Translucent,
+                false, "");
+
         if (globalClass.isNetworkAvailable()) {
-            if (globalClass.getLogin_status().equals(true)) {
-                Intent intent = new Intent(LaunchActivity.this, SettingActivity.class);
 
 
-                startActivity(intent);
-                finish();
+            if (globalClass.getLogin_status()) {
+
+                if (prefrence.isFirstLogin()){
+                    Intent intent = new Intent(LaunchActivity.this,
+                            SettingActivity.class);
+                    startActivity(intent);
+                    finish();
+                }else {
+                    Intent intent = new Intent(LaunchActivity.this,
+                            Activity_activity.class);
+                    startActivity(intent);
+                    finish();
+                }
+
             }
 
         }
@@ -143,7 +153,7 @@ public class LaunchActivity extends AppCompatActivity {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
 
-        pd.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.login_otp, new Response.Listener<String>() {
@@ -152,7 +162,7 @@ public class LaunchActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 Log.d(TAG, "Login Response: " + response.toString());
 
-                pd.dismiss();
+                loaderDialog.dismiss();
 
                 try {
                     JSONObject jsonObject = new JSONObject(response);
@@ -175,7 +185,7 @@ public class LaunchActivity extends AppCompatActivity {
                                 Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(register);
                         finish();
-                        pd.dismiss();
+                        loaderDialog.dismiss();
 
 
                     } else {
@@ -204,7 +214,7 @@ public class LaunchActivity extends AppCompatActivity {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
                 Toast.makeText(getApplicationContext(),
                         "Connection Error", Toast.LENGTH_LONG).show();
-                pd.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
 

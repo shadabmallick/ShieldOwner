@@ -63,6 +63,8 @@ import com.sketch.securityowner.model.ActivityModel;
 import com.sketch.securityowner.model.ChildItem;
 import com.sketch.securityowner.model.HeaderItem;
 import com.sketch.securityowner.model.ListItem;
+import com.sketch.securityowner.util.DigitTextView;
+import com.sketch.securityowner.util.OnSwipeTouchListener;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -91,6 +93,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.sketch.securityowner.GlobalClass.VolleySingleton.backOff;
 import static com.sketch.securityowner.GlobalClass.VolleySingleton.nuOfRetry;
 import static com.sketch.securityowner.GlobalClass.VolleySingleton.timeOut;
@@ -121,7 +124,8 @@ public class Activity_activity extends AppCompatActivity implements
             car1,rel_upcoming_visitor,rel_all_visitor,ll_community;
     RelativeLayout rl_profile;
     View view_all_visitor,view_upcoming_visitor;
-    TextView date_picker,tv_upcoming_visitor,tv_all_visitor,tv_flat_name;
+    TextView tv_upcoming_visitor,tv_all_visitor,tv_flat_name;
+    DigitTextView tv_digit_textview;
 
     String category,date_to_push;
     EditText edt_search;
@@ -183,6 +187,7 @@ public class Activity_activity extends AppCompatActivity implements
         ll_bell =  findViewById(R.id.ll_bell);
         tv_flat_name =  findViewById(R.id.tv_flat_name);
         edt_search =  findViewById(R.id.edt_search);
+        tv_digit_textview =  findViewById(R.id.tv_digit_textview);
 
 
 
@@ -297,31 +302,13 @@ public class Activity_activity extends AppCompatActivity implements
             }
         });
 
-        rl_profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                DialogProfile dialogProfile = new DialogProfile(Activity_activity.this);
-                dialogProfile.show();
-
-                dialogProfile.setOnDismissListener(dialog -> {
-
-                    if (dialogProfile.is_clicked){
-
-                        tv_flat_name.setText(globalClass.getFlat_name());
-
-                        getActivityList("all");
-                    }
-
-                });
-
-            }
-        });
-
         recycle_activity.setLayoutManager(new LinearLayoutManager(this));
         recycle_upcoming.setLayoutManager(new LinearLayoutManager(this));
 
-        tv_flat_name.setText(globalClass.getFlat_name());
+       // tv_flat_name.setText(globalClass.getFlat_name());
+
+        tv_digit_textview.setValue(globalClass.getFlat_name(), "up");
+
 
         Date c = Calendar.getInstance().getTime();
         //System.out.println("Current time => " + c);
@@ -364,6 +351,27 @@ public class Activity_activity extends AppCompatActivity implements
             }
         });
 
+        setSwipeAction();
+
+        tabViews();
+    }
+
+    private void tabViews(){
+
+        ImageView img_temp = findViewById(R.id.img_temp);
+        ImageView img_temp1 = findViewById(R.id.img_temp1);
+        ImageView img_temp3 = findViewById(R.id.img_temp3);
+        ImageView img_temp4 = findViewById(R.id.img_temp4);
+
+        TextView tv = findViewById(R.id.tv);
+        TextView tv1 = findViewById(R.id.tv1);
+        TextView tv3 = findViewById(R.id.tv3);
+        TextView tv4 = findViewById(R.id.tv4);
+
+
+        img_temp.setColorFilter(ContextCompat.getColor(getApplicationContext(),
+                R.color.black), android.graphics.PorterDuff.Mode.MULTIPLY);
+        tv.setTextColor(getResources().getColor(R.color.blue));
 
     }
 
@@ -595,9 +603,6 @@ public class Activity_activity extends AppCompatActivity implements
                                                 child.setFlat_no(obj.optString("flat_name"));
 
 
-
-
-
                                                 childArrayList.add(child);
 
                                             }
@@ -609,9 +614,7 @@ public class Activity_activity extends AppCompatActivity implements
                                             activityModelArrayList.add(activityModel);
                                         }
 
-
                                     }
-
 
 
                                     if (main_object.has("data_temp")) {
@@ -1223,6 +1226,222 @@ public class Activity_activity extends AppCompatActivity implements
                 .addToRequestQueue(stringRequest
                         .setRetryPolicy(
                                 new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+    }
+
+
+
+    //// on swipe ...
+
+    private void setSwipeAction(){
+
+
+        tv_digit_textview.setOnTouchListener(new OnSwipeTouchListener(Activity_activity.this) {
+            public void onSwipeTop() {
+               // Toast.makeText(Activity_activity.this, "top", Toast.LENGTH_SHORT).show();
+                swipeUp();
+            }
+            public void onSwipeRight() {
+                //Toast.makeText(Activity_activity.this, "right", Toast.LENGTH_SHORT).show();
+            }
+            public void onSwipeLeft() {
+               // Toast.makeText(Activity_activity.this, "left", Toast.LENGTH_SHORT).show();
+            }
+            public void onSwipeBottom() {
+               // Toast.makeText(Activity_activity.this, "bottom", Toast.LENGTH_SHORT).show();
+                swipeDown();
+            }
+
+
+        });
+
+
+        listOwnerFlat = new ArrayList<>();
+
+        rl_profile.setOnClickListener(v -> {
+
+            DialogProfile dialogProfile =
+                    new DialogProfile(Activity_activity.this, listOwnerFlat);
+            dialogProfile.show();
+
+            dialogProfile.setOnDismissListener(dialog -> {
+
+                if (dialogProfile.is_clicked){
+
+                    tv_digit_textview.setValue(globalClass.getFlat_name(), "up");
+
+                    TastyToast.makeText(getApplicationContext(),
+                            "You are now flat "+globalClass.getFlat_name(),
+                            TastyToast.LENGTH_SHORT, TastyToast.DEFAULT);
+
+                    getActivityList("all");
+                }
+
+            });
+
+        });
+
+        getFlatListOwnerWise();
+    }
+
+
+    private void swipeUp(){
+        int past_position = 0;
+        for (int i = 0; i < listOwnerFlat.size(); i++){
+            HashMap<String, String> hashMap = listOwnerFlat.get(i);
+            if (globalClass.getFlat_no().equals(hashMap.get("flat_id"))){
+                past_position = i;
+            }
+        }
+
+        try {
+
+            past_position++;
+
+            HashMap<String, String> hashMap = listOwnerFlat.get(past_position);
+            globalClass.setFlat_no(hashMap.get("flat_id"));
+            globalClass.setFlat_name(hashMap.get("flat_no"));
+            prefManager.savePrefrence();
+            prefManager.loadPrefrence();
+
+
+            tv_digit_textview.setValue(globalClass.getFlat_name(), "up");
+
+            TastyToast.makeText(getApplicationContext(),
+                    "You are now flat "+globalClass.getFlat_name(),
+                    TastyToast.LENGTH_SHORT, TastyToast.DEFAULT);
+            getActivityList("all");
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private void swipeDown(){
+        int past_position = 0;
+        for (int i = 0; i < listOwnerFlat.size(); i++){
+            HashMap<String, String> hashMap = listOwnerFlat.get(i);
+            if (globalClass.getFlat_no().equals(hashMap.get("flat_id"))){
+                past_position = i;
+            }
+        }
+
+        try {
+
+            past_position--;
+
+            HashMap<String, String> hashMap = listOwnerFlat.get(past_position);
+            globalClass.setFlat_no(hashMap.get("flat_id"));
+            globalClass.setFlat_name(hashMap.get("flat_no"));
+            prefManager.savePrefrence();
+            prefManager.loadPrefrence();
+
+
+            tv_digit_textview.setValue(globalClass.getFlat_name(), "down");
+
+            TastyToast.makeText(getApplicationContext(),
+                    "You are now flat "+globalClass.getFlat_name(),
+                    TastyToast.LENGTH_SHORT, TastyToast.DEFAULT);
+
+            getActivityList("all");
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+    ArrayList<HashMap<String, String>> listOwnerFlat;
+    private void getFlatListOwnerWise() {
+        // Tag used to cancel the request
+        String tag_string_req = "req_login";
+
+        listOwnerFlat = new ArrayList<>();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.user_complex_flat_list, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "flat_list: " + response.toString());
+
+                try {
+
+                    JSONObject object = new JSONObject(response);
+
+                    String status = object.optString("status");
+                    String message = object.optString("message");
+
+                    if(status.equals("1")) {
+
+                        JSONObject data = object.getJSONObject("data");
+
+                        JSONArray flat_details = data.getJSONArray("flat_details");
+
+                        for (int j = 0; j < flat_details.length(); j++) {
+                            JSONObject flat = flat_details.getJSONObject(j);
+
+                            String complex_id = flat.optString("complex_id");
+                            String user_type = flat.optString("user_type");
+                            String complex_name = flat.optString("complex_name");
+                            String flat_id = flat.optString("flat_id");
+                            String flat_no = flat.optString("flat_no");
+                            String block = flat.optString("block");
+                            String floor = flat.optString("floor");
+
+                            HashMap<String, String> map_ser = new HashMap<>();
+
+                            map_ser.put("complex_id", complex_id);
+                            map_ser.put("user_type", user_type);
+                            map_ser.put("complex_name", complex_name);
+                            map_ser.put("flat_id", flat_id);
+                            map_ser.put("flat_no", flat_no);
+                            map_ser.put("block", block);
+                            map_ser.put("floor", floor);
+
+                            listOwnerFlat.add(map_ser);
+                        }
+
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
+                loaderDialog.dismiss();
+            }
+        }){
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<>();
+
+                params.put("user_type", "Flat Owner");
+                params.put("user_id", globalClass.getId());
+
+                Log.d(TAG, "param: "+params);
+
+                return params;
+            }
+
+        };
+        // Adding request to request queue
+        GlobalClass.getInstance().addToRequestQueue(strReq, tag_string_req);
+        strReq.setRetryPolicy(new DefaultRetryPolicy(20 * 1000,
+                10, 1.0f));
 
     }
 

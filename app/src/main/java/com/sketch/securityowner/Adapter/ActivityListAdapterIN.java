@@ -111,7 +111,6 @@ public class ActivityListAdapterIN extends
             return new ChildViewHolder(itemView);
         }
 
-
     }
 
 
@@ -182,8 +181,6 @@ public class ActivityListAdapterIN extends
 
                     Glide.with(context)
                             .load(activityChild.getProfile_image())
-                            .centerCrop()
-                            .placeholder(R.drawable.ic_user_black)
                             .into(holder.profile_image);
 
                     Glide.with(context)
@@ -220,7 +217,7 @@ public class ActivityListAdapterIN extends
 
                         holder.visitor_type_name.setText("Visiting Help");
 
-                        holder.tv_vendor_name.setText(activityChild.getVendor_name());
+                        holder.tv_vendor_name.setText(activityChild.getVisiting_help_cat());
 
                     }
 
@@ -357,8 +354,6 @@ public class ActivityListAdapterIN extends
 
                     Glide.with(context)
                             .load(activityChild.getProfile_image())
-                            .centerCrop()
-                            .placeholder(R.drawable.ic_user_black)
                             .into(holder.profile_image);
 
                     Glide.with(context)
@@ -394,7 +389,7 @@ public class ActivityListAdapterIN extends
 
                         holder.visitor_type_name.setText("Visiting Help");
 
-                        holder.tv_vendor_name.setText(activityChild.getVendor_name());
+                        holder.tv_vendor_name.setText(activityChild.getVisiting_help_cat());
 
                     }
 

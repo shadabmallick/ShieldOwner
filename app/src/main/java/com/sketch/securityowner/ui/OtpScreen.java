@@ -106,6 +106,7 @@ public class OtpScreen extends AppCompatActivity {
                     String message = object.optString("message");
 
                     if(status.equals("1")) {
+
                         JSONObject data = object.getJSONObject("data");
                         String user_id = data.optString("user_id");
                         String user_type = data.optString("user_type");
@@ -137,14 +138,14 @@ public class OtpScreen extends AppCompatActivity {
                         globalClass.setFirst_time_login(first_time_login);
                         globalClass.setIs_login(is_login);
                         globalClass.setLogin_status(true);
-                        //array.add("Select Location");
+
                         preference.savePrefrence();
 
                         Intent setting=new Intent(getApplicationContext(),SettingActivity.class);
-                        setting.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
+                        setting.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(setting);
-
+                        finish();
 
                     }
                     else {

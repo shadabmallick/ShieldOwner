@@ -58,11 +58,11 @@
     <string name="notification_cab">Notification on Cab\'s Entry and Exit</string>
     <string name="notification_car">Notification on Car\'s Entry and Exit</string>
     <string name="search">Search Visitor</string>
-    <string name="all">ALL VISITORS</string>
+    <string name="all">ALL</string>
     <string name="support">:suppoprt@cartface.com</string>
     <string name="text_contact">Cartface Technologies Pvt. Ltd.\n50 ,D.H.Road,kolkata-700104 </string>
     <string name="text_contact1">Cartface Technologies Pvt. Ltd.50 ,D.H.Road,kolkata-700104 </string>
-    <string name="upcoming">UPCOMING VISITORS</string>
+    <string name="upcoming">UPCOMING</string>
     <string name="send">Send</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>

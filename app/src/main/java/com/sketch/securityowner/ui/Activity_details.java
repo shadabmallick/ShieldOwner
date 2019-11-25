@@ -54,6 +54,7 @@ import com.sketch.securityowner.GlobalClass.Config;
 import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
+import com.sketch.securityowner.dialogs.LoaderDialog;
 import com.sketch.securityowner.model.ActivityChild;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -93,7 +94,8 @@ public class Activity_details extends AppCompatActivity {
     ActivityChild activityChild;
 
     GlobalClass globalClass;
-    ProgressDialog progressDialog;
+
+    LoaderDialog loaderDialog;
 
 
     @Override
@@ -129,10 +131,8 @@ public class Activity_details extends AppCompatActivity {
 
         globalClass = (GlobalClass) getApplicationContext();
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setMessage("Loading...");
+        loaderDialog = new LoaderDialog(this, android.R.style.Theme_Translucent,
+                false, "");
 
 
         Bundle bundle = getIntent().getExtras();
@@ -639,7 +639,7 @@ public class Activity_details extends AppCompatActivity {
 
     public void generatePasscode(String desc){
 
-        progressDialog.show();
+        loaderDialog.show();
 
         String url = AppConfig.getpass_generate;
 
@@ -704,7 +704,7 @@ public class Activity_details extends AppCompatActivity {
                         }
 
 
-                        progressDialog.dismiss();
+                        loaderDialog.dismiss();
 
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -716,7 +716,7 @@ public class Activity_details extends AppCompatActivity {
             public void onFailure(int statusCode, Header[] headers,
                                   String res, Throwable t) {
                 Log.d(AppConfig.TAG, "new_visitor_add- " + res);
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
 
                 TastyToast.makeText(Activity_details.this,
                         "Server error. Try again.",

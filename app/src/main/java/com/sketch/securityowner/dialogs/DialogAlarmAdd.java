@@ -41,10 +41,11 @@ public class DialogAlarmAdd extends Dialog {
 
     private Context context;
     private GlobalClass globalClass;
-    private ProgressDialog progressDialog;
     private CardView animal,fire,threat,lift,medical,theif;
 
     private TextView tv_animal,tv_medical,tv_thief,tv_threat, tv_lift,tv_id;
+
+    LoaderDialog loaderDialog;
 
 
     public DialogAlarmAdd(@NonNull Context context) {
@@ -61,11 +62,10 @@ public class DialogAlarmAdd extends Dialog {
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
+        loaderDialog = new LoaderDialog(context, android.R.style.Theme_Translucent,
+                false, "");
+
         globalClass = (GlobalClass) context.getApplicationContext();
-        progressDialog = new ProgressDialog(context);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setMessage("Loading...");
 
 
         animal=findViewById(R.id.animal);
@@ -143,7 +143,7 @@ public class DialogAlarmAdd extends Dialog {
     private void FireAlarm(final String category) {
         String tag_string_req = "req_login";
 
-        progressDialog.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.add_panic, new Response.Listener<String>() {
@@ -152,7 +152,7 @@ public class DialogAlarmAdd extends Dialog {
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
 
                 Gson gson = new Gson();
 
@@ -190,7 +190,7 @@ public class DialogAlarmAdd extends Dialog {
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
 

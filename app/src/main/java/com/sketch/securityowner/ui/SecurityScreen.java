@@ -6,8 +6,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
@@ -141,8 +143,28 @@ public class SecurityScreen extends AppCompatActivity {
         });
 
 
+        tabViews();
+
     }
 
+    private void tabViews(){
+
+        ImageView img_temp = findViewById(R.id.img_temp);
+        ImageView img_temp1 = findViewById(R.id.img_temp1);
+        ImageView img_temp3 = findViewById(R.id.img_temp3);
+        ImageView img_temp4 = findViewById(R.id.img_temp4);
+
+        TextView tv = findViewById(R.id.tv);
+        TextView tv1 = findViewById(R.id.tv1);
+        TextView tv3 = findViewById(R.id.tv3);
+        TextView tv4 = findViewById(R.id.tv4);
+
+
+        img_temp1.setColorFilter(ContextCompat.getColor(getApplicationContext(),
+                R.color.black), android.graphics.PorterDuff.Mode.MULTIPLY);
+        tv1.setTextColor(getResources().getColor(R.color.blue));
+
+    }
 
 
 }

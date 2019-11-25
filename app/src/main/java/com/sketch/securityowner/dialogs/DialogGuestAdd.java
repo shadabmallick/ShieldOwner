@@ -52,7 +52,6 @@ public class DialogGuestAdd extends Dialog {
 
     private Context context;
     private GlobalClass globalClass;
-    private ProgressDialog progressDialog;
 
     private int mYear, mMonth, mDay, mHour, mMinute,mSecond;
     private String date_web, send_time;
@@ -61,7 +60,7 @@ public class DialogGuestAdd extends Dialog {
     private RadioButton radio1, radio2;
     private EditText edit_name_cab, edit_phone_cab;
 
-
+    LoaderDialog loaderDialog;
     private Calendar myCalendar = Calendar.getInstance();
 
     public DialogGuestAdd(@NonNull Context context) {
@@ -80,10 +79,9 @@ public class DialogGuestAdd extends Dialog {
         setCancelable(false);
 
         globalClass = (GlobalClass) context.getApplicationContext();
-        progressDialog = new ProgressDialog(context);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setMessage("Loading...");
+        loaderDialog = new LoaderDialog(context, android.R.style.Theme_Translucent,
+                false, "");
+
 
         TextView close = findViewById(R.id.close);
         LinearLayout ll_hide = findViewById(R.id.ll_hide);
@@ -219,7 +217,7 @@ public class DialogGuestAdd extends Dialog {
     private void AddGuest(final String type,final String radio_value) {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
-        progressDialog.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.add_visitor, new Response.Listener<String>() {
@@ -257,7 +255,7 @@ public class DialogGuestAdd extends Dialog {
 
                     }
 
-                    progressDialog.dismiss();
+                    loaderDialog.dismiss();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -272,7 +270,7 @@ public class DialogGuestAdd extends Dialog {
             public void onErrorResponse(VolleyError error) {
                 Log.e(AppConfig.TAG, "DATA NOT FOUND: " + error.getMessage());
                 TastyToast.makeText(context, "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
             @Override

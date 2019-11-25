@@ -30,6 +30,7 @@ import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.GlobalClass.Shared_Preference;
 import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
+import com.sketch.securityowner.dialogs.LoaderDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,10 +51,12 @@ public class HelpListDetails extends AppCompatActivity {
     RecyclerView recycler_view;
     GlobalClass globalClass;
     Shared_Preference prefManager;
-    ProgressDialog progressDialog;
     AdapterHelpList adapterHelpList;
     ArrayList<HashMap<String,String>> cityList;
     LinearLayout ll_data_not_found;
+
+    LoaderDialog loaderDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,14 +72,13 @@ public class HelpListDetails extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        loaderDialog = new LoaderDialog(this, android.R.style.Theme_Translucent,
+                false, "");
 
         globalClass = (GlobalClass) getApplicationContext();
         prefManager = new Shared_Preference(this);
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setMessage("Loading...");
+
         cityList=new ArrayList<>();
 
 
@@ -109,7 +111,7 @@ public class HelpListDetails extends AppCompatActivity {
     private void HelpListDetails(final String category) {
         // Tag used to cancel the request
         cityList.clear();
-        progressDialog.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.local_help_list, new Response.Listener<String>() {
@@ -119,7 +121,7 @@ public class HelpListDetails extends AppCompatActivity {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
 
-               progressDialog.dismiss();
+                loaderDialog.dismiss();
 
                 Gson gson = new Gson();
 

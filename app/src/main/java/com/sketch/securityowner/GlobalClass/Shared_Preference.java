@@ -58,6 +58,7 @@ public class Shared_Preference {
     private static final String PREFS_NAME2 = "preferences2";
 
     private static final String PREF_logInStatus = "logInStatus";
+    private static final String PREF_firstlogin = "firstlogin";
     private static final String PREF_name = "name";
     private static final String PREF_fname = "fname";
     private static final String PREF_lname = "lname";
@@ -98,9 +99,18 @@ public class Shared_Preference {
 
     }
 
+    public void saveFirstLogin(boolean val){
+        editor.putBoolean(PREF_firstlogin, val);
+        editor.commit();
+    }
+
+    public boolean isFirstLogin(){
+        return sharedPreferences.getBoolean(PREF_firstlogin, true);
+    }
+
     public void savePrefrence() {
         if (globalclass.getLogin_status()) {
-           // remote_user_id=globalclass.getRemote_user_id();
+
             editor.putString(remote,remote_user_id);
             pref_logInStatus = globalclass.getLogin_status();
             editor.putBoolean(PREF_logInStatus, pref_logInStatus);
@@ -117,7 +127,6 @@ public class Shared_Preference {
             block = globalclass.getBlock();
             editor.putString(prefblock, block);
 
-
             user_type = globalclass.getUser_type();
             editor.putString(prefuser_type, user_type);
 
@@ -133,8 +142,6 @@ public class Shared_Preference {
             complex_name = globalclass.getComplex_name();
             editor.putString(prefcomplex_name, complex_name);
 
-
-
             complex_id = globalclass.getComplex_id();
             editor.putString(prefcomplex_id, complex_id);
 
@@ -143,14 +150,12 @@ public class Shared_Preference {
             editor.putString(prefis_login, is_login);
 
 
-
             first_time_login = globalclass.getFirst_time_login();
             editor.putString(preffirst_time_login, first_time_login);
 
             pref_id= globalclass.getId();
             editor.putString(PREF_id,pref_id);
 
-           // list_id= globalclass.getList_Id();
             editor.putString(PREF_id,pref_id);
 
             pref_email= globalclass.getEmail();
@@ -159,20 +164,16 @@ public class Shared_Preference {
             pref_phone_number= globalclass.getPhone_number();
             editor.putString(PREF_phone_number,pref_phone_number);
 
-          //  pref_order_id= globalclass.getOrder_id();
             editor.putString(PREF_order_id,pref_order_id);
 
-           // pref_order_type= globalclass.getType();
             editor.putString(PREF_order_type,pref_order_type);
 
-           // pref_business=globalclass.getBusiness();
             editor.putString(PREF_business,pref_business);
 
 
             pref_profile_img = globalclass.getProfil_pic();
             editor.putString(PREF_profile_img, pref_profile_img);
 
-           // pref_organisation = globalclass.getOrganization();
             editor.putString(PREF_organisation, pref_organisation);
 
             pref_cart_no = globalclass.getCart_no();
@@ -181,16 +182,6 @@ public class Shared_Preference {
 
             login_from = globalclass.getLogin_from();
             editor.putString(PREF_login_from, login_from);
-
-          /*  pref_ship_address_id = globalclass.getShipping_id();
-            editor.putString(PREF_ship_address_id, pref_ship_address_id);
-
-            pref_ship_full_address = globalclass.getShipping_full_address();
-            editor.putString(PREF_ship_full_address, pref_ship_full_address);*/
-
-
-
-
 
 
             editor.commit();
@@ -252,23 +243,13 @@ public class Shared_Preference {
             globalclass.setEmail(pref_email);
 
             pref_organisation=sharedPreferences.getString(PREF_organisation,"");
-          //  globalclass.setOrganization(pref_organisation);
 
             pref_cart_no=sharedPreferences.getString(PREF_cart_no,"");
             globalclass.setCart_no(pref_cart_no);
 
             pref_order_id=sharedPreferences.getString(PREF_order_id,"");
-           // globalclass.setOrder_id(pref_order_id);
 
             pref_order_type=sharedPreferences.getString(PREF_order_type,"");
-          //  globalclass.setType(pref_order_type);
-
-            /*pref_ship_address_id=sharedPreferences.getString(PREF_ship_address_id,"");
-            globalclass.setShipping_id(pref_ship_address_id);
-
-            pref_ship_full_address=sharedPreferences.getString(PREF_ship_full_address,"");
-            globalclass.setShipping_full_address(pref_ship_full_address);
-*/
 
 
             pref_profile_img=sharedPreferences.getString(PREF_profile_img,"");
@@ -277,8 +258,6 @@ public class Shared_Preference {
 
             login_from=sharedPreferences.getString(PREF_login_from,"");
             globalclass.setLogin_from(login_from);
-
-
 
 
         }

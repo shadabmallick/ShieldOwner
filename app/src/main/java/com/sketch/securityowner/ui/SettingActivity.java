@@ -150,8 +150,6 @@ public class SettingActivity extends AppCompatActivity {
         initToolBar();
         currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
         currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        Log.d(TAG, "onCreate: "+currentDate);
-        Log.d(TAG, "onCreate: "+currentTime);
 
         profile_details_api_call();
         //
@@ -196,6 +194,7 @@ public class SettingActivity extends AppCompatActivity {
         globalClass = (GlobalClass) getApplicationContext();
         preference = new Shared_Preference(SettingActivity.this);
         preference.loadPrefrence();
+        preference.saveFirstLogin(false);
 
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);

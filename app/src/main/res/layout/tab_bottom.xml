@@ -21,7 +21,8 @@
             android:orientation="horizontal"
             android:weightSum="5"
             android:layout_width="fill_parent"
-            android:layout_marginTop="2dp"
+            android:paddingTop="2dp"
+            android:background="@color/white"
             android:layout_height="70dip">
 
             <LinearLayout
@@ -37,17 +38,19 @@
                     android:id="@+id/img_temp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:tint="@color/blue"
                     android:layout_centerInParent="true"
                     android:src="@drawable/ic_layers"
+                    android:tint="@color/light_dark_gray"
                     />
 
                 <TextView
+                    android:id="@+id/tv"
                     android:layout_below="@+id/img_temp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/activity"
-                    android:textColor="@color/blue"
+                    android:textSize="12sp"
+                    android:textColor="@color/light_dark_gray"
 
                     />
             </LinearLayout>
@@ -65,17 +68,19 @@
                     android:id="@+id/img_temp1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:tint="@color/blue"
                     android:layout_centerInParent="true"
                     android:src="@drawable/ic_shield"
+                    android:tint="@color/light_dark_gray"
                     />
 
                 <TextView
+                    android:id="@+id/tv1"
                     android:layout_below="@+id/img_temp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/help"
-                    android:textColor="@color/blue"
+                    android:textSize="12sp"
+                    android:text="@string/security"
+                    android:textColor="@color/light_dark_gray"
 
                     />
             </LinearLayout>
@@ -121,18 +126,19 @@
                     android:id="@+id/img_temp3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:tint="@color/blue"
                     android:layout_centerInParent="true"
                     android:src="@drawable/ic_users"
+                    android:tint="@color/light_dark_gray"
                     />
 
                 <TextView
+                    android:id="@+id/tv3"
                     android:layout_below="@+id/img_temp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/community"
-                    android:textColor="@color/blue"
-                    android:textSize="12dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/light_dark_gray"
 
                     />
             </LinearLayout>
@@ -150,18 +156,19 @@
                     android:id="@+id/img_temp4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:tint="@color/blue"
                     android:layout_centerInParent="true"
                     android:src="@drawable/ic_help_circle"
+                    android:tint="@color/light_dark_gray"
                     />
 
                 <TextView
+                    android:id="@+id/tv4"
                     android:layout_below="@+id/img_temp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/help"
-                    android:textSize="12dp"
-                    android:textColor="@color/blue"
+                    android:textSize="12sp"
+                    android:textColor="@color/light_dark_gray"
 
                     />
             </LinearLayout>

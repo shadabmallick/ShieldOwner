@@ -12,17 +12,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.sketch.securityowner.R;
 
 public class ShowInvoice extends AppCompatActivity {
+
     String TAG="ShowInvoice";
-  WebView  webView ;
-  WebViewClient webViewClient;
+    WebView  webView ;
+    WebViewClient webViewClient;
     String url;
     ProgressDialog progressBar;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_invoice);
         webView=findViewById(R.id.webView);
-        progressBar = ProgressDialog.show(ShowInvoice.this, "Loading the pdf", "Loading...");
+        progressBar = ProgressDialog.show(ShowInvoice.this,
+                "Loading the pdf", "Loading...");
         webView.getSettings().setJavaScriptEnabled(true);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {

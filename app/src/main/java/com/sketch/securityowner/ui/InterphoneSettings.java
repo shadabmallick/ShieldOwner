@@ -24,6 +24,7 @@ import com.sketch.securityowner.GlobalClass.Config;
 import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.GlobalClass.Shared_Preference;
 import com.sketch.securityowner.R;
+import com.sketch.securityowner.dialogs.LoaderDialog;
 
 import org.json.JSONObject;
 
@@ -38,8 +39,10 @@ public class InterphoneSettings extends AppCompatActivity {
     EditText add_number;
     GlobalClass globalClass;
     Shared_Preference prefManager;
-    ProgressDialog progressDialog;
     TextView ivr_number;
+
+    LoaderDialog loaderDialog;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,10 +54,9 @@ public class InterphoneSettings extends AppCompatActivity {
         globalClass = (GlobalClass) getApplicationContext();
         prefManager = new Shared_Preference(this);
 
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setMessage("Loading...");
+        loaderDialog = new LoaderDialog(this, android.R.style.Theme_Translucent,
+                false, "");
+
         IVR();
         img_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +91,7 @@ public class InterphoneSettings extends AppCompatActivity {
 
     public void IVR(){
 
-        progressDialog.show();
+        loaderDialog.show();
 
         String url = AppConfig.ivr_number;
         AsyncHttpClient cl = new AsyncHttpClient();
@@ -118,7 +120,7 @@ public class InterphoneSettings extends AppCompatActivity {
                 if (response != null) {
                     Log.d(TAG, "user_profile_pic_update- " + response.toString());
                     try {
-                        progressDialog.dismiss();
+                        loaderDialog.dismiss();
                         // dialog.dismiss();
 
                         int status = response.getInt("status");
@@ -128,11 +130,7 @@ public class InterphoneSettings extends AppCompatActivity {
                         if (status == 1) {
                             ivr_number.setText(ivr_number_res);
 
-                            // Log.d(TAG, "name: "+name)
-
                             TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                            //  edit_name.setText(globalClass.getName());
 
                         } else {
                             TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
@@ -157,7 +155,7 @@ public class InterphoneSettings extends AppCompatActivity {
     }
     public void EditNumber(final String number){
 
-        progressDialog.show();
+        loaderDialog.show();
 
         String url = AppConfig.update_ivr_number;
         AsyncHttpClient cl = new AsyncHttpClient();
@@ -187,21 +185,13 @@ public class InterphoneSettings extends AppCompatActivity {
                 if (response != null) {
                     Log.d(TAG, "user_profile_pic_update- " + response.toString());
                     try {
-                        progressDialog.dismiss();
-                        // dialog.dismiss();
+                        loaderDialog.dismiss();
 
                         int status = response.getInt("status");
                         String message = response.getString("message");
-                      //  String ivr_number_res = response.getString("ivr_number");
 
                         if (status == 1) {
                             IVR();
-
-                            // Log.d(TAG, "name: "+name)
-
-                        //    TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                            //  edit_name.setText(globalClass.getName());
 
                         } else {
                             TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);

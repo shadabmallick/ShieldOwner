@@ -278,6 +278,7 @@ public class PayUMoneyPayment extends AppCompatActivity {
                         intent.putExtra("status", "y");
                         intent.putExtra("invoice_no", productinfo);
                         intent.putExtra("invoice_id", hashMap.get("invoice_id"));
+                        intent.putExtra("id", hashMap.get("id"));
 
                         setResult(Activity.RESULT_OK, intent);
 
@@ -299,6 +300,7 @@ public class PayUMoneyPayment extends AppCompatActivity {
                         intent.putExtra("invoice_no", productinfo);
                         intent.putExtra("status", "n");
                         intent.putExtra("invoice_id", hashMap.get("invoice_id"));
+                        intent.putExtra("id", hashMap.get("id"));
 
                         setResult(Activity.RESULT_OK, intent);
 

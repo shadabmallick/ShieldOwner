@@ -83,7 +83,6 @@ public class CallUi extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
-        //getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         ButterKnife.bind(this);
         actionViews();
@@ -109,7 +108,7 @@ public class CallUi extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setMessage("Loading...");
+        progressDialog.setMessage("Submitting your response...");
 
 
         Bundle bundle = getIntent().getExtras();

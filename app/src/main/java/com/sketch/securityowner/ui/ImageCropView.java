@@ -24,6 +24,9 @@ public class ImageCropView extends AppCompatActivity {
         btn_ok = findViewById(R.id.btn_ok);
 
 
+
+
+
     }
 
 

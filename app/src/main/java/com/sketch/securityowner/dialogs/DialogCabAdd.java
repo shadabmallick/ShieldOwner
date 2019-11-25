@@ -59,7 +59,6 @@ public class DialogCabAdd extends Dialog implements categoryAdapter.onItemClickL
 
     private Context context;
     private GlobalClass globalClass;
-    private ProgressDialog progressDialog;
 
     private int mYear, mMonth, mDay, mHour, mMinute,mSecond;
     private String date_web, send_time, category;
@@ -69,7 +68,7 @@ public class DialogCabAdd extends Dialog implements categoryAdapter.onItemClickL
     private EditText edit_car_no, edit_name_cab, edit_phone_cab, tv_others;
     private RecyclerView delivery_recycle;
     private LinearLayout ll_hide;
-
+    LoaderDialog loaderDialog;
 
     private ArrayList<HashMap<String,String>> DeliveryList;
 
@@ -90,11 +89,11 @@ public class DialogCabAdd extends Dialog implements categoryAdapter.onItemClickL
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         setCancelable(false);
 
+        loaderDialog = new LoaderDialog(context, android.R.style.Theme_Translucent,
+                false, "");
+
         globalClass = (GlobalClass) context.getApplicationContext();
-        progressDialog = new ProgressDialog(context);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setMessage("Loading...");
+
 
         DeliveryList = new ArrayList<>();
 
@@ -251,7 +250,7 @@ public class DialogCabAdd extends Dialog implements categoryAdapter.onItemClickL
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         DeliveryList.clear();
-        progressDialog.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.company_list, new Response.Listener<String>() {
@@ -299,7 +298,7 @@ public class DialogCabAdd extends Dialog implements categoryAdapter.onItemClickL
 
                     }
 
-                    progressDialog.dismiss();
+                    loaderDialog.dismiss();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -313,7 +312,7 @@ public class DialogCabAdd extends Dialog implements categoryAdapter.onItemClickL
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
 
@@ -359,7 +358,7 @@ public class DialogCabAdd extends Dialog implements categoryAdapter.onItemClickL
         // Tag used to cancel the request
         String tag_string_req = "req_login";
 
-        progressDialog.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.add_visitor, new Response.Listener<String>() {
@@ -368,7 +367,7 @@ public class DialogCabAdd extends Dialog implements categoryAdapter.onItemClickL
             public void onResponse(String response) {
                 Log.d(AppConfig.TAG, "JOB RESPONSE: " + response.toString());
                 Gson gson = new Gson();
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
                 try {
 
 
@@ -397,7 +396,7 @@ public class DialogCabAdd extends Dialog implements categoryAdapter.onItemClickL
 
                     }
 
-                    progressDialog.dismiss();
+                    loaderDialog.dismiss();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -411,7 +410,7 @@ public class DialogCabAdd extends Dialog implements categoryAdapter.onItemClickL
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(AppConfig.TAG, "DATA NOT FOUND: " + error.getMessage());
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
             @Override

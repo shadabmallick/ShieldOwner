@@ -31,6 +31,8 @@ import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
 import com.sketch.securityowner.dialogs.LoaderDialog;
 
+import org.json.JSONObject;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -111,8 +113,6 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-
-
                 Gson gson = new Gson();
 
                 try {
@@ -148,6 +148,7 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
                             String delete_flag = jobj1.get("delete_flag").toString().replaceAll("\"", "");
                             String invoice_name = jobj1.get("invoice_name").toString().replaceAll("\"", "");
                             String note = jobj1.get("note").toString().replaceAll("\"", "");
+                            String status1 = jobj1.get("status").toString().replaceAll("\"", "");
                             String date_after = formateDateFromstring("yyyy-MM-dd", "dd, MMM yyyy", date);
 
                             HashMap<String, String> map_ser = new HashMap<>();
@@ -168,6 +169,7 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
                             map_ser.put("delete_flag", delete_flag);
                             map_ser.put("invoice_name", invoice_name);
                             map_ser.put("note", note);
+                            map_ser.put("status", status1);
 
                             invoice_list.add(map_ser);
 
@@ -208,7 +210,6 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(InvoiceList.this, "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
             }
         }) {
@@ -217,7 +218,7 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<>();
 
-                params.put("flat_id", "4");
+                params.put("flat_id", globalClass.getFlat_no());
 
                 Log.d(TAG, "getParams: "+params);
 
@@ -290,9 +291,11 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
             String status = data.getStringExtra("status");
             String invoice_no = data.getStringExtra("invoice_no");
             String invoice_id = data.getStringExtra("invoice_id");
+            String id = data.getStringExtra("id");
 
             finalPaymentReceive2(txnid, amount, cardnum, paymentId,
-                    mode, bank_ref_num, status, invoice_no, invoice_id);
+                    mode, bank_ref_num, status, invoice_no,
+                    invoice_id, id);
 
 
         }
@@ -301,7 +304,8 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
 
     private void finalPaymentReceive2(String txnid, String amount, String cardnum,
                                       String paymentId, String mode, String bank_ref_num,
-                                      String status, String invoice_no, String invoice_id) {
+                                      String status, String invoice_no,
+                                      String invoice_id, String id) {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         loaderDialog.show();
@@ -322,6 +326,7 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
         params.put("phone", globalClass.getPhone_number());
         params.put("flat_id", globalClass.getFlat_no());
         params.put("complex_id", globalClass.getComplex_id());
+        params.put("id", id);
 
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
@@ -331,15 +336,32 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
             public void onResponse(String response) {
                 Log.d(TAG, "payment_receive RESPONSE: " +response);
 
-
+                loaderDialog.dismiss();
                 try {
 
+                    JSONObject object = new JSONObject(response);
+
+                    int status = object.optInt("status");
+                    String message = object.optString("message");
+
+                    if (status == 1){
+
+                        InvoiceList();
+
+                        TastyToast.makeText(InvoiceList.this, message,
+                                TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                    }else {
+
+                        TastyToast.makeText(InvoiceList.this, message,
+                                TastyToast.LENGTH_LONG, TastyToast.ERROR);
+
+                    }
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
-                loaderDialog.dismiss();
             }
         }, new Response.ErrorListener() {
 

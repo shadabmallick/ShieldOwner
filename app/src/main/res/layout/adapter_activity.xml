@@ -29,21 +29,39 @@
                 android:orientation="horizontal"
                 android:layout_height="wrap_content">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/profile_image"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:src="@drawable/ic_user_black"
-                    app:civ_border_color="@color/dark_gray"
-                    app:civ_border_width="1dp"
-                    />
+                <RelativeLayout
+                    android:id="@+id/rel_profile_image"
+                    android:layout_width="51dp"
+                    android:layout_height="51dp"
+                    >
+
+                    <ImageView
+                        android:layout_width="@dimen/dimen_50dp"
+                        android:layout_height="@dimen/dimen_50dp"
+                        android:background="@drawable/circle_blue"
+                        android:src="@drawable/ic_user_white"
+                        android:padding="@dimen/dimen_10dp"
+                        android:layout_centerInParent="true"
+                        />
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/profile_image"
+                        android:layout_width="51dp"
+                        android:layout_height="51dp"
+                        app:civ_border_color="@color/light_gray"
+                        app:civ_border_width="1dp"
+                        android:layout_margin="1dp"
+                        android:layout_centerInParent="true"
+                        />
+
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_marginStart="10dp"
-                    android:layout_toEndOf="@+id/profile_image"
+                    android:layout_toEndOf="@+id/rel_profile_image"
                     android:layout_toStartOf="@+id/rel_end"
                     >
                     <TextView

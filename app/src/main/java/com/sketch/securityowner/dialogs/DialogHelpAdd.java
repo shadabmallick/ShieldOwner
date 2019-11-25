@@ -59,7 +59,6 @@ public class DialogHelpAdd extends Dialog {
 
     private Context context;
     private GlobalClass globalClass;
-    private ProgressDialog progressDialog;
     RadioGroup radioSex;
     private int mYear, mMonth, mDay, mHour, mMinute,mSecond;
     private String date_web, send_time,help_id;
@@ -73,6 +72,7 @@ public class DialogHelpAdd extends Dialog {
     private Calendar myCalendar = Calendar.getInstance();
     Spinner spinner_help;
 
+    LoaderDialog loaderDialog;
 
 
     public DialogHelpAdd(@NonNull Context context) {
@@ -91,10 +91,10 @@ public class DialogHelpAdd extends Dialog {
         setCancelable(false);
         HelpList=new ArrayList<>();
         globalClass = (GlobalClass) context.getApplicationContext();
-        progressDialog = new ProgressDialog(context);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setMessage("Loading...");
+
+        loaderDialog = new LoaderDialog(context, android.R.style.Theme_Translucent,
+                false, "");
+
 
         close = findViewById(R.id.close);
         ll_hide = findViewById(R.id.ll_hide);
@@ -322,6 +322,8 @@ public class DialogHelpAdd extends Dialog {
         String tag_string_req = "req_login";
         HelpList.clear();
 
+        loaderDialog.show();
+
         StringRequest strReq = new StringRequest(Request.Method.GET,
                 AppConfig.help_category_list, new Response.Listener<String>() {
 
@@ -340,20 +342,17 @@ public class DialogHelpAdd extends Dialog {
 
                     if(status.equals("1")) {
 
-                        Log.d("jobj", "" + jobj);
+                        //Log.d("jobj", "" + jobj);
                         ArrayList<String> state_array = new ArrayList<String>();
                         state_array.add("Select State");
 
-                        //array.add("Select Location");
                         JsonArray jarray = jobj.getAsJsonArray("data");
-                        Log.d("jarray", "" + jarray.toString());
+                        //Log.d("jarray", "" + jarray.toString());
                         array1 = new ArrayList<>();
                         array1.add("Help");
                         for (int i = 0; i < jarray.size(); i++) {
                             JsonObject jobj1 = jarray.get(i).getAsJsonObject();
-                            //get the object
 
-                            //JsonObject jobj1 = jarray.get(i).getAsJsonObject();
                             String id = jobj1.get("id").toString().replaceAll("\"", "");
                             String name = jobj1.get("name").toString().replaceAll("\"", "");
                             String image = jobj1.get("image").toString().replaceAll("\"", "");
@@ -382,7 +381,7 @@ public class DialogHelpAdd extends Dialog {
 
                     }
 
-
+                    loaderDialog.dismiss();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -396,11 +395,8 @@ public class DialogHelpAdd extends Dialog {
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(context, "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-            }
+                loaderDialog.dismiss();            }
         }) {
-
-
 
         };
 
@@ -410,14 +406,13 @@ public class DialogHelpAdd extends Dialog {
                         .setRetryPolicy(
                                 new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
 
-
     }
 
 
     private void AddVisitorHelp(final String type,final String radio_value) {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
-        progressDialog.show();
+        loaderDialog.show();
         HelpList.clear();
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.add_visitor, new Response.Listener<String>() {
@@ -427,7 +422,7 @@ public class DialogHelpAdd extends Dialog {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
                 Gson gson = new Gson();
-              progressDialog.dismiss();
+                loaderDialog.dismiss();
                 try {
 
                     JsonObject jobj = gson.fromJson(response, JsonObject.class);
@@ -465,7 +460,6 @@ public class DialogHelpAdd extends Dialog {
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(context, "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
             }
         }) {
             @Override

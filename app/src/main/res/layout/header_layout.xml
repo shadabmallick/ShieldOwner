@@ -15,7 +15,7 @@
         android:paddingRight="20dp"
         android:textStyle="bold"
         android:textColor="@color/range_white"
-        android:background="@drawable/curve_blue"/>
+        android:background="@drawable/curve_light_gray"/>
 
 
 </LinearLayout>

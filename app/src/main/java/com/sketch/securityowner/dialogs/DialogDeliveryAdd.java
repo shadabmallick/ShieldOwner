@@ -57,7 +57,6 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
 
     private Context context;
     private GlobalClass globalClass;
-    private ProgressDialog progressDialog;
 
     private int mYear, mMonth, mDay, mHour, mMinute,mSecond;
     private String date_web, send_time, category;
@@ -67,6 +66,7 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
     private EditText edt_car_no,edit_name_cab, edit_phone_cab, tv_others;
     private RecyclerView delivery_recycle;
 
+    LoaderDialog loaderDialog;
 
     ArrayList<HashMap<String,String>> DeliveryList;
 
@@ -87,11 +87,11 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         setCancelable(false);
 
+        loaderDialog = new LoaderDialog(context, android.R.style.Theme_Translucent,
+                false, "");
+
         globalClass = (GlobalClass) context.getApplicationContext();
-        progressDialog = new ProgressDialog(context);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setMessage("Loading...");
+
 
         DeliveryList = new ArrayList<>();
 
@@ -234,7 +234,7 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
         // Tag used to cancel the request
         String tag_string_req = "req_login";
         DeliveryList.clear();
-        progressDialog.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.company_list, new Response.Listener<String>() {
@@ -282,13 +282,10 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
 
                     }
 
-                    progressDialog.dismiss();
+                    loaderDialog.dismiss();
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    TastyToast.makeText(context,
-                            "Error Connection", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
                 }
 
             }
@@ -296,7 +293,7 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
 
             @Override
             public void onErrorResponse(VolleyError error) {
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
 
@@ -344,7 +341,7 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
         // Tag used to cancel the request
         String tag_string_req = "req_login";
 
-        progressDialog.show();
+        loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.add_visitor, new Response.Listener<String>() {
@@ -382,7 +379,7 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
 
                     }
 
-                    progressDialog.dismiss();
+                    loaderDialog.dismiss();
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -396,7 +393,7 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(AppConfig.TAG, "DATA NOT FOUND: " + error.getMessage());
-                progressDialog.dismiss();
+                loaderDialog.dismiss();
             }
         }) {
             @Override
