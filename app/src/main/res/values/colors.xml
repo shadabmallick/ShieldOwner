@@ -26,4 +26,31 @@
     <color name="transparent">#00000000</color>
     <color name="bg_gray">#F1F2F4</color>
 
+
+    <item name="purple1" type="color">#9025c6</item>
+    <item name="green1" type="color">#89b110</item>
+    <item name="orange1" type="color">#ce8900</item>
+    <item name="red1" type="color">#c70000</item>
+    <item name="darkblue" type="color">#448fa7</item>
+    <item name="darkpurple" type="color">#67208b</item>
+    <item name="darkgreen" type="color">#5e7e1d</item>
+    <item name="darkorange" type="color">#935208</item>
+    <item name="darkred" type="color">#FFCC0000</item>
+
+
+    <integer-array name="androidcolors">
+
+        <item>@color/purple1</item>
+        <item>@color/green1</item>
+        <item>@color/orange</item>
+        <item>@color/red</item>
+        <item>@color/darkblue</item>
+        <item>@color/darkpurple</item>
+        <item>@color/darkgreen</item>
+        <item>@color/darkorange</item>
+        <item>@color/darkred</item>
+    </integer-array>
+
+
+
 </resources>

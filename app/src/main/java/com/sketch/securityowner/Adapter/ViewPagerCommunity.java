@@ -1,8 +1,5 @@
 package com.sketch.securityowner.Adapter;
 
-
-
-
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -49,7 +46,7 @@ public class ViewPagerCommunity  extends FragmentPagerAdapter {
         }
         else if (position == 1)
         {
-            title = "Notice Board";
+            title = "Notice";
         }
         else if (position == 2)
         {

@@ -30,7 +30,8 @@ public class AdapterHelpList  extends RecyclerView.Adapter<AdapterHelpList.MyVie
 
     @Override
     public AdapterHelpList.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_help_list, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_help_list, parent, false);
         AdapterHelpList.MyViewHolder vh = new AdapterHelpList.MyViewHolder(view);
         return vh;
     }
@@ -50,17 +51,7 @@ public class AdapterHelpList  extends RecyclerView.Adapter<AdapterHelpList.MyVie
                callPhone(cityList.get(position).get("mobile"));
             }
         });
-/*
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                Intent placeorder=new Intent(context, ChatAppActivity.class);
-
-                context.startActivity(placeorder);
-            }
-        });
-*/
     }
     private void callPhone(String number){
 

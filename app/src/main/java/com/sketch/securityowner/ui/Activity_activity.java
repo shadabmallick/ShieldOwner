@@ -121,7 +121,7 @@ public class Activity_activity extends AppCompatActivity implements
     EditText tv_others;
     String type_in_out, response_value = "", approved_by = "";
     LinearLayout ll_bell,button_activity,
-            car1,rel_upcoming_visitor,rel_all_visitor,ll_community;
+            car1,rel_upcoming_visitor,rel_all_visitor,ll_community, ll_app_help;
     RelativeLayout rl_profile;
     View view_all_visitor,view_upcoming_visitor;
     TextView tv_upcoming_visitor,tv_all_visitor,tv_flat_name;
@@ -188,6 +188,7 @@ public class Activity_activity extends AppCompatActivity implements
         tv_flat_name =  findViewById(R.id.tv_flat_name);
         edt_search =  findViewById(R.id.edt_search);
         tv_digit_textview =  findViewById(R.id.tv_digit_textview);
+        ll_app_help =  findViewById(R.id.button_E4);
 
 
 
@@ -281,17 +282,22 @@ public class Activity_activity extends AppCompatActivity implements
         button_activity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent notification=new Intent(getApplicationContext(), SecurityScreen.class);
+                Intent notification=new Intent(Activity_activity.this, SecurityScreen.class);
                 startActivity(notification);
             }
         });
         ll_community.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent notification=new Intent(getApplicationContext(),CommunityActivity.class);
+                Intent notification=new Intent(Activity_activity.this,CommunityActivity.class);
                 startActivity(notification);
             }
         });
+        ll_app_help.setOnClickListener(v -> {
+            Intent notification=new Intent(Activity_activity.this, AppHelp.class);
+            startActivity(notification);
+        });
+
         rel_middle_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

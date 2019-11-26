@@ -135,9 +135,6 @@ public class HelpListDetails extends AppCompatActivity {
 
                     if(status.equals("1")) {
 
-
-
-
                         JsonArray jarray = jobj.getAsJsonArray("data");
 
 

@@ -1,65 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@android:drawable/dialog_holo_light_frame">
+    android:layout_height="wrap_content">
 
-    <RelativeLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        app:cardUseCompatPadding="true"
+        app:cardElevation="5dp"
+        app:cardCornerRadius="4dp"
         >
 
-        <TextView
-            android:id="@+id/tv_help_id"
-            android:textSize="18sp"
-            android:paddingRight="8dp"
-            android:paddingLeft="8dp"
-            android:gravity="center"
-            android:layout_marginTop="10dp"
-            android:text="I need a teacher"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="5dp">
+            android:orientation="vertical"
+            android:padding="6dp"
+            >
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <TextView
+                    android:id="@+id/tv_help_id"
+                    android:textSize="18sp"
+                    android:paddingRight="8dp"
+                    android:paddingLeft="8dp"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="I need a teacher"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:id="@+id/tv_status"
+                        android:layout_width="wrap_content"
+                        android:gravity="center"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="5dp"
+                        android:textColor="@android:color/white"
+                        android:textSize="10sp"
+                        android:text="pending"
+                        android:background="@drawable/curve_add"
+                        android:layout_height="wrap_content" />
+
+                </RelativeLayout>
+
+
+            </RelativeLayout>
 
             <TextView
-                android:id="@+id/tv_status"
-                android:layout_width="wrap_content"
-                android:gravity="right"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:textColor="@android:color/white"
-                android:tint="@android:color/white"
-                    android:textSize="10dp"
-                     android:text="pending"
-                android:paddingBottom="5dp"
-                android:background="@drawable/curve_add"
-                android:layout_height="20dp" />
+                android:id="@+id/tv_content"
+                android:textSize="18sp"
+                android:paddingRight="8dp"
+                android:paddingLeft="8dp"
+                android:text="Need Water"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
+    </androidx.cardview.widget.CardView>
 
-
-    </RelativeLayout>
-    <TextView
-        android:id="@+id/tv_content"
-        android:textSize="18sp"
-
-        android:paddingRight="8dp"
-        android:paddingLeft="8dp"
-        android:text="Need Water"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:layout_width="wrap_content"
-
-        android:layout_height="wrap_content" />
 </LinearLayout>

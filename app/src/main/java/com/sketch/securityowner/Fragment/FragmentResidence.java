@@ -125,22 +125,18 @@ public class FragmentResidence extends Fragment {
                             Log.d(TAG, "cityList: "+blockList);
 
 
-
-
                         }
 
                         adapter = new AdapterResidence(getActivity(), blockList);
                         recyclerView.setAdapter(adapter);
                     }
                     else {
-                        TastyToast.makeText(getActivity(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                     }
 
 
 
                 } catch (Exception e) {
-                    TastyToast.makeText(getActivity(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                 }
 
@@ -152,7 +148,6 @@ public class FragmentResidence extends Fragment {
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(getActivity(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
             }
         }) {

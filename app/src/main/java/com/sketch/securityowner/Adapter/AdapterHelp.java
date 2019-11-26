@@ -6,37 +6,33 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.sdsmdg.tastytoast.TastyToast;
 import com.sketch.securityowner.R;
 
 import com.sketch.securityowner.ui.ChatGroup;
-import com.sketch.securityowner.ui.OwnerList;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class AdapterSecurityGuard  extends RecyclerView.Adapter<AdapterSecurityGuard.MyViewHolder> {
+public class AdapterHelp extends RecyclerView.Adapter<AdapterHelp.MyViewHolder> {
 
 
     Context context;
     ArrayList<HashMap<String,String>> blockList;
 
-    public AdapterSecurityGuard(Context context, ArrayList<HashMap<String,String>> blockList) {
+    public AdapterHelp(Context context, ArrayList<HashMap<String,String>> blockList) {
         this.blockList = blockList;
         this.context=context;
     }
 
     @Override
-    public AdapterSecurityGuard.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.help_desk_single, parent, false);
-        AdapterSecurityGuard.MyViewHolder vh = new AdapterSecurityGuard.MyViewHolder(view);
+    public AdapterHelp.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.help_desk_single, parent, false);
+        AdapterHelp.MyViewHolder vh = new AdapterHelp.MyViewHolder(view);
         return vh;
     }
 

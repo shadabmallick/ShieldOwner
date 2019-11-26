@@ -29,7 +29,8 @@ public class AlertAdapter  extends RecyclerView.Adapter<AlertAdapter.MyViewHolde
 
     @Override
     public AlertAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_panic, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.single_panic, parent, false);
         AlertAdapter.MyViewHolder vh = new AlertAdapter.MyViewHolder(view);
         return vh;
     }
@@ -37,8 +38,8 @@ public class AlertAdapter  extends RecyclerView.Adapter<AlertAdapter.MyViewHolde
 
     @Override
     public void onBindViewHolder(AlertAdapter.MyViewHolder holder, int position) {
-        // holder.bind(items[position]);
-String category=blockList.get(position).get("category");
+
+        String category=blockList.get(position).get("category");
 
         if(category.equals("Fire")){
             Picasso.with(context)
@@ -84,23 +85,8 @@ String category=blockList.get(position).get("category");
         }
         holder.tv_category.setText(blockList.get(position).get("category"));
         holder.tv_data.setText(blockList.get(position).get("date"));
-/*
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
 
-                        Intent placeorder=new Intent(context, ChatAppActivity.class);
 
-                        context.startActivity(placeorder);
-                    }
-                });
-
-            }
-        });
-*/
 
     }
 

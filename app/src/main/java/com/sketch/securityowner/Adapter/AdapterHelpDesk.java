@@ -32,7 +32,8 @@ public class AdapterHelpDesk  extends RecyclerView.Adapter<AdapterHelpDesk.MyVie
 
     @Override
     public AdapterHelpDesk.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.help_adapter, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.help_adapter, parent, false);
         AdapterHelpDesk.MyViewHolder vh = new AdapterHelpDesk.MyViewHolder(view);
         return vh;
     }

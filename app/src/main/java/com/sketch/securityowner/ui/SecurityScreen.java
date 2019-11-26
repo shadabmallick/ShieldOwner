@@ -29,7 +29,7 @@ public class SecurityScreen extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager viewPager;
     ViewPagerAdapter viewPagerAdapter;
-    LinearLayout ll_activty_class,ll_comunity,ll_security,car1;
+    LinearLayout ll_activty_class,ll_comunity,ll_security,car1, ll_app_help;
     RelativeLayout rel_middle_icon;
     LinearLayout ll_activity;
     LinearLayout ll_bell;
@@ -53,6 +53,7 @@ public class SecurityScreen extends AppCompatActivity {
         car1 =  findViewById(R.id.car1);
 
         ll_security=findViewById(R.id.button_E1);
+        ll_app_help=findViewById(R.id.button_E4);
         img_cab=  findViewById(R.id.img_cab);
         img_guest=  findViewById(R.id.img_guest);
         img_delivery=  findViewById(R.id.img_delivery);
@@ -95,6 +96,11 @@ public class SecurityScreen extends AppCompatActivity {
                         View.VISIBLE ? View.GONE : View.VISIBLE);
 
             }
+        });
+
+        ll_app_help.setOnClickListener(v -> {
+            Intent notification=new Intent(SecurityScreen.this, AppHelp.class);
+            startActivity(notification);
         });
 
 

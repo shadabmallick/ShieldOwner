@@ -41,7 +41,7 @@ public class CommunityActivity extends AppCompatActivity {
     ArrayList<HashMap<String,String>> productDetaiils_sub;
     ArrayList<HashMap<String,String>> staffList;
     ViewPagerCommunity viewPagerAdapter;
-    LinearLayout ll_activity,ll_security,car1;
+    LinearLayout ll_activity,ll_security,car1, ll_app_help;
     RelativeLayout rel_middle_icon;
     LinearLayout ll_bell;
 
@@ -59,6 +59,7 @@ public class CommunityActivity extends AppCompatActivity {
         rel_middle_icon =  findViewById(R.id.rel_middle_icon);
         ll_bell =  findViewById(R.id.ll_bell);
         car1 =  findViewById(R.id.car1);
+        ll_app_help =  findViewById(R.id.button_E4);
         globalClass = (GlobalClass) getApplicationContext();
 
         pd = new ProgressDialog(CommunityActivity.this);
@@ -102,6 +103,11 @@ public class CommunityActivity extends AppCompatActivity {
                 car1.setVisibility(car1.getVisibility()
                         == View.VISIBLE ? View.GONE : View.VISIBLE);
             }
+        });
+
+        ll_app_help.setOnClickListener(v -> {
+            Intent notification=new Intent(CommunityActivity.this, AppHelp.class);
+            startActivity(notification);
         });
 
 

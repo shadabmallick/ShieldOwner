@@ -29,15 +29,18 @@ public class AdapterSecurityList extends RecyclerView.Adapter<AdapterSecurityLis
     Context context;
     ArrayList<HashMap<String,String>> blockList;
 
-    public AdapterSecurityList(Context context, ArrayList<HashMap<String,String>> blockList) {
+    public AdapterSecurityList(Context context, ArrayList<HashMap<String,String>> blockList,
+                               onItemClickListner mListner) {
         this.blockList = blockList;
         this.context=context;
+        this.mListner = mListner;
     }
 
     @Override
     public AdapterSecurityList.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_security, parent, false);
-        AdapterSecurityList.MyViewHolder vh = new AdapterSecurityList.MyViewHolder(view);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.adapter_security, parent, false);
+        AdapterSecurityList.MyViewHolder vh = new AdapterSecurityList.MyViewHolder(view, mListner);
         return vh;
     }
 
@@ -55,38 +58,12 @@ public class AdapterSecurityList extends RecyclerView.Adapter<AdapterSecurityLis
         }
 
 
-/*
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        Intent placeorder=new Intent(context, ChatAppActivity.class);
-
-                        context.startActivity(placeorder);
-                    }
-                });
-
-            }
-        });
-*/
         holder.call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: ");
-                String number="+"+blockList.get(position).get("mobile");
-                Log.d(TAG, "mobile: "+number);
-                String p = "tel:" + number;
-                Intent intent = new Intent(Intent.ACTION_CALL);
-                intent.setData(Uri.parse("tel:" + number));
 
-                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                mListner.onItemClick(blockList.get(position).get("mobile"));
 
-                    return;
-                }
-                context.startActivity(intent);
             }
         });
 
@@ -104,23 +81,27 @@ public class AdapterSecurityList extends RecyclerView.Adapter<AdapterSecurityLis
     public class MyViewHolder extends RecyclerView.ViewHolder {
         // init the item view's
         ImageView profile_image,call;
-        TextView name,tv_name,tv_status,tv_help_id;
+        TextView name,tv_name;
 
+        onItemClickListner listner;
 
-        public MyViewHolder(View itemView) {
+        public MyViewHolder(View itemView, onItemClickListner listner) {
             super(itemView);
-            // get the reference of item view's
+
             tv_name =  itemView.findViewById(R.id.tv_name);
-
-
             profile_image =  itemView.findViewById(R.id.profile_image);
             call =  itemView.findViewById(R.id.call);
 
-
-
-
+            this.listner = listner;
         }
 
     }
+
+
+    private onItemClickListner mListner;
+    public interface onItemClickListner{
+        void onItemClick(String number);
+    }
+
 
 }

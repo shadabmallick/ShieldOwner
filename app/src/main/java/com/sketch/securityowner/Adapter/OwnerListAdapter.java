@@ -116,7 +116,7 @@ public class OwnerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         Glide.with(context)
                 .load(ownerData.getImage())
-                .placeholder(R.mipmap.profile_image)
+                .placeholder(R.drawable.ic_user_black)
                 .into(holder.profile_image);
 
         holder.iv_call.setOnClickListener(v -> {

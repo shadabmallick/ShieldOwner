@@ -1,15 +1,20 @@
 package com.sketch.securityowner.Fragment;
 
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,10 +27,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.sdsmdg.tastytoast.TastyToast;
-import com.sketch.securityowner.Adapter.AdapterSecurityGuard;
-import com.sketch.securityowner.Adapter.AdapterSecurityList;
-import com.sketch.securityowner.Adapter.RecyclerViewAdapter;
+import com.sketch.securityowner.Adapter.AlertAdapter;
+import com.sketch.securityowner.Adapter.EmergencyAdapter;
 import com.sketch.securityowner.Constant.AppConfig;
 import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.GlobalClass.VolleySingleton;
@@ -41,12 +44,12 @@ import static com.sketch.securityowner.GlobalClass.VolleySingleton.backOff;
 import static com.sketch.securityowner.GlobalClass.VolleySingleton.nuOfRetry;
 import static com.sketch.securityowner.GlobalClass.VolleySingleton.timeOut;
 
-public class FragmentB extends Fragment {
 
-    GlobalClass globalClass;
-    AdapterSecurityList adapter;
-    ArrayList<HashMap<String,String>> blockList;
+public class FragEmergency extends Fragment implements EmergencyAdapter.onItemClickListner {
+
     RecyclerView recyclerView;
+    GlobalClass globalClass;
+    ArrayList<HashMap<String,String>> listEmergency;
 
     LoaderDialog loaderDialog;
 
@@ -54,40 +57,40 @@ public class FragmentB extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(
-                R.layout.fragment_guard, container, false);
+                R.layout.fragment_alert, container, false);
         return rootView;
+
+
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         globalClass=(GlobalClass)getActivity().getApplicationContext();
-        blockList=new ArrayList<>();
-        recyclerView = view.findViewById(R.id.recycler_view);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        listEmergency =new ArrayList<>();
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+
 
         loaderDialog = new LoaderDialog(getActivity(), android.R.style.Theme_Translucent,
                 false, "");
 
 
-        BrowseBlock();
+        BrowseAlertList();
     }
-
-    private void BrowseBlock() {
+    private void BrowseAlertList() {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
-        blockList.clear();
-
+        listEmergency.clear();
         loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.security_list, new Response.Listener<String>() {
+                AppConfig.emergency_contact, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "JOB RESPONSE: " + response.toString());
+                Log.d(TAG, "emergency_contact RESPONSE: " + response.toString());
 
 
                 loaderDialog.dismiss();
@@ -104,57 +107,31 @@ public class FragmentB extends Fragment {
 
                     if(status.equals("1")) {
 
+                        JsonArray data = jobj.getAsJsonArray("data");
 
 
+                        for (int i = 0; i < data.size(); i++) {
+                            JsonObject jobj1 = data.get(i).getAsJsonObject();
 
-                        JsonArray jarray = jobj.getAsJsonArray("data");
-
-
-                        for (int i = 0; i < jarray.size(); i++) {
-                            JsonObject jobj1 = jarray.get(i).getAsJsonObject();
-                            //get the object
-
-
-                            String id = jobj1.get("id").toString().replaceAll("\"", "");
                             String name = jobj1.get("name").toString().replaceAll("\"", "");
-                            String image = jobj1.get("image").toString().replaceAll("\"", "");
-                            String emailid = jobj1.get("emailid").toString().replaceAll("\"", "");
-                            String mobile = jobj1.get("mobile").toString().replaceAll("\"", "");
-
-
+                            String contact = jobj1.get("contact").toString().replaceAll("\"", "");
 
                             HashMap<String, String> map_ser = new HashMap<>();
 
 
-                            map_ser.put("id", id);
                             map_ser.put("name", name);
-                            map_ser.put("image", image);
-                            map_ser.put("emailid", emailid);
-                            map_ser.put("mobile", mobile);
+                            map_ser.put("contact", contact);
 
-
-
-                            blockList.add(map_ser);
-                            Log.d(TAG, "cityList: "+blockList);
-
-
-
+                            listEmergency.add(map_ser);
 
                         }
-
-                        adapter = new AdapterSecurityList(getActivity(), blockList);
-                        recyclerView.setAdapter(adapter);
-                    }
-                    else {
-                        TastyToast.makeText(getActivity(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                        setData();
 
                     }
-
 
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    TastyToast.makeText(getActivity(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                 }
 
@@ -166,7 +143,6 @@ public class FragmentB extends Fragment {
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(getActivity(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
             }
         }) {
@@ -175,10 +151,7 @@ public class FragmentB extends Fragment {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<>();
 
-
-
-                params.put("complex_id","277");
-
+                params.put("complex_id",globalClass.getComplex_id());
 
                 return params;
             }
@@ -192,6 +165,49 @@ public class FragmentB extends Fragment {
                         .setRetryPolicy(
                                 new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
 
+
+    }
+
+
+    private void setData(){
+
+        EmergencyAdapter adapter = new EmergencyAdapter(getActivity(), listEmergency,
+                this);
+        recyclerView.setAdapter(adapter);
+
+    }
+
+    @Override
+    public void onItemClick(String number) {
+
+        checkCallPermission(number);
+    }
+
+    private static final int REQUEST_PHONE_CALL = 1212;
+    private void checkCallPermission(String number){
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(getActivity(),
+                    Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.CALL_PHONE},REQUEST_PHONE_CALL);
+
+            }
+            else {
+                callPhone(number);
+            }
+        }
+        else {
+            callPhone(number);
+        }
+
+    }
+
+    private void callPhone(String number){
+
+        Intent intent = new Intent(Intent.ACTION_DIAL,
+                Uri.parse("tel:" + number));// Initiates the Intent
+        startActivity(intent);
 
     }
 

@@ -3,7 +3,6 @@ package com.sketch.securityowner.Fragment;
 
 import android.Manifest;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -23,7 +22,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -39,7 +37,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -47,17 +44,13 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.sdsmdg.tastytoast.TastyToast;
-import com.sketch.securityowner.Adapter.AdapterHelpDesk;
-import com.sketch.securityowner.Adapter.AdapterResidence;
-import com.sketch.securityowner.Adapter.AdapterSecurityGuard;
-import com.sketch.securityowner.Adapter.RecyclerViewAdapter;
+import com.sketch.securityowner.Adapter.AdapterHelp;
 import com.sketch.securityowner.Constant.AppConfig;
 import com.sketch.securityowner.GlobalClass.Config;
 import com.sketch.securityowner.GlobalClass.GlobalClass;
 import com.sketch.securityowner.GlobalClass.VolleySingleton;
 import com.sketch.securityowner.R;
 import com.sketch.securityowner.dialogs.LoaderDialog;
-import com.sketch.securityowner.ui.SettingActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -90,7 +83,7 @@ public class FragmentA extends Fragment {
 
     File p_image;
     GlobalClass globalClass;
-    AdapterSecurityGuard adapter;
+    AdapterHelp adapter;
     EditText edit_content;
     ImageView image_capture,gallery_capture;
     ArrayList<HashMap<String,String>> blockList;
@@ -261,20 +254,13 @@ public class FragmentA extends Fragment {
 
                         }
 
-                        adapter = new AdapterSecurityGuard(getActivity(), blockList);
+                        adapter = new AdapterHelp(getActivity(), blockList);
                         recyclerView.setAdapter(adapter);
                     }
-                    else {
-                        TastyToast.makeText(getActivity(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                    }
-
 
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    TastyToast.makeText(getActivity(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
                 }
 
 
@@ -285,8 +271,6 @@ public class FragmentA extends Fragment {
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(getActivity(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
             }
         }) {
             @Override
@@ -294,10 +278,7 @@ public class FragmentA extends Fragment {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<>();
 
-
-
                 params.put("user_id",globalClass.getId());
-
 
                 return params;
             }

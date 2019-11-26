@@ -208,7 +208,13 @@
         </activity>
 
 
+        <activity android:name=".ui.AppHelp"
+            android:theme="@style/MyTheme">
 
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
 
 
 

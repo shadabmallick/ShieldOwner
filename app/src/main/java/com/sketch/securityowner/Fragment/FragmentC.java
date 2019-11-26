@@ -116,9 +116,6 @@ public class FragmentC extends Fragment {
                             String category = jobj1.get("category").toString().replaceAll("\"", "");
                             String date = jobj1.get("date").toString().replaceAll("\"", "");
 
-
-
-
                             HashMap<String, String> map_ser = new HashMap<>();
 
 
@@ -126,30 +123,17 @@ public class FragmentC extends Fragment {
                             map_ser.put("category", category);
                             map_ser.put("date", date);
 
-
-
-
                             blockList.add(map_ser);
-                            Log.d(TAG, "cityList: "+blockList);
-
-
-
 
                         }
 
                         adapter = new AlertAdapter(getActivity(), blockList);
                         recyclerView.setAdapter(adapter);
                     }
-                    else {
-                        TastyToast.makeText(getActivity(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                    }
-
 
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    TastyToast.makeText(getActivity(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                 }
 
@@ -161,7 +145,6 @@ public class FragmentC extends Fragment {
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(getActivity(), "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
             }
         }) {
@@ -170,10 +153,7 @@ public class FragmentC extends Fragment {
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<>();
 
-
-
-                params.put("user_id","278");
-
+                params.put("user_id",globalClass.getId());
 
                 return params;
             }
