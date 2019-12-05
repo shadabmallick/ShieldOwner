@@ -3,16 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:card_view="http://schemas.android.com/tools"
     >
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardCornerRadius="4dp"
-        card_view:cardElevation="4dp"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="6dp"
         app:cardUseCompatPadding="true"
-        card_view:cardBackgroundColor="@color/white"
         >
 
         <RelativeLayout
@@ -26,8 +24,8 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 app:civ_border_width="1dp"
-                app:civ_border_color="@color/orange"
-                android:src="@mipmap/profile_image"
+                app:civ_border_color="@color/light_dark_gray"
+                android:src="@drawable/ic_user_black"
                 />
 
             <LinearLayout
@@ -53,11 +51,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/dark_gray"
-                    android:textStyle="bold"
                     android:text="Sourav"
                     />
-
-
 
             </LinearLayout>
 

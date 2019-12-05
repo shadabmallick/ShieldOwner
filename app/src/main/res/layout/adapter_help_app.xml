@@ -1,43 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-   >
+    android:background="@color/white"
+    >
+
+    <ImageView
+        android:id="@+id/iv_top"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:src="@mipmap/tour_1"
+        android:scaleType="fitXY"
+        android:contentDescription="@string/app_name"
+        />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardUseCompatPadding="true"
-        app:cardElevation="6dp"
-        app:cardCornerRadius="4dp"
+        app:cardElevation="15dp"
+        app:cardCornerRadius="20dp"
+        android:layout_marginTop="20dp"
+        app:cardBackgroundColor="@color/white"
         >
 
         <RelativeLayout
             android:id="@+id/rel_bg"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:padding="6dp"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
             >
 
             <ImageView
-                android:id="@+id/iv_bg"
+                android:id="@+id/iv_center"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:background="@mipmap/bggg"
-                android:visibility="gone"
+                android:layout_height="130dp"
+                android:contentDescription="@string/app_name"
+                android:src="@mipmap/tour_12"
+                android:layout_centerHorizontal="true"
                 />
 
             <TextView
                 android:id="@+id/tv_msg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:padding="15dp"
+                android:minHeight="55dp"
+                android:textColor="@color/black"
+                android:textSize="13sp"
+                android:padding="8dp"
+                android:layout_below="@+id/iv_center"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
                 />
 
         </RelativeLayout>
@@ -47,4 +63,4 @@
 
 
 
-</LinearLayout>
+</RelativeLayout>

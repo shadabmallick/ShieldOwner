@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
-    android:background="@color/light_gray"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+    android:background="@color/light_gray">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -29,38 +29,61 @@
             android:id="@+id/toolbar_title" />
     </androidx.appcompat.widget.Toolbar>
 
-<LinearLayout
-
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:background="@android:color/white">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        >
+        android:layout_marginTop="10dp"
+        android:background="@android:color/white">
 
-        <FrameLayout
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="20dp"
+            android:padding="15dp"
             >
 
             <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_image"
                 android:layout_width="96dp"
                 android:layout_height="96dp"
                 android:tint="@color/light_gray"
                 android:src="@mipmap/profile_image"/>
 
-        </FrameLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/profile_image"
+                android:layout_centerVertical="true"
+                android:paddingStart="@dimen/dimen_10dp"
+                android:orientation="vertical"
+                >
 
+                <TextView
+                    android:id="@+id/user_name"
+                    android:textSize="16sp"
+                    android:text="xcvcxvcxv"
+                    android:textColor="@color/blue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/block"
+                    android:layout_width="wrap_content"
+                    android:text="2019-10-23"
+                    android:layout_marginTop="5dp"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/address"
+                    android:layout_width="wrap_content"
+                    android:text="2019-10-23"
+                    android:textColor="@android:color/holo_green_dark"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
 
     </LinearLayout>
 
-
-</LinearLayout>
 
     <LinearLayout
         android:id="@+id/ll_tenants"
@@ -70,27 +93,27 @@
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:padding="10dp"
-
         android:background="@android:color/white"
-
         >
-<ImageView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:src="@drawable/ic_box"
-    android:layout_marginLeft="40dp"
-    android:background="@android:color/darker_gray"></ImageView>
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/ic_user_white"
+            android:layout_marginLeft="30dp"
+            android:background="@android:color/darker_gray"
+            android:padding="5dp"
+            />
 
-
-
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:gravity="center"
-    android:layout_marginLeft="20dp"
-    android:text="@string/add_show_tenent"></TextView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginLeft="20dp"
+            android:text="@string/add_show_tenent"/>
     </LinearLayout>
+
+
     <LinearLayout
         android:id="@+id/ll_add_multiple_complex"
         android:layout_width="match_parent"
@@ -100,26 +123,30 @@
         android:padding="10dp"
         android:background="@android:color/white"
         android:layout_marginTop="10dp"
-
         >
-<ImageView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:src="@drawable/ic_box"
-    android:layout_marginLeft="40dp"
-    android:background="@android:color/darker_gray"></ImageView>
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/ic_box"
+            android:layout_marginLeft="30dp"
+            android:padding="6dp"
+            android:background="@android:color/darker_gray"/>
 
 
 
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:gravity="center"
-    android:layout_marginLeft="20dp"
-    android:text="@string/add_new_flat"></TextView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginLeft="20dp"
+            android:text="@string/add_new_flat"/>
     </LinearLayout>
+
+
     <LinearLayout
+        android:id="@+id/linear_share"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -127,24 +154,25 @@
         android:background="@android:color/white"
         android:padding="10dp"
         android:layout_marginTop="10dp"
-
         >
-<ImageView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:src="@drawable/ic_box"
-    android:layout_marginLeft="40dp"
-    android:background="@android:color/darker_gray"></ImageView>
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/ic_share_2"
+            android:layout_marginLeft="30dp"
+            android:padding="6dp"
+            android:background="@android:color/darker_gray"/>
 
 
 
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:gravity="center"
-    android:layout_marginLeft="20dp"
-    android:text="@string/tell_a_freind"></TextView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginLeft="20dp"
+            android:text="@string/tell_a_freind"/>
     </LinearLayout>
 
 </LinearLayout>

@@ -3,13 +3,11 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.sketch.securityowner"
+        applicationId "com.shield.resident"
         minSdkVersion 20
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-
-
 
     }
     compileOptions {
@@ -60,5 +58,6 @@ dependencies {
 
 
     api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
+    implementation files('libs/mint-5.2.1.jar')
 }
 apply plugin: 'com.google.gms.google-services'

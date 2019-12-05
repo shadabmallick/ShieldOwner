@@ -39,7 +39,7 @@
                 android:gravity="center"
                 android:textColor="@android:color/white"
                 android:textSize="16dp"
-                android:text="My Tenants"></TextView>
+                android:text="My Tenants"/>
 
             <RelativeLayout
                 android:id="@+id/rl_add_tenants"
@@ -55,16 +55,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_plus"
-
-
-                    ></ImageView>
+                    />
 
             </RelativeLayout>
 
         </LinearLayout>
-
-
-
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -78,8 +73,7 @@
         android:paddingBottom="8dp"
         />
 
-
-
-
+    <include
+        layout="@layout/no_data_layout"/>
 
 </RelativeLayout>

@@ -14,7 +14,9 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="45dp"
         android:background="#f00"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:animateLayoutChanges="true"
+        >
         <RelativeLayout
             android:id="@+id/profile_layout"
             android:layout_width="match_parent"
@@ -22,6 +24,7 @@
             android:layout_below="@+id/header_cover_image"
             android:elevation="4dp"
             android:background="@android:color/white"
+            android:animateLayoutChanges="true"
             android:paddingBottom="24dp">
 
             <TextView
@@ -116,6 +119,7 @@
                 android:orientation="vertical"
                 android:visibility="gone"
                 android:layout_height="wrap_content"
+                android:animateLayoutChanges="true"
                 android:layout_below="@+id/tv_details_company">
 
                 <LinearLayout

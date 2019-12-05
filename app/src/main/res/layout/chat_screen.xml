@@ -23,6 +23,10 @@
         android:paddingBottom="8dp"
         />
 
+    <include
+        layout="@layout/no_data_layout"/>
+
+
     <View
         android:id="@+id/view1"
         android:layout_width="match_parent"

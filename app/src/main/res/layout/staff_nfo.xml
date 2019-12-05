@@ -10,11 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-
         android:orientation="vertical"
         android:background="@drawable/curve_white">
-
-
 
 
         <TextView
@@ -24,22 +21,22 @@
             android:textStyle="bold"
             android:textSize="20dp"/>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
+        <RelativeLayout
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp">
 
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="20dp"
+                android:padding="10dp"
                 android:background="@drawable/circle">
 
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="96dp"
+                    android:layout_width="60dp"
                     android:id="@+id/profile_image"
-                    android:layout_height="96dp"
-                    android:src="@drawable/ic_user"/>
+                    android:layout_height="60dp"
+                    android:src="@drawable/ic_user_black"/>
 
             </FrameLayout>
 
@@ -47,12 +44,12 @@
                 android:id="@+id/edit_image_staff"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|center"
-                android:layout_marginLeft="-40dp"
-                android:layout_marginTop="50dp"
-                android:src="@drawable/ic_camera" />
+                android:src="@drawable/ic_camera"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                />
 
-        </LinearLayout>
+        </RelativeLayout>
 
 
 
@@ -61,8 +58,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:textSize="13sp"
             android:id="@+id/edit_staff_name"
-            android:layout_marginVertical="10dp"
+            android:layout_marginTop="15dp"
             android:hint="@string/enter_member_name"/>
         <Spinner
             android:id="@+id/spinner_help"
@@ -70,15 +68,17 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             style="@style/SpinnerwithNoArrow"
-
-            android:layout_marginVertical="10dp"
+            android:layout_marginTop="10dp"
             android:hint="@string/staff_type"/>
         <EditText
             android:id="@+id/edit_staff_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:layout_marginVertical="10dp"
+            android:textSize="13sp"
+            android:inputType="phone"
+            android:maxLength="10"
+            android:layout_marginTop="10dp"
             android:hint="@string/enter_phone"/>
 
         <LinearLayout

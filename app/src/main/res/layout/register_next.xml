@@ -4,13 +4,13 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@mipmap/background">
+
     <RelativeLayout
         android:id="@+id/rel_back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp">
-
 
         <TextView
             android:layout_width="wrap_content"
@@ -21,9 +21,7 @@
             android:textStyle="bold"
             android:textColor="@color/blue"
             android:gravity="center"
-
             android:background="@drawable/next_curve"/>
-
 
     </RelativeLayout>
 
@@ -49,6 +47,7 @@
             android:textColorHint="@android:color/white"
             android:textColor="@android:color/white"
             android:hint="@string/enter_name"/>
+
         <EditText
             android:id="@+id/edt_phone_no"
             android:layout_width="match_parent"
@@ -59,7 +58,10 @@
             android:backgroundTint="@android:color/white"
             android:textColorHint="@android:color/white"
             android:textColor="@android:color/white"
+            android:inputType="number"
+            android:maxLength="10"
             android:hint="@string/enter_phone"/>
+
         <EditText
             android:id="@+id/edt_email"
             android:layout_width="match_parent"
@@ -70,6 +72,7 @@
             android:backgroundTint="@android:color/white"
             android:textColorHint="@android:color/white"
             android:textColor="@android:color/white"
+            android:inputType="textEmailAddress"
             android:hint="@string/enter_email"/>
 
         <RelativeLayout
@@ -78,7 +81,6 @@
             android:id="@+id/rel_otp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
 
             <TextView
                 android:layout_width="wrap_content"
@@ -92,11 +94,7 @@
                 android:layout_marginTop="50dp"
                 android:background="@drawable/next_curve"/>
 
-
         </RelativeLayout>
-
-
-
 
     </RelativeLayout>
     <RelativeLayout
@@ -106,6 +104,7 @@
         android:layout_marginBottom="50dp"
         android:layout_height="50dp"
         android:gravity="center">
+
         <TextView
             android:layout_width="200dp"
             android:layout_height="50dp"
@@ -117,9 +116,8 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/login_buttom"/>
 
-
-
     </RelativeLayout>
+
     <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/avi"
         android:layout_centerInParent="true"

@@ -1,117 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:orientation="vertical"
-    android:layout_height="wrap_content"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto">
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="58dp"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:titleTextColor="#ffffff">
-
-        <ImageView
-            android:id="@+id/img_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_phone_call"
-            android:tint="@android:color/white"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/logout"
-            android:textSize="20dp"
-            android:textColor="@android:color/white"
-            android:layout_gravity="center"
-            android:id="@+id/toolbar_title" />
-    </androidx.appcompat.widget.Toolbar>
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/transparent"
+    >
 
     <androidx.cardview.widget.CardView
-
-        android:id="@+id/cardview"
+        android:id="@+id/card"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        card_view:contentPadding="7dp"
-
-        card_view:cardCornerRadius="7dp"
-        card_view:cardElevation="7dp"
-        android:layout_margin="10dp"
-
-
+        android:layout_height="wrap_content"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="7dp"
+        app:cardCornerRadius="6dp"
+        android:layout_centerInParent="true"
         >
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-
             android:orientation="vertical"
-            android:background="@drawable/curve_white">
+            >
 
-
-
-
-
-
-
-
-
-            <TextView
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textColor="@android:color/black"
-                android:layout_marginVertical="10dp"
-                android:text="@string/logout_message"></TextView>
+                android:layout_height="48dp"
+                android:background="?attr/colorPrimary"
+                android:minHeight="?attr/actionBarSize"
+                android:titleTextColor="#ffffff">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/logout"
+                    android:textSize="20dp"
+                    android:textColor="@android:color/white"
+                    android:layout_gravity="center"
+                    android:id="@+id/toolbar_title" />
+            </androidx.appcompat.widget.Toolbar>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:weightSum="2"
-                android:textColor="@android:color/black"
-                android:layout_marginVertical="10dp"
-                android:text="@string/logout_message">
+                android:orientation="vertical"
+                android:background="@color/white"
+                android:padding="@dimen/dimen_15dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@android:color/black"
+                    android:layout_marginVertical="10dp"
+                    android:text="@string/logout_message"/>
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:id="@+id/ll_no"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/black_border"
-                    android:layout_height="wrap_content">
+                    android:weightSum="2"
+                    android:textColor="@android:color/black"
+                    android:layout_marginVertical="10dp"
+                    android:text="@string/logout_message">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/no"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:id="@+id/ll_no"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/black_border"
+                        android:layout_height="wrap_content">
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/no"
+                            android:textColor="@color/black"
+                            android:padding="@dimen/dimen_10dp"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:id="@+id/ll_yes"
+                        android:layout_margin="10dp"
+                        android:background="@drawable/black_border"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/yes"
+                            android:padding="@dimen/dimen_10dp"
+                            android:textColor="@color/black"
+                            />
+
+
+                    </LinearLayout>
 
                 </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:id="@+id/ll_yes"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/black_border"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/yes"/>
-
-
-                </LinearLayout>
-
-
 
             </LinearLayout>
-
-
 
 
         </LinearLayout>
@@ -119,4 +114,4 @@
     </androidx.cardview.widget.CardView>
 
 
-</LinearLayout>
+</RelativeLayout>

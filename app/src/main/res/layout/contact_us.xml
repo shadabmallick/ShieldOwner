@@ -68,18 +68,7 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:src="@mipmap/cartfacelogo"/>
-
-
-
-
-
-
-
-
-
-
-
+                    android:src="@mipmap/ic_shield"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -87,26 +76,20 @@
                     android:gravity="center"
                     android:layout_marginTop="10dp"
                     android:textColor="@android:color/black"
-                    android:text="@string/text_contact"></TextView>
+                    android:text="@string/text_contact"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginTop="5dp"
                     android:gravity="center">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_camera"/>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:textColor="@android:color/black"
-                        android:text="@string/support"></TextView>
-
-
+                        android:text="@string/support"/>
 
                 </LinearLayout>
 
@@ -115,21 +98,14 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center"
-
                     android:layout_marginTop="5dp">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:src="@drawable/ic_camera"/>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:textColor="@android:color/black"
-                        android:text=": +91 9876543210"></TextView>
-
-
+                        android:text=": +91 9876543210"/>
 
                 </LinearLayout>
                 <LinearLayout
@@ -145,18 +121,22 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:textColor="@android:color/black"
-                        android:text="Give Your message  :"></TextView>
+                        android:text="Give Your message  :"/>
 
                     <EditText
                         android:layout_width="match_parent"
-                        android:layout_height="150dp"
+                        android:layout_height="wrap_content"
+                        android:minHeight="150dp"
                         android:layout_marginTop="10dp"
                         android:background="@drawable/black_border"
+                        android:gravity="start"
+                        android:padding="8dp"
+                        android:textSize="13sp"
+                        android:hint="Type here"
                         />
 
-
-
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -173,23 +153,17 @@
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"
                         android:paddingTop="5dp"
-
                         android:paddingBottom="5dp"
                         android:textColor="@android:color/white"
                         android:background="@drawable/curve_add"
-                        android:text="@string/send"></TextView>
-
-
-
+                        android:text="@string/send"/>
 
                 </LinearLayout>
 
-
-
             </LinearLayout>
 
-
         </ScrollView>
+
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
 

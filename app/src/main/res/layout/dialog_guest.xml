@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="56dp"
-                android:text="Approve my cab in given date and time "
+                android:text="Approve my guest in given date and time "
                 android:textSize="16sp"
                 />
 

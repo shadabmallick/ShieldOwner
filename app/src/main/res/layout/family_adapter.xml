@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     >
     <androidx.cardview.widget.CardView
         android:id="@+id/cardview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:contentPadding="7dp"
-        card_view:cardCornerRadius="7dp"
-        card_view:cardElevation="7dp"
-        android:layout_margin="10dp"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="5dp"
+        app:cardCornerRadius="5dp"
         >
 
         <LinearLayout
-            android:layout_width="100dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="8dp"
+            >
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_image"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:padding="5dp"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_launcher_background"
+                android:src="@drawable/ic_user_black"
                 />
 
             <TextView
@@ -40,40 +40,41 @@
                 android:layout_centerInParent="true"
                 />
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_below="@+id/tv_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginTop="10dp"
+                >
 
                 <ImageView
                     android:layout_width="30dp"
                     android:background="@drawable/circle_blue"
                     android:layout_height="30dp"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:id="@+id/iv_call"
-                    android:layout_marginTop="5dp"
                     android:tint="@android:color/white"
-                    android:src="@drawable/ic_phone_call"/>
+                    android:src="@drawable/ic_phone_call"
+                    android:layout_centerVertical="true"
+                    />
+
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="right">
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    >
 
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:tint="@color/black"
-                        android:layout_marginTop="5dp"
                         android:src="@drawable/ic_share_2"/>
 
                 </LinearLayout>
 
 
-
-
-
-            </LinearLayout>
+            </RelativeLayout>
 
         </LinearLayout>
 

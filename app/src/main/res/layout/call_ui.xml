@@ -58,6 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:orientation="vertical"
             >
 
             <RelativeLayout
@@ -75,6 +76,12 @@
 
             </RelativeLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="Reject"
+                />
 
         </LinearLayout>
 
@@ -83,6 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:orientation="vertical"
             >
 
             <RelativeLayout
@@ -96,9 +104,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
+                    android:tint="@color/white"
                     android:src="@drawable/ic_done_black_24dp"/>
 
             </RelativeLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="Accept"
+                />
 
         </LinearLayout>
 
@@ -109,6 +126,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:orientation="vertical"
             >
 
             <RelativeLayout
@@ -125,6 +143,13 @@
                     android:src="@drawable/ic_box"/>
 
             </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="Leave at gate"
+                />
 
         </LinearLayout>
 

@@ -8,6 +8,43 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:728253365342:android:a4bb5eb2110d8fe031c8cf",
+        "android_client_info": {
+          "package_name": "com.shield.resident"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "728253365342-sdl17r2ns7lmusd6oj3du36v6d0dtkfp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shield.resident",
+            "certificate_hash": "bb4df229e99a1ca143a6ca55d8076155cfc9dd8d"
+          }
+        },
+        {
+          "client_id": "728253365342-8d2decuna2s1krjg0b92ikcrg3tu1d6i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-zv58uQTs5u33nZdG5hJ611NGPKUQeE0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "728253365342-8d2decuna2s1krjg0b92ikcrg3tu1d6i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:728253365342:android:40ab1797a2b289b931c8cf",
         "android_client_info": {
           "package_name": "com.shield.security"
@@ -28,49 +65,6 @@
         }
       ],
       "api_key": [
-        {
-          "current_key": "AIzaSyC-zv58uQTs5u33nZdG5hJ611NGPKUQeE0"
-        },
-        {
-          "current_key": "AIzaSyC-zv58uQTs5u33nZdG5hJ611NGPKUQeE0"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "728253365342-8d2decuna2s1krjg0b92ikcrg3tu1d6i.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:728253365342:android:b18c075bb925fc7631c8cf",
-        "android_client_info": {
-          "package_name": "com.sketch.securityowner"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "728253365342-98f871pgou7b0ue9v6j7mis66n8iejib.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.sketch.securityowner",
-            "certificate_hash": "9ae51a970698863d0ad5f9fdf5ed8ffa65ba3b2d"
-          }
-        },
-        {
-          "client_id": "728253365342-8d2decuna2s1krjg0b92ikcrg3tu1d6i.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyC-zv58uQTs5u33nZdG5hJ611NGPKUQeE0"
-        },
         {
           "current_key": "AIzaSyC-zv58uQTs5u33nZdG5hJ611NGPKUQeE0"
         }
