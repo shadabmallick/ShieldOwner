@@ -148,7 +148,7 @@ public class ChatGroupAdapter extends RecyclerView.Adapter<ChatGroupAdapter.Item
 
                 }else if (chatData.getType().equals("security")){
                     viewHolder.bubble_msg2.setBubbleColor(context.getResources()
-                            .getColor(R.color.bubble_1));
+                            .getColor(R.color.bubble_3));
 
                     viewHolder.textView2_name.setText("Security");
 

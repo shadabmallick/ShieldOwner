@@ -158,7 +158,8 @@ public class HelpListDetails extends AppCompatActivity {
 
                         }
 
-                        adapterHelpList = new AdapterHelpList(HelpListDetails.this, cityList);
+                        adapterHelpList = new AdapterHelpList(HelpListDetails.this,
+                                cityList);
                         recycler_view.setAdapter(adapterHelpList);
 
                         if (cityList.size() == 0){
@@ -169,7 +170,8 @@ public class HelpListDetails extends AppCompatActivity {
                     else {
                         linear_nodata.setVisibility(View.VISIBLE);
                         recycler_view.setVisibility(View.GONE);
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                        TastyToast.makeText(getApplicationContext(),
+                                message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                     }
 
@@ -178,6 +180,7 @@ public class HelpListDetails extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                     recycler_view.setVisibility(View.GONE);
+                    linear_nodata.setVisibility(View.VISIBLE);
                 }
 
 

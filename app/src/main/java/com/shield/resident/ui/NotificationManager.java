@@ -1,14 +1,18 @@
 package com.shield.resident.ui;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -39,6 +43,7 @@ import static com.shield.resident.GlobalClass.VolleySingleton.timeOut;
 
 public class NotificationManager extends AppCompatActivity {
     ImageView img_back;
+    TextView tv_msg3;
 
     LoaderDialog loaderDialog;
     Shared_Preference preference;
@@ -70,6 +75,7 @@ public class NotificationManager extends AppCompatActivity {
         switch_car=findViewById(R.id.switch_car);
         switch_delivery=findViewById(R.id.switch_delivery);
         switch_help=findViewById(R.id.switch_help);
+        tv_msg3=findViewById(R.id.tv_msg3);
 
 
         linear_main.setVisibility(View.INVISIBLE);
@@ -140,10 +146,34 @@ public class NotificationManager extends AppCompatActivity {
 
         });
 
+        tv_msg3.setOnClickListener(v -> {
+
+            startInstalledAppDetailsActivity(NotificationManager.this);
+
+        });
+
+
+
 
         getNotificationStatus();
 
     }
+
+
+    public static void startInstalledAppDetailsActivity(final Activity context) {
+        if (context == null) {
+            return;
+        }
+        final Intent i = new Intent();
+        i.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        i.addCategory(Intent.CATEGORY_DEFAULT);
+        i.setData(Uri.parse("package:" + context.getPackageName()));
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        i.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+        context.startActivity(i);
+    }
+
 
 
     private void getNotificationStatus() {
@@ -280,8 +310,6 @@ public class NotificationManager extends AppCompatActivity {
             public void onResponse(String response) {
                 Log.d("TAG", "notification_status Response: " + response);
 
-
-
                 try {
                     JSONObject jsonObject = new JSONObject(response);
 
@@ -342,7 +370,12 @@ public class NotificationManager extends AppCompatActivity {
                             switch_staff.setChecked(false);
                         }*/
 
+                       /* TastyToast.makeText(getApplicationContext(), message,
+                                TastyToast.LENGTH_LONG, TastyToast.SUCCESS);*/
 
+                    }else {
+                        /*TastyToast.makeText(getApplicationContext(), message,
+                                TastyToast.LENGTH_LONG, TastyToast.WARNING);*/
                     }
 
                     loaderDialog.dismiss();
@@ -360,8 +393,6 @@ public class NotificationManager extends AppCompatActivity {
 
             public void onErrorResponse(VolleyError error) {
                 Log.e("TAG", "DATA NOT FOUND: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        "Connection Error", Toast.LENGTH_LONG).show();
                 loaderDialog.dismiss();
             }
         }) {

@@ -46,7 +46,7 @@ public class OtpScreen extends AppCompatActivity {
     GlobalClass globalClass;
     Shared_Preference preference;
     TextView tv_otp_sent;
-    String fcm_token, from;
+    String fcm_token, from, credential_type;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,6 +66,7 @@ public class OtpScreen extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         phone = bundle.getString("phone");
         from = bundle.getString("from");
+        credential_type = bundle.getString("type");
 
 
         otpView.setOtpCompletionListener(new OnOtpCompletionListener() {
@@ -127,11 +128,11 @@ public class OtpScreen extends AppCompatActivity {
                         globalClass.setId(user_id);
                         globalClass.setName(user_name);
                         globalClass.setPhone_number(user_mobile);
-                        globalClass.setUser_type(user_type);
+
                         globalClass.setProfil_pic(user_image);
                         globalClass.setEmail(emailid);
 
-                        globalClass.setFlat_no(flat_no);
+                        globalClass.setFlat_id(flat_no);
                         globalClass.setFlat_name(flat_name);
                         globalClass.setBlock(block);
                         globalClass.setComplex_name(complex_name);
@@ -139,6 +140,16 @@ public class OtpScreen extends AppCompatActivity {
                         globalClass.setFirst_time_login(first_time_login);
                         globalClass.setIs_login(is_login);
                         globalClass.setLogin_status(true);
+
+                        if (user_type.equals("Flat Owner")){
+                            globalClass.setUser_type("owner");
+                        }else if (user_type.equals("Tenant")){
+                            globalClass.setUser_type("tenant");
+                        }else if (user_type.equals("Family Members")){
+                            globalClass.setUser_type("member");
+                        }
+
+
 
                         preference.savePrefrence();
 
@@ -175,7 +186,6 @@ public class OtpScreen extends AppCompatActivity {
 
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
                 Map<String, String> params = new HashMap<>();
 
                 params.put("phone_Number", phone);
@@ -183,6 +193,7 @@ public class OtpScreen extends AppCompatActivity {
                 params.put("device_type","android");
                 params.put("device_id",device_id);
                 params.put("fcm_token", globalClass.getFcm_reg_token());
+                params.put("type", credential_type);
 
                 Log.d(TAG, "params "+params);
 
@@ -247,7 +258,7 @@ public class OtpScreen extends AppCompatActivity {
                         globalClass.setProfil_pic(user_image);
                         globalClass.setEmail(emailid);
 
-                        globalClass.setFlat_no(flat_no);
+                        globalClass.setFlat_id(flat_no);
                         globalClass.setFlat_name(flat_name);
                         globalClass.setBlock(block);
                         globalClass.setComplex_name(complex_name);

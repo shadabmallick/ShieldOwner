@@ -377,10 +377,10 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
                         TastyToast.makeText(context, message,
                                 TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
                         if(!((qr_code.equals("")) && (qr_code_image.equals("")))){
-                            showDialog(qr_code,qr_code_image);
+                           // showDialog(qr_code,qr_code_image);
                         }
 
-
+                        dismiss();
 
                     }
 
@@ -415,7 +415,7 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
                 params.put("type", type);
                 params.put("time", send_time);
                 params.put("date", date_to_send);
-                params.put("flat_no", globalClass.getFlat_no());
+                params.put("flat_no", globalClass.getFlat_id());
                 params.put("complex_id", globalClass.getComplex_id());
                 params.put("visitor_name",edit_name_cab.getText().toString() );
                 params.put("visitor_mobile",edit_phone_cab.getText().toString() );

@@ -13,7 +13,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="45dp"
-        android:background="#f00"
         android:orientation="vertical"
         android:animateLayoutChanges="true"
         >
@@ -21,10 +20,11 @@
             android:id="@+id/profile_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/header_cover_image"
             android:elevation="4dp"
             android:background="@android:color/white"
             android:animateLayoutChanges="true"
+            android:paddingStart="@dimen/dimen_8dp"
+            android:paddingEnd="@dimen/dimen_8dp"
             android:paddingBottom="24dp">
 
             <TextView
@@ -35,6 +35,7 @@
                 android:layout_marginTop="56dp"
                 android:text="Approve my help in given date and time "
                 android:textSize="16sp"
+                android:gravity="center"
                 />
 
             <LinearLayout
@@ -122,12 +123,25 @@
                 android:animateLayoutChanges="true"
                 android:layout_below="@+id/tv_details_company">
 
+
+                <TextView
+                    android:id="@+id/tv_get_contact"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/from_contact"
+                    android:textColor="@color/blue"
+                    android:padding="@dimen/dimen_5dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    />
+
+
                 <LinearLayout
                     android:id="@+id/ll_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:weightSum="2"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     >
 
                     <androidx.cardview.widget.CardView
@@ -147,6 +161,8 @@
                             android:gravity="center"
                             android:padding="6dp"
                             android:textSize="13sp"
+                            android:maxLines="1"
+                            android:inputType="textPersonName"
                             android:background="@color/transparent"
                             />
 
@@ -171,6 +187,7 @@
                             android:maxLength="10"
                             android:padding="6dp"
                             android:textSize="13sp"
+                            android:maxLines="1"
                             android:background="@color/transparent"
                             />
                     </androidx.cardview.widget.CardView>

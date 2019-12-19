@@ -29,6 +29,7 @@ public class ActivityChild implements Serializable {
     private String approve_status;
     private String leave_at_gate_code;
     private String security_mobile;
+    private String note;
 
 
     public String getUser_id() {
@@ -301,6 +302,14 @@ public class ActivityChild implements Serializable {
 
     public void setSecurity_mobile(String security_mobile) {
         this.security_mobile = security_mobile;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }
 

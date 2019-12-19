@@ -22,7 +22,13 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="@string/add_card_success_header"
-        android:layout_marginBottom="150dp"
+        android:layout_marginBottom="140dp"
+        android:paddingStart="@dimen/dimen_30dp"
+        android:paddingEnd="@dimen/dimen_30dp"
+        android:gravity="center"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/monotype_orsiva_regular"
         />
 
 </RelativeLayout>

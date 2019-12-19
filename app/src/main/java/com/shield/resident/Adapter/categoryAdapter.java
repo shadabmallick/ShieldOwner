@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,40 +40,38 @@ public class categoryAdapter  extends RecyclerView.Adapter<categoryAdapter.MyVie
 
     @Override
     public void onBindViewHolder(categoryAdapter.MyViewHolder holder, int position) {
-        // holder.bind(items[position]);
-      //  String category=blockList.get(position).get("company");
-
 
         Picasso.with(context).load(blockList.get(position).get("icon")).
                 fit().into(holder.cab_image);
 
 
-      //   holder.cab_text.setText(blockList.get(position).get("company"));
+      // holder.cab_text.setText(blockList.get(position).get("company"));
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                index = position;
+                notifyDataSetChanged();
 
+                String company=blockList.get(position).get("company");
 
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        index = position;
-                        notifyDataSetChanged();
-                       String company=blockList.get(position).get("company");
+                mListner.onItemClick(company);
 
-                       mListner.onItemClick(company);
+            }
+        });
 
-                    }
-                });
         if(index==position){
-           holder.img_check.setVisibility(View.VISIBLE);
+            //holder.img_check.setVisibility(View.VISIBLE);
+
+            holder.linear_selection.setBackground(context.getResources().getDrawable(R.drawable.curve_green));
         }else{
-            holder.img_check.setVisibility(View.GONE);
+            //holder.img_check.setVisibility(View.GONE);
+            holder.linear_selection.setBackground(null);
 
         }
-            }
 
 
-
-
+    }
 
     @Override
     public long getItemId(int position) {
@@ -88,6 +87,7 @@ public class categoryAdapter  extends RecyclerView.Adapter<categoryAdapter.MyVie
         // init the item view's
         TextView cab_text;
         ImageView cab_image,img_check;
+        LinearLayout linear_selection;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -95,8 +95,7 @@ public class categoryAdapter  extends RecyclerView.Adapter<categoryAdapter.MyVie
          //   cab_text =  itemView.findViewById(R.id.cab_text);
             cab_image =  itemView.findViewById(R.id.cab_image);
             img_check =  itemView.findViewById(R.id.img_check);
-
-
+            linear_selection =  itemView.findViewById(R.id.linear_selection);
 
 
         }

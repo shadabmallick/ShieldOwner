@@ -69,10 +69,69 @@
 
                 </LinearLayout>
 
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/light_gray"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:orientation="vertical"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_msg1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/noti_msg_1"
+                        android:textStyle="bold"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_5dp"
+                        android:gravity="center_vertical"
+                        >
+                        <TextView
+                            android:id="@+id/tv_msg2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/noti_msg_2"
+                            android:textSize="11sp"
+                            />
+                        <TextView
+                            android:id="@+id/tv_msg3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/noti_msg_3"
+                            android:textColor="@color/blue"
+                            android:textSize="11sp"
+                            android:layout_marginStart="@dimen/dimen_5dp"
+                            />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/tv_msg4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/noti_msg_4"
+                        android:textSize="11sp"
+                        android:layout_marginTop="@dimen/dimen_5dp"
+                        />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/light_gray"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    />
 
 
                 <LinearLayout
@@ -92,18 +151,18 @@
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
                                 android:background="@color/blue"
-                                android:padding="6dp"
-                                android:src="@drawable/ic_bell"/>
+                                android:padding="8dp"
+                                android:src="@drawable/ic_user"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:textStyle="bold"
-                                android:textSize="16dp"
+                                android:textSize="16sp"
                                 android:textColor="@color/blue"
                                 android:layout_marginLeft="10dp"
                                 android:text="Staff"/>
@@ -120,10 +179,8 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textStyle="bold"
                                 android:layout_weight="1"
-                                android:text="@string/notification_staff"
-                                android:textSize="16dp"/>
+                                android:text="@string/notification_staff" />
 
                             <Switch
                                 android:id="@+id/switch_staff"
@@ -163,18 +220,18 @@
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
                                 android:background="@color/blue"
-                                android:padding="6dp"
-                                android:src="@drawable/ic_bell"/>
+                                android:padding="8dp"
+                                android:src="@mipmap/guest_white"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:textStyle="bold"
-                                android:textSize="16dp"
+                                android:textSize="16sp"
                                 android:textColor="@color/blue"
                                 android:layout_marginLeft="10dp"
                                 android:text="Guest"/>
@@ -191,10 +248,9 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textStyle="bold"
                                 android:layout_weight="1"
                                 android:text="@string/notification_guest"
-                                android:textSize="16dp"/>
+                                />
 
 
                             <Switch
@@ -233,18 +289,18 @@
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
                                 android:background="@color/blue"
-                                android:padding="6dp"
-                                android:src="@drawable/ic_bell"/>
+                                android:padding="8dp"
+                                android:src="@mipmap/cab_white"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:textStyle="bold"
-                                android:textSize="16dp"
+                                android:textSize="16sp"
                                 android:textColor="@color/blue"
                                 android:layout_marginLeft="10dp"
                                 android:text="Cab"/>
@@ -261,10 +317,9 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textStyle="bold"
                                 android:layout_weight="1"
                                 android:text="@string/notification_cab"
-                                android:textSize="16dp"/>
+                                />
 
 
                             <Switch
@@ -303,18 +358,18 @@
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
                                 android:background="@color/blue"
-                                android:padding="6dp"
-                                android:src="@drawable/ic_bell"/>
+                                android:padding="8dp"
+                                android:src="@mipmap/cab_white"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:textStyle="bold"
-                                android:textSize="16dp"
+                                android:textSize="16sp"
                                 android:textColor="@color/blue"
                                 android:layout_marginLeft="10dp"
                                 android:text="Car"/>
@@ -332,10 +387,9 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textStyle="bold"
                                 android:layout_weight="1"
                                 android:text="@string/notification_car"
-                                android:textSize="16dp"/>
+                                />
 
                             <Switch
                                 android:id="@+id/switch_car"
@@ -371,18 +425,18 @@
                             android:orientation="horizontal">
 
                             <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
                                 android:background="@color/blue"
-                                android:padding="6dp"
-                                android:src="@drawable/ic_bell"/>
+                                android:padding="8dp"
+                                android:src="@mipmap/delivery_man_white"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:textStyle="bold"
-                                android:textSize="16dp"
+                                android:textSize="16sp"
                                 android:textColor="@color/blue"
                                 android:layout_marginLeft="10dp"
                                 android:text="Delivery"/>
@@ -400,10 +454,9 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textStyle="bold"
                                 android:layout_weight="1"
                                 android:text="@string/notification_delivery"
-                                android:textSize="16dp"/>
+                                />
 
                             <Switch
                                 android:id="@+id/switch_delivery"
@@ -431,10 +484,9 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
                         android:layout_weight="1"
                         android:text="@string/notification_on_help"
-                        android:textSize="16dp"/>
+                        />
 
 
                     <Switch
@@ -444,6 +496,8 @@
                         android:layout_weight="3"
                         />
                 </LinearLayout>
+
+
 
             </LinearLayout>
 

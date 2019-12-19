@@ -50,10 +50,9 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.MyViewHolder
 
     @Override
     public StaffAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_staff, parent, false);
-        // set the view's size, margins, paddings and layout parameters
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.adapter_staff, parent, false);
 
-// pass the view to View Holder
         StaffAdapter.MyViewHolder vh = new StaffAdapter.MyViewHolder(v);
         return vh;
 
@@ -65,8 +64,11 @@ public class StaffAdapter extends RecyclerView.Adapter<StaffAdapter.MyViewHolder
     {
         String image=text.get(position).get("staffprofile_pic");
         if(!image.isEmpty()){
-            Picasso.with(context).load(text.get(position).get("staffprofile_pic")).
-                    fit().into(holder.profile_image);
+            Picasso.with(context)
+                    .load(text.get(position).get("staffprofile_pic"))
+                    .fit()
+                    .placeholder(R.mipmap.profile_image)
+                    .into(holder.profile_image);
 
         }
 

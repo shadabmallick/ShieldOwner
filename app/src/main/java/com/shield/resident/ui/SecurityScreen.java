@@ -19,7 +19,9 @@ import com.shield.resident.R;
 import com.shield.resident.dialogs.DialogAlarmAdd;
 import com.shield.resident.dialogs.DialogCabAdd;
 import com.shield.resident.dialogs.DialogDeliveryAdd;
+import com.shield.resident.dialogs.DialogGuestActivityAdd;
 import com.shield.resident.dialogs.DialogGuestAdd;
+import com.shield.resident.dialogs.DialogHelpActivityAdd;
 import com.shield.resident.dialogs.DialogHelpAdd;
 import com.shield.resident.dialogs.LoaderDialog;
 
@@ -126,16 +128,25 @@ public class SecurityScreen extends AppCompatActivity {
         img_guest.setOnClickListener(v -> {
             car1.setVisibility(View.GONE);
 
-            DialogGuestAdd dialogGuestAdd = new DialogGuestAdd(SecurityScreen.this);
-            dialogGuestAdd.show();
+            /*DialogGuestAdd dialogGuestAdd = new DialogGuestAdd(SecurityScreen.this);
+            dialogGuestAdd.show();*/
+
+            Intent intent = new Intent(SecurityScreen.this,
+                    DialogGuestActivityAdd.class);
+            startActivity(intent);
 
         });
 
         img_help.setOnClickListener(v -> {
             car1.setVisibility(View.GONE);
 
-            DialogHelpAdd dialogHelpAdd = new DialogHelpAdd(SecurityScreen.this);
-            dialogHelpAdd.show();
+            /*DialogHelpAdd dialogHelpAdd = new DialogHelpAdd(SecurityScreen.this);
+            dialogHelpAdd.show();*/
+
+
+            Intent intent = new Intent(SecurityScreen.this,
+                    DialogHelpActivityAdd.class);
+            startActivity(intent);
 
 
         });

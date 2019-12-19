@@ -9,6 +9,7 @@ public class Owner {
     private String image;
     private String flat_no;
     private String floor;
+    private String phone_show;
 
 
 
@@ -66,5 +67,13 @@ public class Owner {
 
     public void setFloor(String floor) {
         this.floor = floor;
+    }
+
+    public String getPhone_show() {
+        return phone_show;
+    }
+
+    public void setPhone_show(String phone_show) {
+        this.phone_show = phone_show;
     }
 }

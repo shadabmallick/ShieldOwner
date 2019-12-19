@@ -36,7 +36,7 @@ public class MyComplex extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_complex);
 
-        globalClass = (GlobalClass) getApplicationContext().getApplicationContext();
+        globalClass = (GlobalClass) getApplicationContext();
         preference = new Shared_Preference(this);
         preference.loadPrefrence();
 
@@ -67,6 +67,21 @@ public class MyComplex extends AppCompatActivity {
         ll_tenants = findViewById(R.id.ll_tenants);
         linear_share = findViewById(R.id.linear_share);
         ll_add_multiple_complex = findViewById(R.id.ll_add_multiple_complex);
+
+
+
+        if (globalClass.getUser_type().equals("owner")
+                || globalClass.getUser_type().equals("member")){
+            ll_tenants.setVisibility(View.VISIBLE);
+            ll_add_multiple_complex.setVisibility(View.VISIBLE);
+        }else {
+            ll_tenants.setVisibility(View.GONE);
+            ll_add_multiple_complex.setVisibility(View.GONE);
+        }
+
+
+
+
         img_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,15 +103,18 @@ public class MyComplex extends AppCompatActivity {
             }
         });
 
+
         linear_share.setOnClickListener(v -> {
 
-            String send_msg = "https://play.google.com/store/apps/details?id="
+            String url = "https://play.google.com/store/apps/details?id="
                     + MyComplex.this.getPackageName();
+
+            String message = globalClass.getName() + " "   ;
 
 
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, send_msg);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, url);
             sendIntent.setType("text/plain");
 
             Intent shareIntent = Intent.createChooser(sendIntent, "Share Via ");

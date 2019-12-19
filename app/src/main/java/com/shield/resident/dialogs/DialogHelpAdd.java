@@ -62,7 +62,7 @@ public class DialogHelpAdd extends Dialog {
     private int mYear, mMonth, mDay, mHour, mMinute,mSecond;
     private String date_to_send, send_time,help_id;
     ArrayList<HashMap<String,String>> HelpList;
-    private TextView close,tv_details_company,tv_time, date_picker;
+    private TextView close,tv_details_company,tv_time, date_picker, tv_get_contact;
     private RadioButton radio1, radio2;
     private EditText edit_name_cab, edit_phone_cab;
     ArrayList<String> array1;
@@ -109,6 +109,7 @@ public class DialogHelpAdd extends Dialog {
         tv_details_company=findViewById(R.id.tv_details_company);
         spinner_help=findViewById(R.id.spinner_help);
         ll_hide=findViewById(R.id.ll_hide);
+        tv_get_contact=findViewById(R.id.tv_get_contact);
 
         date_picker.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -254,6 +255,12 @@ public class DialogHelpAdd extends Dialog {
         date_to_send = Config.sdf_send.format(myCalendar.getTime());
 
 
+        tv_get_contact.setOnClickListener(v -> {
+
+
+
+        });
+
 
         visitingHelpCat();
 
@@ -277,7 +284,6 @@ public class DialogHelpAdd extends Dialog {
 
                 }
             };
-
 
 
     private void timePicker2(){
@@ -320,7 +326,6 @@ public class DialogHelpAdd extends Dialog {
 
         mTimePicker.show();
     }
-
 
     private void visitingHelpCat() {
         // Tag used to cancel the request
@@ -410,7 +415,6 @@ public class DialogHelpAdd extends Dialog {
 
     }
 
-
     private void AddVisitorHelp(final String type,final String radio_value) {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
@@ -438,16 +442,14 @@ public class DialogHelpAdd extends Dialog {
 
                         TastyToast.makeText(context, message,
                                 TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                        if(!((qr_code.equals("")) && (qr_code_image.equals("")))){
-                            showDialog(qr_code,qr_code_image);
-                        }
 
-
+                        dismiss();
 
                     }
 
                     else {
-                        TastyToast.makeText(context, message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                        TastyToast.makeText(context, message, TastyToast.LENGTH_LONG,
+                                TastyToast.WARNING);
 
                     }
 
@@ -470,9 +472,9 @@ public class DialogHelpAdd extends Dialog {
                 Map<String, String> params = new HashMap<>();
 
                 params.put("type", type);
-                params.put("time", tv_time.getText().toString());
+                params.put("time", send_time);
                 params.put("date", date_to_send);
-                params.put("flat_no", globalClass.getFlat_no());
+                params.put("flat_no", globalClass.getFlat_id());
                 params.put("complex_id", globalClass.getComplex_id());
                 params.put("visitor_name",edit_name_cab.getText().toString() );
                 params.put("visitor_mobile",edit_phone_cab.getText().toString() );
@@ -496,22 +498,11 @@ public class DialogHelpAdd extends Dialog {
                                 new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
 
     }
-    private void showDialog(final String qr_code,final String image){
-
-
-        DialogQrCode dialogQrCode = new DialogQrCode(context,qr_code,image);
 
 
 
-        dialogQrCode.show();
 
 
-        dialogQrCode.setOnDismissListener(dialog -> {
-
-            dismiss();
-        });
-
-    }
 
 
 }

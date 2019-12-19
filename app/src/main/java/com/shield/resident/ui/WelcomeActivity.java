@@ -35,18 +35,18 @@ public class WelcomeActivity extends AppCompatActivity {
         tab_layout.setupWithViewPager(viewpager, true);
 
         ArrayList<Integer> arrayList = new ArrayList<>();
-        arrayList.add(R.mipmap.slider1);
         arrayList.add(R.mipmap.slider2);
+        arrayList.add(R.mipmap.slider1);
         arrayList.add(R.mipmap.slider3);
         arrayList.add(R.mipmap.slider4);
         arrayList.add(R.mipmap.slider5);
 
         ArrayList<String> textArray = new ArrayList<>();
-        textArray.add("");
-        textArray.add("");
-        textArray.add("");
-        textArray.add("");
-        textArray.add("");
+        textArray.add("Shield Authorise, Validate and Manage your Gate");
+        textArray.add("Do Authorise when your Delivery Arrives and have option to leave the material at gate also");
+        textArray.add("Receive Notification with photo before anyone knocks at your door");
+        textArray.add("You can send domestic threat alert to the security guard");
+        textArray.add("Find Domestic help from your own complex");
 
 
 

@@ -4,30 +4,32 @@
     android:layout_height="wrap_content"
    >
 
-
     <LinearLayout
+        android:id="@+id/linear_selection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:layout_margin="10dp"
-        android:orientation="vertical">
-
+        android:orientation="vertical"
+        android:background="@drawable/curve_green"
+        >
 
         <ImageView
             android:id="@+id/cab_image"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@mipmap/car"/>
-
+            android:layout_margin="@dimen/dimen_5dp"
+            />
 
     </LinearLayout>
+
     <ImageView
         android:id="@+id/img_check"
         android:visibility="gone"
         android:background="@drawable/circle_grey"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-          android:layout_centerInParent="true"
+        android:layout_centerInParent="true"
         android:src="@drawable/ic_check"/>
 
 </RelativeLayout>

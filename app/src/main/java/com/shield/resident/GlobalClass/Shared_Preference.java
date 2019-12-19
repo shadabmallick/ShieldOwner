@@ -14,10 +14,6 @@ public class Shared_Preference {
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
-    SharedPreferences sharedPreferences2;
-    SharedPreferences.Editor editor2;
-
-
 
     GlobalClass globalclass;
     private boolean pref_logInStatus;
@@ -64,7 +60,6 @@ public class Shared_Preference {
     private static final String PREF_lname = "lname";
     private static final String PREF_email = "user_email";
     private static final String PREF_phone_number = "phone_number";
-    private static final String PREF_user_type = "user_type";
     private static final String PREF_business = "business";
     private static final String PREF_id = "id";
     private static final String PREF_profile_img = "profile_img";
@@ -93,10 +88,6 @@ public class Shared_Preference {
         this.sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         this.editor = sharedPreferences.edit();
 
-        this.sharedPreferences2 = context.getSharedPreferences(PREFS_NAME2, Context.MODE_PRIVATE);
-        this.editor2 = sharedPreferences2.edit();
-
-
     }
 
     public void saveFirstLogin(boolean val){
@@ -113,6 +104,7 @@ public class Shared_Preference {
     }
 
     public void savePrefrence() {
+
         if (globalclass.getLogin_status()) {
 
             editor.putString(remote,remote_user_id);
@@ -135,7 +127,7 @@ public class Shared_Preference {
             editor.putString(prefuser_type, user_type);
 
 
-            flat_no = globalclass.getFlat_no();
+            flat_no = globalclass.getFlat_id();
             editor.putString(prefflat_no, flat_no);
 
 
@@ -233,7 +225,7 @@ public class Shared_Preference {
 
 
             flat_no= sharedPreferences.getString(prefflat_no,"");
-            globalclass.setFlat_no(flat_no);
+            globalclass.setFlat_id(flat_no);
             flat_name= sharedPreferences.getString(prefflat_name,"");
             globalclass.setFlat_name(flat_name);
 
@@ -264,6 +256,7 @@ public class Shared_Preference {
             globalclass.setLogin_from(login_from);
 
 
+            globalclass.setUser_type(sharedPreferences.getString(prefuser_type,""));
         }
     }
 

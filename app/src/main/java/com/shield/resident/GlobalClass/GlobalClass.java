@@ -41,7 +41,7 @@ public class GlobalClass extends Application {
     String lname;
     String addressid;
     String user_type;
-    String flat_no;
+    String flat_id;
     String flat_name;
     String block;
     String complex_name;
@@ -57,12 +57,12 @@ public class GlobalClass extends Application {
         this.user_type = user_type;
     }
 
-    public String getFlat_no() {
-        return flat_no;
+    public String getFlat_id() {
+        return flat_id;
     }
 
-    public void setFlat_no(String flat_no) {
-        this.flat_no = flat_no;
+    public void setFlat_id(String flat_id) {
+        this.flat_id = flat_id;
     }
 
     public String getFlat_name() {

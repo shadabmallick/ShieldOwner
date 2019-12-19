@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,11 +62,12 @@ import com.shield.resident.R;
 import com.shield.resident.dialogs.DialogAlarmAdd;
 import com.shield.resident.dialogs.DialogCabAdd;
 import com.shield.resident.dialogs.DialogDeliveryAdd;
-import com.shield.resident.dialogs.DialogGuestAdd;
-import com.shield.resident.dialogs.DialogHelpAdd;
+import com.shield.resident.dialogs.DialogGuestActivityAdd;
+import com.shield.resident.dialogs.DialogHelpActivityAdd;
 import com.shield.resident.dialogs.LoaderDialog;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -126,7 +128,7 @@ public class SettingActivity extends AppCompatActivity {
     ArrayList<HashMap<String,String>> HelpList;
     ArrayList<HashMap<String,String>> listCars;
     ArrayList<HashMap<String,String>> staffList;
-    ImageView edit_image_staff,profile_image,img_cab,img_delivery,img_guest,
+    ImageView profile_image,img_cab,img_delivery,img_guest,
             img_help,profile_image_staff;
     ScrollView scroll_details,scroll_settings;
     RelativeLayout rel_profile,rel_middle_icon;
@@ -141,6 +143,7 @@ public class SettingActivity extends AppCompatActivity {
     LinearLayout ll_ecom,ll_bell,button_E3,button_E1,ll_logout,ll_notification,ll_app_help,
             ll_mycomplex,ll_visitor_option,button_activity,ll_about_us,ll_contact_us;
 
+    String phone_secure;
 
     LoaderDialog loaderDialog;
 
@@ -153,8 +156,10 @@ public class SettingActivity extends AppCompatActivity {
                 false, "");
 
         initToolBar();
-        currentTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
-        currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        currentTime = new SimpleDateFormat("HH:mm:ss",
+                Locale.getDefault()).format(new Date());
+        currentDate = new SimpleDateFormat("yyyy-MM-dd",
+                Locale.getDefault()).format(new Date());
 
         profile_details_api_call();
         //
@@ -208,6 +213,7 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     public void initToolBar() {
+
         listFamilyMembers =new ArrayList<>();
         staffList=new ArrayList<>();
         listCars =new ArrayList<>();
@@ -221,7 +227,7 @@ public class SettingActivity extends AppCompatActivity {
         preference.saveFirstLogin(false);
 
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = findViewById(R.id.toolbar);
         scroll_details =  findViewById(R.id.scroll_details);
         edit =  findViewById(R.id.edit);
         add_car =  findViewById(R.id.add_car);
@@ -286,6 +292,24 @@ public class SettingActivity extends AppCompatActivity {
         recyclerViewCar.setLayoutManager(HorizontalLayout2);
         setSupportActionBar(toolbar);
 
+
+
+
+        if (globalClass.getUser_type().equals("owner")
+                || globalClass.getUser_type().equals("member")){
+
+
+
+        }else if (globalClass.getUser_type().equalsIgnoreCase("Tenant")){
+
+
+        }else {
+
+
+
+        }
+
+
         toolbar.setNavigationOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -342,16 +366,25 @@ public class SettingActivity extends AppCompatActivity {
         img_guest.setOnClickListener(v -> {
             ll_visitor_option.setVisibility(View.GONE);
 
-            DialogGuestAdd dialogGuestAdd = new DialogGuestAdd(SettingActivity.this);
-            dialogGuestAdd.show();
+           /* DialogGuestAdd dialogGuestAdd = new DialogGuestAdd(SettingActivity.this);
+            dialogGuestAdd.show();*/
+
+
+            Intent intent = new Intent(SettingActivity.this,
+                    DialogGuestActivityAdd.class);
+            startActivity(intent);
 
         });
 
         img_help.setOnClickListener(v -> {
             ll_visitor_option.setVisibility(View.GONE);
 
-            DialogHelpAdd dialogHelpAdd = new DialogHelpAdd(SettingActivity.this);
-            dialogHelpAdd.show();
+            /*DialogHelpAdd dialogHelpAdd = new DialogHelpAdd(SettingActivity.this);
+            dialogHelpAdd.show();*/
+
+            Intent intent = new Intent(SettingActivity.this,
+                    DialogHelpActivityAdd.class);
+            startActivity(intent);
 
 
         });
@@ -364,19 +397,20 @@ public class SettingActivity extends AppCompatActivity {
             dialogAlarmAdd.show();
         });
 
-
         add_member.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MemberDialog();
             }
         });
+
         add_car.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 CarDialog();
             }
         });
+
         ll_notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -452,7 +486,9 @@ public class SettingActivity extends AppCompatActivity {
 
     }
 
+    Switch switch_phone_secure;
     public void profileDialog(){
+
         dialog = new Dialog(this, R.style.datepicker);
         dialog.setContentView(R.layout.edit_profile_dialog);
 
@@ -461,6 +497,13 @@ public class SettingActivity extends AppCompatActivity {
         edit_name  =dialog.findViewById(R.id.edit_name);
         edit_phone=dialog.findViewById(R.id.edit_phone);
         edit_mail=dialog.findViewById(R.id.edit_mail);
+        switch_phone_secure = dialog.findViewById(R.id.switch_phone_secure);
+
+        if (phone_secure.equals("1")){
+            switch_phone_secure.setChecked(true);
+        }else {
+            switch_phone_secure.setChecked(false);
+        }
 
         if (!globalClass.getProfil_pic().isEmpty()){
             Picasso.with(SettingActivity.this)
@@ -528,7 +571,17 @@ public class SettingActivity extends AppCompatActivity {
                     return;
                 }
 
-                updateProfile(name,phone,email);
+
+
+
+                String switch_value = "0";
+                if (switch_phone_secure.isChecked()){
+                    switch_value = "1";
+                }else {
+                    switch_value = "0";
+                }
+
+                updateProfile(name,phone,email, switch_value);
 
             }
         });
@@ -1015,11 +1068,7 @@ public class SettingActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            // Bitmap photo = (Bitmap) data.getExtras().get("data");
-            // iv_product_image.setImageBitmap(photo);
         }
-
-
 
 
         if(globalClass.isNetworkAvailable()){
@@ -1032,7 +1081,8 @@ public class SettingActivity extends AppCompatActivity {
 
     public String getRealPathFromURI(Uri contentUri) {
         String[] proj = {MediaStore.Audio.Media.DATA};
-        Cursor cursor = managedQuery(contentUri, proj, null, null, null);
+        Cursor cursor = managedQuery(contentUri, proj, null,
+                null, null);
         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
         cursor.moveToFirst();
         return cursor.getString(column_index);
@@ -1040,14 +1090,14 @@ public class SettingActivity extends AppCompatActivity {
 
 
     public void StaffDialog(){
+
         dialog = new Dialog(this, R.style.datepicker);
         dialog.setContentView(R.layout.staff_nfo);
+        dialog.setCanceledOnTouchOutside(false);
 
         profile_image_staff=dialog.findViewById(R.id.profile_image);
         edit_staff_name=dialog.findViewById(R.id.edit_staff_name);
         edit_staff_phone=dialog.findViewById(R.id.edit_staff_phone);
-        edit_image_staff=dialog.findViewById(R.id.edit_image_staff);
-        edit_image_staff.setOnClickListener(v -> selectImageStaff());
         help_category_list();
         spinner_help=dialog.findViewById(R.id.spinner_help);
         // set the custom dialog components - text, image and button
@@ -1129,10 +1179,10 @@ public class SettingActivity extends AppCompatActivity {
 
 
         params.put("user_id", globalClass.getId());
-        params.put("visitor_name",name);
+        params.put("visitor_name", name);
         params.put("type", type);
         params.put("visitor_mobile", phone);
-        params.put("flat_no", globalClass.getFlat_no());
+        params.put("flat_no", globalClass.getFlat_id());
         params.put("complex_id", globalClass.getComplex_id());
         params.put("visiting_help_cat", help_id);
         params.put("vendor_name", "");
@@ -1389,7 +1439,8 @@ public class SettingActivity extends AppCompatActivity {
 
     }
 
-    public void updateProfile(final String name,final String phone,final String email){
+    public void updateProfile(final String name,final String phone,
+                              final String email, String switch_value){
 
         loaderDialog.show();
 
@@ -1402,6 +1453,7 @@ public class SettingActivity extends AppCompatActivity {
         params.put("name",name);
         params.put("emailid", email);
         params.put("mobile", phone);
+        params.put("phone_show", switch_value);
 
         try{
 
@@ -1450,6 +1502,7 @@ public class SettingActivity extends AppCompatActivity {
                             String emailid = data.optString("emailid");
                             String mobile = data.optString("mobile");
                             String profile_pic = data.optString("profile_pic");
+                            String phone_show = data.optString("phone_show");
 
 
                             globalClass.setId(user_id);
@@ -1457,6 +1510,15 @@ public class SettingActivity extends AppCompatActivity {
                             globalClass.setName(name);
                             globalClass.setPhone_number(mobile);
                             globalClass.setProfil_pic(profile_pic);
+
+                            phone_secure = phone_show;
+                            if (phone_show.equals("1")){
+                                user_mobile.setText(globalClass.getPhone_number() + "(Open)");
+                            }else {
+                                user_mobile.setText(globalClass.getPhone_number()  + "(Secure)");
+                            }
+
+
 
                             preference.savePrefrence();
                             if (globalClass.getProfil_pic().equals("")) {
@@ -1482,8 +1544,10 @@ public class SettingActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            public void onFailure(int statusCode, Header[] headers, String responseString,
+                                  Throwable throwable) {
                 super.onFailure(statusCode, headers, responseString, throwable);
+                Log.d(TAG, "responseString- " + responseString);
             }
         });
 
@@ -1501,7 +1565,7 @@ public class SettingActivity extends AppCompatActivity {
 
         params.put("user_id",globalClass.getId());
         params.put("family_member_name", name);
-        params.put("flat_no", globalClass.getFlat_no());
+        params.put("flat_no", globalClass.getFlat_id());
         params.put("relationship", "");
         params.put("complex_id", globalClass.getComplex_id());
         params.put("family_member_mobile", phone);
@@ -1662,26 +1726,28 @@ public class SettingActivity extends AppCompatActivity {
 
                 loaderDialog.dismiss();
 
-                Gson gson = new Gson();
-
                 try {
 
+                    JSONObject jsonObject = new JSONObject(response);
 
-                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
-
-                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
-                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+                    String status = jsonObject.optString("status");
+                    String message = jsonObject.optString("message");
 
                     Log.d(TAG, "Message: "+message);
 
                     if(status.equals("1") ) {
 
-                        JsonObject user = jobj.getAsJsonObject("user");
-                        String user_id = user.get("user_id").toString().replaceAll("\"", "");
-                        String name = user.get("name").toString().replaceAll("\"", "");
-                        String emailid = user.get("emailid").toString().replaceAll("\"", "");
-                        String mobile = user.get("mobile").toString().replaceAll("\"", "");
-                        String profile_pic = user.get("profile_pic").toString().replaceAll("\"", "");
+                        JSONObject user = jsonObject.getJSONObject("user");
+
+                        String user_id = user.optString("user_id");
+                        String name = user.optString("name");
+                        String emailid = user.optString("emailid");
+                        String mobile = user.optString("mobile");
+                        String profile_pic = user.optString("profile_pic");
+                        String phone_show = user.optString("phone_show");
+
+
+
                         globalClass.setId(user_id);
                         globalClass.setEmail(emailid);
                         globalClass.setName(name);
@@ -1692,7 +1758,14 @@ public class SettingActivity extends AppCompatActivity {
                         preference.savePrefrence();
                         user_name.setText(globalClass.getName());
                         user_email.setText(globalClass.getEmail());
-                        user_mobile.setText(globalClass.getPhone_number());
+
+                        phone_secure = phone_show;
+                        if (phone_show.equals("1")){
+                            user_mobile.setText(globalClass.getPhone_number() + "(Open)");
+                        }else {
+                            user_mobile.setText(globalClass.getPhone_number()  + "(Secure)");
+                        }
+
 
 
                         if (!profile_pic.isEmpty()){
@@ -1706,14 +1779,14 @@ public class SettingActivity extends AppCompatActivity {
                         }
 
 
-                        JsonArray product = jobj.getAsJsonArray("family");
-                        for (int i = 0; i < product.size(); i++) {
-                            JsonObject images1 = product.get(i).getAsJsonObject();
-                            String family_member_id = images1.get("family_member_id").toString().replaceAll("\"", "");
-                            String family_member_name = images1.get("family_member_name").toString().replaceAll("\"", "");
-                            String family_member_type = images1.get("family_member_type").toString().replaceAll("\"", "");
-                            String family_member_mobile = images1.get("family_member_mobile").toString().replaceAll("\"", "");
-                            String profile_pic_family = images1.get("profile_pic").toString().replaceAll("\"", "");
+                        JSONArray family = jsonObject.getJSONArray("family");
+                        for (int i = 0; i < family.length(); i++) {
+                            JSONObject object1 = family.getJSONObject(i);
+                            String family_member_id = object1.optString("family_member_id");
+                            String family_member_name = object1.optString("family_member_name");
+                            String family_member_type = object1.optString("family_member_type");
+                            String family_member_mobile = object1.optString("family_member_mobile");
+                            String profile_pic_family = object1.optString("profile_pic");
 
 
                             HashMap<String, String> hashMap = new HashMap<>();
@@ -1724,7 +1797,6 @@ public class SettingActivity extends AppCompatActivity {
                             hashMap.put("profile_pic_family", profile_pic_family);
 
                             listFamilyMembers.add(hashMap);
-                           // Log.d(TAG, "Hashmap " + hashMap);
 
                         }
 
@@ -1740,23 +1812,25 @@ public class SettingActivity extends AppCompatActivity {
                         }
 
 
-                        JsonArray product_sub = jobj.getAsJsonArray("car");
-                        for (int j = 0; j < product_sub.size(); j++) {
-                            JsonObject images1_sub = product_sub.get(j).getAsJsonObject();
-                            String id = images1_sub.get("id").toString().replaceAll("\"", "");
-                            String _car_user_id = images1_sub.get("user_id").toString().replaceAll("\"", "");
-                            String car_name = images1_sub.get("car_name").toString().replaceAll("\"", "");
-                            String car_no = images1_sub.get("car_no").toString().replaceAll("\"", "");
-                            String car_type = images1_sub.get("car_type").toString().replaceAll("\"", "");
-                            String driver_name = images1_sub.get("driver_name").toString().replaceAll("\"", "");
-                            String driver_mobile = images1_sub.get("driver_mobile").toString().replaceAll("\"", "");
-                            String parking_no = images1_sub.get("parking_no").toString().replaceAll("\"", "");
-                            String note = images1_sub.get("note").toString().replaceAll("\"", "");
-                            String flat_no = images1_sub.get("flat_no").toString().replaceAll("\"", "");
-                            String delete_flag = images1_sub.get("delete_flag").toString().replaceAll("\"", "");
-                            String is_active = images1_sub.get("is_active").toString().replaceAll("\"", "");
-                            String entry_date = images1_sub.get("entry_date").toString().replaceAll("\"", "");
-                            String modified_date = images1_sub.get("modified_date").toString().replaceAll("\"", "");
+
+                        JSONArray car = jsonObject.getJSONArray("car");
+                        for (int j = 0; j < car.length(); j++) {
+                            JSONObject car_object = car.getJSONObject(j);
+
+                            String id = car_object.optString("id");
+                            String _car_user_id = car_object.optString("user_id");
+                            String car_name = car_object.optString("car_name");
+                            String car_no = car_object.optString("car_no");
+                            String car_type = car_object.optString("car_type");
+                            String driver_name = car_object.optString("driver_name");
+                            String driver_mobile = car_object.optString("driver_mobile");
+                            String parking_no = car_object.optString("parking_no");
+                            String note = car_object.optString("note");
+                            String flat_no = car_object.optString("flat_no");
+                            String delete_flag = car_object.optString("delete_flag");
+                            String is_active = car_object.optString("is_active");
+                            String entry_date = car_object.optString("entry_date");
+                            String modified_date = car_object.optString("modified_date");
 
                             HashMap<String, String> hashMap = new HashMap<>();
                             hashMap.put("id", id);
@@ -1789,14 +1863,17 @@ public class SettingActivity extends AppCompatActivity {
                         }
 
 
-                        JsonArray staff = jobj.getAsJsonArray("staff");
-                        for (int j = 0; j < staff.size(); j++) {
-                            JsonObject images1_sub = staff.get(j).getAsJsonObject();
-                            String staff_id = images1_sub.get("staff_id").toString().replaceAll("\"", "");
-                            String staff_name = images1_sub.get("staff_name").toString().replaceAll("\"", "");
-                            String staff_type = images1_sub.get("staff_type").toString().replaceAll("\"", "");
-                            String staff_mobile = images1_sub.get("staff_mobile").toString().replaceAll("\"", "");
-                            String staffprofile_pic = images1_sub.get("profile_pic").toString().replaceAll("\"", "");
+
+
+                        JSONArray staff = jsonObject.getJSONArray("staff");
+                        for (int j = 0; j < staff.length(); j++) {
+
+                            JSONObject staff_object = staff.getJSONObject(j);
+                            String staff_id = staff_object.optString("staff_id");
+                            String staff_name = staff_object.optString("staff_name");
+                            String staff_type = staff_object.optString("staff_type");
+                            String staff_mobile = staff_object.optString("staff_mobile");
+                            String staffprofile_pic = staff_object.optString("profile_pic");
 
                             HashMap<String, String> hashMap = new HashMap<>();
                             hashMap.put("staff_id", staff_id);
@@ -1808,7 +1885,9 @@ public class SettingActivity extends AppCompatActivity {
                             staffList.add(hashMap);
                             //Log.d(TAG, "Hashmap1 " + hashMap);
 
+
                         }
+
                         staffAdapter = new StaffAdapter(SettingActivity.this, staffList);
                         recyclerViewStaff.setAdapter(staffAdapter);
 
@@ -1818,14 +1897,17 @@ public class SettingActivity extends AppCompatActivity {
                             iv_no_data2.setVisibility(View.GONE);
                         }
 
+
                     } else {
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                        TastyToast.makeText(getApplicationContext(), message,
+                                TastyToast.LENGTH_LONG, TastyToast.WARNING);
 
                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    TastyToast.makeText(getApplicationContext(), "Error Connection", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                    TastyToast.makeText(getApplicationContext(), "Error Connection",
+                            TastyToast.LENGTH_LONG, TastyToast.WARNING);
 
                 }
 
@@ -1846,7 +1928,7 @@ public class SettingActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
 
                 params.put("user_id", globalClass.getId());
-                params.put("flat_no", globalClass.getFlat_no());
+                params.put("flat_no", globalClass.getFlat_id());
                 Log.d(TAG, "getParams: "+params);
                 return params;
             }

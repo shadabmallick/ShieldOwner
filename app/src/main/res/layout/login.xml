@@ -2,15 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/background">
+    android:background="@mipmap/bg_login">
 
     <RelativeLayout
-        android:background="@drawable/background_trnaparent"
+        android:background="@drawable/bg_trnns_white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="20dp"
         android:layout_marginLeft="20dp"
-        android:alpha="0.5"
         android:layout_marginRight="20dp"
         android:layout_centerInParent="true">
 
@@ -20,11 +19,10 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_marginTop="10dp"
-            android:layout_below="@+id/edt_block_name"
-            android:backgroundTint="@android:color/white"
-            android:textColorHint="@android:color/white"
-            android:textColor="@android:color/white"
-            android:inputType="phone"
+            android:backgroundTint="@android:color/black"
+            android:textColorHint="@android:color/black"
+            android:textColor="@android:color/black"
+            android:inputType="phone|textEmailAddress"
             android:maxLength="10"
             android:hint="@string/enter_registration_number"/>
 
@@ -32,8 +30,10 @@
             android:layout_below="@+id/edt_register_no"
             android:gravity="center"
             android:id="@+id/rel_login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            >
 
 
             <TextView
@@ -41,10 +41,10 @@
                 android:layout_height="30dp"
                 android:text="@string/login"
                 android:textStyle="bold"
-                android:textColor="@color/blue"
+                android:textColor="@color/white"
                 android:gravity="center"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/next_curve"/>
+                android:background="@drawable/button_blue"/>
 
 
         </RelativeLayout>
@@ -55,11 +55,12 @@
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/rel_register"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="50dp"
         android:layout_height="50dp"
-        android:gravity="center">
+        android:layout_centerHorizontal="true"
+        >
         <TextView
             android:layout_width="200dp"
             android:layout_height="50dp"

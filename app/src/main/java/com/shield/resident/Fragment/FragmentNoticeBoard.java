@@ -17,7 +17,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.shield.resident.Adapter.AdapterHelp;
+import com.shield.resident.Adapter.AdapterNotice;
 import com.shield.resident.Constant.AppConfig;
 import com.shield.resident.GlobalClass.GlobalClass;
 import com.shield.resident.GlobalClass.VolleySingleton;
@@ -41,7 +41,7 @@ public class FragmentNoticeBoard extends Fragment {
     RecyclerView recyclerView;
     ArrayList<HashMap<String,String>> noticeList;
     GlobalClass globalClass;
-    AdapterHelp adapter;
+    AdapterNotice adapter;
 
     LoaderDialog loaderDialog;
     LinearLayout linear_nodata;
@@ -122,7 +122,7 @@ public class FragmentNoticeBoard extends Fragment {
 
                         }
 
-                        adapter = new AdapterHelp(getActivity(), noticeList);
+                        adapter = new AdapterNotice(getActivity(), noticeList);
                         recyclerView.setAdapter(adapter);
 
 

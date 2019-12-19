@@ -160,7 +160,7 @@ public class FragEmergency extends Fragment implements EmergencyAdapter.onItemCl
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<>();
 
-                params.put("complex_id",globalClass.getComplex_id());
+                params.put("complex_id", globalClass.getComplex_id());
 
                 return params;
             }

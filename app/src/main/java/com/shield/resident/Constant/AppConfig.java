@@ -7,7 +7,9 @@ public class AppConfig {
     public static final String TAG = "Shield";
 
 
-    private static final String URL_DEV = "https://www.shieldapp.in/Api/";
+   // private static final String URL_DEV = "https://www.shieldapp.in/Api/";
+
+    private static final String URL_DEV = "https://www.shieldapp.in/App/Api/";
 
 
 

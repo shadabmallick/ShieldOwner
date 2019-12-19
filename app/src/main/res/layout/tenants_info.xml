@@ -63,11 +63,14 @@
             android:id="@+id/edit_name"
             android:layout_marginVertical="10dp"
             android:hint="@string/enter_tenant_name"/>
+
         <EditText
             android:id="@+id/edit_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:maxLength="10"
+            android:inputType="phone"
             android:layout_marginVertical="10dp"
             android:hint="@string/enter_tenant_phone"/>
 

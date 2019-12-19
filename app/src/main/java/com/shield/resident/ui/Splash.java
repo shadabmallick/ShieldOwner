@@ -3,9 +3,16 @@ package com.shield.resident.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.shield.resident.Constant.AppConfig;
 import com.shield.resident.GlobalClass.GlobalClass;
 import com.shield.resident.GlobalClass.Shared_Preference;
 import com.shield.resident.R;
@@ -29,7 +36,29 @@ public class Splash extends AppCompatActivity {
 
         Mint.initAndStartSession(this.getApplication(), "8a38783c");
 
-        threadFor();
+
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+
+                        globalClass.setFcm_reg_token(token);
+
+                        // Log and toast
+                        Log.d(AppConfig.TAG, "token = "+token);
+
+                        threadFor();
+
+                    }
+                });
+
+
     }
 
     private void threadFor(){

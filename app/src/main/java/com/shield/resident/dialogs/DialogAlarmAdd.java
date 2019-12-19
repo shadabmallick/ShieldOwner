@@ -42,7 +42,7 @@ public class DialogAlarmAdd extends Dialog {
     private GlobalClass globalClass;
     private CardView animal,fire,threat,lift,medical,theif;
 
-    private TextView tv_animal,tv_medical,tv_thief,tv_threat, tv_lift,tv_id;
+    private TextView tv_animal,tv_medical,tv_thief,tv_threat, tv_lift, tv_fire;
 
     LoaderDialog loaderDialog;
 
@@ -72,7 +72,7 @@ public class DialogAlarmAdd extends Dialog {
         lift=findViewById(R.id.lift);
         medical=findViewById(R.id.medical);
         threat=findViewById(R.id.threat);
-        tv_id=findViewById(R.id.tv_fire);
+        tv_fire=findViewById(R.id.tv_fire);
         tv_lift=findViewById(R.id.tv_lift);
         tv_threat=findViewById(R.id.tv_threat);
         tv_thief=findViewById(R.id.tv_thief);
@@ -87,28 +87,32 @@ public class DialogAlarmAdd extends Dialog {
         fire.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String category=tv_id.getText().toString();
+                //String category=tv_fire.getText().toString();
+                String category="Fire";
                 FireAlarm(category);
             }
         });
         lift.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String category=tv_lift.getText().toString();
+                //String category=tv_lift.getText().toString();
+                String category="Lift Stuck";
                 FireAlarm(category);
             }
         });
         threat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String category=tv_threat.getText().toString();
+                //String category=tv_threat.getText().toString();
+                String category="Threat";
                 FireAlarm(category);
             }
         });
         theif.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String category=tv_thief.getText().toString();
+                //String category=tv_thief.getText().toString();
+                String category="Burglary";
                 FireAlarm(category);
             }
         });
@@ -116,7 +120,8 @@ public class DialogAlarmAdd extends Dialog {
             @Override
             public void onClick(View v) {
 
-                String category=tv_medical.getText().toString();
+               // String category=tv_medical.getText().toString();
+                String category="Medical Emergency";
                 FireAlarm(category);
             }
         });
@@ -124,7 +129,8 @@ public class DialogAlarmAdd extends Dialog {
             @Override
             public void onClick(View v) {
 
-                String category=tv_animal.getText().toString();
+              //  String category=tv_animal.getText().toString();
+                String category="Animal Attack";
                 FireAlarm(category);
 
             }
@@ -173,8 +179,6 @@ public class DialogAlarmAdd extends Dialog {
 
                     }
 
-
-
                 } catch (Exception e) {
                     e.printStackTrace();
                     TastyToast.makeText(context, "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
@@ -201,7 +205,7 @@ public class DialogAlarmAdd extends Dialog {
                 params.put("user_id", globalClass.getId());
                 params.put("category", category);
                 params.put("complex_id", globalClass.getComplex_id());
-                params.put("flat_id", globalClass.getFlat_no());
+                params.put("flat_id", globalClass.getFlat_id());
 
                 Log.d(TAG, "getParams: "+params);
                 return params;

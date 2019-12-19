@@ -1,5 +1,6 @@
 package com.shield.resident.ui;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -39,7 +41,7 @@ import static com.shield.resident.GlobalClass.VolleySingleton.nuOfRetry;
 import static com.shield.resident.GlobalClass.VolleySingleton.timeOut;
 
 public class AddMultipleFlat extends AppCompatActivity {
-    String TAG="RegistrationActivity";
+    String TAG="RegisterFlatDetails";
     RecyclerView recyclerView;
     RelativeLayout rel_next,rel_login;
     GlobalClass globalClass;
@@ -576,6 +578,7 @@ public class AddMultipleFlat extends AppCompatActivity {
 
                 params.put("complex_id",complex_id);
                 params.put("block",block_name);
+                params.put("type",globalClass.getUser_type());
 
                 Log.d(TAG, "city_id: "+params);
 
@@ -726,21 +729,25 @@ public class AddMultipleFlat extends AppCompatActivity {
                     String status = jobj.get("status").getAsString().replaceAll("\"", "");
                     String message = jobj.get("message").getAsString().replaceAll("\"", "");
 
-                    Log.d("jobj", "" + jobj);
                     if(status.equals("1")) {
 
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-                         finish();
-                        Log.d(TAG, "onResponse: "+message);
+                        TastyToast.makeText(getApplicationContext(),
+                                message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                        showDialog(message);
 
                     } else {
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                        TastyToast.makeText(getApplicationContext(),
+                                message, TastyToast.LENGTH_LONG, TastyToast.WARNING);
+
+                        showDialog(message);
 
                     }
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    TastyToast.makeText(getApplicationContext(), "DATA NOT FOUND", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                    TastyToast.makeText(getApplicationContext(),
+                            "DATA NOT FOUND", TastyToast.LENGTH_LONG, TastyToast.WARNING);
 
                 }
 
@@ -765,6 +772,8 @@ public class AddMultipleFlat extends AppCompatActivity {
                 params.put("complex_id",complex_id);
                 params.put("user_id",globalClass.getId());
                 params.put("flat_id",flat_id);
+                params.put("phone_Number",globalClass.getPhone_number());
+
                 Log.d(TAG, "params "+params);
 
                 return params;
@@ -780,5 +789,26 @@ public class AddMultipleFlat extends AppCompatActivity {
 
     }
 
+
+    private void showDialog(String text){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.datepicker);
+        builder.setTitle(getResources().getString(R.string.app_name));
+        builder.setMessage(text);
+        builder.setIcon(R.mipmap.sand_clock);
+        builder.setCancelable(false);
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                finish();
+
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
 
 }

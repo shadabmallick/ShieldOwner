@@ -52,6 +52,7 @@ import com.shield.resident.GlobalClass.VolleySingleton;
 import com.shield.resident.R;
 import com.shield.resident.dialogs.LoaderDialog;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -208,33 +209,28 @@ public class FragmentHelp extends Fragment {
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-
                 loaderDialog.dismiss();
-
-                Gson gson = new Gson();
 
                 try {
 
-                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
-                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
-                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+                    JSONObject jsonObject = new JSONObject(response);
 
+                    String status = jsonObject.optString("status");
+                    String message = jsonObject.optString("message");
 
                     if(status.equals("1")) {
 
-                        JsonArray jarray = jobj.getAsJsonArray("data");
+                        JSONArray jarray = jsonObject.getJSONArray("data");
 
-                        for (int i = 0; i < jarray.size(); i++) {
-                            JsonObject jobj1 = jarray.get(i).getAsJsonObject();
-                            //get the object
+                        for (int i = 0; i < jarray.length(); i++) {
+                            JSONObject jobj1 = jarray.getJSONObject(i);
 
-
-                            String help_id = jobj1.get("help_id").toString().replaceAll("\"", "");
-                            String content = jobj1.get("content").toString().replaceAll("\"", "");
-                            String image = jobj1.get("image").toString().replaceAll("\"", "");
-                            String date = jobj1.get("date").toString().replaceAll("\"", "");
-                            String time = jobj1.get("time").toString().replaceAll("\"", "");
-                            String status1 = jobj1.get("status").toString().replaceAll("\"", "");
+                            String help_id = jobj1.optString("help_id");
+                            String content = jobj1.optString("content");
+                            String image = jobj1.optString("image");
+                            String date = jobj1.optString("date");
+                            String time = jobj1.optString("time");
+                            String status1 = jobj1.optString("status");
 
                             HashMap<String, String> map_ser = new HashMap<>();
 
@@ -248,7 +244,7 @@ public class FragmentHelp extends Fragment {
 
 
                             helpList.add(map_ser);
-                            Log.d(TAG, "cityList: "+ helpList);
+                           // Log.d(TAG, "cityList: "+ helpList);
 
 
                         }

@@ -17,44 +17,75 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="6dp"
+            android:padding="8dp"
             >
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 >
+
+                <RelativeLayout
+                    android:layout_width="@dimen/dimen_50dp"
+                    android:layout_height="@dimen/dimen_50dp"
+                    android:background="@drawable/circle"
+                    >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_user_black"
+                        android:layout_margin="8dp"
+                        />
+
+                </RelativeLayout>
+
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/profile_image"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:padding="5dp"
-                    android:layout_marginTop="5dp"
-                    android:src="@drawable/ic_user_black"
+                    app:civ_border_width="1dp"
+                    app:civ_border_color="@color/darker_gray"
                     />
 
-                <TextView
-                    android:id="@+id/tv_name"
-                    android:textSize="16sp"
-                    android:layout_toRightOf="@id/profile_image"
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_toEndOf="@id/profile_image"
+                    android:layout_toStartOf="@+id/call"
                     android:paddingRight="8dp"
                     android:paddingLeft="8dp"
-                    android:gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:text="I need a teacher"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    />
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_name"
+                        android:textSize="16sp"
+                        android:gravity="center"
+                        android:text="I need a teacher"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+
+                    <TextView
+                        android:id="@+id/list_item1"
+                        android:textSize="14sp"
+                        android:textColor="@color/green"
+                        android:text="On Duty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+
+                </LinearLayout>
+
 
                 <ImageView
                     android:layout_width="40dp"
-                    android:gravity="right"
                     android:src="@drawable/ic_phone_call"
                     android:id="@+id/call"
                     android:tint="@android:color/white"
-                    android:background="@drawable/green_circle"
+                    android:background="@drawable/circle_blue"
                     android:layout_height="40dp"
                     android:padding="@dimen/dimen_8dp"
                     android:layout_alignParentEnd="true"
@@ -63,15 +94,6 @@
 
             </RelativeLayout>
 
-            <TextView
-                android:id="@+id/list_item1"
-                android:textSize="14sp"
-                android:textColor="@color/green"
-                android:paddingRight="8dp"
-                android:paddingLeft="8dp"
-                android:text="On Duty"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
 
         </LinearLayout>
 

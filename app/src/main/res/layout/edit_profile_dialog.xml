@@ -52,7 +52,6 @@
 
 
 
-
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -60,20 +59,43 @@
             android:id="@+id/edit_name"
             android:layout_marginTop="10dp"
             android:hint="@string/enter_name"/>
+
         <EditText
             android:id="@+id/edit_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:layout_marginTop="10dp"
+            android:enabled="false"
             android:hint="@string/enter_phone"/>
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:id="@+id/edit_mail"
             android:layout_marginTop="10dp"
+            android:enabled="false"
             android:hint="@string/enter_email"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_10dp"
+            >
+
+            <Switch
+                android:id="@+id/switch_phone_secure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/secure_phone_msg"
+                android:padding="8dp"
+                android:textSize="14sp"
+                android:layout_centerInParent="true"
+                />
+
+
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/ll_save"

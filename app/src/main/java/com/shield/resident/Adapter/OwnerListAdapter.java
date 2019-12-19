@@ -114,9 +114,13 @@ public class OwnerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         holder.tv_name.setText(ownerData.getName());
         holder.tv_flat_name.setText("Flat: "+ownerData.getFlat_no());
 
-        Glide.with(context)
-                .load(ownerData.getImage())
-                .placeholder(R.drawable.ic_user_black)
+        if (ownerData.getPhone_show().equals("1")){
+            holder.iv_call.setVisibility(View.VISIBLE);
+        }else {
+            holder.iv_call.setVisibility(View.GONE);
+        }
+
+        Glide.with(context).load(ownerData.getImage())
                 .into(holder.profile_image);
 
         holder.iv_call.setOnClickListener(v -> {

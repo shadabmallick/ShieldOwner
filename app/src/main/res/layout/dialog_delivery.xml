@@ -67,6 +67,7 @@
                             android:background="@color/transparent"
                             android:padding="6dp"
                             android:textSize="13sp"
+
                             />
 
                     </androidx.cardview.widget.CardView>
@@ -223,6 +224,7 @@
                                 android:background="@color/transparent"
                                 android:padding="6dp"
                                 android:textSize="13sp"
+                                android:inputType="textPersonName"
                                 />
 
                         </androidx.cardview.widget.CardView>

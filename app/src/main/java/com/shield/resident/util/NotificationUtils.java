@@ -278,7 +278,7 @@ public class NotificationUtils {
 
         collapsedView.setTextViewText(R.id.text_view_collapsed_1, "Hello World!");
 
-        expandedView.setImageViewResource(R.id.image_view_expanded, R.mipmap.background);
+        expandedView.setImageViewResource(R.id.image_view_expanded, R.drawable.bg_rounded_white);
         expandedView.setOnClickPendingIntent(R.id.image_view_expanded, clickPendingIntent);
 
         Notification notification = new NotificationCompat.Builder(mContext, CHANNEL_ID)

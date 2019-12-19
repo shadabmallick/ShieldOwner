@@ -150,7 +150,9 @@ public class ChatGroup extends AppCompatActivity implements
         if (bundle != null) {
             help_id = bundle.getString("id");
 
-            getSupportActionBar().setTitle("Help Id"+" "+help_id);
+            String content = bundle.getString("content");
+
+            getSupportActionBar().setTitle("Help Id : "+help_id);
 
         }
 
@@ -246,7 +248,6 @@ public class ChatGroup extends AppCompatActivity implements
                             chatData.setChat_id(object.optString("chat_id"));
                             chatData.setType(object.optString("type")); // user type
                             chatData.setHelp_id(object.optString("help_id"));
-                          //  chatData.setSender_name(object.optString("sender_name"));
                             chatData.setContent(object.optString("content"));
                             chatData.setImage(object.optString("image"));
                             chatData.setDate(object.optString("date"));
@@ -256,12 +257,19 @@ public class ChatGroup extends AppCompatActivity implements
                             chatData.setImage_from("web");
 
 
-                            if (globalClass.getId()
-                                    .equals(object.optString("help_id"))){
+                            if (object.optString("type").equals("user")){
                                 chatData.setIs_me(true);
                             }else {
                                 chatData.setIs_me(false);
                             }
+
+
+                           /* if (globalClass.getId()
+                                    .equals(object.optString("help_id"))){
+                                chatData.setIs_me(true);
+                            }else {
+                                chatData.setIs_me(false);
+                            }*/
 
 
                             chatListDataArrayList.add(chatData);
@@ -369,10 +377,13 @@ public class ChatGroup extends AppCompatActivity implements
 
 
             edt_message.setText("");
-            chatListDataArrayList.add(chatData);
-            chatGroupAdapter.notifyDataSetChanged();
+           // chatListDataArrayList.add(chatData);
+           // chatGroupAdapter.notifyDataSetChanged();
+
+            setGroupChatData(chatData);
 
             recycler_view.smoothScrollToPosition(chatListDataArrayList.size() - 1);
+
            // Log.d(TAG ,"array- " + chatListDataArrayList.size());
 
             postChat(chatData);

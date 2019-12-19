@@ -19,6 +19,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.shield.resident.GlobalClass.GlobalClass;
+import com.shield.resident.GlobalClass.Shared_Preference;
 import com.shield.resident.R;
 import com.squareup.picasso.Picasso;
 
@@ -31,6 +33,8 @@ public class DialogQrCode extends Dialog {
     private String qr_code, image;
     private TextView close,tv_code;
     private ImageView img_qr_code,img_share;
+    private GlobalClass globalClass;
+    private Shared_Preference preference;
 
 
     public DialogQrCode(@NonNull Context context,String qr_code,String image) {
@@ -46,6 +50,10 @@ public class DialogQrCode extends Dialog {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.qr_code);
+        globalClass = (GlobalClass) context.getApplicationContext();
+        preference = new Shared_Preference(context);
+        preference.loadPrefrence();
+
 
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -58,7 +66,18 @@ public class DialogQrCode extends Dialog {
         img_share=findViewById(R.id.img_share);
         tv_code.setText(qr_code);
 
-        String send_msg = "Your entry code : "+qr_code;
+
+        String s1 = globalClass.getName() + " has added you as guest to visit "
+                + "Resident-" + globalClass.getComplex_name()
+                + ", Block-" + globalClass.getBlock()
+                + " Flat-"+ globalClass.getFlat_name()+".";
+        String s2 = "Your pass code - "+qr_code + ". Use this code at the gate," +
+                " every time you enter in the society.";
+
+       /* String send_msg = "Your pass code for entering into the "
+                +globalClass.getComplex_name() +  " = " + qr_code;*/
+
+        String send_msg = s1 + "\n\n" + s2;
 
         Picasso.with(context)
                 .load(image) // web image url

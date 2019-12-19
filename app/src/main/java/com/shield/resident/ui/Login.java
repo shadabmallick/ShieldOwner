@@ -3,16 +3,14 @@ package com.shield.resident.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
-
-
+import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,10 +19,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.shield.resident.Constant.AppConfig;
 import com.shield.resident.GlobalClass.GlobalClass;
@@ -50,44 +44,20 @@ public class Login extends AppCompatActivity {
     LoaderDialog loaderDialog;
     String device_id,number;
     EditText edt_register_no_name;
-    String fcm_token;
+    String credential_type;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+
         globalClass = (GlobalClass)getApplicationContext();
-        fcm_token = FirebaseInstanceId.getInstance().getToken();
         prefrence = new Shared_Preference(Login.this);
         prefrence.loadPrefrence();
 
         loaderDialog = new LoaderDialog(this, android.R.style.Theme_Translucent,
                 false, "");
 
-       /* if (globalClass.isNetworkAvailable()) {
-
-            if (globalClass.getLogin_status()) {
-
-                if (prefrence.isFirstLogin()){
-                    Intent intent = new Intent(Login.this,
-                            SettingActivity.class);
-                    startActivity(intent);
-                    finish();
-                }else {
-                    Intent intent = new Intent(Login.this,
-                            Activity_activity.class);
-                    startActivity(intent);
-                    finish();
-                }
-
-            }
-
-        } else {
-            TastyToast.makeText(getApplicationContext(),
-                    "Check Network", TastyToast.LENGTH_LONG,
-                    TastyToast.SUCCESS).show();
-
-        }*/
 
         device_id = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         rel_register=findViewById(R.id.rel_register);
@@ -98,57 +68,56 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent register=new Intent(Login.this,
-                        RegistrationActivity.class);
+                        RegisterUserDetails.class);
                 startActivity(register);
             }
         });
+
+
         rel_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 number = edt_register_no_name.getText().toString().trim();
 
+                Log.d(TAG, "number: " +number);
+
+
                 if (!globalClass.isNetworkAvailable()) {
-                    TastyToast.makeText(getApplicationContext(),
-                            "Check Network", TastyToast.LENGTH_LONG,
-                            TastyToast.WARNING).show();
+                    TastyToast.makeText(Login.this,
+                            "Check your internet connection", TastyToast.LENGTH_LONG,
+                            TastyToast.WARNING);
+
+                    return;
                 }
 
-                if (!edt_register_no_name.getText().toString().isEmpty()) {
-                    checkLogin(number);
-
-                }
-                else {
-                    TastyToast.makeText(getApplicationContext(), "Enter Number", TastyToast.LENGTH_LONG, TastyToast.SUCCESS).show();
-
+                if (number.isEmpty()) {
+                    TastyToast.makeText(Login.this,
+                            "Enter phone number or email",
+                            TastyToast.LENGTH_LONG, TastyToast.WARNING);
+                    return;
                 }
 
+                if (isValidEmail(number)){
+                    credential_type = "email";
+                }else {
+                    credential_type = "phone";
+                }
+
+
+
+                checkLogin(number);
 
             }
         });
 
-
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            return;
-                        }
-
-                        // Get new Instance ID token
-                        String token = task.getResult().getToken();
-
-                        fcm_token = token;
-
-                        globalClass.setFcm_reg_token(token);
-
-                        // Log and toast
-                        Log.d(AppConfig.TAG, "token = "+token);
-
-                    }
-                });
     }
 
+
+    public static boolean isValidEmail(CharSequence target) {
+        return (!TextUtils.isEmpty(target)
+                && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+    }
 
     private void checkLogin(final String number) {
         // Tag used to cancel the request
@@ -180,10 +149,11 @@ public class Login extends AppCompatActivity {
 
 
                         TastyToast.makeText(getApplicationContext(), message,
-                                TastyToast.LENGTH_LONG, TastyToast.SUCCESS).show();
+                                TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                         Intent register=new Intent(getApplicationContext(),OtpScreen.class);
                         register.putExtra("phone", number);
+                        register.putExtra("type", credential_type);
                         register.putExtra("from","login");
 
                         register.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|
@@ -192,21 +162,21 @@ public class Login extends AppCompatActivity {
                         startActivity(register);
                         finish();
 
-
-
                     } else {
 
                         TastyToast.makeText(getApplicationContext(),
                                 message, TastyToast.LENGTH_LONG,
-                                TastyToast.WARNING).show();
+                                TastyToast.WARNING);
                     }
 
                     Log.d(TAG,"Token \n" +message);
 
                 }catch (Exception e) {
 
-                    Toast.makeText(getApplicationContext(),
-                            "DATA NOT FOUND", Toast.LENGTH_LONG).show();
+                    TastyToast.makeText(getApplicationContext(),
+                            "DATA NOT FOUND", TastyToast.LENGTH_LONG,
+                            TastyToast.WARNING);
+
                     e.printStackTrace();
 
                 }
@@ -218,8 +188,7 @@ public class Login extends AppCompatActivity {
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        "Connection Error", Toast.LENGTH_LONG).show();
+
                 loaderDialog.dismiss();
             }
         }) {
@@ -232,13 +201,8 @@ public class Login extends AppCompatActivity {
                 params.put("phone_Number", number);
                 params.put("device_type", "android");
                 params.put("device_id", device_id);
-
-                if (fcm_token==null){
-                    params.put("fcm_token","123456");
-                } else {
-                    params.put("fcm_token",fcm_token);
-                }
-
+                params.put("fcm_token", globalClass.getFcm_reg_token());
+                params.put("type", credential_type);
 
                 Log.d(TAG, "getParams: "+params);
                 return params;

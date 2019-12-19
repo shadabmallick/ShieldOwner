@@ -31,9 +31,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -120,7 +117,7 @@ RecyclerView recycler_view;
 
 
     public void MemberDialog(){
-        dialog = new Dialog(this);
+        dialog = new Dialog(this, R.style.datepicker);
         dialog.setContentView(R.layout.tenants_info);
         ImageView img_edit=dialog.findViewById(R.id.img_edit_member);
         image_member=dialog.findViewById(R.id.image_member);
@@ -141,8 +138,8 @@ RecyclerView recycler_view;
         ll_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String name=edit_name.getText().toString();
-                String phone=edit_phone.getText().toString();
+                String name= edit_name.getText().toString();
+                String phone= edit_phone.getText().toString();
 
                 if (name.trim().length() == 0){
                     TastyToast.makeText(Activity_tenants.this,
@@ -258,7 +255,7 @@ RecyclerView recycler_view;
                 Map<String, String> params = new HashMap<>();
 
                 params.put("user_id", globalClass.getId());
-                params.put("flat_id", globalClass.getFlat_no());
+                params.put("flat_id", globalClass.getFlat_id());
 
                 Log.d(TAG, "getParams: "+params);
 
@@ -397,7 +394,7 @@ RecyclerView recycler_view;
 
 
         params.put("user_id", globalClass.getId());
-        params.put("flat_no",globalClass.getFlat_no());
+        params.put("flat_no",globalClass.getFlat_id());
         params.put("complex_id", globalClass.getComplex_id());
         params.put("tenant_name",name);
         params.put("tenant_mobile",phone);

@@ -45,7 +45,6 @@ public class AdapterSecurityList extends RecyclerView.Adapter<AdapterSecurityLis
 
         if(!image.isEmpty()){
             Picasso.with(context).load(blockList.get(position).get("image")).
-                    placeholder(R.mipmap.profile_image).
                     fit().into(holder.profile_image);
         }
 

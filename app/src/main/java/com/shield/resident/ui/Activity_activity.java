@@ -3,7 +3,6 @@ package com.shield.resident.ui;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -43,6 +42,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.borax12.materialdaterangepicker.date.DatePickerDialog;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.UpdateAvailability;
+import com.google.android.play.core.tasks.Task;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.shield.resident.Adapter.ActivityListAdapterIN;
 import com.shield.resident.Adapter.categoryAdapter;
@@ -54,8 +59,8 @@ import com.shield.resident.R;
 import com.shield.resident.dialogs.DialogAlarmAdd;
 import com.shield.resident.dialogs.DialogCabAdd;
 import com.shield.resident.dialogs.DialogDeliveryAdd;
-import com.shield.resident.dialogs.DialogGuestAdd;
-import com.shield.resident.dialogs.DialogHelpAdd;
+import com.shield.resident.dialogs.DialogGuestActivityAdd;
+import com.shield.resident.dialogs.DialogHelpActivityAdd;
 import com.shield.resident.dialogs.DialogProfile;
 import com.shield.resident.dialogs.LoaderDialog;
 import com.shield.resident.model.ActivityChild;
@@ -65,7 +70,6 @@ import com.shield.resident.model.HeaderItem;
 import com.shield.resident.model.ListItem;
 import com.shield.resident.util.DigitTextView;
 import com.shield.resident.util.OnSwipeTouchListener;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -126,7 +130,7 @@ public class Activity_activity extends AppCompatActivity implements
     TextView tv_upcoming_visitor,tv_all_visitor,tv_flat_name;
     DigitTextView tv_digit_textview;
 
-    String category,date_to_push;
+    String category, date_to_push;
     EditText edt_search;
     ArrayList<HashMap<String,String>> Category;
     ArrayList<HashMap<String,String>> DeliveryList;
@@ -150,6 +154,8 @@ public class Activity_activity extends AppCompatActivity implements
         ButterKnife.bind(this);
 
         actionViews();
+
+        inAppUpdate();
 
     }
 
@@ -236,24 +242,35 @@ public class Activity_activity extends AppCompatActivity implements
         img_guest.setOnClickListener(v -> {
             car1.setVisibility(View.GONE);
 
-            DialogGuestAdd dialogGuestAdd = new DialogGuestAdd(Activity_activity.this);
-            dialogGuestAdd.show();
+            //DialogGuestAdd dialogGuestAdd = new DialogGuestAdd(Activity_activity.this);
+            //dialogGuestAdd.show();
 
-            dialogGuestAdd.setOnDismissListener(dialog1 -> {
+            /*dialogGuestAdd.setOnDismissListener(dialog1 -> {
                 getActivityList("all");
-            });
+            });*/
+
+
+            Intent intent = new Intent(Activity_activity.this,
+                    DialogGuestActivityAdd.class);
+            startActivity(intent);
+
 
         });
 
         img_help.setOnClickListener(v -> {
             car1.setVisibility(View.GONE);
 
-            DialogHelpAdd dialogHelpAdd = new DialogHelpAdd(Activity_activity.this);
+           /* DialogHelpAdd dialogHelpAdd = new DialogHelpAdd(Activity_activity.this);
             dialogHelpAdd.show();
 
             dialogHelpAdd.setOnDismissListener(dialog1 -> {
                 getActivityList("all");
-            });
+            });*/
+
+            Intent intent = new Intent(Activity_activity.this,
+                    DialogHelpActivityAdd.class);
+            startActivity(intent);
+
 
         });
 
@@ -510,7 +527,6 @@ public class Activity_activity extends AppCompatActivity implements
             Date date1 = df_send.parse(sendFromDate);
             Date date2 = df_send.parse(sendEndDate);
 
-
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -533,7 +549,7 @@ public class Activity_activity extends AppCompatActivity implements
 
         final Map<String, String> params = new HashMap<>();
         params.put("type", from);
-        params.put("flat_no", globalClass.getFlat_no());
+        params.put("flat_no", globalClass.getFlat_id());
         params.put("complex_id", globalClass.getComplex_id());
         params.put("user_id", globalClass.getId());
 
@@ -609,6 +625,7 @@ public class Activity_activity extends AppCompatActivity implements
                                                 child.setBlock(obj.optString("block"));
                                                 child.setFlat_id(obj.optString("flat_id"));
                                                 child.setFlat_no(obj.optString("flat_name"));
+                                                child.setNote(obj.optString("note"));
 
 
                                                 childArrayList.add(child);
@@ -748,6 +765,8 @@ public class Activity_activity extends AppCompatActivity implements
                     }
                 }
             });
+
+            Collections.reverse(listDates);
 
 
             ArrayList<HashMap<String, ArrayList<ActivityChild>>> listMain = new ArrayList<>();
@@ -1309,7 +1328,7 @@ public class Activity_activity extends AppCompatActivity implements
         int past_position = 0;
         for (int i = 0; i < listOwnerFlat.size(); i++){
             HashMap<String, String> hashMap = listOwnerFlat.get(i);
-            if (globalClass.getFlat_no().equals(hashMap.get("flat_id"))){
+            if (globalClass.getFlat_id().equals(hashMap.get("flat_id"))){
                 past_position = i;
             }
         }
@@ -1319,8 +1338,14 @@ public class Activity_activity extends AppCompatActivity implements
             past_position++;
 
             HashMap<String, String> hashMap = listOwnerFlat.get(past_position);
-            globalClass.setFlat_no(hashMap.get("flat_id"));
+            globalClass.setFlat_id(hashMap.get("flat_id"));
             globalClass.setFlat_name(hashMap.get("flat_no"));
+
+            globalClass.setUser_type(hashMap.get("user_type"));
+            globalClass.setComplex_id(hashMap.get("complex_id"));
+            globalClass.setComplex_name(hashMap.get("complex_name"));
+            globalClass.setBlock(hashMap.get("block"));
+
             prefManager.savePrefrence();
             prefManager.loadPrefrence();
 
@@ -1344,7 +1369,7 @@ public class Activity_activity extends AppCompatActivity implements
         int past_position = 0;
         for (int i = 0; i < listOwnerFlat.size(); i++){
             HashMap<String, String> hashMap = listOwnerFlat.get(i);
-            if (globalClass.getFlat_no().equals(hashMap.get("flat_id"))){
+            if (globalClass.getFlat_id().equals(hashMap.get("flat_id"))){
                 past_position = i;
             }
         }
@@ -1354,8 +1379,14 @@ public class Activity_activity extends AppCompatActivity implements
             past_position--;
 
             HashMap<String, String> hashMap = listOwnerFlat.get(past_position);
-            globalClass.setFlat_no(hashMap.get("flat_id"));
+            globalClass.setFlat_id(hashMap.get("flat_id"));
             globalClass.setFlat_name(hashMap.get("flat_no"));
+
+            globalClass.setUser_type(hashMap.get("user_type"));
+            globalClass.setComplex_id(hashMap.get("complex_id"));
+            globalClass.setComplex_name(hashMap.get("complex_name"));
+            globalClass.setBlock(hashMap.get("block"));
+
             prefManager.savePrefrence();
             prefManager.loadPrefrence();
 
@@ -1465,4 +1496,61 @@ public class Activity_activity extends AppCompatActivity implements
 
     }
 
+
+
+
+
+    //// in app update ...
+    public static final int UPDATE_REQUEST_CODE = 411;
+    private void inAppUpdate(){
+
+        // Creates instance of the manager.
+        AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(Activity_activity.this);
+
+        // Returns an intent object that you use to check for an update.
+        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+
+        // Checks that the platform will allow the specified type of update.
+        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                    // For a flexible update, use AppUpdateType.FLEXIBLE
+                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                // Request the update.
+
+                try {
+
+                    appUpdateManager.startUpdateFlowForResult(
+                            // Pass the intent that is returned by 'getAppUpdateInfo()'.
+                            appUpdateInfo,
+                            // Or 'AppUpdateType.FLEXIBLE' for flexible updates.
+                            AppUpdateType.IMMEDIATE,
+                            // The current activity making the update request.
+                            this,
+                            // Include a request code to later monitor this update request.
+                            UPDATE_REQUEST_CODE);
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+
+
+
+            }
+        });
+
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == UPDATE_REQUEST_CODE) {
+            if (resultCode != RESULT_OK) {
+                Log.d(TAG, "onActivityResult: "+resultCode);
+                // If the update is cancelled or fails,
+                // you can request to start the update again.
+            }
+        }
+    }
 }

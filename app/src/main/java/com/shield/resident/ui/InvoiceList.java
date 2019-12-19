@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -227,7 +226,7 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<>();
 
-                params.put("flat_id", globalClass.getFlat_no());
+                params.put("flat_id", globalClass.getFlat_id());
 
                 Log.d(TAG, "getParams: "+params);
 
@@ -333,7 +332,7 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
         params.put("firstname", globalClass.getName());
         params.put("email", globalClass.getEmail());
         params.put("phone", globalClass.getPhone_number());
-        params.put("flat_id", globalClass.getFlat_no());
+        params.put("flat_id", globalClass.getFlat_id());
         params.put("complex_id", globalClass.getComplex_id());
         params.put("id", id);
 

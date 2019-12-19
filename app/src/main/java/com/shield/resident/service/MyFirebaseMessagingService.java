@@ -1,5 +1,6 @@
 package com.shield.resident.service;
 
+import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -10,6 +11,7 @@ import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.PowerManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -23,6 +25,7 @@ import com.shield.resident.GlobalClass.Shared_Preference;
 import com.shield.resident.R;
 import com.shield.resident.ui.CallUi;
 import com.shield.resident.ui.Login;
+import com.shield.resident.ui.Splash;
 import com.shield.resident.util.NotificationUtils;
 
 import java.util.HashMap;
@@ -52,6 +55,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
             String message = remoteMessage.getData().get("body"); // message
             String title = remoteMessage.getData().get("title"); // Notification
+
+
             String type = remoteMessage.getData().get("type"); // call/new call
 
             showNotification(title, message);
@@ -67,6 +72,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 String complex_name = remoteMessage.getData().get("complex_name");
                 String complex_id = remoteMessage.getData().get("complex_id");
                 String visitor_id = remoteMessage.getData().get("visitor_id");
+                String url = remoteMessage.getData().get("url");
 
 
                 HashMap<String, String> hashMap = new HashMap<>();
@@ -81,6 +87,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 hashMap.put("type", type);
                 hashMap.put("message", message);
                 hashMap.put("visitor_id", visitor_id);
+                hashMap.put("url", url);
 
                 callTo(hashMap);
 
@@ -95,6 +102,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 String complex_name = remoteMessage.getData().get("complex_name");
                 String complex_id = remoteMessage.getData().get("complex_id");
                 String visitor_id = remoteMessage.getData().get("visitor_id");
+                String url = remoteMessage.getData().get("url");
 
 
                 HashMap<String, String> hashMap = new HashMap<>();
@@ -109,6 +117,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 hashMap.put("visitor_id", visitor_id);
                 hashMap.put("type", type);
                 hashMap.put("message", message);
+                hashMap.put("url", url);
 
                 callTo(hashMap);
 
@@ -123,6 +132,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 String complex_name = remoteMessage.getData().get("complex_name");
                 String complex_id = remoteMessage.getData().get("complex_id");
                 String visitor_id = remoteMessage.getData().get("visitor_id");
+                String url = remoteMessage.getData().get("url");
 
                 HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put("activity_id", activity_id);
@@ -136,6 +146,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 hashMap.put("visitor_id", visitor_id);
                 hashMap.put("type", type);
                 hashMap.put("message", message);
+                hashMap.put("url", url);
 
                 callTo(hashMap);
 
@@ -150,6 +161,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 String complex_name = remoteMessage.getData().get("complex_name");
                 String complex_id = remoteMessage.getData().get("complex_id");
                 String visitor_id = remoteMessage.getData().get("visitor_id");
+                String url = remoteMessage.getData().get("url");
+
 
                 HashMap<String, String> hashMap = new HashMap<>();
                 hashMap.put("activity_id", activity_id);
@@ -163,6 +176,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 hashMap.put("visitor_id", visitor_id);
                 hashMap.put("type", type);
                 hashMap.put("message", message);
+                hashMap.put("url", url);
 
                 callTo(hashMap);
             }
@@ -186,7 +200,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     public void showNotification(String title, String message) {
 
-        Intent intent = new Intent(this, Login.class);
+        Intent intent = new Intent(this, Splash.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 0 /* Request code */, intent,
@@ -212,7 +226,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         collapsedView.setTextViewText(R.id.text_view_collapsed_1, message);
 
-        expandedView.setImageViewResource(R.id.image_view_expanded, R.mipmap.background);
+        expandedView.setImageViewResource(R.id.image_view_expanded, R.drawable.bg_rounded_white);
         expandedView.setOnClickPendingIntent(R.id.image_view_expanded, clickPendingIntent);
 
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
@@ -254,6 +268,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Intent intent = new Intent(getApplicationContext(), CallUi.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("hashMap", hashMap);
         startActivity(intent);
 

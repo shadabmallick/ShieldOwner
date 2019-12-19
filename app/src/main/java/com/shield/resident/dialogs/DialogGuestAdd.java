@@ -1,9 +1,11 @@
 package com.shield.resident.dialogs;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -21,6 +23,8 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -43,6 +47,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import static android.Manifest.permission.READ_CONTACTS;
 import static com.shield.resident.GlobalClass.VolleySingleton.backOff;
 import static com.shield.resident.GlobalClass.VolleySingleton.nuOfRetry;
 import static com.shield.resident.GlobalClass.VolleySingleton.timeOut;
@@ -56,7 +61,7 @@ public class DialogGuestAdd extends Dialog {
     private int mYear, mMonth, mDay, mHour, mMinute,mSecond;
     private String date_to_send, send_time;
 
-    private TextView tv_time, date_picker;
+    private TextView tv_time, date_picker, tv_get_contact;
     private RadioButton radio1, radio2;
     private EditText edit_name_cab, edit_phone_cab;
 
@@ -92,6 +97,7 @@ public class DialogGuestAdd extends Dialog {
         edit_name_cab = findViewById(R.id.edit_name);
         edit_phone_cab = findViewById(R.id.edit_phone);
         tv_time = findViewById(R.id.tv_time);
+        tv_get_contact = findViewById(R.id.tv_get_contact);
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,7 +145,8 @@ public class DialogGuestAdd extends Dialog {
 
                 radio1 = findViewById(selectedId);
 
-                String radio_value=radio1.getText().toString();
+                String radio_value = radio1.getText().toString();
+
                 AddGuest("guest",radio_value);
 
             }
@@ -153,6 +160,18 @@ public class DialogGuestAdd extends Dialog {
 
 
 
+        tv_get_contact.setOnClickListener(v -> {
+
+            if (checkPermission()){
+
+
+            }else {
+
+                requestPermission();
+            }
+
+
+        });
 
 
     }
@@ -288,7 +307,7 @@ public class DialogGuestAdd extends Dialog {
                 params.put("type", type);
                 params.put("time", send_time);
                 params.put("date", date_to_send);
-                params.put("flat_no", globalClass.getFlat_no());
+                params.put("flat_no", globalClass.getFlat_id());
                 params.put("complex_id", globalClass.getComplex_id());
                 params.put("visitor_name", edit_name_cab.getText().toString() );
                 params.put("visitor_mobile", edit_phone_cab.getText().toString() );
@@ -323,5 +342,48 @@ public class DialogGuestAdd extends Dialog {
         });
 
     }
+
+
+
+    ///// contact permission ...
+    public static final int PERMISSION_REQUEST_CODE = 121;
+    public static final int PERMISSION_REQUEST_CONTACT = 221;
+
+    private boolean checkPermission() {
+        int result = ContextCompat.checkSelfPermission(context, READ_CONTACTS);
+
+        return result == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestPermission() {
+
+        ActivityCompat.requestPermissions((Activity) context,
+                new String[]{READ_CONTACTS}, PERMISSION_REQUEST_CODE);
+
+    }
+
+
+    public void onRequestPermissionsResult(int requestCode, String permissions[],
+                                           int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_CODE:
+
+                if (grantResults.length > 0) {
+
+                    boolean contactAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+
+                    if (contactAccepted){
+
+
+                    }
+
+                }
+
+                break;
+        }
+    }
+
+
+
 
 }

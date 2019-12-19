@@ -14,7 +14,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CALL_PHONE"/>
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -24,6 +23,10 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+
+
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
 
 
     <application
@@ -52,90 +55,105 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name="com.shield.resident.ui.Login"
-            android:theme="@style/MyTheme">
+            android:theme="@style/MyNoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-        <activity android:name="com.shield.resident.ui.RegistrationActivity"
-            android:theme="@style/MyTheme">
+
+        <activity android:name="com.shield.resident.ui.RegisterFlatDetails"
+            android:theme="@style/MyNoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+
         <activity android:name="com.shield.resident.ui.AddMultipleFlat"
             android:theme="@style/MyTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
-        <activity android:name="com.shield.resident.ui.RegisterNext"
-            android:theme="@style/MyTheme">
+
+        <activity android:name="com.shield.resident.ui.RegisterUserDetails"
+            android:theme="@style/MyNoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+
         <activity android:name="com.shield.resident.ui.OtpScreen"
             android:theme="@style/MyTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+
         <activity android:name="com.shield.resident.ui.SettingActivity"
             android:theme="@style/MyTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+
         <activity android:name="com.shield.resident.ui.NotificationManager"
-            android:theme="@style/MyNoActionBar">
+            android:theme="@style/MyTheme2">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+
         <activity android:name="com.shield.resident.ui.MyComplex"
             android:theme="@style/MyTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+
         <activity android:name="com.shield.resident.ui.ActivityClass"
             android:theme="@style/MyTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+
         <activity android:name="com.shield.resident.ui.AboutUs"
             android:theme="@style/MyTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+
         <activity android:name="com.shield.resident.ui.ContactUs"
             android:theme="@style/MyTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+
         <activity android:name="com.shield.resident.ui.SecurityScreen"
             android:theme="@style/MyTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+
         <activity android:name="com.shield.resident.ui.Activity_details"
             android:theme="@style/MyTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+
         <activity android:name="com.shield.resident.ui.Activity_tenants"
             android:theme="@style/MyTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+
         <activity android:name="com.shield.resident.ui.InterphoneSettings"
             android:theme="@style/MyTheme">
             <intent-filter>
@@ -149,12 +167,14 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+
         <activity android:name="com.shield.resident.ui.CommunityActivity"
             android:theme="@style/MyTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+
         <activity android:name="com.shield.resident.ui.ResponsePage"
             android:theme="@style/MyTheme"
             android:launchMode="singleTask">
@@ -162,6 +182,7 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+
         <activity android:name="com.shield.resident.ui.OwnerList"
             android:theme="@style/MyTheme"
             android:launchMode="singleTask">
@@ -169,6 +190,7 @@
                 <action android:name="android.intent.action.VIEW" />
             </intent-filter>
         </activity>
+
         <activity android:name="com.shield.resident.ui.Activity_activity"
             android:theme="@style/MyTheme">
             <intent-filter>
@@ -233,6 +255,37 @@
             </intent-filter>
         </activity>
 
+
+        <activity
+            android:theme="@style/MyTheme"
+            android:name="com.shield.resident.ui.ContactList"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:theme="@style/datepicker"
+            android:name="com.shield.resident.dialogs.DialogGuestActivityAdd"
+            android:screenOrientation="portrait"
+            android:label=""
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:theme="@style/datepicker"
+            android:name="com.shield.resident.dialogs.DialogHelpActivityAdd"
+            android:screenOrientation="portrait"
+            android:label=""
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
+        </activity>
 
 
 

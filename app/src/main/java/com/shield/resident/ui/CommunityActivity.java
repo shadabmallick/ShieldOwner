@@ -20,7 +20,9 @@ import com.shield.resident.R;
 import com.shield.resident.dialogs.DialogAlarmAdd;
 import com.shield.resident.dialogs.DialogCabAdd;
 import com.shield.resident.dialogs.DialogDeliveryAdd;
+import com.shield.resident.dialogs.DialogGuestActivityAdd;
 import com.shield.resident.dialogs.DialogGuestAdd;
+import com.shield.resident.dialogs.DialogHelpActivityAdd;
 import com.shield.resident.dialogs.DialogHelpAdd;
 
 import java.util.ArrayList;
@@ -133,8 +135,13 @@ public class CommunityActivity extends AppCompatActivity {
         img_guest.setOnClickListener(v -> {
             car1.setVisibility(View.GONE);
 
-            DialogGuestAdd dialogGuestAdd = new DialogGuestAdd(CommunityActivity.this);
-            dialogGuestAdd.show();
+            /*DialogGuestAdd dialogGuestAdd = new DialogGuestAdd(CommunityActivity.this);
+            dialogGuestAdd.show();*/
+
+
+            Intent intent = new Intent(CommunityActivity.this,
+                    DialogGuestActivityAdd.class);
+            startActivity(intent);
 
 
         });
@@ -142,8 +149,14 @@ public class CommunityActivity extends AppCompatActivity {
         img_help.setOnClickListener(v -> {
             car1.setVisibility(View.GONE);
 
-            DialogHelpAdd dialogHelpAdd = new DialogHelpAdd(CommunityActivity.this);
-            dialogHelpAdd.show();
+            /*DialogHelpAdd dialogHelpAdd = new DialogHelpAdd(CommunityActivity.this);
+            dialogHelpAdd.show();*/
+
+
+            Intent intent = new Intent(CommunityActivity.this,
+                    DialogHelpActivityAdd.class);
+            startActivity(intent);
+
 
         });
 

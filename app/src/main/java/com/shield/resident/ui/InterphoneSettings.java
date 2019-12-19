@@ -91,7 +91,7 @@ public class InterphoneSettings extends AppCompatActivity {
 
                 if (number.trim().length() < 10){
                     TastyToast.makeText(getApplicationContext(),
-                            "Enter a valid phone number",
+                            "Enter 10-digit phone number",
                             TastyToast.LENGTH_LONG, TastyToast.WARNING);
                     return;
                 }
@@ -113,7 +113,7 @@ public class InterphoneSettings extends AppCompatActivity {
         RequestParams params = new RequestParams();
 
         params.put("user_id",globalClass.getId());
-        params.put("flat_id",globalClass.getFlat_no());
+        params.put("flat_id",globalClass.getFlat_id());
 
         cl.setSSLSocketFactory(new SSLSocketFactory(Config.getSslContext(),
                         SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));
@@ -179,7 +179,7 @@ public class InterphoneSettings extends AppCompatActivity {
 
         params.put("user_id",globalClass.getId());
         params.put("ivr_number",number);
-        params.put("flat_id",globalClass.getFlat_no());
+        params.put("flat_id",globalClass.getFlat_id());
 
 
         cl.setSSLSocketFactory(

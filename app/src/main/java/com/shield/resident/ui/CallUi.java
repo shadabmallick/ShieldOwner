@@ -1,5 +1,6 @@
 package com.shield.resident.ui;
 
+import android.app.KeyguardManager;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
@@ -30,6 +31,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
 import com.sdsmdg.tastytoast.TastyToast;
 import com.shield.resident.Constant.AppConfig;
 import com.shield.resident.GlobalClass.GlobalClass;
@@ -71,22 +73,35 @@ public class CallUi extends AppCompatActivity {
     Shared_Preference shared_preference;
     HashMap<String, String> hashMap;
     Vibrator vibrator;
+    MediaPlayer mediaPlayer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.call_ui);
 
-        Window window = this.getWindow();
+
+       /* Window window = this.getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
         window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);*/
+
+        final Window win = getWindow();
+        win.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+        );
+
+        setContentView(R.layout.call_ui);
 
 
         ButterKnife.bind(this);
         actionViews();
 
+
     }
+
 
 
     private void actionViews() {
@@ -119,8 +134,6 @@ public class CallUi extends AppCompatActivity {
             tv_vendor_name.setText(hashMap.get("type").toUpperCase());
 
 
-            tv_vendor_name.setText(hashMap.get("type").toUpperCase());
-
 
             ll_leave_at_gate.setVisibility(View.GONE);
 
@@ -131,24 +144,23 @@ public class CallUi extends AppCompatActivity {
             }
 
 
-            if (hashMap.get("message").equals("new delivery call")) {
-
-
-
-            /*String profile_image = bundle.getString("data");
+            String profile_image = hashMap.get("url");
 
             Glide.with(this)
                     .load(profile_image)
                     .centerCrop()
                     .placeholder(R.drawable.ic_user)
-                    .into(image_pic);*/
+                    .into(image_pic);
+
+
+            if (hashMap.get("message").equals("new delivery call")) {
 
             }
 
 
             NotificationManager manager = (NotificationManager) getApplicationContext()
                     .getSystemService(Context.NOTIFICATION_SERVICE);
-            manager.cancelAll();
+            //manager.cancelAll();
 
 
             long[] jArr = {0, 300, 200, 300, 500, 300};
@@ -175,7 +187,9 @@ public class CallUi extends AppCompatActivity {
             Uri defaultSoundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
                     + "://" + getPackageName() + "/raw/ring1");
 
-            MediaPlayer mediaPlayer = new MediaPlayer();
+
+
+            mediaPlayer = new MediaPlayer();
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 
 
@@ -188,6 +202,16 @@ public class CallUi extends AppCompatActivity {
                 e.printStackTrace();
             }
             mediaPlayer.start();
+
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+
+                    mp.start();
+
+                }
+            });
+
 
 
             rel_rejected.setOnClickListener(v -> {
@@ -467,6 +491,20 @@ public class CallUi extends AppCompatActivity {
             handler.removeCallbacks(myRunnable);
         }
 
+        if (mediaPlayer != null){
+            mediaPlayer.stop();
+        }
+
         super.onDestroy();
+    }
+
+
+    @Override
+    public void finish() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            super.finishAndRemoveTask();
+        } else {
+            super.finish();
+        }
     }
 }

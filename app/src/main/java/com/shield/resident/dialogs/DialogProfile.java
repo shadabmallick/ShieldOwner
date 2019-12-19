@@ -28,7 +28,6 @@ import com.shield.resident.Constant.AppConfig;
 import com.shield.resident.GlobalClass.GlobalClass;
 import com.shield.resident.GlobalClass.Shared_Preference;
 import com.shield.resident.R;
-import com.shield.resident.ui.InvoiceList;
 import com.shield.resident.ui.SettingActivity;
 import com.squareup.picasso.Picasso;
 
@@ -85,6 +84,7 @@ public class DialogProfile extends Dialog implements ProfileFlatAdapter.ViewClic
 
         globalClass = (GlobalClass) context.getApplicationContext();
         preference = new Shared_Preference(context);
+        preference.loadPrefrence();
 
         loaderDialog = new LoaderDialog(context, android.R.style.Theme_Translucent,
                 false, "");
@@ -126,9 +126,9 @@ public class DialogProfile extends Dialog implements ProfileFlatAdapter.ViewClic
         ll_invoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dismiss();
-                Intent setting=new Intent(context, InvoiceList.class);
-                context.startActivity(setting);
+               // dismiss();
+              //  Intent setting=new Intent(context, InvoiceList.class);
+               // context.startActivity(setting);
 
             }
         });
@@ -238,9 +238,27 @@ public class DialogProfile extends Dialog implements ProfileFlatAdapter.ViewClic
 
     }
 
+
+
+
     private void setData(){
+
+        ArrayList<HashMap<String, String>> list = new ArrayList<>();
+
+        for (int i = 0; i < listOwnerFlat.size(); i++){
+
+            HashMap<String, String> hashMap = listOwnerFlat.get(i);
+
+            if (!hashMap.get("flat_id").equals(globalClass.getFlat_id())){
+
+                list.add(hashMap);
+            }
+
+        }
+
+
         ProfileFlatAdapter profileFlatAdapter =
-                new ProfileFlatAdapter(context, listOwnerFlat);
+                new ProfileFlatAdapter(context, list);
         recycler_user_flats.setAdapter(profileFlatAdapter);
         profileFlatAdapter.setViewClickListener(this);
 
@@ -251,8 +269,13 @@ public class DialogProfile extends Dialog implements ProfileFlatAdapter.ViewClic
 
         is_clicked = true;
 
-        globalClass.setFlat_no(hashMap.get("flat_id"));
+        globalClass.setFlat_id(hashMap.get("flat_id"));
         globalClass.setFlat_name(hashMap.get("flat_no"));
+        globalClass.setUser_type(hashMap.get("user_type"));
+        globalClass.setComplex_id(hashMap.get("complex_id"));
+        globalClass.setComplex_name(hashMap.get("complex_name"));
+        globalClass.setBlock(hashMap.get("block"));
+
 
         preference.savePrefrence();
         preference.loadPrefrence();
