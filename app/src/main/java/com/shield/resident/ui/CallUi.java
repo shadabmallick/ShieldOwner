@@ -160,7 +160,7 @@ public class CallUi extends AppCompatActivity {
 
             NotificationManager manager = (NotificationManager) getApplicationContext()
                     .getSystemService(Context.NOTIFICATION_SERVICE);
-            //manager.cancelAll();
+            manager.cancelAll();
 
 
             long[] jArr = {0, 300, 200, 300, 500, 300};

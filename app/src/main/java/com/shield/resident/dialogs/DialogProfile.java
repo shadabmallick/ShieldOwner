@@ -28,6 +28,7 @@ import com.shield.resident.Constant.AppConfig;
 import com.shield.resident.GlobalClass.GlobalClass;
 import com.shield.resident.GlobalClass.Shared_Preference;
 import com.shield.resident.R;
+import com.shield.resident.ui.InvoiceList;
 import com.shield.resident.ui.SettingActivity;
 import com.squareup.picasso.Picasso;
 
@@ -117,6 +118,7 @@ public class DialogProfile extends Dialog implements ProfileFlatAdapter.ViewClic
         ll_setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 dismiss();
                 Intent setting=new Intent(context, SettingActivity.class);
                 context.startActivity(setting);
@@ -126,9 +128,10 @@ public class DialogProfile extends Dialog implements ProfileFlatAdapter.ViewClic
         ll_invoice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // dismiss();
-              //  Intent setting=new Intent(context, InvoiceList.class);
-               // context.startActivity(setting);
+
+                dismiss();
+                Intent setting=new Intent(context, InvoiceList.class);
+                context.startActivity(setting);
 
             }
         });

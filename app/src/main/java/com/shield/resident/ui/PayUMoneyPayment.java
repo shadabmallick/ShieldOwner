@@ -74,8 +74,9 @@ public class PayUMoneyPayment extends AppCompatActivity {
         txnid = String.valueOf(System.currentTimeMillis());
         name = globalClass.getName();
         email = globalClass.getEmail().trim();
-        //phone = globalClass.getPhone_number();
-        phone = "8240253745";
+        phone = globalClass.getPhone_number().trim();
+
+
 
 
         Bundle bundle = getIntent().getExtras();

@@ -134,6 +134,7 @@ public class FragmentNoticeBoard extends Fragment {
 
                 } catch (Exception e) {
                     e.printStackTrace();
+                    linear_nodata.setVisibility(View.VISIBLE);
                 }
 
 

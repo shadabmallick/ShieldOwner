@@ -18,15 +18,16 @@
         android:layout_width="match_parent"
         android:layout_below="@+id/toolbar"
         android:orientation="horizontal"
-        android:gravity="center"
         android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tv_address"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:textColor="@color/green"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="5dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="@dimen/dimen_10dp"
             android:text="">
         </TextView>
 
@@ -36,79 +37,73 @@
            android:layout_height="wrap_content"
            android:layout_marginLeft="20dp"
            android:orientation="vertical"
-           android:gravity="right">
+           android:layout_weight="1"
+           >
 
            <LinearLayout
                android:layout_marginTop="10dp"
-               android:layout_width="wrap_content"
+               android:layout_width="match_parent"
                android:orientation="horizontal"
-               android:weightSum="2"
-               android:layout_height="wrap_content">
+               android:layout_height="wrap_content"
+               android:gravity="end"
+               >
+
                <TextView
-                   android:layout_weight="1"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:text="@string/billed"/>
 
                <TextView
-                   android:layout_weight="1"
                    android:id="@+id/billed"
-                   android:text="Rs......"
+                   android:text="Rs."
                    android:layout_marginRight="10dp"
-                   android:layout_marginLeft="20dp"
+                   android:layout_marginLeft="10dp"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
+                   android:layout_gravity="end"
                   />
 
            </LinearLayout>
 
            <LinearLayout
-               android:layout_width="wrap_content"
+               android:layout_width="match_parent"
                android:orientation="horizontal"
-               android:weightSum="2"
                android:layout_marginTop="10dp"
-               android:layout_height="wrap_content">
+               android:layout_height="wrap_content"
+               android:gravity="end"
+               >
                <TextView
-                   android:layout_weight="1"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:text="@string/receipt">
-
-               </TextView>
+                   android:text="@string/receipt"/>
                <TextView
                    android:id="@+id/receipt"
-                   android:layout_weight="1"
                    android:layout_marginRight="10dp"
-                   android:layout_marginLeft="20dp"
+                   android:layout_marginLeft="10dp"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:text="Rs.......">
-
-               </TextView>
+                   android:text="Rs."/>
 
            </LinearLayout>
            <LinearLayout
                android:layout_marginTop="10dp"
-               android:layout_width="wrap_content"
+               android:layout_width="match_parent"
                android:orientation="horizontal"
-               android:layout_height="wrap_content">
+               android:layout_height="wrap_content"
+               android:gravity="end"
+               >
                <TextView
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:text="@string/Due">
-
-               </TextView>
+                   android:text="@string/Due"/>
                <TextView
                    android:id="@+id/due"
                    android:textColor="@color/red"
-                   android:layout_marginLeft="20dp"
+                   android:layout_marginLeft="10dp"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:layout_marginRight="10dp"
-                   android:text="Rs.......">
-
-
-               </TextView>
+                   android:text="Rs."/>
 
 
            </LinearLayout>

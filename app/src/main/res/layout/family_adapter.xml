@@ -66,6 +66,7 @@
                     >
 
                     <ImageView
+                        android:id="@+id/iv_share"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:tint="@color/black"

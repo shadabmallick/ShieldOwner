@@ -109,12 +109,13 @@ public class MyComplex extends AppCompatActivity {
             String url = "https://play.google.com/store/apps/details?id="
                     + MyComplex.this.getPackageName();
 
-            String message = globalClass.getName() + " "   ;
+            String message = "The all-in-one solution to manage your guests, " +
+                    "deliveries and much more. Implement the app in your society.\n\n"+url;
 
 
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
-            sendIntent.putExtra(Intent.EXTRA_TEXT, url);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, message);
             sendIntent.setType("text/plain");
 
             Intent shareIntent = Intent.createChooser(sendIntent, "Share Via ");

@@ -24,15 +24,13 @@ import java.util.HashMap;
 
 
 public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.MyViewHolder> {
-    String TAG="Add";
+
     GlobalClass globalClass;
     Shared_Preference preference;
     Context context;
     ArrayList<HashMap<String,String>> text;
-
     LayoutInflater inflater;
-    ArrayList<Boolean> booleansarr;
-    String selected = "";
+
 
     public FamilyAdapter(Context context ,ArrayList<HashMap<String,String>> text
     ) {
@@ -50,10 +48,8 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.MyViewHold
 
     @Override
     public FamilyAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.family_adapter, parent, false);
-        // set the view's size, margins, paddings and layout parameters
-
-// pass the view to View Holder
+        View v = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.family_adapter, parent, false);
         FamilyAdapter.MyViewHolder vh = new FamilyAdapter.MyViewHolder(v);
         return vh;
 
@@ -61,8 +57,8 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.MyViewHold
 
 
     @Override
-    public void onBindViewHolder(final FamilyAdapter.MyViewHolder holder, final int position)
-    {
+    public void onBindViewHolder(final FamilyAdapter.MyViewHolder holder, final int position) {
+
         String profile_pic_family=text.get(position).get("profile_pic_family");
         if(!profile_pic_family.isEmpty()){
             Picasso.with(context).load(text.get(position).get("profile_pic_family")).
@@ -81,50 +77,13 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.MyViewHold
 
             }
         });
-       // holder.tv_name1.setText(staff_type);
-       // String city=text.get(position).get("city");
 
-/*
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        holder.iv_share.setOnClickListener(v -> {
 
+            shareToMember();
 
-                setSelectedData(position,true);
-
-                String address_id = text.get(position).get("id");
-                String fname = text.get(position).get("address");
-                String lname = text.get(position).get("pin");
-                String address= text.get(position).get("city");
-                String city =  text.get(position).get("city");
-                String country = text.get(position).get("state");
-                String mobile = text.get(position).get("phone_number");
-                String ship_name = text.get(position).get("ship_name");
-
-                //   String state = address_list.get(position).get("state");
-                //   String zip = address_list.get(position).get("zip");
-
-               */
-/*  lat= Double.valueOf(address_list.get(position).get("lat"));
-                lng= Double.valueOf(address_list.get(position).get("lng"));*//*
-
-
-
-                Log.d(TAG, "onClick: "+address_id);
-
-                globalClass.setAddressid(address_id);
-
-                preference.savePrefrence();
-
-
-            }
         });
-*/
 
-
-/*
-        Picasso.with(context).load(listProduct.get(position)).
-                fit().into(holder.image);*/
 
 
 
@@ -142,19 +101,38 @@ public class FamilyAdapter extends RecyclerView.Adapter<FamilyAdapter.MyViewHold
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        // init the item view's
         TextView name;
-        ImageView profile_image,iv_call;
-
+        ImageView profile_image,iv_call, iv_share;
         public MyViewHolder(View itemView) {
             super(itemView);
-            // get the reference of item view's
             name =  itemView.findViewById(R.id.tv_name);
             profile_image =  itemView.findViewById(R.id.profile_image);
             iv_call =  itemView.findViewById(R.id.iv_call);
-
-
+            iv_share =  itemView.findViewById(R.id.iv_share);
 
         }
+    }
+
+
+    private void shareToMember(){
+
+        String url = "https://play.google.com/store/apps/details?id="
+                + context.getPackageName();
+
+        String message = globalClass.getName() + " has added you as a member in "
+                + "Complex-" + globalClass.getComplex_name()
+                + ", block-"+globalClass.getBlock()
+                + ", flat-"+globalClass.getFlat_name()
+                + ".\n\nDownload from this link:\n"
+                + url;
+
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, message);
+        sendIntent.setType("text/plain");
+
+        Intent shareIntent = Intent.createChooser(sendIntent, "Share Via ");
+        context.startActivity(shareIntent);
     }
 }

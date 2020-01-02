@@ -141,23 +141,38 @@ public class OtpScreen extends AppCompatActivity {
                         globalClass.setIs_login(is_login);
                         globalClass.setLogin_status(true);
 
-                        if (user_type.equals("Flat Owner")){
+
+                        // 1 = owner, 4 = member, 6 = tenant
+
+
+                        if (user_type.equals("1")){
                             globalClass.setUser_type("owner");
-                        }else if (user_type.equals("Tenant")){
-                            globalClass.setUser_type("tenant");
-                        }else if (user_type.equals("Family Members")){
+                        }else if (user_type.equals("4")){
                             globalClass.setUser_type("member");
+                        }else if (user_type.equals("6")){
+                            globalClass.setUser_type("tenant");
                         }
 
 
 
                         preference.savePrefrence();
 
-                        Intent setting=new Intent(getApplicationContext(),SettingActivity.class);
-                        setting.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(setting);
-                        finish();
+
+                        if (first_time_login.equalsIgnoreCase("Y")){
+                            Intent setting=new Intent(getApplicationContext(),SettingActivity.class);
+                            setting.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(setting);
+                            finish();
+                        }else {
+                            Intent setting=new Intent(getApplicationContext(),Activity_activity.class);
+                            setting.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(setting);
+                            finish();
+                        }
+
+
 
                     } else {
                         TastyToast.makeText(getApplicationContext(),

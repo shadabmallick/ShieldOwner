@@ -1448,12 +1448,24 @@ public class Activity_activity extends AppCompatActivity implements
                             HashMap<String, String> map_ser = new HashMap<>();
 
                             map_ser.put("complex_id", complex_id);
-                            map_ser.put("user_type", user_type);
+
                             map_ser.put("complex_name", complex_name);
                             map_ser.put("flat_id", flat_id);
                             map_ser.put("flat_no", flat_no);
                             map_ser.put("block", block);
                             map_ser.put("floor", floor);
+
+
+                            // 1 = owner, 4 = member, 6 = tenant
+
+
+                            if (user_type.equals("1")){
+                                map_ser.put("user_type", "owner");
+                            }else if (user_type.equals("4")){
+                                map_ser.put("user_type", "member");
+                            }else if (user_type.equals("6")){
+                                map_ser.put("user_type", "tenant");
+                            }
 
                             listOwnerFlat.add(map_ser);
                         }
@@ -1480,7 +1492,7 @@ public class Activity_activity extends AppCompatActivity implements
                 // Posting parameters to login url
                 Map<String, String> params = new HashMap<>();
 
-                params.put("user_type", "Flat Owner");
+                params.put("user_type", globalClass.getUser_type());
                 params.put("user_id", globalClass.getId());
 
                 Log.d(TAG, "param: "+params);

@@ -3,6 +3,7 @@ package com.shield.resident.ui;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -709,6 +710,10 @@ public class ChatGroup extends AppCompatActivity implements
             //do other stuff here
             Log.d(TAG, "chat_data = "+chat_data);
 
+
+            android.app.NotificationManager nMgr = (NotificationManager)
+                    getSystemService(Context.NOTIFICATION_SERVICE);
+            nMgr.cancelAll();
 
             try {
                 JSONObject object = new JSONObject(chat_data);

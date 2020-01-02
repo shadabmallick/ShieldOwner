@@ -73,8 +73,8 @@ public class DialogGuestActivityAdd extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,

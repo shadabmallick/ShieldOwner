@@ -55,7 +55,7 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
     Shared_Preference preference;
     Toolbar toolbar;
     LoaderDialog loaderDialog;
-    LinearLayout linear_nodata;
+    LinearLayout linear_nodata, llinvlice;
 
     private static final int REQUEST_FOR_PAYMENT = 2323;
 
@@ -74,7 +74,9 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
         receipt=findViewById(R.id.receipt);
         tv_due=findViewById(R.id.due);
         linear_nodata=findViewById(R.id.linear_nodata);
+        llinvlice=findViewById(R.id.llinvlice);
         linear_nodata.setVisibility(View.GONE);
+        llinvlice.setVisibility(View.GONE);
 
         invoice_list=new ArrayList<>();
 
@@ -188,6 +190,8 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
                         adapterOnvoiceList = new AdapterOnvoiceList(InvoiceList.this,
                                 invoice_list,InvoiceList.this);
                         recycler_view.setAdapter(adapterOnvoiceList);
+
+                        llinvlice.setVisibility(View.VISIBLE);
 
                     } else {
 

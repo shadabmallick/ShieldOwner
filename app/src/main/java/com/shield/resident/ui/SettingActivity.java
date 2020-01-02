@@ -295,19 +295,6 @@ public class SettingActivity extends AppCompatActivity {
 
 
 
-        if (globalClass.getUser_type().equals("owner")
-                || globalClass.getUser_type().equals("member")){
-
-
-
-        }else if (globalClass.getUser_type().equalsIgnoreCase("Tenant")){
-
-
-        }else {
-
-
-
-        }
 
 
         toolbar.setNavigationOnClickListener(
@@ -1191,13 +1178,9 @@ public class SettingActivity extends AppCompatActivity {
         params.put("date", currentDate);
         params.put("time", currentTime);
 
-        cl.setSSLSocketFactory(
-                new SSLSocketFactory(Config.getSslContext(),
-                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));
 
-
-        Log.d(TAG , "URL "+url);
-        Log.d(TAG , "params "+params.toString());
+       // Log.d(TAG , "URL "+url);
+      //  Log.d(TAG , "params "+params.toString());
 
 
         int DEFAULT_TIMEOUT = 30 * 1000;
@@ -1464,14 +1447,10 @@ public class SettingActivity extends AppCompatActivity {
         }catch (FileNotFoundException e){
             e.printStackTrace();
         }
-        cl.setSSLSocketFactory(
-                new SSLSocketFactory(Config.getSslContext(),
-                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));
 
 
-
-        Log.d(TAG , "URL "+url);
-        Log.d(TAG , "params "+params.toString());
+       // Log.d(TAG , "URL "+url);
+       // Log.d(TAG , "params "+params.toString());
 
 
         int DEFAULT_TIMEOUT = 30 * 1000;
@@ -1570,6 +1549,15 @@ public class SettingActivity extends AppCompatActivity {
         params.put("complex_id", globalClass.getComplex_id());
         params.put("family_member_mobile", phone);
 
+
+        if (globalClass.getUser_type().equals("owner")){
+            params.put("user_type", "1");
+        }else if (globalClass.getUser_type().equals("member")){
+            params.put("user_type", "4");
+        }else if (globalClass.getUser_type().equals("tenant")){
+            params.put("user_type", "6");
+        }
+
         try{
 
             params.put("profileImage", p_image);
@@ -1578,14 +1566,13 @@ public class SettingActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        cl.setSSLSocketFactory(
+        /*cl.setSSLSocketFactory(
                 new SSLSocketFactory(Config.getSslContext(),
-                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));
+                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));*/
 
 
-
-        Log.d(TAG , "URL "+url);
-        Log.d(TAG , "params "+params.toString());
+       // Log.d(TAG , "URL "+url);
+       // Log.d(TAG , "params "+params.toString());
 
 
         int DEFAULT_TIMEOUT = 30 * 1000;
@@ -1655,8 +1642,8 @@ public class SettingActivity extends AppCompatActivity {
         params.put("complex_id", globalClass.getComplex_id());
 
 
-        Log.d(TAG , "URL "+url);
-        Log.d(TAG , "params "+params.toString());
+       // Log.d(TAG , "URL "+url);
+       // Log.d(TAG , "params "+params.toString());
 
 
         int DEFAULT_TIMEOUT = 30 * 1000;
@@ -1929,6 +1916,16 @@ public class SettingActivity extends AppCompatActivity {
 
                 params.put("user_id", globalClass.getId());
                 params.put("flat_no", globalClass.getFlat_id());
+
+                if (globalClass.getUser_type().equals("owner")){
+                    params.put("user_type", "1");
+                }else if (globalClass.getUser_type().equals("member")){
+                    params.put("user_type", "4");
+                }else if (globalClass.getUser_type().equals("tenant")){
+                    params.put("user_type", "6");
+                }
+
+
                 Log.d(TAG, "getParams: "+params);
                 return params;
             }

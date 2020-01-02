@@ -1,5 +1,7 @@
 package com.shield.resident.ui;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -35,6 +37,12 @@ public class Splash extends AppCompatActivity {
         prefrence.loadPrefrence();
 
         Mint.initAndStartSession(this.getApplication(), "8a38783c");
+
+
+
+        android.app.NotificationManager manager = (NotificationManager) getApplicationContext()
+                .getSystemService(Context.NOTIFICATION_SERVICE);
+        manager.cancelAll();
 
 
         FirebaseInstanceId.getInstance().getInstanceId()

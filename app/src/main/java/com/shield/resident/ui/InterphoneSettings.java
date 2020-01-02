@@ -155,6 +155,7 @@ public class InterphoneSettings extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
+                    loaderDialog.dismiss();
                 }
             }
 
@@ -162,6 +163,8 @@ public class InterphoneSettings extends AppCompatActivity {
             public void onFailure(int statusCode, Header[] headers,
                                   String responseString, Throwable throwable) {
                 super.onFailure(statusCode, headers, responseString, throwable);
+
+                loaderDialog.dismiss();
             }
         });
 
@@ -226,6 +229,7 @@ public class InterphoneSettings extends AppCompatActivity {
                                   Throwable throwable) {
                 super.onFailure(statusCode, headers, responseString, throwable);
                 Log.d(TAG, "update_ivr_number- " +responseString);
+                loaderDialog.dismiss();
             }
         });
 

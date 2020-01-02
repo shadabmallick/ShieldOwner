@@ -221,7 +221,9 @@
         </activity>
 
         <activity android:name="com.shield.resident.ui.PayUMoneyPayment"
-            android:theme="@style/MyTheme">
+            android:theme="@style/MyTheme"
+            android:screenOrientation="portrait"
+            >
         </activity>
 
 
@@ -268,7 +270,6 @@
         <activity
             android:theme="@style/datepicker"
             android:name="com.shield.resident.dialogs.DialogGuestActivityAdd"
-            android:screenOrientation="portrait"
             android:label=""
             >
             <intent-filter>
@@ -279,7 +280,6 @@
         <activity
             android:theme="@style/datepicker"
             android:name="com.shield.resident.dialogs.DialogHelpActivityAdd"
-            android:screenOrientation="portrait"
             android:label=""
             >
             <intent-filter>

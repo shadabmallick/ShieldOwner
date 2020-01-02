@@ -319,14 +319,37 @@ RecyclerView recycler_view;
 
             Uri uri = data.getData();
 
-            p_image = new File(getRealPathFromURI(uri));
-            Log.d(TAG, "image = " + p_image);
+            //p_image = new File(getRealPathFromURI(uri));
+            //Log.d(TAG, "image = " + p_image);
 
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 image_member.setImageBitmap(bitmap);
 
-            } catch (IOException e) {
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bytes);
+
+
+                String path = Environment.getExternalStorageDirectory() + File.separator;
+                OutputStream outFile = null;
+                File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
+                try {
+                    p_image = file;
+                    Log.d(TAG, "image: " + p_image);
+
+                    outFile = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outFile);
+                    outFile.flush();
+                    outFile.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -358,7 +381,7 @@ RecyclerView recycler_view;
                 File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
                 try {
                     p_image = file;
-                    Log.d(TAG, "OutputStream: " + p_image);
+                    Log.d(TAG, "image: " + p_image);
 
                     outFile = new FileOutputStream(file);
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outFile);
@@ -394,10 +417,10 @@ RecyclerView recycler_view;
 
 
         params.put("user_id", globalClass.getId());
-        params.put("flat_no",globalClass.getFlat_id());
+        params.put("flat_no", globalClass.getFlat_id());
         params.put("complex_id", globalClass.getComplex_id());
-        params.put("tenant_name",name);
-        params.put("tenant_mobile",phone);
+        params.put("tenant_name", name);
+        params.put("tenant_mobile", phone);
 
         try{
 
@@ -406,9 +429,11 @@ RecyclerView recycler_view;
         }catch (FileNotFoundException e){
             e.printStackTrace();
         }
-        cl.setSSLSocketFactory(
+
+
+        /*cl.setSSLSocketFactory(
                 new SSLSocketFactory(Config.getSslContext(),
-                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));
+                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));*/
 
 
 
@@ -418,12 +443,12 @@ RecyclerView recycler_view;
 
         int DEFAULT_TIMEOUT = 30 * 1000;
         cl.setMaxRetriesAndTimeout(5 , DEFAULT_TIMEOUT);
-        cl.post(url,params, new JsonHttpResponseHandler() {
+        cl.post(url, params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 
                 if (response != null) {
-                    Log.d(TAG, "user_profile_pic_update- " + response.toString());
+                    Log.d(TAG, "add_tenant- " + response.toString());
                     try {
                         loaderDialog.dismiss();
 
@@ -451,8 +476,12 @@ RecyclerView recycler_view;
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            public void onFailure(int statusCode, Header[] headers, String responseString,
+                                  Throwable throwable) {
                 super.onFailure(statusCode, headers, responseString, throwable);
+                loaderDialog.dismiss();
+
+                Log.d(TAG, "add tenant - " + responseString);
             }
         });
 

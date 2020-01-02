@@ -1,8 +1,11 @@
 package com.shield.resident.ui;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,7 +18,7 @@ import com.shield.resident.R;
 
 public class AboutUs extends AppCompatActivity {
     ImageView img_back;
-    TextView tv_aboutus;
+    TextView tv_aboutus, tv_appVersion;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +26,24 @@ public class AboutUs extends AppCompatActivity {
 
         tv_aboutus=findViewById(R.id.tv_aboutus);
         img_back=findViewById(R.id.img_back);
+        tv_appVersion=findViewById(R.id.tv_appVersion);
+
+
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            String versionName = pInfo.versionName;
+            int versionCode = pInfo.versionCode;
+
+            Log.d("TAG", "versionName = "+versionName);
+            Log.d("TAG", "versionCode = "+versionCode);
+
+            tv_appVersion.setText("App Version: "+versionName);
+
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
 
         img_back.setOnClickListener(new View.OnClickListener() {
             @Override

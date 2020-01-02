@@ -46,7 +46,7 @@
             android:layout_height="wrap_content"
             android:inputType="number"
             android:itemBackground="@android:color/white"
-            android:textColor="@color/blue"
+            android:textColor="@color/black"
             app:itemCount="4"
             android:textStyle="bold"
             app:lineColor="@color/colorPrimary"
