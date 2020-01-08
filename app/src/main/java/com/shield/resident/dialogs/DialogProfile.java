@@ -141,7 +141,6 @@ public class DialogProfile extends Dialog implements ProfileFlatAdapter.ViewClic
         recycler_user_flats.setLayoutManager(new LinearLayoutManager(context));
         setData();
 
-        //getFlatListOwnerWise();
 
     }
 
@@ -278,6 +277,7 @@ public class DialogProfile extends Dialog implements ProfileFlatAdapter.ViewClic
         globalClass.setComplex_id(hashMap.get("complex_id"));
         globalClass.setComplex_name(hashMap.get("complex_name"));
         globalClass.setBlock(hashMap.get("block"));
+        globalClass.setIs_tenant(hashMap.get("tenant"));
 
 
         preference.savePrefrence();

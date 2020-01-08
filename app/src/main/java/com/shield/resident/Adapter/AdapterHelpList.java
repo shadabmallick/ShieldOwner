@@ -68,16 +68,12 @@ public class AdapterHelpList  extends RecyclerView.Adapter<AdapterHelpList.MyVie
     @Override
     public int getItemCount() {
         return cityList.size();
-
-
-
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         // init the item view's
         TextView name;
         ImageView profile_image,iv_call;
-
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -86,8 +82,6 @@ public class AdapterHelpList  extends RecyclerView.Adapter<AdapterHelpList.MyVie
 
             profile_image =  itemView.findViewById(R.id.profile_image);
             iv_call =  itemView.findViewById(R.id.iv_call);
-
-
 
         }
     }

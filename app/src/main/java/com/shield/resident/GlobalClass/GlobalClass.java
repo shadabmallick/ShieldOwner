@@ -48,6 +48,7 @@ public class GlobalClass extends Application {
     String complex_id;
     String is_login;
     String first_time_login;
+    String is_tenant;
 
     public String getUser_type() {
         return user_type;
@@ -111,6 +112,14 @@ public class GlobalClass extends Application {
 
     public void setFirst_time_login(String first_time_login) {
         this.first_time_login = first_time_login;
+    }
+
+    public String getIs_tenant() {
+        return is_tenant;
+    }
+
+    public void setIs_tenant(String is_tenant) {
+        this.is_tenant = is_tenant;
     }
 
     public String getDevice_type() {

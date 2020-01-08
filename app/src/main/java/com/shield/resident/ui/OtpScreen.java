@@ -124,6 +124,7 @@ public class OtpScreen extends AppCompatActivity {
                         String user_image = data.optString("user_image");
                         String first_time_login = data.optString("first_time_login");
                         String is_login = data.optString("is_login");
+                        String tenant = data.optString("tenant");
 
                         globalClass.setId(user_id);
                         globalClass.setName(user_name);
@@ -139,6 +140,7 @@ public class OtpScreen extends AppCompatActivity {
                         globalClass.setComplex_id(complex_id);
                         globalClass.setFirst_time_login(first_time_login);
                         globalClass.setIs_login(is_login);
+                        globalClass.setIs_tenant(tenant);
                         globalClass.setLogin_status(true);
 
 
@@ -184,7 +186,7 @@ public class OtpScreen extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                     TastyToast.makeText(getApplicationContext(),
-                            "DATA NOT FOUND", TastyToast.LENGTH_LONG, TastyToast.WARNING);
+                            "Server error", TastyToast.LENGTH_LONG, TastyToast.WARNING);
 
                 }
 

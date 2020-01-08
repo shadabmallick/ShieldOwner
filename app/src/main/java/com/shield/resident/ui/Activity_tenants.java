@@ -407,6 +407,8 @@ RecyclerView recycler_view;
         cursor.moveToFirst();
         return cursor.getString(column_index);
     }
+
+
     public void AddTenant(final String name,final String phone){
 
         loaderDialog.show();
@@ -424,21 +426,15 @@ RecyclerView recycler_view;
 
         try{
 
-            params.put("image", p_image);
+            params.put("profileImage", p_image);
 
         }catch (FileNotFoundException e){
             e.printStackTrace();
         }
 
 
-        /*cl.setSSLSocketFactory(
-                new SSLSocketFactory(Config.getSslContext(),
-                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));*/
-
-
-
-        Log.d(TAG , "URL "+url);
-        Log.d(TAG , "params "+params.toString());
+       // Log.d(TAG , "URL "+url);
+       // Log.d(TAG , "params "+params.toString());
 
 
         int DEFAULT_TIMEOUT = 30 * 1000;
@@ -497,24 +493,21 @@ RecyclerView recycler_view;
         RequestParams params = new RequestParams();
 
         params.put("tenant_id", tenant_id);
-
-        cl.setSSLSocketFactory(
-                new SSLSocketFactory(Config.getSslContext(),
-                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));
+        params.put("flat_id", globalClass.getFlat_id());
 
 
-        Log.d(TAG , "URL "+url);
-        Log.d(TAG , "params "+params.toString());
+       // Log.d(TAG , "URL "+url);
+       // Log.d(TAG , "params "+params.toString());
 
 
-        int DEFAULT_TIMEOUT = 30 * 1000;
+        int DEFAULT_TIMEOUT = 15 * 1000;
         cl.setMaxRetriesAndTimeout(5 , DEFAULT_TIMEOUT);
         cl.post(url,params, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 
                 if (response != null) {
-                    Log.d(TAG, "user_profile_pic_update- " + response.toString());
+                    Log.d(TAG, "delete_tenant- " + response.toString());
                     try {
                         loaderDialog.dismiss();
 

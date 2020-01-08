@@ -34,7 +34,7 @@
         />
 
     <LinearLayout
-        android:id="@+id/car1"
+        android:id="@+id/ll_visitor_option"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

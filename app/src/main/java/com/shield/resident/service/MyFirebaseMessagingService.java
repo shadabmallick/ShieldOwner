@@ -179,6 +179,16 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 hashMap.put("url", url);
 
                 callTo(hashMap);
+
+            }else if (type.equals("tenant_blocked")){
+
+                shared_preference.setPref_logInStatus(false);
+                gotoLoginScreen();
+
+            }else if (type.equals("member_blocked")){
+
+                shared_preference.setPref_logInStatus(false);
+                gotoLoginScreen();
             }
 
             sendResponseToActivityScreen(getApplicationContext(), type);
@@ -280,5 +290,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         context.sendBroadcast(intent);
     }
 
+    private void gotoLoginScreen(){
+
+        Intent intent = new Intent(getApplicationContext(), Login.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+
+    }
 
 }

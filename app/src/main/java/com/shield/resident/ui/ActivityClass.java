@@ -27,7 +27,7 @@ public class ActivityClass extends AppCompatActivity {
     private AdaptorVisitor upcomingAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView.LayoutManager layoutManager1;
-    LinearLayout center_button,car1,rel_upcoming_visitor,rel_all_visitor;
+    LinearLayout center_button,ll_visitor_option,rel_upcoming_visitor,rel_all_visitor;
     private  boolean button1IsVisible = true;
     private  boolean viwe1IsVisible = true;
     View view_all_visitor,view_upcoming_visitor;
@@ -42,7 +42,7 @@ public class ActivityClass extends AppCompatActivity {
         recycle_activity =  findViewById(R.id.recycle_activity);
         recycle_upcoming =  findViewById(R.id.recycle_upcoming);
         center_button =  findViewById(R.id.button_E2);
-        car1 =  findViewById(R.id.car1);
+        ll_visitor_option =  findViewById(R.id.ll_visitor_option);
         view_upcoming_visitor =  findViewById(R.id.view_upcoming_visitor);
         view_all_visitor =  findViewById(R.id.view_all_visitor);
         rel_all_visitor =  findViewById(R.id.rel_all_visitor);
@@ -91,13 +91,13 @@ public class ActivityClass extends AppCompatActivity {
                 if(button1IsVisible==true)
                 {
 
-                    car1.setVisibility(View.VISIBLE);
+                    ll_visitor_option.setVisibility(View.VISIBLE);
                     button1IsVisible = false;
                 }
                 else if(button1IsVisible==false)
                 {
                     // car1.animate().alpha(1.0f);
-                    car1.setVisibility(View.GONE);
+                    ll_visitor_option.setVisibility(View.GONE);
                     button1IsVisible = true;
                 }
             }

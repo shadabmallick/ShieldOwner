@@ -338,7 +338,7 @@ public class DialogGuestActivityAdd extends AppCompatActivity {
 
     private void showDialog(final String qr_code,final String image){
 
-        DialogQrCode dialogQrCode = new DialogQrCode(this,qr_code,image);
+        DialogQrCode dialogQrCode = new DialogQrCode(this, qr_code, image);
         dialogQrCode.show();
         dialogQrCode.setOnDismissListener(dialog -> {
 

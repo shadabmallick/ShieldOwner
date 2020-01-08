@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
+import com.sdsmdg.tastytoast.TastyToast;
 import com.shield.resident.Adapter.ViewPagerAdapter;
 import com.shield.resident.GlobalClass.GlobalClass;
 import com.shield.resident.R;
@@ -31,7 +32,7 @@ public class SecurityScreen extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager viewPager;
     ViewPagerAdapter viewPagerAdapter;
-    LinearLayout ll_activty_class,ll_comunity,ll_security,car1, ll_app_help;
+    LinearLayout ll_activty_class,ll_comunity,ll_security,ll_visitor_option, ll_app_help;
     RelativeLayout rel_middle_icon;
     LinearLayout ll_activity;
     LinearLayout ll_bell;
@@ -52,7 +53,7 @@ public class SecurityScreen extends AppCompatActivity {
         ll_comunity =  findViewById(R.id.button_E3);
         ll_security =  findViewById(R.id.button_E1);
         rel_middle_icon =  findViewById(R.id.rel_middle_icon);
-        car1 =  findViewById(R.id.car1);
+        ll_visitor_option =  findViewById(R.id.ll_visitor_option);
 
         ll_security=findViewById(R.id.button_E1);
         ll_app_help=findViewById(R.id.button_E4);
@@ -62,7 +63,7 @@ public class SecurityScreen extends AppCompatActivity {
         img_help=  findViewById(R.id.img_help);
         rel_middle_icon =  findViewById(R.id.rel_middle_icon);
         ll_bell =  findViewById(R.id.ll_bell);
-        car1 =  findViewById(R.id.car1);
+
         globalClass = (GlobalClass) getApplicationContext();
 
         loaderDialog = new LoaderDialog(this, android.R.style.Theme_Translucent,
@@ -94,9 +95,14 @@ public class SecurityScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                car1.setVisibility(car1.getVisibility() ==
-                        View.VISIBLE ? View.GONE : View.VISIBLE);
-
+                if (globalClass.getIs_tenant().equals("no")){
+                    ll_visitor_option.setVisibility(ll_visitor_option.getVisibility()
+                            == View.VISIBLE ? View.GONE : View.VISIBLE);
+                }else {
+                    TastyToast.makeText(getApplicationContext(),
+                            "You shifted this features to your tenant",
+                            TastyToast.LENGTH_LONG, TastyToast.INFO);
+                }
             }
         });
 
@@ -108,7 +114,7 @@ public class SecurityScreen extends AppCompatActivity {
 
         img_cab.setOnClickListener(v -> {
 
-            car1.setVisibility(View.GONE);
+            ll_visitor_option.setVisibility(View.GONE);
 
             DialogCabAdd dialogCabAdd = new DialogCabAdd(SecurityScreen.this);
             dialogCabAdd.show();
@@ -117,7 +123,7 @@ public class SecurityScreen extends AppCompatActivity {
 
         img_delivery.setOnClickListener(v -> {
 
-            car1.setVisibility(View.GONE);
+            ll_visitor_option.setVisibility(View.GONE);
 
             DialogDeliveryAdd dialogDeliveryAdd = new DialogDeliveryAdd(SecurityScreen.this);
             dialogDeliveryAdd.show();
@@ -126,7 +132,7 @@ public class SecurityScreen extends AppCompatActivity {
 
 
         img_guest.setOnClickListener(v -> {
-            car1.setVisibility(View.GONE);
+            ll_visitor_option.setVisibility(View.GONE);
 
             /*DialogGuestAdd dialogGuestAdd = new DialogGuestAdd(SecurityScreen.this);
             dialogGuestAdd.show();*/
@@ -138,7 +144,7 @@ public class SecurityScreen extends AppCompatActivity {
         });
 
         img_help.setOnClickListener(v -> {
-            car1.setVisibility(View.GONE);
+            ll_visitor_option.setVisibility(View.GONE);
 
             /*DialogHelpAdd dialogHelpAdd = new DialogHelpAdd(SecurityScreen.this);
             dialogHelpAdd.show();*/
@@ -153,7 +159,7 @@ public class SecurityScreen extends AppCompatActivity {
 
         ll_bell.setOnClickListener(v -> {
 
-            car1.setVisibility(View.GONE);
+            ll_visitor_option.setVisibility(View.GONE);
 
             DialogAlarmAdd dialogAlarmAdd = new DialogAlarmAdd(SecurityScreen.this);
             dialogAlarmAdd.show();

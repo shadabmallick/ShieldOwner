@@ -124,7 +124,8 @@ public class Activity_activity extends AppCompatActivity implements
     EditText tv_others;
     String type_in_out, response_value = "", approved_by = "";
     LinearLayout ll_bell,button_activity,
-            car1,rel_upcoming_visitor,rel_all_visitor,ll_community, ll_app_help, linear_nodata;
+            view_add_visitor,rel_upcoming_visitor,rel_all_visitor,ll_community,
+            ll_app_help, linear_nodata;
     RelativeLayout rl_profile;
     View view_all_visitor,view_upcoming_visitor;
     TextView tv_upcoming_visitor,tv_all_visitor,tv_flat_name;
@@ -183,7 +184,7 @@ public class Activity_activity extends AppCompatActivity implements
         button_activity =  findViewById(R.id.button_E1);
         ll_community =  findViewById(R.id.button_E3);
         rel_middle_icon =  findViewById(R.id.rel_middle_icon);
-        car1 =  findViewById(R.id.car1);
+        view_add_visitor =  findViewById(R.id.view_add_visitor);
         rl_profile =  findViewById(R.id.rl_profile);
         img_guest =  findViewById(R.id.img_guest);
         img_delivery =  findViewById(R.id.img_delivery);
@@ -214,7 +215,7 @@ public class Activity_activity extends AppCompatActivity implements
 
         img_cab.setOnClickListener(v -> {
 
-            car1.setVisibility(View.GONE);
+            view_add_visitor.setVisibility(View.GONE);
 
             DialogCabAdd dialogCabAdd = new DialogCabAdd(Activity_activity.this);
             dialogCabAdd.show();
@@ -227,7 +228,7 @@ public class Activity_activity extends AppCompatActivity implements
 
         img_delivery.setOnClickListener(v -> {
 
-            car1.setVisibility(View.GONE);
+            view_add_visitor.setVisibility(View.GONE);
 
             DialogDeliveryAdd dialogDeliveryAdd = new DialogDeliveryAdd(Activity_activity.this);
             dialogDeliveryAdd.show();
@@ -240,7 +241,7 @@ public class Activity_activity extends AppCompatActivity implements
 
 
         img_guest.setOnClickListener(v -> {
-            car1.setVisibility(View.GONE);
+            view_add_visitor.setVisibility(View.GONE);
 
             //DialogGuestAdd dialogGuestAdd = new DialogGuestAdd(Activity_activity.this);
             //dialogGuestAdd.show();
@@ -258,7 +259,7 @@ public class Activity_activity extends AppCompatActivity implements
         });
 
         img_help.setOnClickListener(v -> {
-            car1.setVisibility(View.GONE);
+            view_add_visitor.setVisibility(View.GONE);
 
            /* DialogHelpAdd dialogHelpAdd = new DialogHelpAdd(Activity_activity.this);
             dialogHelpAdd.show();
@@ -276,7 +277,7 @@ public class Activity_activity extends AppCompatActivity implements
 
         ll_bell.setOnClickListener(v -> {
 
-            car1.setVisibility(View.GONE);
+            view_add_visitor.setVisibility(View.GONE);
 
             DialogAlarmAdd dialogAlarmAdd = new DialogAlarmAdd(Activity_activity.this);
             dialogAlarmAdd.show();
@@ -319,8 +320,14 @@ public class Activity_activity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
 
-                car1.setVisibility(car1.getVisibility()
-                        == View.VISIBLE ? View.GONE : View.VISIBLE);
+                if (globalClass.getIs_tenant().equals("no")){
+                    view_add_visitor.setVisibility(view_add_visitor.getVisibility()
+                            == View.VISIBLE ? View.GONE : View.VISIBLE);
+                }else {
+                    TastyToast.makeText(getApplicationContext(),
+                            "You shifted this features to your tenant",
+                            TastyToast.LENGTH_LONG, TastyToast.INFO);
+                }
 
             }
         });
@@ -959,6 +966,9 @@ public class Activity_activity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         forAllVisitor();
+
+        getFlatListOwnerWise();
+
         super.onResume();
     }
 
@@ -1345,6 +1355,7 @@ public class Activity_activity extends AppCompatActivity implements
             globalClass.setComplex_id(hashMap.get("complex_id"));
             globalClass.setComplex_name(hashMap.get("complex_name"));
             globalClass.setBlock(hashMap.get("block"));
+            globalClass.setIs_tenant(hashMap.get("tenant"));
 
             prefManager.savePrefrence();
             prefManager.loadPrefrence();
@@ -1386,6 +1397,7 @@ public class Activity_activity extends AppCompatActivity implements
             globalClass.setComplex_id(hashMap.get("complex_id"));
             globalClass.setComplex_name(hashMap.get("complex_name"));
             globalClass.setBlock(hashMap.get("block"));
+            globalClass.setIs_tenant(hashMap.get("tenant"));
 
             prefManager.savePrefrence();
             prefManager.loadPrefrence();
@@ -1444,6 +1456,7 @@ public class Activity_activity extends AppCompatActivity implements
                             String flat_no = flat.optString("flat_no");
                             String block = flat.optString("block");
                             String floor = flat.optString("floor");
+                            String tenant = flat.optString("tenant");
 
                             HashMap<String, String> map_ser = new HashMap<>();
 
@@ -1454,6 +1467,7 @@ public class Activity_activity extends AppCompatActivity implements
                             map_ser.put("flat_no", flat_no);
                             map_ser.put("block", block);
                             map_ser.put("floor", floor);
+                            map_ser.put("tenant", tenant);
 
 
                             // 1 = owner, 4 = member, 6 = tenant
@@ -1466,6 +1480,23 @@ public class Activity_activity extends AppCompatActivity implements
                             }else if (user_type.equals("6")){
                                 map_ser.put("user_type", "tenant");
                             }
+
+                            if (globalClass.getFlat_id().equals(flat_id)){
+
+                                globalClass.setFlat_id(map_ser.get("flat_id"));
+                                globalClass.setFlat_name(map_ser.get("flat_no"));
+
+                                globalClass.setUser_type(map_ser.get("user_type"));
+                                globalClass.setComplex_id(map_ser.get("complex_id"));
+                                globalClass.setComplex_name(map_ser.get("complex_name"));
+                                globalClass.setBlock(map_ser.get("block"));
+                                globalClass.setIs_tenant(map_ser.get("tenant"));
+
+                                prefManager.savePrefrence();
+                                prefManager.loadPrefrence();
+
+                            }
+
 
                             listOwnerFlat.add(map_ser);
                         }

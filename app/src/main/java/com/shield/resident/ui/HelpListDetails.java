@@ -48,7 +48,7 @@ public class HelpListDetails extends AppCompatActivity {
     GlobalClass globalClass;
     Shared_Preference prefManager;
     AdapterHelpList adapterHelpList;
-    ArrayList<HashMap<String,String>> cityList;
+    ArrayList<HashMap<String,String>> hashMapArrayList;
     LinearLayout linear_nodata;
 
     LoaderDialog loaderDialog;
@@ -75,20 +75,18 @@ public class HelpListDetails extends AppCompatActivity {
         globalClass = (GlobalClass) getApplicationContext();
         prefManager = new Shared_Preference(this);
 
-
-        cityList=new ArrayList<>();
-
+        hashMapArrayList=new ArrayList<>();
 
         recycler_view.setLayoutManager(new LinearLayoutManager(this));
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null){
 
-            String block = bundle.getString("category");
+            String category = bundle.getString("category");
 
-            getSupportActionBar().setTitle(block);
+            getSupportActionBar().setTitle(category);
 
-            HelpListDetails(block);
+            HelpListDetailsApi(category);
         }
 
 
@@ -105,9 +103,9 @@ public class HelpListDetails extends AppCompatActivity {
         return (super.onOptionsItemSelected(menuItem));
     }
 
-    private void HelpListDetails(final String category) {
+    private void HelpListDetailsApi(final String category) {
         // Tag used to cancel the request
-        cityList.clear();
+        hashMapArrayList.clear();
         loaderDialog.show();
 
         StringRequest strReq = new StringRequest(Request.Method.POST,
@@ -153,28 +151,24 @@ public class HelpListDetails extends AppCompatActivity {
                             map_ser.put("category", category);
                             map_ser.put("mobile", mobile);
 
-                            cityList.add(map_ser);
-                            Log.d(TAG, "cityList: "+cityList);
+                            hashMapArrayList.add(map_ser);
 
                         }
 
                         adapterHelpList = new AdapterHelpList(HelpListDetails.this,
-                                cityList);
+                                hashMapArrayList);
                         recycler_view.setAdapter(adapterHelpList);
 
-                        if (cityList.size() == 0){
+                        if (hashMapArrayList.size() == 0){
                             linear_nodata.setVisibility(View.VISIBLE);
                         }
 
-                    }
-                    else {
+                    } else {
+
                         linear_nodata.setVisibility(View.VISIBLE);
                         recycler_view.setVisibility(View.GONE);
-                        TastyToast.makeText(getApplicationContext(),
-                                message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                     }
-
 
 
                 } catch (Exception e) {
@@ -191,8 +185,6 @@ public class HelpListDetails extends AppCompatActivity {
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                TastyToast.makeText(HelpListDetails.this, "", TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
             }
         }) {
             @Override
@@ -201,11 +193,12 @@ public class HelpListDetails extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
 
                 params.put("category", category);
+                params.put("complex_id", globalClass.getComplex_id());
+
                 Log.d(TAG, "getParams: "+params);
 
                 return params;
             }
-
 
         };
 

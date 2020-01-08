@@ -176,6 +176,8 @@ public class SettingActivity extends AppCompatActivity {
 
                 tv_details.setTypeface(null, Typeface.BOLD); //only text style(only bold)
 
+                profile_details_api_call();
+
             }
         });
         app_setting.setOnClickListener(new View.OnClickListener() {
@@ -465,8 +467,17 @@ public class SettingActivity extends AppCompatActivity {
         rel_middle_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ll_visitor_option.setVisibility(ll_visitor_option.getVisibility()
-                        == View.VISIBLE ? View.GONE : View.VISIBLE);
+
+                if (globalClass.getIs_tenant().equals("no")){
+                    ll_visitor_option.setVisibility(ll_visitor_option.getVisibility()
+                            == View.VISIBLE ? View.GONE : View.VISIBLE);
+                }else {
+                    TastyToast.makeText(getApplicationContext(),
+                            "You shifted this features to your tenant",
+                            TastyToast.LENGTH_LONG, TastyToast.INFO);
+                }
+
+
 
             }
         });

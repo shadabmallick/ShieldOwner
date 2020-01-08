@@ -79,6 +79,7 @@ public class Shared_Preference {
     private static final String prefcomplex_id="prefcomplex_id";
     private static final String prefis_login="prefis_login";
     private static final String preffirst_time_login="preffirst_time_login";
+    private static final String tenant="tenant";
 
 
     public Shared_Preference(Context context) {
@@ -101,6 +102,11 @@ public class Shared_Preference {
 
     public boolean isLogin(){
         return sharedPreferences.getBoolean(PREF_logInStatus, false);
+    }
+
+    public void setPref_logInStatus(boolean val){
+        editor.putBoolean(PREF_logInStatus, val);
+        editor.commit();
     }
 
     public void savePrefrence() {
@@ -179,6 +185,8 @@ public class Shared_Preference {
             login_from = globalclass.getLogin_from();
             editor.putString(PREF_login_from, login_from);
 
+            editor.putString(tenant, globalclass.getIs_tenant());
+
 
             editor.commit();
 
@@ -255,6 +263,7 @@ public class Shared_Preference {
             login_from=sharedPreferences.getString(PREF_login_from,"");
             globalclass.setLogin_from(login_from);
 
+            globalclass.setIs_tenant(sharedPreferences.getString(tenant,""));
 
             globalclass.setUser_type(sharedPreferences.getString(prefuser_type,""));
         }

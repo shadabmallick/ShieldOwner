@@ -186,7 +186,7 @@
         />
 
     <LinearLayout
-        android:id="@+id/car1"
+        android:id="@+id/view_add_visitor"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
