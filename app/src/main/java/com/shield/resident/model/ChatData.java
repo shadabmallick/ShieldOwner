@@ -16,6 +16,7 @@ public class ChatData implements Serializable {
     private String sender_name;
     private boolean is_me;
     private String image_from;
+    private String entry_date;
 
     public String getHelp_id() {
         return help_id;
@@ -113,6 +114,13 @@ public class ChatData implements Serializable {
         this.image_from = image_from;
     }
 
+    public String getEntry_date() {
+        return entry_date;
+    }
+
+    public void setEntry_date(String entry_date) {
+        this.entry_date = entry_date;
+    }
 
     /*  {
             "help_id": "20",

@@ -111,7 +111,16 @@ public class OwnerListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     private void setOwnerData(OwnerViewHolder holder, Owner ownerData){
 
-        holder.tv_name.setText(ownerData.getName());
+        String user_type = "";
+        if (ownerData.getUser_type().equals("1")){
+            user_type = " (Owner)";
+        }else  if (ownerData.getUser_type().equals("4")){
+            user_type = " (Member)";
+        }else  if (ownerData.getUser_type().equals("6")){
+            user_type = " (Tenant)";
+        }
+
+        holder.tv_name.setText(ownerData.getName() + user_type);
         holder.tv_flat_name.setText("Flat: "+ownerData.getFlat_no());
 
         if (ownerData.getPhone_show().equals("1")){

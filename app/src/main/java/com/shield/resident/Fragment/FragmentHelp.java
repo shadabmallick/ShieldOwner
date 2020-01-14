@@ -490,6 +490,8 @@ public class FragmentHelp extends Fragment {
         cursor.moveToFirst();
         return cursor.getString(column_index);
     }
+
+
     public void AddHelp(final String content){
 
         loaderDialog.show();
@@ -500,6 +502,7 @@ public class FragmentHelp extends Fragment {
 
 
         params.put("user_id",globalClass.getId());
+        params.put("flat_id",globalClass.getFlat_id());
         params.put("content", content);
 
         params.put("complex_id", globalClass.getComplex_id());

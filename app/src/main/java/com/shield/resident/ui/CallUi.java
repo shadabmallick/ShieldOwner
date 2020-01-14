@@ -137,7 +137,8 @@ public class CallUi extends AppCompatActivity {
 
             ll_leave_at_gate.setVisibility(View.GONE);
 
-            if (hashMap.get("type").equals("new delivery call")) {
+            if (hashMap.get("type").equals("new delivery call")
+                    || hashMap.get("type").equals("delivery call")) {
                 ll_leave_at_gate.setVisibility(View.VISIBLE);
             } else {
                 ll_leave_at_gate.setVisibility(View.GONE);
@@ -300,7 +301,7 @@ public class CallUi extends AppCompatActivity {
         params.put("status", status);
 
 
-        Log.d(AppConfig.TAG , "status_update- " + url);
+        //Log.d(AppConfig.TAG , "status_update- " + url);
         Log.d(AppConfig.TAG , "status_update- " + params.toString());
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -308,12 +309,14 @@ public class CallUi extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
 
-                        Log.d(AppConfig.TAG , "visitor_out- " +response);
+                        Log.d(AppConfig.TAG , "status_update- " +response);
 
                         if (response != null){
                             try {
 
                                 JSONObject main_object = new JSONObject(response);
+
+                                progressDialog.dismiss();
 
                                 int status = main_object.optInt("status");
                                 String message = main_object.optString("message");
@@ -334,10 +337,13 @@ public class CallUi extends AppCompatActivity {
                                     finish();
                                 }
 
-                                progressDialog.dismiss();
+
 
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                                progressDialog.dismiss();
+                                finish();
+
                             }
                         }
                     }
@@ -390,7 +396,7 @@ public class CallUi extends AppCompatActivity {
         params.put("status", status);
 
 
-        Log.d(AppConfig.TAG , "status_update- " + url);
+       // Log.d(AppConfig.TAG , "status_update- " + url);
         Log.d(AppConfig.TAG , "status_update- " + params.toString());
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -398,7 +404,7 @@ public class CallUi extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
 
-                Log.d(AppConfig.TAG , "visitor_out- " +response);
+                Log.d(AppConfig.TAG , "status_update- " +response);
 
                 if (response != null){
                     try {
@@ -428,6 +434,8 @@ public class CallUi extends AppCompatActivity {
 
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        finish();
+                        progressDialog.dismiss();
                     }
                 }
             }

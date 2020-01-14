@@ -201,22 +201,26 @@ public class NotificationManager extends AppCompatActivity {
 
                         JSONObject data = jsonObject.getJSONObject("data");
 
-                        String guest_notification = data.getString("guest_notification");
-                        String delivery_notification = data.getString("delivery_notification");
+                        String guest_entry_notification = data.getString("guest_entry_notification");
+                        String guest_exit_notification = data.getString("guest_exit_notification");
+                        String delivery_entry_notification = data.getString("delivery_entry_notification");
+                        String delivery_exit_notification = data.getString("delivery_exit_notification");
                         String help_notification = data.getString("help_notification");
-                        String cab_notification = data.getString("cab_notification");
-                        String staff_notification = data.getString("staff_notification");
-                        String car_notification = data.getString("car_notification");
+                        String cab_entry_notification = data.getString("cab_entry_notification");
+                        String cab_exit_notification = data.getString("cab_exit_notification");
+                        String staff_exit_notification = data.getString("staff_exit_notification");
+                        String staff_entry_notification = data.getString("staff_entry_notification");
+                        //String car_notification = data.getString("car_notification");
 
 
-                        if (guest_notification.equals("y")){
+                        if (guest_entry_notification.equals("y")){
                             switch_guest.setChecked(true);
                         }else {
                             switch_guest.setChecked(false);
                         }
 
 
-                        if (delivery_notification.equals("y")){
+                        if (delivery_entry_notification.equals("y")){
                             switch_delivery.setChecked(true);
                         }else {
                             switch_delivery.setChecked(false);
@@ -230,21 +234,19 @@ public class NotificationManager extends AppCompatActivity {
                         }
 
 
-                        if (cab_notification.equals("y")){
+                        if (cab_entry_notification.equals("y")){
                             switch_cab.setChecked(true);
                         }else {
                             switch_cab.setChecked(false);
                         }
 
 
-                        if (car_notification.equals("y")){
-                            switch_car.setChecked(true);
-                        }else {
-                            switch_car.setChecked(false);
-                        }
+
+                        switch_car.setChecked(false);
 
 
-                        if (staff_notification.equals("y")){
+
+                        if (staff_entry_notification.equals("y")){
                             switch_staff.setChecked(true);
                         }else {
                             switch_staff.setChecked(false);

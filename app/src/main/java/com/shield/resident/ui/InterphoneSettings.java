@@ -115,8 +115,8 @@ public class InterphoneSettings extends AppCompatActivity {
         params.put("user_id",globalClass.getId());
         params.put("flat_id",globalClass.getFlat_id());
 
-        cl.setSSLSocketFactory(new SSLSocketFactory(Config.getSslContext(),
-                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));
+       /* cl.setSSLSocketFactory(new SSLSocketFactory(Config.getSslContext(),
+                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));*/
 
         Log.d(TAG , "URL "+url);
         Log.d(TAG , "params "+params.toString());
@@ -185,9 +185,9 @@ public class InterphoneSettings extends AppCompatActivity {
         params.put("flat_id",globalClass.getFlat_id());
 
 
-        cl.setSSLSocketFactory(
+        /*cl.setSSLSocketFactory(
                 new SSLSocketFactory(Config.getSslContext(),
-                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));
+                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));*/
 
 
         Log.d(TAG , "URL "+url);

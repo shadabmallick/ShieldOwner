@@ -231,6 +231,7 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
                 Map<String, String> params = new HashMap<>();
 
                 params.put("flat_id", globalClass.getFlat_id());
+                params.put("complex_id", globalClass.getComplex_id());
 
                 Log.d(TAG, "getParams: "+params);
 

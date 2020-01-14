@@ -34,6 +34,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -107,7 +108,8 @@ public class Activity_activity extends AppCompatActivity implements
         ActivityListAdapterIN.ItemClickListenerIN,
         ActivityListAdapterIN.ItemClickListenerStatusUpdate,
         DatePickerDialog.OnDateSetListener,
-       categoryAdapter.onItemClickListner {
+        categoryAdapter.onItemClickListner,
+        SwipeRefreshLayout.OnRefreshListener{
 
    static String TAG = "Activity_activity";
     @BindView(R.id.recycle_activity) RecyclerView recycle_activity;
@@ -130,6 +132,7 @@ public class Activity_activity extends AppCompatActivity implements
     View view_all_visitor,view_upcoming_visitor;
     TextView tv_upcoming_visitor,tv_all_visitor,tv_flat_name;
     DigitTextView tv_digit_textview;
+    SwipeRefreshLayout swipe_refresh;
 
     String category, date_to_push;
     EditText edt_search;
@@ -145,6 +148,7 @@ public class Activity_activity extends AppCompatActivity implements
     ActivityListAdapterIN activityListAdapter;
     ArrayList<ListItem> mItems;
 
+    String all_upcoming;
 
     LoaderDialog loaderDialog;
 
@@ -198,6 +202,7 @@ public class Activity_activity extends AppCompatActivity implements
         linear_nodata = findViewById(R.id.linear_nodata);
         linear_nodata.setVisibility(View.GONE);
 
+        swipe_refresh = findViewById(R.id.swipe_refresh);
 
         recycle_activity.setVisibility(View.VISIBLE);
         recycle_upcoming.setVisibility(View.GONE);
@@ -210,6 +215,8 @@ public class Activity_activity extends AppCompatActivity implements
 
         Category=new ArrayList<>();
 
+        all_upcoming = "all";
+
         this.registerReceiver(mMessageReceiver, new IntentFilter("activity_screen"));
 
 
@@ -221,7 +228,7 @@ public class Activity_activity extends AppCompatActivity implements
             dialogCabAdd.show();
 
             dialogCabAdd.setOnDismissListener(dialog1 -> {
-                getActivityList("all");
+                forAllVisitor();
             });
 
         });
@@ -234,22 +241,13 @@ public class Activity_activity extends AppCompatActivity implements
             dialogDeliveryAdd.show();
 
             dialogDeliveryAdd.setOnDismissListener(dialog1 -> {
-                getActivityList("all");
+                forAllVisitor();
             });
 
         });
 
-
         img_guest.setOnClickListener(v -> {
             view_add_visitor.setVisibility(View.GONE);
-
-            //DialogGuestAdd dialogGuestAdd = new DialogGuestAdd(Activity_activity.this);
-            //dialogGuestAdd.show();
-
-            /*dialogGuestAdd.setOnDismissListener(dialog1 -> {
-                getActivityList("all");
-            });*/
-
 
             Intent intent = new Intent(Activity_activity.this,
                     DialogGuestActivityAdd.class);
@@ -260,13 +258,6 @@ public class Activity_activity extends AppCompatActivity implements
 
         img_help.setOnClickListener(v -> {
             view_add_visitor.setVisibility(View.GONE);
-
-           /* DialogHelpAdd dialogHelpAdd = new DialogHelpAdd(Activity_activity.this);
-            dialogHelpAdd.show();
-
-            dialogHelpAdd.setOnDismissListener(dialog1 -> {
-                getActivityList("all");
-            });*/
 
             Intent intent = new Intent(Activity_activity.this,
                     DialogHelpActivityAdd.class);
@@ -288,12 +279,14 @@ public class Activity_activity extends AppCompatActivity implements
         rel_all_visitor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                all_upcoming = "all";
                 forAllVisitor();
             }
         });
         rel_upcoming_visitor.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                all_upcoming = "up";
                 forUpcomingVisitor();
             }
         });
@@ -343,7 +336,6 @@ public class Activity_activity extends AppCompatActivity implements
         Date c = Calendar.getInstance().getTime();
         //System.out.println("Current time => " + c);
         String formattedDate = df_show.format(c);
-
         from_date = df_send.format(c);
         to_date = df_send.format(c);
 
@@ -354,7 +346,6 @@ public class Activity_activity extends AppCompatActivity implements
         mItems = new ArrayList<>();
         activityListAdapter = new ActivityListAdapterIN(Activity_activity.this,
                 mItems);
-
 
         edt_search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -381,9 +372,12 @@ public class Activity_activity extends AppCompatActivity implements
             }
         });
 
+        swipe_refresh.setOnRefreshListener(this);
+
         setSwipeAction();
 
         tabViews();
+
     }
 
     private void tabViews(){
@@ -719,7 +713,10 @@ public class Activity_activity extends AppCompatActivity implements
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
+
+                            swipe_refresh.setRefreshing(false);
                         }
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -1356,6 +1353,8 @@ public class Activity_activity extends AppCompatActivity implements
             globalClass.setComplex_name(hashMap.get("complex_name"));
             globalClass.setBlock(hashMap.get("block"));
             globalClass.setIs_tenant(hashMap.get("tenant"));
+            globalClass.setPayment_system(hashMap.get("payment_system"));
+
 
             prefManager.savePrefrence();
             prefManager.loadPrefrence();
@@ -1398,6 +1397,8 @@ public class Activity_activity extends AppCompatActivity implements
             globalClass.setComplex_name(hashMap.get("complex_name"));
             globalClass.setBlock(hashMap.get("block"));
             globalClass.setIs_tenant(hashMap.get("tenant"));
+            globalClass.setPayment_system(hashMap.get("payment_system"));
+
 
             prefManager.savePrefrence();
             prefManager.loadPrefrence();
@@ -1457,6 +1458,7 @@ public class Activity_activity extends AppCompatActivity implements
                             String block = flat.optString("block");
                             String floor = flat.optString("floor");
                             String tenant = flat.optString("tenant");
+                            String payment_system = flat.optString("payment_system");
 
                             HashMap<String, String> map_ser = new HashMap<>();
 
@@ -1468,6 +1470,7 @@ public class Activity_activity extends AppCompatActivity implements
                             map_ser.put("block", block);
                             map_ser.put("floor", floor);
                             map_ser.put("tenant", tenant);
+                            map_ser.put("payment_system", payment_system);
 
 
                             // 1 = owner, 4 = member, 6 = tenant
@@ -1491,6 +1494,7 @@ public class Activity_activity extends AppCompatActivity implements
                                 globalClass.setComplex_name(map_ser.get("complex_name"));
                                 globalClass.setBlock(map_ser.get("block"));
                                 globalClass.setIs_tenant(map_ser.get("tenant"));
+                                globalClass.setPayment_system(map_ser.get("payment_system"));
 
                                 prefManager.savePrefrence();
                                 prefManager.loadPrefrence();
@@ -1536,6 +1540,18 @@ public class Activity_activity extends AppCompatActivity implements
         GlobalClass.getInstance().addToRequestQueue(strReq, tag_string_req);
         strReq.setRetryPolicy(new DefaultRetryPolicy(20 * 1000,
                 10, 1.0f));
+
+    }
+
+
+    @Override
+    public void onRefresh() {
+
+        if (all_upcoming.equals("all")){
+            forAllVisitor();
+        }else {
+            forUpcomingVisitor();
+        }
 
     }
 

@@ -66,7 +66,9 @@ public class AppConfig {
     public static final String update_user_notification_status
             = URL_DEV + "update_user_notification_status";
 
-
+    public static final String add_contact                  = URL_DEV + "add_contact";
+    public static final String complex_details              = URL_DEV + "complex_details";
+    public static final String about                        = URL_DEV + "about";
 
     //// static types of visitor ...
     public static final String visiting_help = "visiting_help";

@@ -56,10 +56,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             String message = remoteMessage.getData().get("body"); // message
             String title = remoteMessage.getData().get("title"); // Notification
 
-
             String type = remoteMessage.getData().get("type"); // call/new call
 
             showNotification(title, message);
+
 
             if (type != null && type.equals("call")){
 
@@ -180,15 +180,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                 callTo(hashMap);
 
-            }else if (type.equals("tenant_blocked")){
+            }else if (type != null && type.equals("tenant_blocked")){
 
                 shared_preference.setPref_logInStatus(false);
                 gotoLoginScreen();
 
-            }else if (type.equals("member_blocked")){
+            }else if (type != null && type.equals("member_blocked")){
 
                 shared_preference.setPref_logInStatus(false);
                 gotoLoginScreen();
+
+            }else if (type != null && type.equals("chat")){
+
+                String chat_data = remoteMessage.getData().get("chat_data");
+                sendResponseToChatScreen(getApplicationContext(), type, chat_data);
+
             }
 
             sendResponseToActivityScreen(getApplicationContext(), type);
@@ -196,16 +202,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 
     }
-
-
-    private void handleNotification(String title, String message) {
-        if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
-            showNotification(title, message);
-        }else{
-            showNotification(title, message);
-        }
-    }
-
 
 
     public void showNotification(String title, String message) {
@@ -256,21 +252,27 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
-                    "Shield Residents",
+                    "Shield_Residents",
                     NotificationManager.IMPORTANCE_HIGH);
+
+
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
+                    .build();
 
             AudioAttributes attributes = new AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_NOTIFICATION)
                     .build();
 
-            channel.setSound(defaultSoundUri, attributes);
+            channel.setSound(defaultSoundUri, audioAttributes);
             channel.setDescription(message);
             channel.setVibrationPattern(vibrate);
 
             notificationManager.createNotificationChannel(channel);
         }
 
-        notificationManager.notify(1, notification);
+        notificationManager.notify(getNotiId(), notification);
     }
 
 
@@ -290,12 +292,23 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         context.sendBroadcast(intent);
     }
 
+    static void sendResponseToChatScreen(Context context, String type, String chat_data) {
+        Intent intent = new Intent("chat_screen");
+        intent.putExtra("type", type);
+        intent.putExtra("chat_data", chat_data);
+        context.sendBroadcast(intent);
+    }
+
     private void gotoLoginScreen(){
 
         Intent intent = new Intent(getApplicationContext(), Login.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
 
+    }
+
+    private int getNotiId(){
+        return (int)System.currentTimeMillis();
     }
 
 }

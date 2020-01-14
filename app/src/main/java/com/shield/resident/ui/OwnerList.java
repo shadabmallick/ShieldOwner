@@ -171,6 +171,7 @@ public class OwnerList extends AppCompatActivity implements
                                     owner.setMobile(obj1.optString("mobile"));
                                     owner.setEmailid(obj1.optString("emailid"));
                                     owner.setPhone_show(obj1.optString("phone_show"));
+                                    owner.setUser_type(obj1.optString("user_type"));
 
                                     arrayList.add(owner);
 

@@ -52,6 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="end"
+                android:textSize="@dimen/dimen_18sp"
                 />
 
             <TextView
@@ -60,7 +61,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_marginVertical="10dp"
-                android:text="@string/about_us_text"
                 />
 
         </LinearLayout>

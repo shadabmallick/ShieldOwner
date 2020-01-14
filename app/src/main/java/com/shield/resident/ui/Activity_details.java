@@ -729,9 +729,9 @@ public class Activity_details extends AppCompatActivity {
         params.put("activity_id", activityChild.getActivity_id());
         params.put("table", activityChild.getType());
 
-        client.setSSLSocketFactory(
+       /* client.setSSLSocketFactory(
                 new SSLSocketFactory(Config.getSslContext(),
-                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));
+                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));*/
 
         Log.d(AppConfig.TAG , "delete_activity- " + url);
         Log.d(AppConfig.TAG , "delete_activity- " + params.toString());

@@ -54,7 +54,7 @@ public class AdapterHelp extends RecyclerView.Adapter<AdapterHelp.MyViewHolder> 
 
         holder.tv_help_id.setText("Help Id: "+help.get("help_id"));
 
-        holder.tv_status.setText(help.get("status"));
+
 
         holder.tv_content.setText(help.get("content"));
 
@@ -71,8 +71,30 @@ public class AdapterHelp extends RecyclerView.Adapter<AdapterHelp.MyViewHolder> 
         showActualInTime(holder.tv_post_date, date);
 
 
+        holder.tv_status.setText(help.get("status"));
+        if (help.get("status").equalsIgnoreCase("Pending")){
+            holder.tv_status.setBackgroundResource(R.drawable.curved_orange);
 
-        holder.tv_content.setVisibility(View.GONE);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent intent = new Intent(context, ChatGroup.class);
+                    intent.putExtra("id", arrayList.get(position).get("help_id"));
+                    intent.putExtra("content", arrayList.get(position).get("content"));
+                    context.startActivity(intent);
+
+                }
+            });
+
+
+
+        }else {
+            holder.tv_status.setBackgroundResource(R.drawable.curved_green2);
+
+            holder.itemView.setOnClickListener(null);
+        }
+
 
         try {
 
@@ -93,18 +115,6 @@ public class AdapterHelp extends RecyclerView.Adapter<AdapterHelp.MyViewHolder> 
         }catch (Exception e){
             e.printStackTrace();
         }
-
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(context, ChatGroup.class);
-                intent.putExtra("id", arrayList.get(position).get("help_id"));
-                intent.putExtra("content", arrayList.get(position).get("content"));
-                context.startActivity(intent);
-
-            }
-        });
 
 
 

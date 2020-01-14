@@ -706,7 +706,7 @@ public class ChatGroup extends AppCompatActivity implements
         @Override
         public void onReceive(Context context, Intent intent) {
             // Extract data included in the Intent
-            String chat_data = intent.getStringExtra("data");
+            String chat_data = intent.getStringExtra("chat_data");
             //do other stuff here
             Log.d(TAG, "chat_data = "+chat_data);
 
@@ -722,11 +722,16 @@ public class ChatGroup extends AppCompatActivity implements
                 chatData.setChat_id(object.optString("chat_id"));
                 chatData.setType(object.optString("type")); // user type
                 chatData.setHelp_id(object.optString("help_id"));
-               chatData.setSender_name(object.optString("sender_name"));
+                chatData.setSender_name(object.optString("sender_name"));
                 chatData.setContent(object.optString("content"));
                 chatData.setImage(object.optString("image"));
-                chatData.setDate(object.optString("date"));
-                chatData.setTime(object.optString("time"));
+
+                String entry_date = object.optString("entry_date");
+                String[] array = entry_date.split(" ");
+
+                chatData.setDate(array[0]);
+                chatData.setTime(array[1]);
+
                 chatData.setStatus(object.optString("status"));
                 chatData.setImage_from("web");
 

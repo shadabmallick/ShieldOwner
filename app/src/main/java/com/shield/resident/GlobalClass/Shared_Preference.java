@@ -80,6 +80,7 @@ public class Shared_Preference {
     private static final String prefis_login="prefis_login";
     private static final String preffirst_time_login="preffirst_time_login";
     private static final String tenant="tenant";
+    private static final String payment_system="payment_system";
 
 
     public Shared_Preference(Context context) {
@@ -187,6 +188,8 @@ public class Shared_Preference {
 
             editor.putString(tenant, globalclass.getIs_tenant());
 
+            editor.putString(payment_system, globalclass.getPayment_system());
+
 
             editor.commit();
 
@@ -264,6 +267,8 @@ public class Shared_Preference {
             globalclass.setLogin_from(login_from);
 
             globalclass.setIs_tenant(sharedPreferences.getString(tenant,""));
+
+            globalclass.setPayment_system(sharedPreferences.getString(payment_system,""));
 
             globalclass.setUser_type(sharedPreferences.getString(prefuser_type,""));
         }

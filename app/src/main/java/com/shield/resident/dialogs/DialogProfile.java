@@ -137,6 +137,12 @@ public class DialogProfile extends Dialog implements ProfileFlatAdapter.ViewClic
         });
 
 
+        if (globalClass.getPayment_system().equals("1")){
+            ll_invoice.setVisibility(View.VISIBLE);
+        }else {
+            ll_invoice.setVisibility(View.GONE);
+        }
+
 
         recycler_user_flats.setLayoutManager(new LinearLayoutManager(context));
         setData();
@@ -180,16 +186,30 @@ public class DialogProfile extends Dialog implements ProfileFlatAdapter.ViewClic
                             String flat_no = flat.optString("flat_no");
                             String block = flat.optString("block");
                             String floor = flat.optString("floor");
+                            String tenant = flat.optString("tenant");
+                            String payment_system = flat.optString("payment_system");
 
                             HashMap<String, String> map_ser = new HashMap<>();
 
                             map_ser.put("complex_id", complex_id);
-                            map_ser.put("user_type", user_type);
                             map_ser.put("complex_name", complex_name);
                             map_ser.put("flat_id", flat_id);
                             map_ser.put("flat_no", flat_no);
                             map_ser.put("block", block);
                             map_ser.put("floor", floor);
+                            map_ser.put("tenant", tenant);
+                            map_ser.put("payment_system", payment_system);
+
+
+                            if (user_type.equals("1")){
+                                map_ser.put("user_type", "owner");
+                            }else if (user_type.equals("4")){
+                                map_ser.put("user_type", "member");
+                            }else if (user_type.equals("6")){
+                                map_ser.put("user_type", "tenant");
+                            }
+
+
 
                            // mapArrayList.add(map_ser);
                         }
@@ -278,6 +298,7 @@ public class DialogProfile extends Dialog implements ProfileFlatAdapter.ViewClic
         globalClass.setComplex_name(hashMap.get("complex_name"));
         globalClass.setBlock(hashMap.get("block"));
         globalClass.setIs_tenant(hashMap.get("tenant"));
+        globalClass.setPayment_system(hashMap.get("payment_system"));
 
 
         preference.savePrefrence();

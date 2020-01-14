@@ -1,5 +1,6 @@
 package com.shield.resident.ui;
 
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -14,7 +15,24 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.sdsmdg.tastytoast.TastyToast;
+import com.shield.resident.Constant.AppConfig;
+import com.shield.resident.GlobalClass.VolleySingleton;
 import com.shield.resident.R;
+
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.shield.resident.GlobalClass.VolleySingleton.backOff;
+import static com.shield.resident.GlobalClass.VolleySingleton.nuOfRetry;
+import static com.shield.resident.GlobalClass.VolleySingleton.timeOut;
 
 public class AboutUs extends AppCompatActivity {
     ImageView img_back;
@@ -43,8 +61,6 @@ public class AboutUs extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
-
         img_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,35 +68,68 @@ public class AboutUs extends AppCompatActivity {
             }
         });
 
-
-
-        String s = "SHIELD is an easy to understand security app/platform that is intelligent, efficient and affordable. It is a realistic and reasonable app that can be used in residential complexes, private security agencies, corporate companies, hospitals and educational institutions.\n" +
-                " \n" +
-                "SHIELD will make sure the user lives peacefully and not risk office or home security.\n" +
-                "\n" +
-                "\n" +
-                "Some of the features include:\n" +
-                "\n" +
-                "Single page management: The managing committee can check all the activities and updates through instant notifications. They can also look into different complaints, attendance of servants and communicate with any member of the group through the app.\n" +
-                "\n" +
-                "Approval of guests: Any visitors or outsiders will only gain entry if approved by the concerned resident. They will either by entering through a passkey or be pre-approved by the residents.\n" +
-                "\n" +
-                "Delivery option: The SHIELD app offers 'Leave at gate' facility for leaving any courier or parcel at the entry gate to be collected later by the owner.\n" +
-                "\n" +
-                "Payments: The payment section of SHIELD offers the users a unified accounting platform. Payments in various modes can be easily processed by the platform. Different kinds of monthly reports and invoices relating to the premises can also be accessed through the app.\n" +
-                "\n" +
-                "What can the users expect from the app?\n" +
-                "Authorization, validation and managing at the entry gate\n" +
-                "Notification with photo before anyone knocks at the door\n" +
-                "Notification upon guest arrival\n" +
-                "Notification when help arrives\n" +
-                "Pre-approval of the cab to enter the premises\n" +
-                "\n" +
-                "Welcome to a safe and secured neighbourhood that is protected by SHIELD.";
-
-        tv_aboutus.setText(s);
+        about();
 
     }
 
+
+    private void about() {
+        // Tag used to cancel the request
+        String tag_string_req = "req_login";
+
+        StringRequest strReq = new StringRequest(Request.Method.GET,
+                AppConfig.about, new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d("TAG", "about Response: " + response.toString());
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+
+                    String status = jsonObject.optString("status");
+                    String message = jsonObject.optString("message");
+
+                    if(status.equals("1") ) {
+
+                        JSONObject data = jsonObject.getJSONObject("data");
+                        String about = data.optString("about");
+                        tv_aboutus.setText(about);
+
+                    }
+
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+
+            public void onErrorResponse(VolleyError error) {
+                Log.e("TAG", "DATA NOT FOUND: " + error.getMessage());
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to login url
+                Map<String, String> params = new HashMap<>();
+                Log.d("TAG", "getParams: "+params);
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(AboutUs.this)
+                .addToRequestQueue(strReq
+                        .setRetryPolicy(
+                                new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+
+    }
 
 }
