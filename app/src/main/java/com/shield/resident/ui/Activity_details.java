@@ -14,14 +14,20 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -63,8 +69,9 @@ public class Activity_details extends AppCompatActivity {
 
     RelativeLayout rl_top, rl_call_visitor;
     ImageView img_back, iv_profile, iv_vendor_image, iv_visitor_type, img_delete;
-    TextView tv_name, tv_date_time, tv_status, visitor_type_name, tv_vendor_name, tv_message;
-    LinearLayout ll_call_security, ll_generate_passcode, ll_vendors;
+    TextView tv_name, tv_date_time, tv_status, visitor_type_name,
+            tv_vendor_name, tv_message, tv_txt_stayOvernight;
+    LinearLayout ll_call_security, ll_generate_passcode, ll_vendors, ll_stay_over_night;
 
     ActivityChild activityChild;
 
@@ -79,12 +86,10 @@ public class Activity_details extends AppCompatActivity {
         setContentView(R.layout.activity_details);
         initViews();
 
-
     }
 
 
     private void initViews(){
-
 
         rl_top=findViewById(R.id.rl_top);
         img_back=findViewById(R.id.img_back);
@@ -102,8 +107,11 @@ public class Activity_details extends AppCompatActivity {
         iv_visitor_type=findViewById(R.id.iv_visitor_type);
         tv_message=findViewById(R.id.tv_message);
         img_delete=findViewById(R.id.img_delete);
+        ll_stay_over_night=findViewById(R.id.ll_stay_over_night);
+        tv_txt_stayOvernight=findViewById(R.id.tv_txt_stayOvernight);
 
         ll_vendors.setVisibility(View.GONE);
+        ll_stay_over_night.setVisibility(View.GONE);
 
         globalClass = (GlobalClass) getApplicationContext();
 
@@ -116,9 +124,7 @@ public class Activity_details extends AppCompatActivity {
 
             activityChild = (ActivityChild) bundle.getSerializable("info");
 
-
             tv_name.setText(activityChild.getName());
-
 
             //// status check ...
             if (activityChild.getApprove_status().equals("new")){
@@ -177,12 +183,26 @@ public class Activity_details extends AppCompatActivity {
 
 
 
+            if (activityChild.getApprove_status().equals("y")
+                || activityChild.getApprove_status().equals("n")
+                    || activityChild.getApprove_status().equals("l")
+                    || activityChild.getApprove_status().equals("sr")
+            ){
+                img_delete.setVisibility(View.GONE);
+            }else {
+                img_delete.setVisibility(View.VISIBLE);
+            }
+
+
+
             //// visitor type ...
             if (activityChild.getVisitor_type().equals(AppConfig.guest)){
 
                 visitor_type_name.setText("Guest");
 
                 iv_visitor_type.setImageResource(R.mipmap.guest_white);
+
+                ll_stay_over_night.setVisibility(View.VISIBLE);
 
             }else  if (activityChild.getVisitor_type().equals(AppConfig.delivery)){
 
@@ -246,6 +266,8 @@ public class Activity_details extends AppCompatActivity {
                 }else {
 
                     ll_generate_passcode.setVisibility(View.GONE);
+
+                    ll_stay_over_night.setVisibility(View.GONE);
                 }
 
             }else {
@@ -263,6 +285,24 @@ public class Activity_details extends AppCompatActivity {
                         .placeholder(R.mipmap.profile_image)
                         .into(iv_profile);
             }
+
+
+            if (!activityChild.getGuest_no_of_stay().isEmpty()
+                && !activityChild.getGuest_type_of_stay().isEmpty()){
+                tv_txt_stayOvernight.setText("Update stay overnight");
+
+                tv_status.setText(activityChild.getGuest_no_of_stay()
+                        + " "+activityChild.getGuest_type_of_stay()
+                        + " stay");
+            }
+
+
+            if (activityChild.getSecurity_mobile() == null
+                    || activityChild.getSecurity_mobile().isEmpty()){
+                ll_call_security.setVisibility(View.GONE);
+            }
+
+
         }
 
 
@@ -287,6 +327,12 @@ public class Activity_details extends AppCompatActivity {
         img_delete.setOnClickListener(v -> {
 
             deleteActivity();
+
+        });
+
+        ll_stay_over_night.setOnClickListener(v -> {
+
+            dialogOvernightStay();
 
         });
     }
@@ -557,6 +603,7 @@ public class Activity_details extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == CAMERA_REQUEST && resultCode == RESULT_OK) {
 
@@ -648,13 +695,7 @@ public class Activity_details extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
-        client.setSSLSocketFactory(
-                new SSLSocketFactory(Config.getSslContext(),
-                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));
-
-
-        Log.d(AppConfig.TAG , "new_visitor_add- " + url);
+       // Log.d(AppConfig.TAG , "new_visitor_add- " + url);
         Log.d(AppConfig.TAG , "new_visitor_add- " + params.toString());
 
         int DEFAULT_TIMEOUT = 15 * 1000;
@@ -780,6 +821,153 @@ public class Activity_details extends AppCompatActivity {
             public void onFailure(int statusCode, Header[] headers,
                                   String res, Throwable t) {
                 Log.d(AppConfig.TAG, "delete_activity- " + res);
+                loaderDialog.dismiss();
+
+                TastyToast.makeText(Activity_details.this,
+                        "Server error. Try again.",
+                        TastyToast.LENGTH_LONG, TastyToast.WARNING);
+
+            }
+
+
+        });
+
+    }
+
+
+
+    /// overnight stay ...
+    String time_type = "";
+    private void dialogOvernightStay(){
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View convertView = inflater.inflate(R.layout.dialog_stay_overnight, null);
+        alertDialog.setView(convertView);
+
+        final AlertDialog show = alertDialog.show();
+
+        EditText edt_how_much = convertView.findViewById(R.id.edt_how_much);
+        Button btn_submit_stay = convertView.findViewById(R.id.btn_submit_stay);
+        Spinner spinner_days = convertView.findViewById(R.id.spinner_days);
+
+        ArrayList<String> spinnerArray = new ArrayList<>();
+        spinnerArray.add("Day");
+        spinnerArray.add("Week");
+        spinnerArray.add("Month");
+        spinnerArray.add("Year");
+
+        ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(this,
+                android.R.layout.simple_spinner_dropdown_item,
+                spinnerArray);
+        spinner_days.setAdapter(spinnerArrayAdapter);
+
+
+
+        spinner_days.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                time_type = spinnerArray.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        btn_submit_stay.setOnClickListener(v -> {
+
+            if (edt_how_much.getText().toString().trim().length() == 0){
+                TastyToast.makeText(Activity_details.this,
+                        "Enter value.",
+                        TastyToast.LENGTH_LONG, TastyToast.INFO);
+
+                return;
+            }
+
+            if (edt_how_much.getText().toString().equals("0")){
+                TastyToast.makeText(Activity_details.this,
+                        "0 value is not accepted.",
+                        TastyToast.LENGTH_LONG, TastyToast.INFO);
+
+                return;
+            }
+
+
+            show.dismiss();
+
+            postStayValue(edt_how_much.getText().toString(), time_type);
+
+
+        });
+
+    }
+
+    public void postStayValue(String time, String time_type){
+
+        loaderDialog.show();
+
+        String url = AppConfig.guest_stay_time;
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+
+
+        params.put("complex_id", globalClass.getComplex_id());
+        params.put("activity_id", activityChild.getActivity_id());
+        params.put("time", time);
+        params.put("time_type", time_type);
+
+
+        //Log.d(AppConfig.TAG , "new_visitor_add- " + url);
+        Log.d(AppConfig.TAG , "guest_stay_time- " + params.toString());
+
+        int DEFAULT_TIMEOUT = 15 * 1000;
+        client.setMaxRetriesAndTimeout(5 , DEFAULT_TIMEOUT);
+
+        client.post(url, params, new JsonHttpResponseHandler() {
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+
+                Log.d(AppConfig.TAG, "guest_stay_time- " + response.toString());
+
+                if (response != null) {
+                    try {
+
+                        int status = response.optInt("status");
+                        String message = response.optString("message");
+
+
+                        if (status == 1) {
+
+                            TastyToast.makeText(Activity_details.this,
+                                    message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+
+                            finish();
+
+                        }else {
+
+                            TastyToast.makeText(Activity_details.this,
+                                    message, TastyToast.LENGTH_LONG, TastyToast.WARNING);
+
+                        }
+
+
+                        loaderDialog.dismiss();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers,
+                                  String res, Throwable t) {
+                Log.d(AppConfig.TAG, "guest_stay_time- " + res);
                 loaderDialog.dismiss();
 
                 TastyToast.makeText(Activity_details.this,

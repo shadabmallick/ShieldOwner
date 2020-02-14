@@ -8,7 +8,7 @@
     <string name="flat_no">Flat Number</string>
     <string name="login">Login</string>
     <string name="register">Register</string>
-    <string name="enter_registration_number">Enter registered number</string>
+    <string name="enter_registration_number">Enter registered email/mobile</string>
     <string name="enter_name">Enter Name</string>
     <string name="enter_phone">Enter Phone</string>
     <string name="enter_tenant_phone">Enter Tenant Phone</string>
@@ -16,6 +16,7 @@
     <string name="back">Back</string>
     <string name="otp_send">OTP Has been sent to you on</string>
     <string name="help">Help</string>
+    <string name="app_tour">App Tour</string>
     <string name="activity">Activity</string>
     <string name="community">Community</string>
      <string name="invitation">Invitation</string>
@@ -26,9 +27,12 @@
     <string name="setting">Settings</string>
     <string name="my_details">MY DETAILS</string>
     <string name="app_details">APP SETTINGS</string>
-    <string name="my_family">My Family</string>
+    <string name="my_family">MY FAMILY</string>
     <string name="my_staff">My Staff</string>
-    <string name="my_car">My Car</string>
+    <string name="my_daily_help">MY DAILY HELP</string>
+    <string name="my_car">MY VEHICLE</string>
+    <string name="my_frequent_guest">MY FREQUENT GUEST</string>
+    <string name="my_complex_caps">MY COMPLEX</string>
     <string name="add">ADD</string>
     <string name="loading">wait loading</string>
     <string name="security">Security</string>
@@ -41,7 +45,7 @@
     <string name="profile_info">PROFILE INFO</string>
     <string name="member_info">MEMBER INFO</string>
     <string name="staff_info">STAFF INFO</string>
-    <string name="car_info">CAR INFO</string>
+    <string name="car_info">VEHICLE INFO</string>
     <string name="tenants_info">Tenant Info</string>
     <string name="save">Save</string>
     <string name="staff_name">Enter Staff Name</string>
@@ -89,93 +93,43 @@
     <string name="notification_on_help">Notification on help</string>
     <string name="add_show_tenent">Add / Show Tenant</string>
     <string name="add_new_flat">Add new flat/ Complex</string>
-    <string name="tell_a_freind">Tell a friend About Shield</string>
+    <string name="tell_a_freind">Tell a friend about Shield</string>
     <string name="cab_dialog_msg">Approve my cab in given date and time</string>
+    <string name="delivery_dialog_msg">Approve my delivery boy in given date and time</string>
     <string name="flat_owner">Flat Owner</string>
     <string name="tenant">Tenant</string>
     <string name="submit">Submit</string>
     <string name="secure_phone_msg">Connect with other Residents</string>
     <string name="from_contact">Get from contact</string>
+    <string name="enter_call_setting">Intercom Call Setup</string>
+    <string name="call_through_ivr">Call on your phone through IVR when visitor a the gate.</string>
+    <string name="visitor_at_gate">When the visitor at the gate\n<b>First you will get mobile verification</b></string>
+    <string name="send_notification">Send Test Notification</string>
+    <string name="nobody_response">If nobody responds to the notification\n<b>Phone call will be triggered through IVR.</b></string>
+     <string name="get_call">Get a test call</string>
+     <string name="if_call_picked">If Call not picks up\n<b>Then the guard may find another way to reach you</b></string>
+    <string name="avoid_call">You can avoid intercom call by approving visitor in advance</string>
+    <string name="entry_exit_notificationi">Entry, Exit Notifications</string>
+    <string name="daily_help"><b>Daily Help</b>\nMaid, Cook, Driver etc.</string>
+    <string name="entry_notification">Entry Notification</string>
+    <string name="exit_notification">Exit Notification</string>
+    <string name="guest">Guest</string>
+    <string name="delivery">Delivery</string>
+    <string name="cab">Cab</string>
+    <string name="help_others">Help and Others</string>
+    <string name="no_push_notification">Not receiving push notification?\nPlease check your<a href="http://www.google.com">Phone Setting and app permission</a>\n(May some other apps can restrict notifications ) </string>
 
 
     <string name="noti_msg_1">Not receiving push notification or in app call?</string>
     <string name="noti_msg_2">Please check your phone </string>
     <string name="noti_msg_3">settings and app permissions.</string>
-    <string name="noti_msg_4">(Sometimes battery savings apps or auto start manager apps can restrict app notifications)</string>
+    <string name="noti_msg_4">(May some other apps can restrict notifications)</string>
 
 
     <string name="about_us_text">SHIELD is an easy to understand security app/platform that is intelligent, efficient and affordable. It is a realistic and reasonable app that can be used in residential complexes, private security agencies, corporate companies, hospitals and educational institutions.</string>
 
-
-
-    <string-array name="tab_A">
-        <item>Item 1A</item>
-        <item>Item 1B</item>
-        <item>Item 1C</item>
-        <item>Item 1D</item>
-        <item>Item 1E</item>
-        <item>Item 1F</item>
-        <item>Item 1G</item>
-        <item>Item 1H</item>
-        <item>Item 1I</item>
-        <item>Item 1J</item>
-        <item>Item 1K</item>
-        <item>Item 1L</item>
-        <item>Item 1M</item>
-        <item>Item 1N</item>
-        <item>Item 1O</item>
-        <item>Item 1P</item>
-        <item>Item 1Q</item>
-        <item>Item 1R</item>
-        <item>Item 1S</item>
-        <item>Item 1T</item>
-    </string-array>
-
-    <string-array name="tab_B">
-        <item>Item 2A</item>
-        <item>Item 2B</item>
-        <item>Item 2C</item>
-        <item>Item 2D</item>
-        <item>Item 2E</item>
-        <item>Item 2F</item>
-        <item>Item 2G</item>
-        <item>Item 2H</item>
-        <item>Item 2I</item>
-        <item>Item 2J</item>
-        <item>Item 2K</item>
-        <item>Item 2L</item>
-        <item>Item 2M</item>
-        <item>Item 2N</item>
-        <item>Item 2O</item>
-        <item>Item 2P</item>
-        <item>Item 2Q</item>
-        <item>Item 2R</item>
-        <item>Item 2S</item>
-        <item>Item 2T</item>
-    </string-array>
-
-    <string-array name="tab_C">
-        <item>Item 3A</item>
-        <item>Item 3B</item>
-        <item>Item 3C</item>
-        <item>Item 3D</item>
-        <item>Item 3E</item>
-        <item>Item 3F</item>
-        <item>Item 3G</item>
-        <item>Item 3H</item>
-        <item>Item 3I</item>
-        <item>Item 3J</item>
-        <item>Item 3K</item>
-        <item>Item 3L</item>
-        <item>Item 3M</item>
-        <item>Item 3N</item>
-        <item>Item 3O</item>
-        <item>Item 3P</item>
-        <item>Item 3Q</item>
-        <item>Item 3R</item>
-        <item>Item 3S</item>
-        <item>Item 3T</item>
-    </string-array>
-
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="terms_condition">Terms &amp; Condition</string>
+    <string name="add_new">Add New</string>
 
 </resources>

@@ -28,7 +28,7 @@
         android:textColor="@color/range_white"
         android:textSize="22sp"
         android:gravity="center"
-        android:text="Sourav Roy Calling..."
+        android:text="Guest is waiting at the gate."
         />
 
     <TextView
@@ -41,7 +41,7 @@
         android:textStyle="bold"
         android:textColor="@color/range_white"
         android:gravity="center"
-        android:text="Zomato Delivery"
+        android:text="CALL"
         />
 
 

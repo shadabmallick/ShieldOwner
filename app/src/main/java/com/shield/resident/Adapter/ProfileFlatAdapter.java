@@ -13,9 +13,11 @@ import com.shield.resident.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ProfileFlatAdapter extends RecyclerView.Adapter<ProfileFlatAdapter.MyViewHolder> {
-    ArrayList<HashMap<String, String>> aList;
-    Context context;
+public class ProfileFlatAdapter extends
+        RecyclerView.Adapter<ProfileFlatAdapter.MyViewHolder> {
+
+    private ArrayList<HashMap<String, String>> aList;
+    private Context context;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 

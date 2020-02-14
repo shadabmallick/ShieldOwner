@@ -68,13 +68,14 @@ public class CallUi extends AppCompatActivity {
     LinearLayout ll_leave_at_gate;
 
 
-    ProgressDialog progressDialog;
-    GlobalClass globalClass;
-    Shared_Preference shared_preference;
-    HashMap<String, String> hashMap;
-    Vibrator vibrator;
-    MediaPlayer mediaPlayer;
+    private ProgressDialog progressDialog;
+    private GlobalClass globalClass;
+    private Shared_Preference shared_preference;
+    private HashMap<String, String> hashMap;
+    private Vibrator vibrator;
+    private MediaPlayer mediaPlayer;
 
+    boolean test_noti = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +128,8 @@ public class CallUi extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
+
+            test_noti = false;
 
             hashMap = (HashMap<String, String>) bundle.getSerializable("hashMap");
 
@@ -254,6 +257,79 @@ public class CallUi extends AppCompatActivity {
 
             });
 
+        }else {
+            ll_leave_at_gate.setVisibility(View.GONE);
+            test_noti = true;
+
+
+
+            long[] jArr = {0, 300, 200, 300, 500, 300};
+            vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                try {
+                    vibrator.vibrate(VibrationEffect.createWaveform(jArr,
+                            new int[]{0, 145, 0, 145, 0, 145}, -1));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                vibrator.vibrate(jArr, 0);
+            }
+
+
+            AudioManager audioManager = (AudioManager) getApplicationContext()
+                    .getSystemService(Context.AUDIO_SERVICE);
+            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+                    audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+
+
+            Uri defaultSoundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
+                    + "://" + getPackageName() + "/raw/ring1");
+
+
+
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+
+            try {
+                mediaPlayer.setDataSource(getApplicationContext(), defaultSoundUri);
+                mediaPlayer.prepare();
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mediaPlayer.start();
+
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+
+                    mp.start();
+
+                }
+            });
+
+
+
+            rel_rejected.setOnClickListener(v -> {
+                mediaPlayer.stop();
+                vibrator.cancel();
+
+                finish();
+                super.finishAndRemoveTask();
+            });
+
+            rel_approved.setOnClickListener(v -> {
+                mediaPlayer.stop();
+                vibrator.cancel();
+
+                finish();
+                super.finishAndRemoveTask();
+
+            });
         }
 
 

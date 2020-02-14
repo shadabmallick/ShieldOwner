@@ -8,9 +8,9 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardElevation="8dp"
         app:cardUseCompatPadding="true"
-        app:cardElevation="5dp"
-        app:cardCornerRadius="4dp"
+        app:cardCornerRadius="7dp"
         >
 
         <LinearLayout
@@ -63,14 +63,15 @@
                         android:id="@+id/tv_name"
                         android:textSize="16sp"
                         android:gravity="center"
-                        android:text="I need a teacher"
+                        android:text="Sourav"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/black"
                         />
 
                     <TextView
                         android:id="@+id/list_item1"
-                        android:textSize="14sp"
+                        android:textSize="12sp"
                         android:textColor="@color/green"
                         android:text="On Duty"
                         android:layout_width="wrap_content"

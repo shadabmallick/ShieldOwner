@@ -2,13 +2,14 @@ package com.shield.resident.ui;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -25,7 +26,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -37,6 +37,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -54,7 +55,6 @@ import com.shield.resident.Adapter.CarAdapter;
 import com.shield.resident.Adapter.FamilyAdapter;
 import com.shield.resident.Adapter.StaffAdapter;
 import com.shield.resident.Constant.AppConfig;
-import com.shield.resident.GlobalClass.Config;
 import com.shield.resident.GlobalClass.GlobalClass;
 import com.shield.resident.GlobalClass.Shared_Preference;
 import com.shield.resident.GlobalClass.VolleySingleton;
@@ -65,6 +65,7 @@ import com.shield.resident.dialogs.DialogDeliveryAdd;
 import com.shield.resident.dialogs.DialogGuestActivityAdd;
 import com.shield.resident.dialogs.DialogHelpActivityAdd;
 import com.shield.resident.dialogs.LoaderDialog;
+import com.shield.resident.util.Commons;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -86,20 +87,20 @@ import java.util.Locale;
 import java.util.Map;
 
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.conn.ssl.SSLSocketFactory;
 
 import static com.shield.resident.GlobalClass.VolleySingleton.backOff;
 import static com.shield.resident.GlobalClass.VolleySingleton.nuOfRetry;
 import static com.shield.resident.GlobalClass.VolleySingleton.timeOut;
 
-public class SettingActivity extends AppCompatActivity {
+public class SettingActivity extends AppCompatActivity implements
+        SwipeRefreshLayout.OnRefreshListener,
+        FamilyAdapter.ViewClickListener,
+        CarAdapter.ViewClickListener{
+
+
     String TAG="Setting";
 
-    RecyclerView recyclerView,recyclerViewStaff,recyclerViewCar;
-    RecyclerView.LayoutManager RecyclerViewLayoutManager;
-    RecyclerView.LayoutManager RecyclerViewLayoutManager1;
-    RecyclerView.LayoutManager RecyclerViewLayoutManager2;
-    RecyclerView.LayoutManager RecyclerViewLayoutManager3;
+    RecyclerView recyclerView_members,recyclerViewStaff,recyclerViewCar;
 
     FamilyAdapter RecyclerViewHorizontalAdapter;
     ArrayAdapter<String> dataAdapter1;
@@ -107,15 +108,12 @@ public class SettingActivity extends AppCompatActivity {
     StaffAdapter staffAdapter;
     ArrayList<String> array1;
     CarAdapter carAdapter;
-    LinearLayoutManager HorizontalLayout ;
-    LinearLayoutManager HorizontalLayout1 ;
-    LinearLayoutManager HorizontalLayout2 ;
 
     File p_image;
     String currentDate,currentTime;
     Dialog dialog;
     Toolbar toolbar;
-    TextView tv_details,app_setting,user_name,user_mobile,user_email;
+    TextView user_name, user_mobile, user_email, passcode;
     ImageView profile_image_edit,image_member;
 
     EditText edit_car_no,edit_parking_no,edit_name,edit_phone,edit_mail,
@@ -128,9 +126,7 @@ public class SettingActivity extends AppCompatActivity {
     ArrayList<HashMap<String,String>> HelpList;
     ArrayList<HashMap<String,String>> listCars;
     ArrayList<HashMap<String,String>> staffList;
-    ImageView profile_image,img_cab,img_delivery,img_guest,
-            img_help,profile_image_staff;
-    ScrollView scroll_details,scroll_settings;
+    ImageView profile_image,img_cab,img_delivery,img_guest, img_help,profile_image_staff;
     RelativeLayout rel_profile,rel_middle_icon;
     ImageView edit, iv_no_data1, iv_no_data2, iv_no_data3;
     String help_id = "";
@@ -140,9 +136,12 @@ public class SettingActivity extends AppCompatActivity {
     private final int PICK_IMAGE_CAMERA_FAMILY = 3, PICK_IMAGE_GALLERY_FAMILY = 4;
     private final int PICK_IMAGE_CAMERA_CAR = 5, PICK_IMAGE_GALLERY_CAR = 6;
     private final int PICK_IMAGE_CAMERA_STAFF = 7, PICK_IMAGE_GALLERY_STAFF = 6;
-    LinearLayout ll_ecom,ll_bell,button_E3,button_E1,ll_logout,ll_notification,ll_app_help,
-            ll_mycomplex,ll_visitor_option,button_activity,ll_about_us,ll_contact_us;
-
+    LinearLayout ll_bell,button_E3,button_E1,ll_app_help,ll_visitor_option,button_activity;
+    SwipeRefreshLayout swipe_refresh;
+    LinearLayout linear_main, ll_my_complex, linear_share_address;
+    RelativeLayout rl_app_noti_settings, rl_support_feedback, rl_tell_friend, rl_logout;
+    TextView tv_appVersion, terms_condition, tv_privacy;
+    RelativeLayout rl_add_member, relfamily, rl_add_staff, relstaff, rl_add_car, relCar;
     String phone_secure;
 
     LoaderDialog loaderDialog;
@@ -150,49 +149,16 @@ public class SettingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.setting_activity);
+        setContentView(R.layout.activity_settings);
 
         loaderDialog = new LoaderDialog(this, android.R.style.Theme_Translucent,
                 false, "");
 
-        initToolBar();
+        initViews();
         currentTime = new SimpleDateFormat("HH:mm:ss",
                 Locale.getDefault()).format(new Date());
         currentDate = new SimpleDateFormat("yyyy-MM-dd",
                 Locale.getDefault()).format(new Date());
-
-        profile_details_api_call();
-        //
-
-        // view1.setVisibility(View.VISIBLE);
-        tv_details.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                scroll_details.setVisibility(View.VISIBLE);
-                scroll_settings.setVisibility(View.GONE);
-                rel_profile.setVisibility(View.VISIBLE);
-
-                app_setting.setTypeface(null, Typeface.NORMAL); //only text style(only bold)
-
-                tv_details.setTypeface(null, Typeface.BOLD); //only text style(only bold)
-
-                profile_details_api_call();
-
-            }
-        });
-        app_setting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                scroll_details.setVisibility(View.GONE);
-                scroll_settings.setVisibility(View.VISIBLE);
-                rel_profile.setVisibility(View.GONE);
-                app_setting.setTypeface(null, Typeface.BOLD); //only text style(only bold)
-                tv_details.setTypeface(null, Typeface.NORMAL); //only text style(only bold)
-
-            }
-        });
-
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(SettingActivity.this,
@@ -214,7 +180,7 @@ public class SettingActivity extends AppCompatActivity {
 
     }
 
-    public void initToolBar() {
+    public void initViews() {
 
         listFamilyMembers =new ArrayList<>();
         staffList=new ArrayList<>();
@@ -230,28 +196,21 @@ public class SettingActivity extends AppCompatActivity {
 
 
         toolbar = findViewById(R.id.toolbar);
-        scroll_details =  findViewById(R.id.scroll_details);
         edit =  findViewById(R.id.edit);
         add_car =  findViewById(R.id.add_car);
-        ll_ecom =  findViewById(R.id.ll_ecom);
         add_member =  findViewById(R.id.add_member);
         add_staff =  findViewById(R.id.add_staff);
-        scroll_settings =  findViewById(R.id.scroll_settings);
-        tv_details =findViewById(R.id.tv_details);
         rel_profile =findViewById(R.id.rel_profile);
-        app_setting =  findViewById(R.id.app_details);
         profile_image =  findViewById(R.id.profile_image);
         user_email =  findViewById(R.id.user_email);
         user_name =  findViewById(R.id.user_name);
-        ll_notification =  findViewById(R.id.ll_notification);
+        passcode =  findViewById(R.id.passcode);
+
         user_mobile =  findViewById(R.id.user_mobile);
-        ll_mycomplex =  findViewById(R.id.ll_mycomplex);
         ll_visitor_option =  findViewById(R.id.ll_visitor_option);
         rel_middle_icon =  findViewById(R.id.rel_middle_icon);
         button_activity=  findViewById(R.id.button_E);
-        ll_about_us=  findViewById(R.id.ll_about_us);
-        ll_contact_us=  findViewById(R.id.ll_contact_us);
-        ll_logout=  findViewById(R.id.ll_logout);
+
         button_E1=  findViewById(R.id.button_E1);
         button_E3=  findViewById(R.id.button_E3);
         ll_app_help=  findViewById(R.id.button_E4);
@@ -269,69 +228,51 @@ public class SettingActivity extends AppCompatActivity {
         iv_no_data3.setVisibility(View.GONE);
 
 
+        rl_add_member = findViewById(R.id.rl_add_member);
+        relfamily = findViewById(R.id.relfamily);
+        rl_add_staff = findViewById(R.id.rl_add_staff);
+        relstaff = findViewById(R.id.relstaff);
+        rl_add_car = findViewById(R.id.rl_add_car);
+        relCar = findViewById(R.id.relCar);
+
+
         toolbar.setTitle("");
-        recyclerView = findViewById(R.id.rec_family);
+        recyclerView_members = findViewById(R.id.rec_family);
         recyclerViewStaff = findViewById(R.id.rec_staff);
         recyclerViewCar = findViewById(R.id.rec_car);
 
-        RecyclerViewLayoutManager = new LinearLayoutManager(getApplicationContext());
-        RecyclerViewLayoutManager1 = new LinearLayoutManager(getApplicationContext());
-        RecyclerViewLayoutManager2 = new LinearLayoutManager(getApplicationContext());
-        RecyclerViewLayoutManager3 = new LinearLayoutManager(getApplicationContext());
+        swipe_refresh = findViewById(R.id.swipe_refresh);
+        swipe_refresh.setOnRefreshListener(this);
 
-        recyclerView.setLayoutManager(RecyclerViewLayoutManager);
-        recyclerViewStaff.setLayoutManager(RecyclerViewLayoutManager1);
-        recyclerViewCar.setLayoutManager(RecyclerViewLayoutManager2);
+        linear_share_address = findViewById(R.id.linear_share_address);
+        linear_main = findViewById(R.id.linear_main);
+        linear_main.setVisibility(View.INVISIBLE);
+
+        rl_app_noti_settings = findViewById(R.id.rl_app_noti_settings);
+        rl_support_feedback = findViewById(R.id.rl_support_feedback);
+        rl_tell_friend = findViewById(R.id.rl_tell_friend);
+        rl_logout = findViewById(R.id.rl_logout);
+        ll_my_complex = findViewById(R.id.ll_my_complex);
+
+        tv_appVersion = findViewById(R.id.tv_appVersion);
+        terms_condition = findViewById(R.id.terms_condition);
+        tv_privacy = findViewById(R.id.tv_privacy);
 
 
+        recyclerView_members.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewStaff.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewCar.setLayoutManager(new LinearLayoutManager(this));
 
 
-        HorizontalLayout = new LinearLayoutManager(SettingActivity.this, LinearLayoutManager.HORIZONTAL, false);
-        HorizontalLayout1 = new LinearLayoutManager(SettingActivity.this, LinearLayoutManager.HORIZONTAL, false);
-        HorizontalLayout2 = new LinearLayoutManager(SettingActivity.this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(HorizontalLayout);
-        recyclerViewStaff.setLayoutManager(HorizontalLayout1);
-        recyclerViewCar.setLayoutManager(HorizontalLayout2);
         setSupportActionBar(toolbar);
 
 
-
-
-
-
-        toolbar.setNavigationOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(SettingActivity.this,
-                                "clicking the toolbar!", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-        );
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 profileDialog();
             }
         });
-        add_staff.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                StaffDialog();
-            }
-        });
-        ll_ecom.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent entercom_setting=new Intent(getApplicationContext(),
-                        InterphoneSettings.class);
-                startActivity(entercom_setting);
-
-            }
-        });
-
 
         img_cab.setOnClickListener(v -> {
 
@@ -351,13 +292,8 @@ public class SettingActivity extends AppCompatActivity {
 
         });
 
-
         img_guest.setOnClickListener(v -> {
             ll_visitor_option.setVisibility(View.GONE);
-
-           /* DialogGuestAdd dialogGuestAdd = new DialogGuestAdd(SettingActivity.this);
-            dialogGuestAdd.show();*/
-
 
             Intent intent = new Intent(SettingActivity.this,
                     DialogGuestActivityAdd.class);
@@ -367,9 +303,6 @@ public class SettingActivity extends AppCompatActivity {
 
         img_help.setOnClickListener(v -> {
             ll_visitor_option.setVisibility(View.GONE);
-
-            /*DialogHelpAdd dialogHelpAdd = new DialogHelpAdd(SettingActivity.this);
-            dialogHelpAdd.show();*/
 
             Intent intent = new Intent(SettingActivity.this,
                     DialogHelpActivityAdd.class);
@@ -400,7 +333,14 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-        ll_notification.setOnClickListener(new View.OnClickListener() {
+        add_staff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StaffDialog();
+            }
+        });
+
+        rl_app_noti_settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent notification=new Intent(getApplicationContext(),NotificationManager.class);
@@ -408,14 +348,15 @@ public class SettingActivity extends AppCompatActivity {
                 startActivity(notification);
             }
         });
-        ll_mycomplex.setOnClickListener(new View.OnClickListener() {
+
+        ll_my_complex.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent notification=new Intent(getApplicationContext(),MyComplex.class);
-
-                startActivity(notification);
+                Intent intent=new Intent(getApplicationContext(),MyComplex.class);
+                startActivity(intent);
             }
         });
+
         button_activity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -424,44 +365,41 @@ public class SettingActivity extends AppCompatActivity {
                 startActivity(notification);
             }
         });
-        ll_about_us.setOnClickListener(new View.OnClickListener() {
+
+        rl_support_feedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent notification=new Intent(getApplicationContext(),AboutUs.class);
-                startActivity(notification);
+                Intent intent=new Intent(getApplicationContext(),ContactUs.class);
+                startActivity(intent);
             }
         });
-        ll_contact_us.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent notification=new Intent(getApplicationContext(),ContactUs.class);
-                startActivity(notification);
-            }
-        });
+
         button_E1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent notification=new Intent(getApplicationContext(), SecurityScreen.class);
-                startActivity(notification);
+                Intent intent=new Intent(getApplicationContext(), SecurityScreen.class);
+                startActivity(intent);
             }
         });
+
         button_E3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent notification=new Intent(getApplicationContext(),CommunityActivity.class);
-                startActivity(notification);
+                Intent intent=new Intent(getApplicationContext(),CommunityActivity.class);
+                startActivity(intent);
             }
         });
-        ll_logout.setOnClickListener(new View.OnClickListener() {
+
+        rl_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                logoutDailog();
+                logoutDialog();
             }
         });
 
         ll_app_help.setOnClickListener(v -> {
-            Intent notification=new Intent(SettingActivity.this, AppHelp.class);
-            startActivity(notification);
+            Intent intent = new Intent(SettingActivity.this, AppHelp.class);
+            startActivity(intent);
         });
 
         rel_middle_icon.setOnClickListener(new View.OnClickListener() {
@@ -476,11 +414,102 @@ public class SettingActivity extends AppCompatActivity {
                             "You shifted this features to your tenant",
                             TastyToast.LENGTH_LONG, TastyToast.INFO);
                 }
-
-
-
             }
         });
+
+        rl_tell_friend.setOnClickListener(v -> {
+
+            String url = "https://play.google.com/store/apps/details?id="
+                    + SettingActivity.this.getPackageName();
+
+            String message = "The all-in-one solution to manage your guests, " +
+                    "deliveries and much more. Implement the app in your society.\n\n"+url;
+
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, message);
+            sendIntent.setType("text/plain");
+
+            Intent shareIntent = Intent.createChooser(sendIntent, "Share Via ");
+            startActivity(shareIntent);
+
+        });
+        linear_share_address.setOnClickListener(v -> {
+
+            String message = "My Complex address :\n"+globalClass.getComplex_address()+"\n";
+
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, message);
+            sendIntent.setType("text/plain");
+
+            Intent shareIntent = Intent.createChooser(sendIntent, "Share Via ");
+            startActivity(shareIntent);
+
+        });
+
+
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            String versionName = pInfo.versionName;
+            int versionCode = pInfo.versionCode;
+
+            Log.d("TAG", "versionName = "+versionName);
+            Log.d("TAG", "versionCode = "+versionCode);
+
+            tv_appVersion.setText("Version: "+versionName);
+
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        terms_condition.setOnClickListener(v -> {
+
+            String url = "https://www.shieldapp.in/terms-conditions/";
+
+            try {
+                Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(myIntent);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(this, "No application can handle this request."
+                        + " Please install a web browser",  Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+        });
+
+        tv_privacy.setOnClickListener(v -> {
+
+            String url = "https://www.shieldapp.in/privacy-policy/";
+
+            try {
+                Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                startActivity(myIntent);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(this, "No application can handle this request."
+                        + " Please install a web browser",  Toast.LENGTH_LONG).show();
+                e.printStackTrace();
+            }
+        });
+
+        rl_add_member.setOnClickListener(v -> {
+            MemberDialog();
+        });
+        rl_add_staff.setOnClickListener(v -> {
+            StaffDialog();
+        });
+        rl_add_car.setOnClickListener(v -> {
+            CarDialog();
+        });
+
+
+
+        profile_details_api_call();
+    }
+
+    @Override
+    public void onRefresh() {
+
+        profile_details_api_call();
 
     }
 
@@ -516,7 +545,12 @@ public class SettingActivity extends AppCompatActivity {
         edit_name.setText(globalClass.getName());
         edit_phone.setText(globalClass.getPhone_number());
         edit_mail.setText(globalClass.getEmail());
-        // set the custom dialog components - text, image and button
+
+
+        if (!edit_mail.getText().toString().isEmpty()){
+            edit_mail.setEnabled(false);
+        }
+
         img_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -602,16 +636,10 @@ public class SettingActivity extends AppCompatActivity {
                 if (ContextCompat.checkSelfPermission(SettingActivity.this,
                         permissions[i]) != PackageManager.PERMISSION_GRANTED) {
 
-                    Log.d("permisssion","not granted");
-
                     if (shouldShowRequestPermissionRationale(permissions[i])) {
-
-                        Log.d("if","if");
                         permissionsNeeded.add(perm);
 
                     } else {
-                        // add the request.
-                        Log.d("else","else");
                         permissionsNeeded.add(perm);
                     }
 
@@ -621,12 +649,10 @@ public class SettingActivity extends AppCompatActivity {
 
         if (permissionsNeeded.size() > 0) {
             if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                // go ahead and request permissions
                 requestPermissions(permissionsNeeded.toArray(new String[permissionsNeeded.size()]), permRequestCode);
             }
             return false;
         } else {
-            // no permission need to be asked so all good...we have them all.
             return true;
         }
 
@@ -696,9 +722,9 @@ public class SettingActivity extends AppCompatActivity {
 
 
             }
-             //   Toast.makeText(SettingActivity.this, "Camera Permission error", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
-            Toast.makeText(SettingActivity.this, "Camera Permission error", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SettingActivity.this,
+                    "Camera Permission error", Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
     }
@@ -773,90 +799,56 @@ public class SettingActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        /// profile ...
         if (requestCode == PICK_IMAGE_GALLERY && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
 
             Uri uri = data.getData();
 
-            p_image = new File(getRealPathFromURI(uri));
-
-
-            Log.d(TAG, "image = "+p_image);
-
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                // Log.d(TAG, String.valueOf(bitmap));
-                profile_image_edit.setImageBitmap(bitmap);
-
-            } catch (IOException e) {
+                writeBitmap(bitmap, profile_image_edit);
+            } catch (IOException e){
                 e.printStackTrace();
             }
+
         }
-
-        if (requestCode == PICK_IMAGE_CAMERA && resultCode == RESULT_OK) {
-
-            File f = new File(Environment.getExternalStorageDirectory().toString());
-            for (File temp : f.listFiles()) {
-                if (temp.getName().equals("temp.jpg")) {
-                    f = temp;
-                    break;
-                }
-            }
+        else if (requestCode == PICK_IMAGE_CAMERA && resultCode == RESULT_OK) {
 
             try {
-                Bitmap bitmap;
-                BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-
-
-                bitmap = (Bitmap) data.getExtras().get("data");
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bytes);
-
-                profile_image_edit.setImageBitmap(bitmap);
-
-                String path = Environment.getExternalStorageDirectory()+File.separator;
-
-                OutputStream outFile = null;
-                File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
-                try {
-                    p_image = file;
-                    Log.d(TAG, "OutputStream: "+p_image);
-                    outFile = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outFile);
-                    outFile.flush();
-                    outFile.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
+                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                writeBitmap(bitmap, profile_image_edit);
+            }catch (Exception e){
                 e.printStackTrace();
             }
-
-            // Bitmap photo = (Bitmap) data.getExtras().get("data");
-            // iv_product_image.setImageBitmap(photo);
         }
-        else if (requestCode == PICK_IMAGE_GALLERY_FAMILY && resultCode == RESULT_OK && data != null && data.getData() != null) {
+
+
+        /// family member ...
+        else if (requestCode == PICK_IMAGE_GALLERY_FAMILY && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
 
             Uri uri = data.getData();
-
-            p_image = new File(getRealPathFromURI(uri));
-
-
-            Log.d(TAG, "image = "+p_image);
-
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                // Log.d(TAG, String.valueOf(bitmap));
-                image_member.setImageBitmap(bitmap);
-
-            } catch (IOException e) {
+                writeBitmap(bitmap, image_member);
+            } catch (IOException e){
                 e.printStackTrace();
             }
         }
+        else if (requestCode == PICK_IMAGE_CAMERA_FAMILY && resultCode == RESULT_OK) {
+
+            try {
+                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                writeBitmap(bitmap, image_member);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+
+
+        /// car image ...
         else if (requestCode == PICK_IMAGE_CAMERA_CAR && resultCode == RESULT_OK) {
 
 
@@ -917,152 +909,41 @@ public class SettingActivity extends AppCompatActivity {
             // Bitmap photo = (Bitmap) data.getExtras().get("data");
             // iv_product_image.setImageBitmap(photo);
         }
-
-        else if (requestCode == PICK_IMAGE_GALLERY_CAR && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        else if (requestCode == PICK_IMAGE_GALLERY_CAR && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
 
             Uri uri = data.getData();
-
             p_image = new File(getRealPathFromURI(uri));
-
-
             Log.d(TAG, "image = "+p_image);
-
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                // Log.d(TAG, String.valueOf(bitmap));
                 image_member.setImageBitmap(bitmap);
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        else if (requestCode == PICK_IMAGE_CAMERA_FAMILY && resultCode == RESULT_OK) {
 
 
-            File f = new File(Environment.getExternalStorageDirectory().toString());
-            for (File temp : f.listFiles()) {
-                if (temp.getName().equals("temp.jpg")) {
-                    f = temp;
-                    break;
-                }
-            }
-
-
-            try {
-                Bitmap bitmap;
-                BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-
-
-                bitmap = (Bitmap) data.getExtras().get("data");
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bytes);
-
-/*
-                bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(),
-                        bitmapOptions);*/
-
-                Log.d(TAG, "bitmap: "+bitmap);
-
-                image_member.setImageBitmap(bitmap);
-
-                String path = Environment.getExternalStorageDirectory()+File.separator;
-                // + File.separator
-                //   + "Phoenix" + File.separator + "default";
-                // f.delete();
-                OutputStream outFile = null;
-                File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
-                try {
-
-                    p_image = file;
-
-                    Log.d(TAG, "OutputStream: "+p_image);
-
-
-                    outFile = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outFile);
-                    outFile.flush();
-                    outFile.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            // Bitmap photo = (Bitmap) data.getExtras().get("data");
-            // iv_product_image.setImageBitmap(photo);
-        }
-
-        else if (requestCode == PICK_IMAGE_GALLERY_STAFF && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        /// Staff image ...
+        else if (requestCode == PICK_IMAGE_GALLERY_STAFF && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
 
             Uri uri = data.getData();
-
-            p_image = new File(getRealPathFromURI(uri));
-
-
-            Log.d(TAG, "image = "+p_image);
-
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                // Log.d(TAG, String.valueOf(bitmap));
-                profile_image_staff.setImageBitmap(bitmap);
-
-            } catch (IOException e) {
+                writeBitmap(bitmap, profile_image_staff);
+            } catch (IOException e){
                 e.printStackTrace();
             }
+
         }
         else if (requestCode == PICK_IMAGE_CAMERA_STAFF && resultCode == RESULT_OK) {
 
-            File f = new File(Environment.getExternalStorageDirectory().toString());
-            for (File temp : f.listFiles()) {
-                if (temp.getName().equals("temp.jpg")) {
-                    f = temp;
-                    break;
-                }
-            }
-
             try {
-                Bitmap bitmap;
-                BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
-
-                bitmap = (Bitmap) data.getExtras().get("data");
-                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, bytes);
-
-
-                Log.d(TAG, "bitmap: "+bitmap);
-
-                profile_image_edit.setImageBitmap(bitmap);
-
-                String path = Environment.getExternalStorageDirectory()+File.separator;
-                // + File.separator
-                //   + "Phoenix" + File.separator + "default";
-                // f.delete();
-                OutputStream outFile = null;
-                File file = new File(path, String.valueOf(System.currentTimeMillis()) + ".jpg");
-                try {
-
-                    p_image = file;
-
-                    Log.d(TAG, "OutputStream: "+p_image);
-
-
-                    outFile = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outFile);
-                    outFile.flush();
-                    outFile.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
+                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
+                writeBitmap(bitmap, profile_image_staff);
+            }catch (Exception e){
                 e.printStackTrace();
             }
 
@@ -1070,12 +951,58 @@ public class SettingActivity extends AppCompatActivity {
 
 
         if(globalClass.isNetworkAvailable()){
-            // user_profile_pic_update_url();
         }else{
-            TastyToast.makeText(SettingActivity.this,"Network Connection",TastyToast.LENGTH_LONG,TastyToast.WARNING).show();
+            TastyToast.makeText(SettingActivity.this,
+                    "Network Connection",
+                    TastyToast.LENGTH_LONG,TastyToast.WARNING).show();
         }
 
     }
+
+
+    private void writeBitmap(Bitmap bitmap, ImageView imageView){
+
+        bitmap = Commons.getResizedBitmap(bitmap, 480, 520);
+
+        final String dir = Commons.getFolderDirectory();
+
+        File file = new File(dir);
+        if (!file.exists())
+            file.mkdir();
+
+
+        String files = dir + "/profile_pic" +".jpg";
+        File newfile = new File(files);
+
+        try {
+
+            imageView.setImageBitmap(bitmap);
+
+            newfile.delete();
+            OutputStream outFile = null;
+            try {
+
+                p_image = newfile;
+
+                outFile = new FileOutputStream(newfile);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, outFile);
+                outFile.flush();
+                outFile.close();
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
 
     public String getRealPathFromURI(Uri contentUri) {
         String[] proj = {MediaStore.Audio.Media.DATA};
@@ -1085,7 +1012,6 @@ public class SettingActivity extends AppCompatActivity {
         cursor.moveToFirst();
         return cursor.getString(column_index);
     }
-
 
     public void StaffDialog(){
 
@@ -1167,7 +1093,8 @@ public class SettingActivity extends AppCompatActivity {
 
     }
 
-    public void AddStaff(final String type,final String name,final String phone){
+    public void AddStaff(final String type, final String name,
+                         final String phone){
 
         loaderDialog.show();
 
@@ -1301,6 +1228,9 @@ public class SettingActivity extends AppCompatActivity {
         edit_car_no=dialog.findViewById(R.id.edit_car_no);
         edit_parking_no=dialog.findViewById(R.id.edit_parking_no);
 
+        edit_parking_no.setText(globalClass.getParking_no());
+        edit_parking_no.setEnabled(false);
+
 
         LinearLayout ll_save=dialog.findViewById(R.id.ll_save);
 
@@ -1333,7 +1263,7 @@ public class SettingActivity extends AppCompatActivity {
 
     }
 
-    public void logoutDailog(){
+    public void logoutDialog(){
         final Dialog dialog = new Dialog(this, android.R.style.Theme_Translucent);
         dialog.setContentView(R.layout.logout_dailog);
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -1361,8 +1291,6 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-
-
     }
 
     public void Logout(){
@@ -1388,7 +1316,7 @@ public class SettingActivity extends AppCompatActivity {
 
                 if(status.equals("1") ) {
 
-                    preference.clearPrefrence();
+                    preference.clearPreference();
                     Intent intent=new Intent(SettingActivity.this, Login.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                             | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -1415,7 +1343,7 @@ public class SettingActivity extends AppCompatActivity {
 
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
 
                 params.put("user_id", globalClass.getId());
@@ -1441,7 +1369,6 @@ public class SettingActivity extends AppCompatActivity {
         String url = AppConfig.profile_update;
         AsyncHttpClient cl = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-
 
         params.put("user_id", globalClass.getId());
         params.put("name",name);
@@ -1511,10 +1438,10 @@ public class SettingActivity extends AppCompatActivity {
 
 
                             preference.savePrefrence();
-                            if (globalClass.getProfil_pic().equals("")) {
-                                Picasso.with(getApplicationContext()).load("http://i.imgur.com/DvpvklR.png").into(profile_image_edit);
-                            } else {
-                                Picasso.with(getApplicationContext()).load(globalClass.getProfil_pic()).into(profile_image_edit);
+                            if (!globalClass.getProfil_pic().isEmpty()) {
+                                Picasso.with(getApplicationContext())
+                                        .load(globalClass.getProfil_pic())
+                                        .into(profile_image_edit);
                             }
                             edit_name.setText(globalClass.getName());
 
@@ -1559,15 +1486,8 @@ public class SettingActivity extends AppCompatActivity {
         params.put("relationship", "");
         params.put("complex_id", globalClass.getComplex_id());
         params.put("family_member_mobile", phone);
+        params.put("user_type", globalClass.getUser_type());
 
-
-        if (globalClass.getUser_type().equals("owner")){
-            params.put("user_type", "1");
-        }else if (globalClass.getUser_type().equals("member")){
-            params.put("user_type", "4");
-        }else if (globalClass.getUser_type().equals("tenant")){
-            params.put("user_type", "6");
-        }
 
         try{
 
@@ -1576,11 +1496,6 @@ public class SettingActivity extends AppCompatActivity {
         }catch (FileNotFoundException e){
             e.printStackTrace();
         }
-
-        /*cl.setSSLSocketFactory(
-                new SSLSocketFactory(Config.getSslContext(),
-                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));*/
-
 
        // Log.d(TAG , "URL "+url);
        // Log.d(TAG , "params "+params.toString());
@@ -1622,8 +1537,6 @@ public class SettingActivity extends AppCompatActivity {
                     }
 
                 }
-
-
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString,
@@ -1650,12 +1563,12 @@ public class SettingActivity extends AppCompatActivity {
         params.put("car_name", "");
         params.put("car_no", number);
         params.put("parking_no", parking);
+        params.put("parking_id", globalClass.getParking_id());
         params.put("complex_id", globalClass.getComplex_id());
 
 
        // Log.d(TAG , "URL "+url);
        // Log.d(TAG , "params "+params.toString());
-
 
         int DEFAULT_TIMEOUT = 30 * 1000;
         cl.setMaxRetriesAndTimeout(5 , DEFAULT_TIMEOUT);
@@ -1704,7 +1617,6 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
     private void profile_details_api_call() {
@@ -1743,6 +1655,15 @@ public class SettingActivity extends AppCompatActivity {
                         String mobile = user.optString("mobile");
                         String profile_pic = user.optString("profile_pic");
                         String phone_show = user.optString("phone_show");
+                        String user_passcode = user.optString("user_passcode");
+
+
+
+                        if (emailid == null
+                                || emailid.equals("null")
+                                || emailid.equals(null)){
+                            emailid = "";
+                        }
 
 
 
@@ -1754,8 +1675,11 @@ public class SettingActivity extends AppCompatActivity {
                         globalClass.setLogin_status(true);
                         globalClass.setLogin_from("signup");
                         preference.savePrefrence();
+
                         user_name.setText(globalClass.getName());
                         user_email.setText(globalClass.getEmail());
+                        passcode.setText("#Passcode: "+user_passcode);
+
 
                         phone_secure = phone_show;
                         if (phone_show.equals("1")){
@@ -1798,15 +1722,20 @@ public class SettingActivity extends AppCompatActivity {
 
                         }
 
-                        RecyclerViewHorizontalAdapter =
-                                new FamilyAdapter(SettingActivity.this,
+                        RecyclerViewHorizontalAdapter = new FamilyAdapter(SettingActivity.this,
                                         listFamilyMembers);
-                        recyclerView.setAdapter(RecyclerViewHorizontalAdapter);
+                        recyclerView_members.setAdapter(RecyclerViewHorizontalAdapter);
+                        RecyclerViewHorizontalAdapter.setViewClickListener(SettingActivity.this);
+
 
                         if (listFamilyMembers.size() == 0){
-                            iv_no_data1.setVisibility(View.VISIBLE);
+                            add_member.setVisibility(View.INVISIBLE);
+                            rl_add_member.setVisibility(View.VISIBLE);
+                            relfamily.setVisibility(View.GONE);
                         }else {
-                            iv_no_data1.setVisibility(View.GONE);
+                            rl_add_member.setVisibility(View.GONE);
+                            relfamily.setVisibility(View.VISIBLE);
+                            add_member.setVisibility(View.VISIBLE);
                         }
 
 
@@ -1847,19 +1776,22 @@ public class SettingActivity extends AppCompatActivity {
                             hashMap.put("modified_date", modified_date);
 
                             listCars.add(hashMap);
-                           // Log.d(TAG, "Hashmap1 " + hashMap);
 
                         }
                         carAdapter = new CarAdapter(SettingActivity.this, listCars);
                         recyclerViewCar.setAdapter(carAdapter);
+                        carAdapter.setViewClickListener(SettingActivity.this);
 
 
                         if (listCars.size() == 0){
-                            iv_no_data3.setVisibility(View.VISIBLE);
+                            add_car.setVisibility(View.INVISIBLE);
+                            rl_add_car.setVisibility(View.VISIBLE);
+                            relCar.setVisibility(View.GONE);
                         }else {
-                            iv_no_data3.setVisibility(View.GONE);
+                            rl_add_car.setVisibility(View.GONE);
+                            relCar.setVisibility(View.VISIBLE);
+                            add_car.setVisibility(View.VISIBLE);
                         }
-
 
 
 
@@ -1889,10 +1821,15 @@ public class SettingActivity extends AppCompatActivity {
                         staffAdapter = new StaffAdapter(SettingActivity.this, staffList);
                         recyclerViewStaff.setAdapter(staffAdapter);
 
+
                         if (staffList.size() == 0){
-                            iv_no_data2.setVisibility(View.VISIBLE);
+                            add_staff.setVisibility(View.INVISIBLE);
+                            rl_add_staff.setVisibility(View.VISIBLE);
+                            relstaff.setVisibility(View.GONE);
                         }else {
-                            iv_no_data2.setVisibility(View.GONE);
+                            rl_add_staff.setVisibility(View.GONE);
+                            relstaff.setVisibility(View.VISIBLE);
+                            add_staff.setVisibility(View.VISIBLE);
                         }
 
 
@@ -1909,6 +1846,10 @@ public class SettingActivity extends AppCompatActivity {
 
                 }
 
+                linear_main.setVisibility(View.VISIBLE);
+
+                swipe_refresh.setRefreshing(false);
+
             }
         }, new Response.ErrorListener() {
 
@@ -1917,27 +1858,33 @@ public class SettingActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
                 loaderDialog.dismiss();
+                swipe_refresh.setRefreshing(false);
             }
         }) {
 
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
 
                 params.put("user_id", globalClass.getId());
                 params.put("flat_no", globalClass.getFlat_id());
+                params.put("complex_id", globalClass.getComplex_id());
+                params.put("user_type", globalClass.getUser_type());
 
-                if (globalClass.getUser_type().equals("owner")){
+                /*if (globalClass.getUser_type().equals("owner")){
                     params.put("user_type", "1");
                 }else if (globalClass.getUser_type().equals("member")){
                     params.put("user_type", "4");
                 }else if (globalClass.getUser_type().equals("tenant")){
                     params.put("user_type", "6");
-                }
+                }*/
+
+
 
 
                 Log.d(TAG, "getParams: "+params);
+
                 return params;
             }
 
@@ -1958,7 +1905,7 @@ public class SettingActivity extends AppCompatActivity {
         HelpList.clear();
         loaderDialog.show();
 
-        StringRequest strReq = new StringRequest(Request.Method.GET,
+        StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.help_category_list, new Response.Listener<String>() {
 
             @Override
@@ -2043,7 +1990,16 @@ public class SettingActivity extends AppCompatActivity {
             }
         }) {
 
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to activity_login url
+                Map<String, String> params = new HashMap<>();
 
+                params.put("complex_id", globalClass.getComplex_id());
+
+                Log.d(TAG, "getParams: "+params);
+                return params;
+            }
 
         };
 
@@ -2056,5 +2012,198 @@ public class SettingActivity extends AppCompatActivity {
 
     }
 
+
+    @Override
+    public void onMemberDelete(HashMap<String, String> hashMap) {
+
+        deleteMemberDialog(hashMap.get("family_member_id"));
+    }
+
+    public void deleteMemberDialog(String member_id){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.datepicker);
+        builder.setTitle(getResources().getString(R.string.app_name));
+        builder.setMessage("Are you sure you want to delete this member?");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                deleteFamilyMember(member_id);
+            }
+        });
+        builder.setNeutralButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+
+    }
+
+    private void deleteFamilyMember(String member_id) {
+
+        loaderDialog.show();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.delete_family_member,
+                new Response.Listener<String>() {
+
+            @Override
+            public void onResponse(String response) {
+                Log.d(TAG, "delete_family_member: " + response.toString());
+
+                loaderDialog.dismiss();
+
+                try {
+
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    String status = jsonObject.optString("status");
+                    String message = jsonObject.optString("message");
+
+                    if(status.equals("1")) {
+
+                        profile_details_api_call();
+
+
+                    } else {
+                        TastyToast.makeText(getApplicationContext(),
+                                message,
+                                TastyToast.LENGTH_LONG, TastyToast.WARNING);
+
+                    }
+
+                } catch (Exception e) {
+                   e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
+                loaderDialog.dismiss();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to activity_login url
+                Map<String, String> params = new HashMap<>();
+
+                params.put("user_id", member_id);
+                params.put("flat_id", globalClass.getFlat_id());
+
+                Log.d(TAG, "getParams: "+params);
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(SettingActivity.this)
+                .addToRequestQueue(strReq.setRetryPolicy(
+                        new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+
+    }
+
+
+    @Override
+    public void onCarDelete(HashMap<String, String> hashMap) {
+
+        deleteCarDialog(hashMap.get("id"));
+    }
+
+    public void deleteCarDialog(String car_id){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.datepicker);
+        builder.setTitle(getResources().getString(R.string.app_name));
+        builder.setMessage("Are you sure you want to delete this car?");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                deleteCar(car_id);
+            }
+        });
+        builder.setNeutralButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+
+    }
+
+    private void deleteCar(String car_id) {
+
+        loaderDialog.show();
+
+        StringRequest strReq = new StringRequest(Request.Method.POST,
+                AppConfig.delete_car,
+                new Response.Listener<String>() {
+
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d(TAG, "delete_car: " + response.toString());
+
+                        loaderDialog.dismiss();
+
+                        try {
+
+                            JSONObject jsonObject = new JSONObject(response);
+
+                            String status = jsonObject.optString("status");
+                            String message = jsonObject.optString("message");
+
+                            if(status.equals("1")) {
+
+                                profile_details_api_call();
+
+
+                            } else {
+                                TastyToast.makeText(getApplicationContext(),
+                                        message,
+                                        TastyToast.LENGTH_LONG, TastyToast.WARNING);
+
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
+                loaderDialog.dismiss();
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to activity_login url
+                Map<String, String> params = new HashMap<>();
+
+                params.put("user_id", globalClass.getId());
+                params.put("car_id", car_id);
+
+                Log.d(TAG, "getParams: "+params);
+                return params;
+            }
+
+        };
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(SettingActivity.this)
+                .addToRequestQueue(strReq.setRetryPolicy(
+                        new DefaultRetryPolicy(timeOut, nuOfRetry, backOff)));
+
+
+    }
 
 }

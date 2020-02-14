@@ -24,8 +24,13 @@ public class ShowInvoice extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.show_invoice);
         webView=findViewById(R.id.webView);
-        progressBar = ProgressDialog.show(ShowInvoice.this,
-                "Loading the pdf", "Loading...");
+
+        progressBar = new ProgressDialog(this, R.style.datepicker);
+        progressBar.setTitle("Loading the pdf");
+        progressBar.setMessage("Loading...");
+        progressBar.show();
+
+
         webView.getSettings().setJavaScriptEnabled(true);
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {

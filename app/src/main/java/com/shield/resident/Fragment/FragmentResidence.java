@@ -1,5 +1,6 @@
 package com.shield.resident.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +30,8 @@ import com.shield.resident.GlobalClass.GlobalClass;
 import com.shield.resident.GlobalClass.VolleySingleton;
 import com.shield.resident.R;
 import com.shield.resident.dialogs.LoaderDialog;
+import com.shield.resident.ui.CommitteeList;
+import com.shield.resident.util.ItemOffsetDecoration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,20 +44,21 @@ import static com.shield.resident.GlobalClass.VolleySingleton.timeOut;
 
 public class FragmentResidence extends Fragment {
 
-    RecyclerView recyclerView;
-    ListView list;
-    ArrayList<HashMap<String,String>> blockList;
-    AdapterResidence adapter;
-    GlobalClass globalClass;
+    private RecyclerView recyclerView;
+    private CardView carview;
 
-    LoaderDialog loaderDialog;
-    LinearLayout linear_nodata;
+    private ArrayList<HashMap<String,String>> blockList;
+    private AdapterResidence adapter;
+    private GlobalClass globalClass;
+
+    private LoaderDialog loaderDialog;
+    private LinearLayout linear_nodata;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_resident, container, false);
         return rootView;
     }
 
@@ -64,12 +69,19 @@ public class FragmentResidence extends Fragment {
         loaderDialog = new LoaderDialog(getActivity(), android.R.style.Theme_Translucent,
                 false, "");
 
-        globalClass=(GlobalClass)getActivity().getApplicationContext();
-        blockList=new ArrayList<>();
+        globalClass = (GlobalClass)getActivity().getApplicationContext();
+        blockList = new ArrayList<>();
 
         recyclerView = view.findViewById(R.id.recycler_view);
+        carview = view.findViewById(R.id.carview);
         linear_nodata = view.findViewById(R.id.linear_nodata);
         linear_nodata.setVisibility(View.GONE);
+
+
+        carview.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), CommitteeList.class);
+            startActivity(intent);
+        });
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -78,6 +90,7 @@ public class FragmentResidence extends Fragment {
         BrowseBlock();
 
     }
+
     private void BrowseBlock() {
         // Tag used to cancel the request
         String tag_string_req = "req_login";
@@ -96,7 +109,6 @@ public class FragmentResidence extends Fragment {
                 Gson gson = new Gson();
 
                 try {
-
                     JsonObject jobj = gson.fromJson(response, JsonObject.class);
                     String status = jobj.get("status").getAsString().replaceAll("\"", "");
                     String message = jobj.get("message").getAsString().replaceAll("\"", "");
@@ -112,18 +124,14 @@ public class FragmentResidence extends Fragment {
                             String block = jobj1.get("block").toString().replaceAll("\"", "");
 
                             HashMap<String, String> map_ser = new HashMap<>();
-
                             map_ser.put("block", block);
 
                             blockList.add(map_ser);
-
-                           // Log.d(TAG, "cityList: "+helpList);
 
                         }
 
                         adapter = new AdapterResidence(getActivity(), blockList);
                         recyclerView.setAdapter(adapter);
-
 
                     }
 
@@ -148,7 +156,7 @@ public class FragmentResidence extends Fragment {
         }) {
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
 
                 params.put("complex_id",globalClass.getComplex_id());

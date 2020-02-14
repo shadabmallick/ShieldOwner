@@ -31,6 +31,7 @@ import com.shield.resident.GlobalClass.VolleySingleton;
 import com.shield.resident.R;
 import com.shield.resident.dialogs.LoaderDialog;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.ParseException;
@@ -116,44 +117,42 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
             public void onResponse(String response) {
                 Log.d(TAG, "JOB RESPONSE: " + response.toString());
 
-                Gson gson = new Gson();
-
                 try {
 
-                    JsonObject jobj = gson.fromJson(response, JsonObject.class);
+                    JSONObject jsonObject = new JSONObject(response);
 
-                    String status = jobj.get("status").getAsString().replaceAll("\"", "");
-                    String message = jobj.get("message").getAsString().replaceAll("\"", "");
+                    String status = jsonObject.optString("status");
+                    String message = jsonObject.optString("message");
 
                     if(status.equals("1")) {
 
-                        String invoice_total = jobj.get("invoice_total").getAsString().replaceAll("\"", "");
-                        String total_paid = jobj.get("total_paid").getAsString().replaceAll("\"", "");
-                        String due = jobj.get("due").getAsString().replaceAll("\"", "");
+                        String invoice_total = jsonObject.optString("invoice_total");
+                        String total_paid = jsonObject.optString("total_paid");
+                        String due = jsonObject.optString("due");
 
-                        JsonArray jarray = jobj.getAsJsonArray("data");
 
-                        for (int i = 0; i < jarray.size(); i++) {
-                            JsonObject jobj1 = jarray.get(i).getAsJsonObject();
-                            //get the object
+                        JSONArray data = jsonObject.getJSONArray("data");
 
-                            String id = jobj1.get("id").toString().replaceAll("\"", "");
-                            String invoice_id = jobj1.get("invoice_id").toString().replaceAll("\"", "");
-                            String invoice_no = jobj1.get("invoice_no").toString().replaceAll("\"", "");
-                            String complex_id = jobj1.get("complex_id").toString().replaceAll("\"", "");
-                            String flat_id = jobj1.get("flat_id").toString().replaceAll("\"", "");
-                            String billing_amount = jobj1.get("billing_amount").toString().replaceAll("\"", "");
-                            String billing_month = jobj1.get("billing_month").toString().replaceAll("\"", "");
-                            String billing_year = jobj1.get("billing_year").toString().replaceAll("\"", "");
-                            String invoice_link = jobj1.get("invoice_link").toString().replaceAll("\"", "");
-                            String date = jobj1.get("date").toString().replaceAll("\"", "");
-                            String is_active = jobj1.get("is_active").toString().replaceAll("\"", "");
+                        for (int i = 0; i < data.length(); i++) {
+                            JSONObject jobj1 = data.getJSONObject(i);
 
-                            String invoicestatus = jobj1.get("status").toString().replaceAll("\"", "");
-                            String delete_flag = jobj1.get("delete_flag").toString().replaceAll("\"", "");
-                            String invoice_name = jobj1.get("invoice_name").toString().replaceAll("\"", "");
-                            String note = jobj1.get("note").toString().replaceAll("\"", "");
-                            String status1 = jobj1.get("status").toString().replaceAll("\"", "");
+                            String id = jobj1.optString("id");
+                            String invoice_id = jobj1.optString("invoice_id");
+                            String invoice_no = jobj1.optString("invoice_no");
+                            String complex_id = jobj1.optString("complex_id");
+                            String flat_id = jobj1.optString("flat_id");
+                            String billing_amount = jobj1.optString("billing_amount");
+                            String billing_month = jobj1.optString("billing_month");
+                            String billing_year = jobj1.optString("billing_year");
+                            String invoice_link = jobj1.optString("invoice_link");
+                            String date = jobj1.optString("date");
+                            String is_active = jobj1.optString("is_active");
+
+                            String invoicestatus = jobj1.optString("status");
+                            String delete_flag = jobj1.optString("delete_flag");
+                            String invoice_name = jobj1.optString("invoice_name");
+                            String note = jobj1.optString("note");
+                            String status1 = jobj1.optString("status");
                             String date_after = formateDateFromstring("yyyy-MM-dd", "dd, MMM yyyy", date);
 
                             HashMap<String, String> map_ser = new HashMap<>();
@@ -195,7 +194,8 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
 
                     } else {
 
-                        TastyToast.makeText(getApplicationContext(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                        TastyToast.makeText(getApplicationContext(), message,
+                                TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
 
                     }
 
@@ -227,7 +227,7 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
         }) {
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
 
                 params.put("flat_id", globalClass.getFlat_id());
@@ -249,7 +249,9 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
 
 
     }
-    public static String formateDateFromstring(String inputFormat, String outputFormat, String inputDate){
+
+    public static String formateDateFromstring(String inputFormat, String outputFormat,
+                                               String inputDate){
 
         Date parsed = null;
         String outputDate = "";
@@ -274,7 +276,7 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
 
         Intent show_invoice=new Intent(getApplicationContext(), ShowInvoice.class);
         show_invoice.putExtra("url",url);
-        Log.d(TAG, "onItemClick: "+url);
+        //Log.d(TAG, "onItemClick: "+url);
         startActivity(show_invoice);
 
     }

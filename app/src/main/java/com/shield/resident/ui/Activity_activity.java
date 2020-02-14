@@ -69,6 +69,7 @@ import com.shield.resident.model.ActivityModel;
 import com.shield.resident.model.ChildItem;
 import com.shield.resident.model.HeaderItem;
 import com.shield.resident.model.ListItem;
+import com.shield.resident.util.Commons;
 import com.shield.resident.util.DigitTextView;
 import com.shield.resident.util.OnSwipeTouchListener;
 
@@ -627,6 +628,8 @@ public class Activity_activity extends AppCompatActivity implements
                                                 child.setFlat_id(obj.optString("flat_id"));
                                                 child.setFlat_no(obj.optString("flat_name"));
                                                 child.setNote(obj.optString("note"));
+                                                child.setGuest_no_of_stay(obj.optString("guest_no_of_stay"));
+                                                child.setGuest_type_of_stay(obj.optString("guest_type_of_stay"));
 
 
                                                 childArrayList.add(child);
@@ -682,6 +685,11 @@ public class Activity_activity extends AppCompatActivity implements
                                                 child.setBlock(obj.optString("block"));
                                                 child.setFlat_id(obj.optString("flat_id"));
                                                 child.setFlat_no(obj.optString("flat_name"));
+                                                child.setNote("");
+                                                child.setGuest_no_of_stay("");
+                                                child.setGuest_type_of_stay("");
+
+
 
 
                                                 child.setType_in_out("in");
@@ -709,7 +717,10 @@ public class Activity_activity extends AppCompatActivity implements
 
                                 }
 
-                              loaderDialog.dismiss();
+                                loaderDialog.dismiss();
+
+                                Commons.showKeyBoard(Activity_activity.this);
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -823,7 +834,7 @@ public class Activity_activity extends AppCompatActivity implements
             e.printStackTrace();
         }
 
-
+        Commons.showKeyBoard(Activity_activity.this);
     }
 
     private ArrayList<ActivityChild> getChildArray(String date, String query){
@@ -1284,8 +1295,6 @@ public class Activity_activity extends AppCompatActivity implements
 
         });*/
 
-
-
         rl_profile.setOnTouchListener(new OnSwipeTouchListener(
                 Activity_activity.this) {
             public void onSwipeTop() {
@@ -1327,7 +1336,6 @@ public class Activity_activity extends AppCompatActivity implements
         });
 
 
-        getFlatListOwnerWise();
     }
 
 
@@ -1354,6 +1362,14 @@ public class Activity_activity extends AppCompatActivity implements
             globalClass.setBlock(hashMap.get("block"));
             globalClass.setIs_tenant(hashMap.get("tenant"));
             globalClass.setPayment_system(hashMap.get("payment_system"));
+            globalClass.setComplex_address(hashMap.get("address"));
+
+            globalClass.setPayu_mkey(hashMap.get("payu_key"));
+            globalClass.setPayu_mid(hashMap.get("payu_mid"));
+            globalClass.setPayu_salt(hashMap.get("payu_salt"));
+            globalClass.setParking_no(hashMap.get("parking_no"));
+            globalClass.setParking_id(hashMap.get("parking_id"));
+            globalClass.setOwner(hashMap.get("owner"));
 
 
             prefManager.savePrefrence();
@@ -1398,7 +1414,14 @@ public class Activity_activity extends AppCompatActivity implements
             globalClass.setBlock(hashMap.get("block"));
             globalClass.setIs_tenant(hashMap.get("tenant"));
             globalClass.setPayment_system(hashMap.get("payment_system"));
+            globalClass.setComplex_address(hashMap.get("address"));
 
+            globalClass.setPayu_mkey(hashMap.get("payu_key"));
+            globalClass.setPayu_mid(hashMap.get("payu_mid"));
+            globalClass.setPayu_salt(hashMap.get("payu_salt"));
+            globalClass.setParking_no(hashMap.get("parking_no"));
+            globalClass.setParking_id(hashMap.get("parking_id"));
+            globalClass.setOwner(hashMap.get("owner"));
 
             prefManager.savePrefrence();
             prefManager.loadPrefrence();
@@ -1458,7 +1481,25 @@ public class Activity_activity extends AppCompatActivity implements
                             String block = flat.optString("block");
                             String floor = flat.optString("floor");
                             String tenant = flat.optString("tenant");
+                            String owner = flat.optString("owner");
                             String payment_system = flat.optString("payment_system");
+                            String payu_key = flat.optString("payu_key");
+                            String payu_mid = flat.optString("payu_mid");
+                            String payu_salt = flat.optString("payu_salt");
+
+                            String complex_address = flat.optString("complex_address");
+                            String city = flat.optString("city");
+                            String state = flat.optString("state");
+                            String pin = flat.optString("pin");
+                            String parking_no = flat.optString("parking_no");
+                            String parking_id = flat.optString("parking_id");
+
+                            StringBuilder csvBuilder = new StringBuilder();
+                            csvBuilder.append(complex_address).append(",");
+                            csvBuilder.append(city).append(",");
+                            csvBuilder.append(state).append(",");
+                            csvBuilder.append(pin);
+
 
                             HashMap<String, String> map_ser = new HashMap<>();
 
@@ -1471,18 +1512,19 @@ public class Activity_activity extends AppCompatActivity implements
                             map_ser.put("floor", floor);
                             map_ser.put("tenant", tenant);
                             map_ser.put("payment_system", payment_system);
+                            map_ser.put("address", csvBuilder.toString());
+                            map_ser.put("payu_key", payu_key);
+                            map_ser.put("payu_mid", payu_mid);
+                            map_ser.put("payu_salt", payu_salt);
+                            map_ser.put("parking_no", parking_no);
+                            map_ser.put("parking_id", parking_id);
+                            map_ser.put("owner", owner);
 
 
                             // 1 = owner, 4 = member, 6 = tenant
+                            map_ser.put("user_type", user_type);
 
 
-                            if (user_type.equals("1")){
-                                map_ser.put("user_type", "owner");
-                            }else if (user_type.equals("4")){
-                                map_ser.put("user_type", "member");
-                            }else if (user_type.equals("6")){
-                                map_ser.put("user_type", "tenant");
-                            }
 
                             if (globalClass.getFlat_id().equals(flat_id)){
 
@@ -1495,6 +1537,14 @@ public class Activity_activity extends AppCompatActivity implements
                                 globalClass.setBlock(map_ser.get("block"));
                                 globalClass.setIs_tenant(map_ser.get("tenant"));
                                 globalClass.setPayment_system(map_ser.get("payment_system"));
+                                globalClass.setComplex_address(csvBuilder.toString());
+
+                                globalClass.setPayu_mkey(map_ser.get("payu_key"));
+                                globalClass.setPayu_mid(map_ser.get("payu_mid"));
+                                globalClass.setPayu_salt(map_ser.get("payu_salt"));
+                                globalClass.setParking_no(map_ser.get("parking_no"));
+                                globalClass.setParking_id(map_ser.get("parking_id"));
+                                globalClass.setOwner(map_ser.get("owner"));
 
                                 prefManager.savePrefrence();
                                 prefManager.loadPrefrence();
@@ -1507,7 +1557,7 @@ public class Activity_activity extends AppCompatActivity implements
 
                     }
 
-
+                    Commons.showKeyBoard(Activity_activity.this);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -1524,7 +1574,7 @@ public class Activity_activity extends AppCompatActivity implements
 
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
 
                 params.put("user_type", globalClass.getUser_type());
@@ -1554,8 +1604,6 @@ public class Activity_activity extends AppCompatActivity implements
         }
 
     }
-
-
 
 
 
@@ -1599,7 +1647,6 @@ public class Activity_activity extends AppCompatActivity implements
         });
 
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

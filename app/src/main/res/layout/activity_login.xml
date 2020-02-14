@@ -22,8 +22,6 @@
             android:backgroundTint="@android:color/black"
             android:textColorHint="@android:color/black"
             android:textColor="@android:color/black"
-            android:inputType="phone|textEmailAddress"
-            android:maxLength="10"
             android:hint="@string/enter_registration_number"/>
 
         <RelativeLayout
@@ -34,7 +32,6 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             >
-
 
             <TextView
                 android:layout_width="100dp"

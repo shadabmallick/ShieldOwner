@@ -115,10 +115,8 @@ public class InterphoneSettings extends AppCompatActivity {
         params.put("user_id",globalClass.getId());
         params.put("flat_id",globalClass.getFlat_id());
 
-       /* cl.setSSLSocketFactory(new SSLSocketFactory(Config.getSslContext(),
-                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));*/
 
-        Log.d(TAG , "URL "+url);
+       // Log.d(TAG , "URL "+url);
         Log.d(TAG , "params "+params.toString());
 
 
@@ -129,7 +127,7 @@ public class InterphoneSettings extends AppCompatActivity {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 
                 if (response != null) {
-                    Log.d(TAG, "user_profile_pic_update- " + response.toString());
+                    Log.d(TAG, "ivr_number- " + response.toString());
                     try {
                         loaderDialog.dismiss();
                         // dialog.dismiss();
@@ -184,10 +182,6 @@ public class InterphoneSettings extends AppCompatActivity {
         params.put("ivr_number",number);
         params.put("flat_id",globalClass.getFlat_id());
 
-
-        /*cl.setSSLSocketFactory(
-                new SSLSocketFactory(Config.getSslContext(),
-                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));*/
 
 
         Log.d(TAG , "URL "+url);

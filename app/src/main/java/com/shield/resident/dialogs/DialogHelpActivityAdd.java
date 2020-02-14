@@ -90,7 +90,6 @@ public class DialogHelpActivityAdd extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-
         setContentView(R.layout.dialog_help);
 
 
@@ -351,7 +350,7 @@ public class DialogHelpActivityAdd extends AppCompatActivity {
 
         loaderDialog.show();
 
-        StringRequest strReq = new StringRequest(Request.Method.GET,
+        StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.help_category_list, new Response.Listener<String>() {
 
             @Override
@@ -422,7 +421,16 @@ public class DialogHelpActivityAdd extends AppCompatActivity {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
                 loaderDialog.dismiss();            }
         }) {
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to activity_login url
+                Map<String, String> params = new HashMap<>();
 
+                params.put("complex_id", globalClass.getComplex_id());
+
+                Log.d(TAG, "getParams: "+params);
+                return params;
+            }
         };
 
         // Adding request to request queue
@@ -486,7 +494,7 @@ public class DialogHelpActivityAdd extends AppCompatActivity {
         }) {
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
 
                 params.put("type", type);

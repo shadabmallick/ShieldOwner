@@ -75,7 +75,6 @@
             android:gravity="center"
             android:id="@+id/edit_mail"
             android:layout_marginTop="10dp"
-            android:enabled="false"
             android:hint="@string/enter_email"/>
 
         <RelativeLayout

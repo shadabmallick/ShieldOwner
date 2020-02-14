@@ -10,7 +10,7 @@
         <RelativeLayout
             android:id="@+id/rl_top"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="230dp"
             >
 
             <ImageView
@@ -342,11 +342,36 @@
                  </LinearLayout>
 
 
+                 <LinearLayout
+                     android:id="@+id/ll_stay_over_night"
+                     android:padding="10dp"
+                     android:layout_marginTop="30dp"
+                     android:layout_marginLeft="30dp"
+                     android:layout_marginRight="30dp"
+                     android:gravity="center"
+                     android:layout_gravity="center"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:background="@drawable/curve_yellow2">
+
+                     <TextView
+                         android:id="@+id/tv_txt_stayOvernight"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_gravity="center"
+                         android:gravity="center"
+                         android:textSize="16sp"
+                         android:textStyle="bold"
+                         android:textColor="@android:color/black"
+                         android:text="Stay Overnight?">
+
+                     </TextView>
+                 </LinearLayout>
 
                  <LinearLayout
                      android:id="@+id/ll_generate_passcode"
                      android:padding="10dp"
-                     android:layout_marginTop="30dp"
+                     android:layout_marginTop="20dp"
                      android:layout_marginLeft="30dp"
                      android:layout_marginRight="30dp"
                      android:gravity="center"

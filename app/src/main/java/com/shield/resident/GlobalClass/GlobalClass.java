@@ -30,26 +30,34 @@ public class GlobalClass extends Application {
     private static GlobalClass mInstance;
     public static final String CHANNEL_ID = "CustomNotification";
 
-    String id;
-    String name;
-    String email;
-    String phone_number;
-    String fcm_reg_token;
-    String deviceid;
-    String profil_pic;
-    String fname;
-    String lname;
-    String addressid;
-    String user_type;
-    String flat_id;
-    String flat_name;
-    String block;
-    String complex_name;
-    String complex_id;
-    String is_login;
-    String first_time_login;
-    String is_tenant;
-    String payment_system;
+    private String id;
+    private String name;
+    private String email;
+    private String phone_number;
+    private String fcm_reg_token;
+    private String deviceid;
+    private String profil_pic;
+    private String fname;
+    private String lname;
+    private String addressid;
+    private String user_type;
+    private String flat_id;
+    private String flat_name;
+    private String block;
+    private String complex_name;
+    private String complex_id;
+    private String is_login;
+    private String first_time_login;
+    private String is_tenant;
+    private String payment_system;
+    private String complex_address;
+    private String parking_no;
+    private String parking_id;
+    private String owner;
+
+    private String payu_salt="";
+    private String payu_mid="";
+    private String payu_mkey="";
 
     public String getUser_type() {
         return user_type;
@@ -131,6 +139,68 @@ public class GlobalClass extends Application {
         this.payment_system = payment_system;
     }
 
+    public String getComplex_address() {
+        return complex_address;
+    }
+
+    public GlobalClass setComplex_address(String complex_address) {
+        this.complex_address = complex_address;
+        return this;
+    }
+
+    public String getPayu_salt() {
+        return payu_salt;
+    }
+
+    public GlobalClass setPayu_salt(String payu_salt) {
+        this.payu_salt = payu_salt;
+        return this;
+    }
+
+    public String getPayu_mid() {
+        return payu_mid;
+    }
+
+    public GlobalClass setPayu_mid(String payu_mid) {
+        this.payu_mid = payu_mid;
+        return this;
+    }
+
+    public String getPayu_mkey() {
+        return payu_mkey;
+    }
+
+    public GlobalClass setPayu_mkey(String payu_mkey) {
+        this.payu_mkey = payu_mkey;
+        return this;
+    }
+
+    public String getParking_no() {
+        return parking_no;
+    }
+
+    public GlobalClass setParking_no(String parking_no) {
+        this.parking_no = parking_no;
+        return this;
+    }
+
+    public String getParking_id() {
+        return parking_id;
+    }
+
+    public GlobalClass setParking_id(String parking_id) {
+        this.parking_id = parking_id;
+        return this;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public GlobalClass setOwner(String owner) {
+        this.owner = owner;
+        return this;
+    }
 
     /////////////////////////////////
 

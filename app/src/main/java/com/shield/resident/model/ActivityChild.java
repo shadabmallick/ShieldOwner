@@ -30,6 +30,8 @@ public class ActivityChild implements Serializable {
     private String leave_at_gate_code;
     private String security_mobile;
     private String note;
+    private String guest_no_of_stay;
+    private String guest_type_of_stay;
 
 
     public String getUser_id() {
@@ -310,6 +312,24 @@ public class ActivityChild implements Serializable {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public String getGuest_no_of_stay() {
+        return guest_no_of_stay;
+    }
+
+    public ActivityChild setGuest_no_of_stay(String guest_no_of_stay) {
+        this.guest_no_of_stay = guest_no_of_stay;
+        return this;
+    }
+
+    public String getGuest_type_of_stay() {
+        return guest_type_of_stay;
+    }
+
+    public ActivityChild setGuest_type_of_stay(String guest_type_of_stay) {
+        this.guest_type_of_stay = guest_type_of_stay;
+        return this;
     }
 }
 

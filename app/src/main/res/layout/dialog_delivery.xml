@@ -36,6 +36,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="56dp"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:gravity="center"
                     android:text="@string/cab_dialog_msg"
                     android:textSize="16sp"
                     />
@@ -273,7 +276,9 @@
                             android:gravity="center"
                             android:orientation="horizontal"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" >
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            >
 
                             <RadioButton
                                 android:id="@+id/radioMale"
@@ -301,7 +306,7 @@
                     android:layout_below="@+id/ll_hide"
                     android:layout_width="match_parent"
                     android:gravity="center"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="20dp"
                     android:layout_height="wrap_content">
 
                     <TextView

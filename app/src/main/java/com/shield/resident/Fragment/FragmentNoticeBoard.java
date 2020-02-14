@@ -85,7 +85,7 @@ public class FragmentNoticeBoard extends Fragment {
 
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "JOB RESPONSE notice : " + response.toString());
+               // Log.d(TAG, "JOB RESPONSE notice : " + response.toString());
 
 
                 loaderDialog.dismiss();
@@ -118,7 +118,6 @@ public class FragmentNoticeBoard extends Fragment {
                             map_ser.put("files", files.toString());
 
                             noticeList.add(map_ser);
-                          //  Log.d(TAG, "notice: "+noticeList);
 
                         }
 
@@ -150,7 +149,7 @@ public class FragmentNoticeBoard extends Fragment {
         }) {
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
 
                 params.put("complex_id",globalClass.getComplex_id());

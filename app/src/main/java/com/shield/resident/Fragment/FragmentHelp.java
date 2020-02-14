@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -36,10 +37,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -87,7 +84,7 @@ public class FragmentHelp extends Fragment {
     AdapterHelp adapter;
     EditText edit_content;
     ImageView image_capture,gallery_capture;
-    LinearLayout linear_nodata;
+    LinearLayout linear_nodata, rl_add_help;
 
     ArrayList<HashMap<String,String>> helpList;
     private final int PICK_IMAGE_CAMERA_CAR = 5;
@@ -138,21 +135,15 @@ public class FragmentHelp extends Fragment {
         recyclerView.setAdapter(adapter);
         getHelpList();
 
-
-
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                StaffDialog();
-            }
+        rl_add_help = view.findViewById(R.id.rl_add_help);
+        rl_add_help.setOnClickListener(v -> {
+            addHelpDialog();
         });
-
 
 
     }
 
-    public void StaffDialog(){
+    public void addHelpDialog(){
         dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.help_dsk_dailog);
         dialog.setCancelable(false);
@@ -162,8 +153,8 @@ public class FragmentHelp extends Fragment {
         gallery_capture=dialog.findViewById(R.id.gallery_capture);
         // set the custom dialog components - text, image and button
 
-        LinearLayout ll_save=dialog.findViewById(R.id.cross);
-        LinearLayout ll_save1=dialog.findViewById(R.id.ll_save);
+        LinearLayout ll_cross = dialog.findViewById(R.id.cross);
+        RelativeLayout ll_save1 = dialog.findViewById(R.id.ll_save);
           image_capture.setOnClickListener(new View.OnClickListener() {
               @Override
               public void onClick(View v) {
@@ -185,7 +176,7 @@ public class FragmentHelp extends Fragment {
               AddHelp(content);
           }
       });
-        ll_save.setOnClickListener(new View.OnClickListener() {
+        ll_cross.setOnClickListener(new View.OnClickListener() {
           @Override
           public void onClick(View v) {
              dialog.dismiss();
@@ -276,7 +267,7 @@ public class FragmentHelp extends Fragment {
         }) {
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
 
                 params.put("user_id",globalClass.getId());
@@ -391,12 +382,12 @@ public class FragmentHelp extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGE_GALLERY && resultCode == RESULT_OK && data != null && data.getData() != null) {
+        if (requestCode == PICK_IMAGE_GALLERY && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
 
             Uri uri = data.getData();
 
             p_image = new File(getRealPathFromURI(uri));
-
 
             Log.d(TAG, "image = "+p_image);
 
@@ -453,7 +444,7 @@ public class FragmentHelp extends Fragment {
 
 
                     outFile = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outFile);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, outFile);
                     outFile.flush();
                     outFile.close();
                 } catch (FileNotFoundException e) {
@@ -485,7 +476,8 @@ public class FragmentHelp extends Fragment {
     }
     public String getRealPathFromURI(Uri contentUri) {
         String[] proj = {MediaStore.Audio.Media.DATA};
-        Cursor cursor = getActivity().managedQuery(contentUri, proj, null, null, null);
+        Cursor cursor = getActivity().managedQuery(contentUri, proj,
+                null, null, null);
         int column_index = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
         cursor.moveToFirst();
         return cursor.getString(column_index);
@@ -504,7 +496,6 @@ public class FragmentHelp extends Fragment {
         params.put("user_id",globalClass.getId());
         params.put("flat_id",globalClass.getFlat_id());
         params.put("content", content);
-
         params.put("complex_id", globalClass.getComplex_id());
 
         try{
@@ -515,21 +506,15 @@ public class FragmentHelp extends Fragment {
             e.printStackTrace();
         }
 
-        cl.setSSLSocketFactory(
-                new SSLSocketFactory(Config.getSslContext(),
-                        SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER));
-
-
-        Log.d(TAG , "URL "+url);
+        //Log.d(TAG , "URL "+url);
         Log.d(TAG , "params "+params.toString());
-
 
         int DEFAULT_TIMEOUT = 30 * 1000;
         cl.setMaxRetriesAndTimeout(5 , DEFAULT_TIMEOUT);
         cl.post(url,params, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                loaderDialog.dismiss();
+
                 if (response != null) {
                     Log.d(TAG, "user_profile_pic_update- " + response.toString());
                     try {
@@ -543,15 +528,15 @@ public class FragmentHelp extends Fragment {
                         if (status == 1) {
 
                             dialog.dismiss();
-                            TastyToast.makeText(getActivity(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS).show();
+
+                            TastyToast.makeText(getActivity(), message,
+                                    TastyToast.LENGTH_LONG, TastyToast.SUCCESS).show();
                             getHelpList();
-
-
 
                         }else{
 
-                            TastyToast.makeText(getActivity(), message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS).show();
-
+                            TastyToast.makeText(getActivity(), message,
+                                    TastyToast.LENGTH_LONG, TastyToast.ERROR).show();
 
                         }
 
@@ -562,14 +547,11 @@ public class FragmentHelp extends Fragment {
                     }
                 }
 
-
-                // pd.dismiss();
             }
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 super.onFailure(statusCode, headers, responseString, throwable);
-                Log.d("Failed: ", ""+statusCode);
-                Log.d("Error : ", "" + throwable);
+                Log.d("Failed: ", ""+responseString);
             }
         });
 

@@ -5,22 +5,53 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="8dp"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="7dp"
+        >
+
+        <LinearLayout
+            android:id="@+id/rl_add_help"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dimen_10dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_add"
+                android:tint="@color/blue"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/dimen_20dp"
+                android:textColor="@color/black"
+                android:paddingStart="@dimen/dimen_15dp"
+                android:text="Need Help?"
+                />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/cardview"
         />
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="16dp"
-        android:backgroundTint="@color/blue"
-        android:background="@color/blue"
-        android:tint="@android:color/white"
-        android:src="@drawable/ic_plus" />
+
+
+
     <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/avi"
         android:layout_centerInParent="true"

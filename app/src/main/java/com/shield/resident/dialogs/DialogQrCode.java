@@ -74,9 +74,6 @@ public class DialogQrCode extends Dialog {
         String s2 = "Your pass code - "+qr_code + ". Use this code at the gate," +
                 " every time you enter in the society.";
 
-       /* String send_msg = "Your pass code for entering into the "
-                +globalClass.getComplex_name() +  " = " + qr_code;*/
-
         String send_msg = s1 + "\n\n" + s2;
 
         Picasso.with(context)
@@ -94,7 +91,7 @@ public class DialogQrCode extends Dialog {
         });
 
         img_share.setOnClickListener(v -> {
-            dismiss();
+            //dismiss();
             BitmapDrawable bitmapDrawable = ((BitmapDrawable) img_qr_code.getDrawable());
             Bitmap bitmap = bitmapDrawable .getBitmap();
             String bitmapPath = MediaStore.Images.Media.insertImage(context.getContentResolver(), bitmap,"", null);

@@ -49,7 +49,7 @@ public class ActivityListAdapterIN extends
         CircleImageView profile_image, vendor_image;
         TextView user_name, visitor_type_name, tv_vendor_name,
                 visiting_time, approved_by, tv_lag_code;
-        ImageView iv_visitor_type, edit, iv_visiting_time;
+        ImageView iv_visitor_type, edit, iv_visiting_time, iv_main_icon;
         LinearLayout ll_buttons, ll_in, ll_out, ll_leaveat_gate, ll_vendors;
         TextView tv_accept, tv_reject, tv_leave_at_gate, tv_gatepass;
 
@@ -75,6 +75,7 @@ public class ActivityListAdapterIN extends
             ll_vendors = itemView.findViewById(R.id.ll_vendors);
             tv_gatepass = itemView.findViewById(R.id.tv_gatepass);
             iv_visiting_time = itemView.findViewById(R.id.iv_visiting_time);
+            iv_main_icon = itemView.findViewById(R.id.iv_main_icon);
 
 
         }
@@ -164,13 +165,15 @@ public class ActivityListAdapterIN extends
 
         try {
 
-            Log.d(AppConfig.TAG, "setChildData: "+activityChild.getProfile_image());
-
+            //Log.d(AppConfig.TAG, "setChildData: "+activityChild.getProfile_image());
 
             holder.tv_gatepass.setVisibility(View.GONE);
 
-
                 if (activityChild.getType().equals("master")){
+
+                    showTime(holder.visiting_time, activityChild.getVisiting_time());
+
+                    holder.iv_visiting_time.setImageResource(R.drawable.ic_clock);
 
                     holder.ll_vendors.setVisibility(View.VISIBLE);
 
@@ -240,8 +243,8 @@ public class ActivityListAdapterIN extends
                     }
 
 
-
                     holder.ll_out.setVisibility(View.GONE);
+                    holder.ll_in.setVisibility(View.GONE);
 
                     if((activityChild.getActual_in_time() == null)
                             ||(activityChild.getActual_in_time().equals("null"))
@@ -266,12 +269,12 @@ public class ActivityListAdapterIN extends
                         if (activityChild.getApprove_status().equals("n")){
 
                             holder.ll_in.setVisibility(View.GONE);
-                            holder.ll_out.setVisibility(View.VISIBLE);
+                            //holder.ll_out.setVisibility(View.VISIBLE);
 
                         }else {
 
                             holder.ll_in.setVisibility(View.VISIBLE);
-                            holder.ll_out.setVisibility(View.GONE);
+                            //holder.ll_out.setVisibility(View.GONE);
                         }
 
 
@@ -308,6 +311,9 @@ public class ActivityListAdapterIN extends
 
 
                     if (activityChild.getApprove_status().equals("w")){
+
+                        holder.ll_in.setVisibility(View.GONE);
+                        holder.ll_out.setVisibility(View.GONE);
 
                         holder.ll_buttons.setVisibility(View.VISIBLE);
                         holder.tv_accept.setVisibility(View.VISIBLE);
@@ -360,7 +366,6 @@ public class ActivityListAdapterIN extends
                     }
 
 
-
                     holder.ll_leaveat_gate.setOnClickListener(v -> {
 
 
@@ -395,15 +400,19 @@ public class ActivityListAdapterIN extends
 
                     });
 
-                    showTime(holder.visiting_time, activityChild.getVisiting_time());
+
 
                 }else {
+                    /// temp
 
                     holder.ll_in.setVisibility(View.GONE);
                     holder.ll_out.setVisibility(View.GONE);
                     holder.ll_leaveat_gate.setVisibility(View.GONE);
                     holder.ll_buttons.setVisibility(View.GONE);
                     holder.ll_vendors.setVisibility(View.VISIBLE);
+
+                    holder.iv_visiting_time.setImageResource(R.drawable.ic_clock);
+
 
                     if (!activityChild.getName().isEmpty()){
                         holder.user_name.setText(activityChild.getName());
@@ -415,6 +424,7 @@ public class ActivityListAdapterIN extends
                             .load(activityChild.getProfile_image())
                             .into(holder.profile_image);
 
+
                     Glide.with(context)
                             .load(activityChild.getVendor_image())
                             .centerCrop()
@@ -425,12 +435,17 @@ public class ActivityListAdapterIN extends
 
                         holder.visitor_type_name.setText("Guest");
                         holder.ll_vendors.setVisibility(View.GONE);
+                        holder.iv_visitor_type.setImageResource(R.mipmap.guest_white);
+                        holder.iv_main_icon.setImageResource(R.mipmap.guest_white);
 
                     }else  if (activityChild.getVisitor_type().equals(AppConfig.delivery)){
 
                         holder.visitor_type_name.setText("Delivery");
 
                         holder.tv_vendor_name.setText(activityChild.getVendor_name());
+
+                        holder.iv_visitor_type.setImageResource(R.mipmap.delivery_man_white);
+                        holder.iv_main_icon.setImageResource(R.mipmap.delivery_man_white);
 
                     }else  if (activityChild.getVisitor_type().equals(AppConfig.staff)){
 
@@ -440,11 +455,17 @@ public class ActivityListAdapterIN extends
 
                         holder.tv_vendor_name.setText(activityChild.getVendor_name());
 
+                        holder.iv_visitor_type.setImageResource(R.drawable.ic_user);
+                        holder.iv_main_icon.setImageResource(R.drawable.ic_user);
+
                     } else  if (activityChild.getVisitor_type().equals(AppConfig.cab)){
 
                         holder.visitor_type_name.setText("Cab");
 
                         holder.tv_vendor_name.setText(activityChild.getVendor_name());
+
+                        holder.iv_visitor_type.setImageResource(R.mipmap.cab_white);
+                        holder.iv_main_icon.setImageResource(R.mipmap.cab_white);
 
                     }else  if (activityChild.getVisitor_type().equals(AppConfig.visiting_help)){
 
@@ -452,9 +473,10 @@ public class ActivityListAdapterIN extends
 
                         holder.tv_vendor_name.setText(activityChild.getVisiting_help_cat());
 
+                        holder.iv_visitor_type.setImageResource(R.mipmap.visiting_help_white);
+                        holder.iv_main_icon.setImageResource(R.mipmap.visiting_help_white);
+
                     }
-
-
 
 
                     if (activityChild.getApprove_status().equals("new")){

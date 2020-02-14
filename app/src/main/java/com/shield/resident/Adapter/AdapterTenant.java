@@ -41,8 +41,8 @@ public class AdapterTenant extends RecyclerView.Adapter<AdapterTenant.MyViewHold
         String imgage=arrayList.get(position).get("profile_pic");
         if(!imgage.isEmpty()){
             Picasso.with(context)
-                    .load(arrayList.get(position).get("profile_pic")).
-                    fit()
+                    .load(arrayList.get(position).get("profile_pic"))
+                    .fit()
                     .into(holder.profile_image);
         }
 

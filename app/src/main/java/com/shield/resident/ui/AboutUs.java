@@ -115,7 +115,7 @@ public class AboutUs extends AppCompatActivity {
 
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
                 Log.d("TAG", "getParams: "+params);
                 return params;

@@ -96,7 +96,7 @@ public class OtpScreen extends AppCompatActivity {
 
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "login RESPONSE: " + response.toString());
+                Log.d(TAG, "activity_login RESPONSE: " + response.toString());
 
                 stopAnim();
 
@@ -141,8 +141,6 @@ public class OtpScreen extends AppCompatActivity {
                         globalClass.setFirst_time_login(first_time_login);
                         globalClass.setIs_login(is_login);
                         globalClass.setIs_tenant(tenant);
-                        globalClass.setLogin_status(true);
-
 
                         // 1 = owner, 4 = member, 6 = tenant
 
@@ -160,6 +158,15 @@ public class OtpScreen extends AppCompatActivity {
                         preference.savePrefrence();
 
 
+                        Intent setting=new Intent(getApplicationContext(), ActivityMultiFlatSelect.class);
+                        setting.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(setting);
+                        finish();
+
+
+
+                        /*
                         if (first_time_login.equalsIgnoreCase("Y")){
                             Intent setting=new Intent(getApplicationContext(),SettingActivity.class);
                             setting.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
@@ -172,7 +179,7 @@ public class OtpScreen extends AppCompatActivity {
                                     | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(setting);
                             finish();
-                        }
+                        }*/
 
 
 
@@ -319,7 +326,7 @@ public class OtpScreen extends AppCompatActivity {
 
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
 
 

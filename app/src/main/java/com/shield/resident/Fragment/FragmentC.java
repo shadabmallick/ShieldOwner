@@ -157,7 +157,7 @@ public class FragmentC extends Fragment {
         }) {
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
 
                 params.put("user_id",globalClass.getId());

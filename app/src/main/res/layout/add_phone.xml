@@ -12,9 +12,8 @@
         android:layout_marginRight="10dp"
         android:layout_gravity="center"
         android:weightSum="3"
-        android:padding="20dp"
+        android:padding="10dp"
         android:layout_marginTop="20dp">
-
 
         <ImageView
             android:layout_width="40dp"
@@ -22,7 +21,7 @@
             android:padding="10dp"
             android:tint="@android:color/white"
             android:src="@drawable/ic_phone_call"
-            android:background="@drawable/circle_green">
+            android:background="@drawable/circle_blue">
         </ImageView>
 
         <EditText
@@ -32,7 +31,7 @@
             android:gravity="center"
             android:textSize="14sp"
             android:background="@null"
-            android:hint="Add Phone Number"
+            android:hint="Enter IVR phone number"
             android:layout_marginLeft="10dp"
             android:inputType="phone"
             android:maxLength="10"
@@ -44,7 +43,6 @@
 
     <LinearLayout
         android:id="@+id/ll_submit"
-        android:layout_below="@+id/ll_hide"
         android:layout_width="match_parent"
         android:gravity="center"
         android:layout_marginBottom="20dp"
@@ -52,12 +50,13 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_width="100dp"
+            android:layout_width="150dp"
             android:text="Add"
             android:textColor="@android:color/white"
             android:gravity="center"
             android:background="@drawable/curve_blue"
             android:layout_height="40dp" />
+
     </LinearLayout>
 
 

@@ -54,7 +54,8 @@ import static com.shield.resident.GlobalClass.VolleySingleton.nuOfRetry;
 import static com.shield.resident.GlobalClass.VolleySingleton.timeOut;
 
 
-public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemClickListner {
+public class DialogDeliveryAdd extends Dialog implements
+        categoryAdapter.onItemClickListner {
 
     private Context context;
     private GlobalClass globalClass;
@@ -62,7 +63,7 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
     private int mYear, mMonth, mDay, mHour, mMinute,mSecond;
     private String date_to_send, send_time, category;
 
-    private TextView tv_time, date_picker, tv_details_company;
+    private TextView user_profile_name, tv_time, date_picker, tv_details_company;
     private RadioButton radio1, radio2;
     private EditText edt_car_no,edit_name_cab, edit_phone_cab, tv_others;
     private RecyclerView delivery_recycle;
@@ -109,6 +110,7 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
         edit_phone_cab = findViewById(R.id.edit_phone);
         tv_time = findViewById(R.id.tv_time);
         tv_others = findViewById(R.id.tv_others);
+        user_profile_name = findViewById(R.id.user_profile_name);
         edt_car_no.setVisibility(View.GONE);
 
         progressBar = findViewById(R.id.progressBar);
@@ -124,6 +126,8 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
             ll_hide.setVisibility(ll_hide.getVisibility()
                     == View.VISIBLE ? View.GONE : View.VISIBLE);
         });
+
+        user_profile_name.setText(context.getResources().getString(R.string.delivery_dialog_msg));
 
 
         close.setOnClickListener(v -> {
@@ -310,7 +314,7 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
 
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
                 params.put("type", "delivery");
 
@@ -409,7 +413,7 @@ public class DialogDeliveryAdd extends Dialog implements categoryAdapter.onItemC
         }) {
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
 
                 params.put("type", type);

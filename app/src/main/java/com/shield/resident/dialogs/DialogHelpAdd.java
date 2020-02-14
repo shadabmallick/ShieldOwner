@@ -334,7 +334,7 @@ public class DialogHelpAdd extends Dialog {
 
         loaderDialog.show();
 
-        StringRequest strReq = new StringRequest(Request.Method.GET,
+        StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.help_category_list, new Response.Listener<String>() {
 
             @Override
@@ -402,8 +402,20 @@ public class DialogHelpAdd extends Dialog {
 
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                loaderDialog.dismiss();            }
+                loaderDialog.dismiss();
+            }
         }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to activity_login url
+                Map<String, String> params = new HashMap<>();
+
+                params.put("complex_id", globalClass.getComplex_id());
+
+                Log.d(TAG, "getParams: "+params);
+                return params;
+            }
 
         };
 
@@ -468,7 +480,7 @@ public class DialogHelpAdd extends Dialog {
         }) {
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
 
                 params.put("type", type);

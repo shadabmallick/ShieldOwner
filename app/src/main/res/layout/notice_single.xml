@@ -8,9 +8,9 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardElevation="8dp"
         app:cardUseCompatPadding="true"
-        app:cardElevation="5dp"
-        app:cardCornerRadius="4dp"
+        app:cardCornerRadius="7dp"
         >
 
         <LinearLayout
@@ -36,14 +36,14 @@
                     />
 
 
-                <TextView
+                <com.skyhope.showmoretextview.ShowMoreTextView
                     android:id="@+id/tv_content"
-                    android:text="I need a teacher"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_subject"
                     android:layout_marginTop="5dp"
                     />
+
 
 
             </RelativeLayout>

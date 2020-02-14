@@ -24,12 +24,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.shield.resident.Adapter.AdapterHelpDesk;
 import com.shield.resident.Constant.AppConfig;
+import com.shield.resident.GlobalClass.GlobalClass;
 import com.shield.resident.GlobalClass.VolleySingleton;
 import com.shield.resident.R;
 import com.shield.resident.dialogs.LoaderDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 import static com.shield.resident.GlobalClass.VolleySingleton.backOff;
@@ -38,13 +40,14 @@ import static com.shield.resident.GlobalClass.VolleySingleton.timeOut;
 
 public class FragmentLocalHelp extends Fragment {
 
-    RecyclerView recyclerView;
-    GridLayoutManager gridLayoutManager;
-    AdapterHelpDesk adapterHelpDesk;
-    ArrayList<HashMap<String,String>> cityList;
+    private RecyclerView recyclerView;
+    private GridLayoutManager gridLayoutManager;
+    private AdapterHelpDesk adapterHelpDesk;
+    private ArrayList<HashMap<String,String>> cityList;
 
-    LoaderDialog loaderDialog;
-    LinearLayout linear_nodata;
+    private LoaderDialog loaderDialog;
+    private LinearLayout linear_nodata;
+    private GlobalClass globalClass;
 
 
     @Nullable
@@ -61,6 +64,8 @@ public class FragmentLocalHelp extends Fragment {
 
         loaderDialog = new LoaderDialog(getActivity(), android.R.style.Theme_Translucent,
                 false, "");
+
+        globalClass = (GlobalClass) getActivity().getApplicationContext();
 
         recyclerView =  view.findViewById(R.id.recycler_view);
         linear_nodata =  view.findViewById(R.id.linear_nodata);
@@ -83,7 +88,7 @@ public class FragmentLocalHelp extends Fragment {
         cityList.clear();
         loaderDialog.show();
 
-        StringRequest strReq = new StringRequest(Request.Method.GET,
+        StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.help_category_list, new Response.Listener<String>() {
 
             @Override
@@ -116,6 +121,7 @@ public class FragmentLocalHelp extends Fragment {
                             String id = jobj1.get("id").toString().replaceAll("\"", "");
                             String name = jobj1.get("name").toString().replaceAll("\"", "");
                             String image = jobj1.get("image").toString().replaceAll("\"", "");
+                            String total = jobj1.get("total").toString().replaceAll("\"", "");
 
                             HashMap<String, String> map_ser = new HashMap<>();
 
@@ -123,6 +129,7 @@ public class FragmentLocalHelp extends Fragment {
                             map_ser.put("id", id);
                             map_ser.put("name", name);
                             map_ser.put("image", image);
+                            map_ser.put("total", total);
 
                             cityList.add(map_ser);
 
@@ -154,7 +161,16 @@ public class FragmentLocalHelp extends Fragment {
             }
         }) {
 
+            @Override
+            protected Map<String, String> getParams() {
+                // Posting parameters to activity_login url
+                Map<String, String> params = new HashMap<>();
 
+                params.put("complex_id", globalClass.getComplex_id());
+
+                Log.d(TAG, "getParams: "+params);
+                return params;
+            }
 
         };
 

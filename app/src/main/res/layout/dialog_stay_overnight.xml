@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dimen_16dp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textSize="@dimen/dimen_16sp"
+            android:textColor="@color/black"
+            android:text="Set overnight time of your guest"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/dimen_20dp"
+            >
+
+            <EditText
+                android:id="@+id/edt_how_much"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_50dp"
+                android:padding="@dimen/dimen_10dp"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                android:hint="0"
+                android:autofillHints="0"
+                android:inputType="number"
+                android:digits="1234567890"
+                android:background="@drawable/black_border"
+                android:layout_marginEnd="@dimen/dimen_8dp"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/black_border"
+                android:layout_weight="1"
+                android:layout_marginStart="@dimen/dimen_8dp"
+                >
+
+                <Spinner
+                    android:id="@+id/spinner_days"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_centerVertical="true"
+                    />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btn_submit_stay"
+            android:layout_width="200dp"
+            android:layout_height="@dimen/dimen_50dp"
+            android:background="@drawable/button_blue"
+            android:layout_marginTop="@dimen/dimen_40dp"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/submit"
+            android:textColor="@color/white"
+            />
+
+    </LinearLayout>
+
+
+</LinearLayout>

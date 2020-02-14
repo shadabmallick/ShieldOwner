@@ -9,7 +9,6 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -49,7 +48,7 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        setContentView(R.layout.activity_login);
 
         globalClass = (GlobalClass)getApplicationContext();
         prefrence = new Shared_Preference(Login.this);
@@ -154,7 +153,7 @@ public class Login extends AppCompatActivity {
                         Intent register=new Intent(getApplicationContext(),OtpScreen.class);
                         register.putExtra("phone", number);
                         register.putExtra("type", credential_type);
-                        register.putExtra("from","login");
+                        register.putExtra("from","activity_login");
 
                         register.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|
                                 Intent.FLAG_ACTIVITY_CLEAR_TASK |
@@ -195,7 +194,7 @@ public class Login extends AppCompatActivity {
 
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
 
                 params.put("phone_Number", number);

@@ -403,7 +403,7 @@ public class RegisterFlatDetails extends AppCompatActivity {
 
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
 
 
@@ -496,7 +496,7 @@ public class RegisterFlatDetails extends AppCompatActivity {
 
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
 
                 params.put("complex_id",complex_id);
@@ -570,11 +570,14 @@ public class RegisterFlatDetails extends AppCompatActivity {
 
                         }
 
-                        dataadapter4 = new ArrayAdapter(RegisterFlatDetails.this,
-                                R.layout.item_spinner, R.id.tvCust, array4);
-                        edt_flat_no.setAdapter(dataadapter4);
+                    }else {
 
+                        array4.add("No Flat Found");
                     }
+
+                    dataadapter4 = new ArrayAdapter(RegisterFlatDetails.this,
+                            R.layout.item_spinner, R.id.tvCust, array4);
+                    edt_flat_no.setAdapter(dataadapter4);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -594,7 +597,7 @@ public class RegisterFlatDetails extends AppCompatActivity {
 
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
 
                 params.put("complex_id", complex_id);
@@ -684,7 +687,7 @@ public class RegisterFlatDetails extends AppCompatActivity {
 
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
 
 

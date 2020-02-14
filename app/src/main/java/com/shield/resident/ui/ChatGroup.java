@@ -152,8 +152,9 @@ public class ChatGroup extends AppCompatActivity implements
             help_id = bundle.getString("id");
 
             String content = bundle.getString("content");
+            String image = bundle.getString("image");
 
-            getSupportActionBar().setTitle("Help Id : "+help_id);
+            getSupportActionBar().setTitle("Ticket No : "+help_id);
 
         }
 
@@ -307,7 +308,7 @@ public class ChatGroup extends AppCompatActivity implements
 
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 return param;
             }
 

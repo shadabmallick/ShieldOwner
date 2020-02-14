@@ -137,126 +137,28 @@ public class DialogProfile extends Dialog implements ProfileFlatAdapter.ViewClic
         });
 
 
-        if (globalClass.getPayment_system().equals("1")){
-            ll_invoice.setVisibility(View.VISIBLE);
+
+
+        if (globalClass.getUser_type().equals("1")
+                || globalClass.getUser_type().equals("4")){
+            if (globalClass.getPayment_system().equals("1")){
+                ll_invoice.setVisibility(View.VISIBLE);
+            }else {
+                ll_invoice.setVisibility(View.GONE);
+            }
         }else {
-            ll_invoice.setVisibility(View.GONE);
+            if (globalClass.getOwner().equals("no") &&
+                    globalClass.getPayment_system().equals("1")){
+                ll_invoice.setVisibility(View.VISIBLE);
+            }else {
+                ll_invoice.setVisibility(View.GONE);
+            }
         }
 
 
         recycler_user_flats.setLayoutManager(new LinearLayoutManager(context));
         setData();
 
-
-    }
-
-
-    private void getFlatListOwnerWise() {
-        // Tag used to cancel the request
-        String tag_string_req = "req_login";
-        loaderDialog.show();
-
-        StringRequest strReq = new StringRequest(Request.Method.POST,
-                AppConfig.user_complex_flat_list, new Response.Listener<String>() {
-
-            @Override
-            public void onResponse(String response) {
-                Log.d(TAG, "flat_list: " + response.toString());
-
-                try {
-
-                    JSONObject object = new JSONObject(response);
-
-                    String status = object.optString("status");
-                    String message = object.optString("message");
-
-                    if(status.equals("1")) {
-
-                        JSONObject data = object.getJSONObject("data");
-
-                        JSONArray flat_details = data.getJSONArray("flat_details");
-
-                        for (int j = 0; j < flat_details.length(); j++) {
-                            JSONObject flat = flat_details.getJSONObject(j);
-
-                            String complex_id = flat.optString("complex_id");
-                            String user_type = flat.optString("user_type");
-                            String complex_name = flat.optString("complex_name");
-                            String flat_id = flat.optString("flat_id");
-                            String flat_no = flat.optString("flat_no");
-                            String block = flat.optString("block");
-                            String floor = flat.optString("floor");
-                            String tenant = flat.optString("tenant");
-                            String payment_system = flat.optString("payment_system");
-
-                            HashMap<String, String> map_ser = new HashMap<>();
-
-                            map_ser.put("complex_id", complex_id);
-                            map_ser.put("complex_name", complex_name);
-                            map_ser.put("flat_id", flat_id);
-                            map_ser.put("flat_no", flat_no);
-                            map_ser.put("block", block);
-                            map_ser.put("floor", floor);
-                            map_ser.put("tenant", tenant);
-                            map_ser.put("payment_system", payment_system);
-
-
-                            if (user_type.equals("1")){
-                                map_ser.put("user_type", "owner");
-                            }else if (user_type.equals("4")){
-                                map_ser.put("user_type", "member");
-                            }else if (user_type.equals("6")){
-                                map_ser.put("user_type", "tenant");
-                            }
-
-
-
-                           // mapArrayList.add(map_ser);
-                        }
-
-
-                        setData();
-
-                    } else {
-                        TastyToast.makeText(context,
-                                message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
-
-                    }
-
-                    loaderDialog.dismiss();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "DATA NOT FOUND: " + error.getMessage());
-                loaderDialog.dismiss();
-            }
-        }){
-
-            @Override
-            protected Map<String, String> getParams() {
-                // Posting parameters to login url
-                Map<String, String> params = new HashMap<>();
-
-                params.put("user_type", "Flat Owner");
-                params.put("user_id", globalClass.getId());
-
-                Log.d(TAG, "param: "+params);
-
-                return params;
-            }
-
-        };
-        // Adding request to request queue
-        GlobalClass.getInstance().addToRequestQueue(strReq, tag_string_req);
-        strReq.setRetryPolicy(new DefaultRetryPolicy(20 * 1000,
-                10, 1.0f));
 
     }
 
@@ -299,6 +201,13 @@ public class DialogProfile extends Dialog implements ProfileFlatAdapter.ViewClic
         globalClass.setBlock(hashMap.get("block"));
         globalClass.setIs_tenant(hashMap.get("tenant"));
         globalClass.setPayment_system(hashMap.get("payment_system"));
+        globalClass.setComplex_address(hashMap.get("address"));
+
+        globalClass.setPayu_mkey(hashMap.get("payu_key"));
+        globalClass.setPayu_mid(hashMap.get("payu_mid"));
+        globalClass.setPayu_salt(hashMap.get("payu_salt"));
+        globalClass.setParking_no(hashMap.get("parking_no"));
+        globalClass.setParking_id(hashMap.get("parking_id"));
 
 
         preference.savePrefrence();

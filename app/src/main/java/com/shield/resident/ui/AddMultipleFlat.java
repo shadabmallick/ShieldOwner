@@ -369,7 +369,7 @@ public class AddMultipleFlat extends AppCompatActivity {
 
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
 
                 params.put("city_id",city_id);
@@ -469,7 +469,7 @@ public class AddMultipleFlat extends AppCompatActivity {
 
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
 
 
@@ -493,6 +493,7 @@ public class AddMultipleFlat extends AppCompatActivity {
 
         loaderDialog.show();
         flatList.clear();
+        array4 = new ArrayList<>();
         StringRequest strReq = new StringRequest(Request.Method.POST,
                 AppConfig.registration_flat_list, new Response.Listener<String>() {
 
@@ -515,7 +516,7 @@ public class AddMultipleFlat extends AppCompatActivity {
                         //array.add("Select Location");
                         JsonArray all_data = jobj.getAsJsonArray("all_data");
 
-                        array4 = new ArrayList<>();
+
                         array4.add("Flat Number");
 
                         for (int j = 0; j < all_data.size(); j++) {
@@ -544,16 +545,18 @@ public class AddMultipleFlat extends AppCompatActivity {
 
                         }
 
-                        dataadapter4 = new ArrayAdapter(AddMultipleFlat.this,
-                                R.layout.item_spinner, R.id.tvCust, array4);
-                        edt_flat_no.setAdapter(dataadapter4);
-
-
                     } else {
+                        array4.add("No Flat Found");
+
                         TastyToast.makeText(getApplicationContext(),
-                                message, TastyToast.LENGTH_LONG, TastyToast.SUCCESS);
+                                message, TastyToast.LENGTH_LONG, TastyToast.WARNING);
 
                     }
+
+                    dataadapter4 = new ArrayAdapter(AddMultipleFlat.this,
+                            R.layout.item_spinner, R.id.tvCust, array4);
+                    edt_flat_no.setAdapter(dataadapter4);
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -573,7 +576,7 @@ public class AddMultipleFlat extends AppCompatActivity {
 
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
 
                 params.put("complex_id",complex_id);
@@ -687,7 +690,7 @@ public class AddMultipleFlat extends AppCompatActivity {
 
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
 
 
@@ -765,7 +768,7 @@ public class AddMultipleFlat extends AppCompatActivity {
 
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
 
 

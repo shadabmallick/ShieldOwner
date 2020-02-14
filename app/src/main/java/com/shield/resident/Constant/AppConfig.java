@@ -7,9 +7,12 @@ public class AppConfig {
     public static final String TAG = "Shield";
 
 
-   // private static final String URL_DEV = "https://www.shieldapp.in/Api/";
-
+    // Live link
     private static final String URL_DEV = "https://www.shieldapp.in/App/Api/";
+
+
+    // Alpha link
+  //  private static final String URL_DEV = "https://alpha-myact-erp.in/App/Api/";
 
 
 
@@ -69,6 +72,13 @@ public class AppConfig {
     public static final String add_contact                  = URL_DEV + "add_contact";
     public static final String complex_details              = URL_DEV + "complex_details";
     public static final String about                        = URL_DEV + "about";
+    public static final String guest_stay_time              = URL_DEV + "guest_stay_time";
+    public static final String delete_family_member         = URL_DEV + "delete_family_member";
+    public static final String delete_car                   = URL_DEV + "delete_car";
+    public static final String delete_own_property          = URL_DEV + "delete_own_property";
+    public static final String committee_details            = URL_DEV + "committee_details";
+
+
 
     //// static types of visitor ...
     public static final String visiting_help = "visiting_help";

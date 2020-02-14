@@ -47,13 +47,13 @@ import static com.shield.resident.GlobalClass.VolleySingleton.timeOut;
 
 public class FragEmergency extends Fragment implements EmergencyAdapter.onItemClickListner {
 
-    RecyclerView recyclerView;
-    GlobalClass globalClass;
-    ArrayList<HashMap<String,String>> listEmergency;
+    private RecyclerView recyclerView;
+    private GlobalClass globalClass;
+    private ArrayList<HashMap<String,String>> listEmergency;
 
-    LoaderDialog loaderDialog;
+    private LoaderDialog loaderDialog;
 
-    LinearLayout linear_nodata;
+    private LinearLayout linear_nodata;
 
     @Nullable
     @Override
@@ -157,7 +157,7 @@ public class FragEmergency extends Fragment implements EmergencyAdapter.onItemCl
         }) {
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
 
                 params.put("complex_id", globalClass.getComplex_id());

@@ -26,6 +26,7 @@ import com.shield.resident.dialogs.LoaderDialog;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 
 import cz.msebera.android.httpclient.Header;
@@ -33,15 +34,20 @@ import cz.msebera.android.httpclient.Header;
 public class PayUMoneyPayment extends AppCompatActivity {
 
 
-    PayUmoneySdkInitializer.PaymentParam.Builder builder;
+    private PayUmoneySdkInitializer.PaymentParam.Builder builder;
     //declare paymentParam object
-    PayUmoneySdkInitializer.PaymentParam paymentParam = null;
+    private PayUmoneySdkInitializer.PaymentParam paymentParam = null;
     private LoaderDialog loaderDialog;
+    private DecimalFormat precision = new DecimalFormat("0.00");
 
+    private String amount, name, email, phone, prodname, txnid;
+    //private String merchantKey = "H0Afr8df";
+    //private String merchant_id = "5466792";
 
-    String amount, name, email, phone, prodname, txnid;
-    private String merchantKey = "H0Afr8df";
-    private String merchant_id = "5466792";
+    private String merchantKey = "";
+    private String merchant_id = "";
+    private String merchant_salt = "";
+
 
     private GlobalClass globalClass;
 
@@ -72,11 +78,13 @@ public class PayUMoneyPayment extends AppCompatActivity {
 
 
         txnid = String.valueOf(System.currentTimeMillis());
-        name = globalClass.getName();
+        name = globalClass.getName().trim();
         email = globalClass.getEmail().trim();
         phone = globalClass.getPhone_number().trim();
 
-
+        merchantKey = globalClass.getPayu_mkey();
+        merchant_id = globalClass.getPayu_mid();
+        merchant_salt = globalClass.getPayu_salt();
 
 
         Bundle bundle = getIntent().getExtras();
@@ -84,7 +92,8 @@ public class PayUMoneyPayment extends AppCompatActivity {
 
             hashMap = (HashMap<String, String>) bundle.getSerializable("hashmap");
 
-            amount = hashMap.get("billing_amount");
+            amount = precision.format(Float.parseFloat(hashMap.get("billing_amount")));
+
         //    prodname = hashMap.get("invoice_no");
             prodname = "shield_invoice";
 
@@ -97,6 +106,9 @@ public class PayUMoneyPayment extends AppCompatActivity {
         Log.d("TAG", "phone "+phone);
         Log.d("TAG", "amount "+amount);
         Log.d("TAG", "prodname "+prodname);
+        Log.d("TAG", "merchantKey "+merchantKey);
+        Log.d("TAG", "merchant_id "+merchant_id);
+        Log.d("TAG", "merchant_salt "+merchant_salt);
 
     }
 
@@ -127,15 +139,13 @@ public class PayUMoneyPayment extends AppCompatActivity {
 
         try {
             paymentParam = builder.build();
-            // generateHashFromServer(paymentParam );
             getHashkey();
 
         } catch (Exception e) {
             Log.e(AppConfig.TAG, " error str: "+e.toString());
 
-
             TastyToast.makeText(getApplicationContext(),
-                    "Phone number is invalid.",
+                    "Phone number/email are invalid.",
                     TastyToast.LENGTH_LONG, TastyToast.WARNING);
 
         }
@@ -160,7 +170,12 @@ public class PayUMoneyPayment extends AppCompatActivity {
         params.put("firstname", name);
         params.put("email", email);
 
-        Log.d(AppConfig.TAG , "URL "+url);
+        params.put("payu_key", merchantKey);
+        params.put("payu_mid", merchant_id);
+        params.put("payu_salt", merchant_salt);
+
+
+        //Log.d(AppConfig.TAG , "URL "+url);
         Log.d(AppConfig.TAG , "params "+params.toString());
 
         int DEFAULT_TIMEOUT = 20 * 1000;
@@ -213,10 +228,11 @@ public class PayUMoneyPayment extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-       // Log.d(ApiClient.TAG, "onActivityResult: " +data);
+        Log.d(AppConfig.TAG, "onActivityResult: " +data);
 
-       // Log.e("data_new",""+data);
-       // Log.e("StartPaymentActivity", "request code " + requestCode + " resultcode " + resultCode);
+        Log.e("data_new",""+data);
+        Log.e("StartPaymentActivity", "request code "
+                + requestCode + " resultcode " + resultCode);
 
         if (requestCode == PayUmoneyFlowManager.REQUEST_CODE_PAYMENT
                 && resultCode == RESULT_OK && data != null) {

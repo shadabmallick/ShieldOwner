@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.shield.resident.R;
 
 import com.shield.resident.ui.ChatGroup;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 
@@ -48,28 +50,14 @@ public class AdapterHelp extends RecyclerView.Adapter<AdapterHelp.MyViewHolder> 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-
-
         HashMap<String, String> help = arrayList.get(position);
 
-        holder.tv_help_id.setText("Help Id: "+help.get("help_id"));
-
-
+        holder.tv_help_id.setText("Ticket No : "+help.get("help_id"));
 
         holder.tv_content.setText(help.get("content"));
 
-        holder.tv_view_image.setPaintFlags(holder.tv_view_image.getPaintFlags()
-                | Paint.UNDERLINE_TEXT_FLAG);
-
-        if (!help.get("image").isEmpty()){
-            holder.tv_view_image.setVisibility(View.VISIBLE);
-        }else {
-            holder.tv_view_image.setVisibility(View.GONE);
-        }
-
         String date = help.get("date") + " " + help.get("time");
         showActualInTime(holder.tv_post_date, date);
-
 
         holder.tv_status.setText(help.get("status"));
         if (help.get("status").equalsIgnoreCase("Pending")){
@@ -82,35 +70,26 @@ public class AdapterHelp extends RecyclerView.Adapter<AdapterHelp.MyViewHolder> 
                     Intent intent = new Intent(context, ChatGroup.class);
                     intent.putExtra("id", arrayList.get(position).get("help_id"));
                     intent.putExtra("content", arrayList.get(position).get("content"));
+                    intent.putExtra("image", arrayList.get(position).get("image"));
                     context.startActivity(intent);
 
                 }
             });
 
-
-
         }else {
             holder.tv_status.setBackgroundResource(R.drawable.curved_green2);
-
             holder.itemView.setOnClickListener(null);
         }
 
 
         try {
-
-            holder.tv_view_image.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    String image = arrayList.get(position).get("image");
-
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(image));
-                    context.startActivity(i);
-                }
-            });
-
-
+            String image = arrayList.get(position).get("image");
+            if(!image.isEmpty()){
+                Picasso.with(context)
+                        .load(image)
+                        .fit()
+                        .into(holder.iv_pic);
+            }
 
         }catch (Exception e){
             e.printStackTrace();
@@ -130,18 +109,16 @@ public class AdapterHelp extends RecyclerView.Adapter<AdapterHelp.MyViewHolder> 
         return arrayList.size();
     }
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        // init the item view's
-        private TextView tv_content, tv_post_date, tv_view_image,
-                tv_help_id, tv_status;
+        private TextView tv_help_id, tv_content, tv_post_date, tv_status;
+        private ImageView iv_pic;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            // get the reference of item view's
+            tv_help_id = itemView.findViewById(R.id.tv_help_id);
             tv_content = itemView.findViewById(R.id.tv_content);
             tv_post_date = itemView.findViewById(R.id.tv_post_date);
-            tv_view_image = itemView.findViewById(R.id.tv_view_image);
-            tv_help_id = itemView.findViewById(R.id.tv_help_id);
             tv_status = itemView.findViewById(R.id.tv_status);
+            iv_pic = itemView.findViewById(R.id.iv_pic);
 
         }
     }

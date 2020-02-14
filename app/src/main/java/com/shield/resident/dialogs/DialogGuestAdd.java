@@ -301,7 +301,7 @@ public class DialogGuestAdd extends Dialog {
         }) {
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
 
                 params.put("type", type);

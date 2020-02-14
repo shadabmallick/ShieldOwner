@@ -1,0 +1,845 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/rel_main"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:titleTextColor="@color/range_white">
+
+        <ImageView
+            android:id="@+id/img_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_left"
+            android:tint="@android:color/white"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_notification"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:layout_gravity="center"
+            android:id="@+id/toolbar_title" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_above="@+id/ll_bottoom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/white"
+                app:cardElevation="8dp"
+                app:cardUseCompatPadding="true"
+                app:cardCornerRadius="7dp"
+                >
+
+                <RelativeLayout
+                    android:id="@+id/relfamily"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:background="@android:color/white"
+                    >
+
+                    <RelativeLayout
+                        android:id="@+id/rl_enter_com"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/enter_call_setting"
+                            android:textStyle="bold"
+                            android:textColor="@android:color/black"
+                            />
+
+                        <Switch
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:visibility="gone"
+                            />
+
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/txt_phone_call"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/call_through_ivr"
+                        android:textColor="@android:color/black"
+                        android:layout_below="@+id/rl_enter_com"/>
+
+                    <LinearLayout
+                        android:id="@+id/ll_sequence"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txt_phone_call"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="10dp" >
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1 "
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp"
+                            android:paddingBottom="10dp"
+                            android:paddingTop="10dp"
+                            android:textStyle="bold"
+                            android:background="@drawable/border_blue_white"
+                            android:textColor="@android:color/black"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/visitor_at_gate"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="10dp"
+                            android:textColor="@android:color/black"
+                            />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/txt_send_notification"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/send_notification"
+                        android:layout_gravity="center"
+                        android:gravity="end"
+                        android:layout_below="@+id/ll_sequence"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/blue"
+                        android:layout_marginTop="5dp"
+                        />
+
+                    <View
+                        android:id="@+id/view1"
+                        android:layout_below="@+id/txt_send_notification"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/light_grey"
+                        android:layout_height="1dp"/>
+
+
+                    <LinearLayout
+                        android:id="@+id/ll_sequence1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/view1"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="10dp" >
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp"
+                            android:paddingBottom="10dp"
+                            android:paddingTop="10dp"
+                            android:textStyle="bold"
+                            android:background="@drawable/border_blue_white"
+                            android:textColor="@android:color/black"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/nobody_response"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="10dp"
+                            android:textColor="@android:color/black"
+                            />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_ivr"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_below="@+id/ll_sequence1"
+                        >
+
+                        <TextView
+                            android:id="@+id/tv_ivr_number"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:layout_gravity="center"
+                            android:gravity="start"
+                            android:layout_marginLeft="10dp"
+                            android:textColor="@color/black"
+                            android:layout_marginTop="5dp"
+                            android:layout_weight="1"
+                            />
+
+
+                        <TextView
+                            android:id="@+id/tv_update_ivr"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Update IVR"
+                            android:layout_gravity="center"
+                            android:gravity="end"
+                            android:layout_marginLeft="10dp"
+                            android:textColor="@color/blue"
+                            android:layout_marginTop="5dp"
+                            android:layout_weight="1"
+                            />
+
+                    </LinearLayout>
+
+
+
+                    <View
+                        android:id="@+id/view2"
+                        android:layout_below="@+id/ll_ivr"
+                        android:layout_width="match_parent"
+                        android:layout_marginTop="10dp"
+                        android:background="@color/light_grey"
+                        android:layout_height="1dp"/>
+
+
+                    <LinearLayout
+                        android:id="@+id/ll_sequence2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/view2"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="10dp" >
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="3"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:paddingLeft="20dp"
+                            android:paddingRight="20dp"
+                            android:paddingBottom="10dp"
+                            android:paddingTop="10dp"
+                            android:textStyle="bold"
+                            android:background="@drawable/border_blue_white"
+                            android:textColor="@android:color/black"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/if_call_picked"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="10dp"
+                            android:textColor="@android:color/black"
+                            />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/txt_send_notification2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/avoid_call"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:layout_below="@+id/ll_sequence2"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="@color/black"
+                        />
+
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardview2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/white"
+                app:cardElevation="8dp"
+                app:cardUseCompatPadding="true"
+                app:cardCornerRadius="7dp"
+                >
+                <RelativeLayout
+                    android:id="@+id/rr_entry_exit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:background="@android:color/white"
+                    >
+
+                    <LinearLayout
+                        android:id="@+id/ll_my_complex"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp"
+                        android:gravity="center_vertical"
+                        android:background="@android:color/white"
+                        >
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/circle_blue"
+                            android:padding="5dp"
+                            android:src="@drawable/ic_user"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:textSize="15sp"
+                            android:paddingStart="@dimen/dimen_10dp"
+                            android:textColor="@color/black"
+                            android:text="@string/daily_help"/>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/ll_entry"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp"
+                        android:layout_below="@+id/ll_my_complex"
+                        android:gravity="center_vertical"
+                        android:background="@android:color/white"
+                        >
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_log_in"
+                            android:tint="@color/black"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:layout_marginStart="10dp"
+                            android:textSize="15sp"
+                            android:text="@string/entry_notification"/>
+
+                        <Switch
+                            android:id="@+id/switch_daily_help_entry"
+                            android:gravity="end"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_exit"
+                        android:layout_width="362dp"
+                        android:layout_height="44dp"
+                        android:layout_below="@+id/ll_entry"
+                        android:layout_marginTop="6dp"
+                        android:background="@android:color/white"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="10dp">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_log_out"
+                            android:tint="@color/black" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="10dp"
+                            android:gravity="center"
+                            android:text="@string/exit_notification"
+                            android:textSize="15sp" />
+
+                        <Switch
+                            android:id="@+id/switch_daily_help_exit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="end" />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/view6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/ll_exit"
+                        android:background="@color/light_grey"/>
+
+                    <LinearLayout
+                        android:id="@+id/ll_my_complex1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp"
+                        android:layout_below="@+id/view6"
+                        android:gravity="center_vertical"
+                        android:background="@android:color/white"
+                        >
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/circle_blue"
+                            android:padding="5dp"
+                            android:src="@drawable/ic_user"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="10dp"
+                            android:textSize="15sp"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
+                            android:text="@string/guest"/>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/ll_entry1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp"
+                        android:layout_below="@+id/ll_my_complex1"
+                        android:gravity="center_vertical"
+                        android:background="@android:color/white"
+                        >
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_log_in"
+                            android:tint="@color/black"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:layout_marginStart="10dp"
+                            android:textSize="15sp"
+                            android:text="@string/entry_notification"/>
+
+                        <Switch
+                            android:id="@+id/switch_guest_entry"
+                            android:gravity="end"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                        </Switch>
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/ll_exit1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp"
+                        android:layout_below="@+id/ll_entry1"
+                        android:gravity="center_vertical"
+                        android:background="@android:color/white"
+                        >
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_log_out"
+                            android:tint="@color/black"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:layout_marginStart="10dp"
+                            android:textSize="15sp"
+                            android:text="@string/exit_notification"/>
+
+                        <Switch
+                            android:id="@+id/switch_guest_exit"
+                            android:gravity="end"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/view_guest"
+                        android:layout_width="wrap_content"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/ll_exit1"
+                        android:background="@color/light_grey"/>
+
+                    <LinearLayout
+                        android:id="@+id/ll_delivery1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp"
+                        android:layout_below="@+id/view_guest"
+                        android:gravity="center_vertical"
+                        android:background="@android:color/white"
+                        >
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/circle_blue"
+                            android:padding="5dp"
+                            android:src="@mipmap/delivery_man_white"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="10dp"
+                            android:textSize="15sp"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
+                            android:text="@string/delivery"/>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/ll_delivery"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp"
+                        android:layout_below="@+id/ll_delivery1"
+                        android:gravity="center_vertical"
+                        android:background="@android:color/white"
+                        >
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_log_in"
+                            android:tint="@color/black"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:layout_marginStart="10dp"
+                            android:textSize="15sp"
+                            android:text="@string/entry_notification"/>
+
+                        <Switch
+                            android:id="@+id/switch_delivery_entry"
+                            android:gravity="end"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/ll_exit2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp"
+                        android:layout_below="@+id/ll_delivery"
+                        android:gravity="center_vertical"
+                        android:background="@android:color/white"
+                        >
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_log_out"
+                            android:tint="@color/black"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:layout_marginStart="10dp"
+                            android:textSize="15sp"
+                            android:text="@string/exit_notification"/>
+
+                        <Switch
+                            android:id="@+id/switch_delivery_exit"
+                            android:gravity="end"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/view7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="1dp"
+                        android:layout_below="@+id/ll_exit2"
+                        android:background="@color/light_grey"/>
+
+
+                    <LinearLayout
+                        android:id="@+id/ll_cab"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp"
+                        android:layout_below="@+id/view7"
+                        android:gravity="center_vertical"
+                        android:background="@android:color/white"
+                        >
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/circle_blue"
+                            android:padding="5dp"
+                            android:src="@mipmap/cab_white"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="10dp"
+                            android:textSize="15sp"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
+                            android:text="@string/cab"/>
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/ll_cab1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp"
+                        android:layout_below="@+id/ll_cab"
+                        android:gravity="center_vertical"
+                        android:background="@android:color/white"
+                        >
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_log_in"
+                            android:tint="@color/black"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:layout_marginStart="10dp"
+                            android:textSize="15sp"
+                            android:text="@string/entry_notification"/>
+
+                        <Switch
+                            android:id="@+id/switch_cab_entry"
+                            android:gravity="end"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/ll_exit3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp"
+                        android:layout_below="@+id/ll_cab1"
+                        android:gravity="center_vertical"
+                        android:background="@android:color/white"
+                        >
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_log_out"
+                            android:tint="@color/black"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:layout_marginStart="10dp"
+                            android:textSize="15sp"
+                            android:text="@string/exit_notification"/>
+
+                        <Switch
+                            android:id="@+id/switch_cab_exit"
+                            android:gravity="end"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:id="@+id/view_last"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/light_grey"
+                        android:layout_below="@+id/ll_exit3"/>
+
+                    <LinearLayout
+                        android:id="@+id/ll_help"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="10dp"
+                        android:layout_below="@+id/view_last"
+                        android:gravity="center_vertical"
+                        android:background="@android:color/white"
+                        >
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/circle_blue"
+                            android:padding="5dp"
+                            android:src="@mipmap/visiting_help_white"
+                            />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textColor="@android:color/black"
+                            android:layout_marginStart="10dp"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:text="@string/help_others"/>
+
+                        <Switch
+                            android:id="@+id/switch_others_help"
+                            android:gravity="end"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+    <LinearLayout
+        android:id="@+id/ll_bottoom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="@dimen/dimen_12dp"
+        android:layout_alignParentBottom="true">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/tv_msg1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/noti_msg_1"
+                android:textStyle="bold"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_5dp"
+                android:gravity="center_vertical"
+                >
+                <TextView
+                    android:id="@+id/tv_msg2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/noti_msg_2"
+                    android:textSize="11sp"
+                    />
+                <TextView
+                    android:id="@+id/tv_msg3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/noti_msg_3"
+                    android:textColor="@color/blue"
+                    android:textSize="11sp"
+                    android:layout_marginStart="@dimen/dimen_5dp"
+                    />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_msg4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/noti_msg_4"
+                android:textSize="11sp"
+                android:layout_marginTop="@dimen/dimen_5dp"
+                />
+
+    </LinearLayout>
+
+</LinearLayout>
+
+
+</RelativeLayout>
+

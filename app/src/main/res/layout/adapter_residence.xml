@@ -8,9 +8,9 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardElevation="8dp"
         app:cardUseCompatPadding="true"
-        app:cardElevation="5dp"
-        app:cardCornerRadius="4dp"
+        app:cardCornerRadius="7dp"
         >
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,35 +25,48 @@
                 android:layout_gravity="center"
                 >
 
-                <de.hdodenhof.circleimageview.CircleImageView
+                <ImageView
                     android:id="@+id/profile_image"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@mipmap/icn"
+                    android:src="@mipmap/office"
+                    android:tint="@color/blue"
+                    android:padding="8dp"
                     />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingRight="8dp"
-                    android:paddingLeft="8dp"
+                    android:paddingLeft="10dp"
                     android:orientation="vertical"
-                    android:gravity="center"
                     android:layout_toRightOf="@id/profile_image"
                     android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/iv_next"
+                    android:layout_toEndOf="@+id/profile_image"
                     >
 
                     <TextView
                         android:id="@+id/list_item"
                         android:textSize="14sp"
-                        android:layout_gravity="center"
                         android:text="I need a teacher"
                         android:layout_width="wrap_content"
+                        android:textColor="@color/black"
                         android:layout_height="match_parent" />
 
 
                 </LinearLayout>
 
+
+                <ImageView
+                    android:id="@+id/iv_next"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:tint="@color/light_dark_gray"
+                    android:src="@drawable/ic_chevron_right"
+                    />
 
             </RelativeLayout>
 

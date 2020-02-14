@@ -12,6 +12,8 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.shield.resident.R;
+import com.shield.resident.ui.Webview;
+import com.skyhope.showmoretextview.ShowMoreTextView;
 
 import org.json.JSONArray;
 
@@ -41,10 +43,12 @@ public class AdapterNotice extends RecyclerView.Adapter<AdapterNotice.MyViewHold
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
        // holder.bind(items[position]);
-       holder.tv_content.setText(arrayList.get(position).get("content"));
-       holder.tv_subject.setText(arrayList.get(position).get("subject"));
 
-        holder.view_file.setPaintFlags(holder.view_file.getPaintFlags()
+       holder.tv_content.setText(arrayList.get(position).get("content"));
+       holder.tv_content.setShowingLine(4);
+
+       holder.tv_subject.setText(arrayList.get(position).get("subject"));
+       holder.view_file.setPaintFlags(holder.view_file.getPaintFlags()
                 | Paint.UNDERLINE_TEXT_FLAG);
 
 
@@ -60,9 +64,9 @@ public class AdapterNotice extends RecyclerView.Adapter<AdapterNotice.MyViewHold
                     @Override
                     public void onClick(View v) {
 
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        i.setData(Uri.parse(url));
-                        context.startActivity(i);
+                       Intent intent = new Intent(context, Webview.class);
+                       intent.putExtra("url", url);
+                       context.startActivity(intent);
 
                     }
                 });
@@ -89,7 +93,8 @@ public class AdapterNotice extends RecyclerView.Adapter<AdapterNotice.MyViewHold
     }
     public class MyViewHolder extends RecyclerView.ViewHolder {
         // init the item view's
-        TextView view_file, tv_subject, tv_content;
+        TextView view_file, tv_subject;
+        ShowMoreTextView tv_content;
 
 
         public MyViewHolder(View itemView) {

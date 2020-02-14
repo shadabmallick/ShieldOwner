@@ -48,7 +48,8 @@ import static com.shield.resident.GlobalClass.VolleySingleton.backOff;
 import static com.shield.resident.GlobalClass.VolleySingleton.nuOfRetry;
 import static com.shield.resident.GlobalClass.VolleySingleton.timeOut;
 
-public class FragSecurity extends Fragment implements AdapterSecurityList.onItemClickListner{
+public class FragSecurity extends Fragment implements
+        AdapterSecurityList.onItemClickListner{
 
     private GlobalClass globalClass;
     private AdapterSecurityList adapter;
@@ -159,7 +160,7 @@ public class FragSecurity extends Fragment implements AdapterSecurityList.onItem
         }) {
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Posting parameters to activity_login url
                 Map<String, String> params = new HashMap<>();
 
                 params.put("complex_id",globalClass.getComplex_id());

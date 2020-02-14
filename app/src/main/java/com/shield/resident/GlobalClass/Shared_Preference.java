@@ -81,6 +81,13 @@ public class Shared_Preference {
     private static final String preffirst_time_login="preffirst_time_login";
     private static final String tenant="tenant";
     private static final String payment_system="payment_system";
+    private static final String address="address";
+    private static final String payu_salt="payu_salt";
+    private static final String payu_mid="payu_mid";
+    private static final String payu_mkey="payu_mkey";
+    private static final String parking_no="parking_no";
+    private static final String parking_id="parking_id";
+    private static final String owner="owner";
 
 
     public Shared_Preference(Context context) {
@@ -129,6 +136,7 @@ public class Shared_Preference {
 
             block = globalclass.getBlock();
             editor.putString(prefblock, block);
+
 
             user_type = globalclass.getUser_type();
             editor.putString(prefuser_type, user_type);
@@ -189,6 +197,15 @@ public class Shared_Preference {
             editor.putString(tenant, globalclass.getIs_tenant());
 
             editor.putString(payment_system, globalclass.getPayment_system());
+
+            editor.putString(address, globalclass.getComplex_address());
+
+            editor.putString(payu_mkey, globalclass.getPayu_mkey());
+            editor.putString(payu_mid, globalclass.getPayu_mid());
+            editor.putString(payu_salt, globalclass.getPayu_salt());
+            editor.putString(parking_no, globalclass.getParking_no());
+            editor.putString(parking_id, globalclass.getParking_id());
+            editor.putString(owner, globalclass.getOwner());
 
 
             editor.commit();
@@ -271,15 +288,23 @@ public class Shared_Preference {
             globalclass.setPayment_system(sharedPreferences.getString(payment_system,""));
 
             globalclass.setUser_type(sharedPreferences.getString(prefuser_type,""));
+
+            globalclass.setComplex_address(sharedPreferences.getString(address,""));
+
+
+            globalclass.setPayu_mkey(sharedPreferences.getString(payu_mkey,""));
+            globalclass.setPayu_mid(sharedPreferences.getString(payu_mid,""));
+            globalclass.setPayu_salt(sharedPreferences.getString(payu_salt,""));
+            globalclass.setParking_no(sharedPreferences.getString(parking_no,""));
+            globalclass.setParking_id(sharedPreferences.getString(parking_id,""));
+            globalclass.setOwner(sharedPreferences.getString(owner,""));
+
         }
     }
 
-    public void clearPrefrence(){
-
+    public void clearPreference(){
         editor.clear();
         editor.commit();
-
-
     }
 
 

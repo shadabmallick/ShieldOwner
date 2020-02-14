@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,11 +23,11 @@ public class AdapterHelpDesk  extends RecyclerView.Adapter<AdapterHelpDesk.MyVie
 
 
     Context context;
-    ArrayList<HashMap<String,String>> cityList;
+    ArrayList<HashMap<String,String>> arrayList;
 
     public AdapterHelpDesk(Context context, ArrayList<HashMap<String,String>> cityList) {
-        this.cityList = cityList;
-        this.context=context;
+        this.arrayList = cityList;
+        this.context = context;
     }
 
     @Override
@@ -39,16 +40,35 @@ public class AdapterHelpDesk  extends RecyclerView.Adapter<AdapterHelpDesk.MyVie
 
     @Override
     public void onBindViewHolder(final AdapterHelpDesk.MyViewHolder holder, final int position) {
-        Picasso.with(context).load(cityList.get(position).get("image")).
-                fit().into(holder.profile_image);
-        String staff_name=cityList.get(position).get("name");
-        holder.name.setText(staff_name);
+
+        if (arrayList.get(position).get("image") != null
+                && !arrayList.get(position).get("image").equals("null")
+                && !arrayList.get(position).get("image").isEmpty()
+        ){
+            Picasso.with(context).load(arrayList.get(position).get("image")).
+                    fit().into(holder.profile_image);
+        }
+
+
+
+        String name=arrayList.get(position).get("name");
+        holder.name.setText(name);
+
+        holder.rl_count.setVisibility(View.GONE);
+
+        if (!arrayList.get(position).get("total").equals("0")){
+            holder.rl_count.setVisibility(View.VISIBLE);
+            holder.tv_count.setText(arrayList.get(position).get("total"));
+        }
+
+
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 Intent placeorder=new Intent(context, HelpListDetails.class);
-                placeorder.putExtra("category",cityList.get(position).get("name"));
+                placeorder.putExtra("category",arrayList.get(position).get("name"));
 
                 context.startActivity(placeorder);
             }
@@ -62,16 +82,14 @@ public class AdapterHelpDesk  extends RecyclerView.Adapter<AdapterHelpDesk.MyVie
 
     @Override
     public int getItemCount() {
-        return cityList.size();
-
-
-
+        return arrayList.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         // init the item view's
-        TextView name;
+        TextView name, tv_count;
         ImageView profile_image;
+        RelativeLayout rl_count;
 
 
         public MyViewHolder(View itemView) {
@@ -80,6 +98,8 @@ public class AdapterHelpDesk  extends RecyclerView.Adapter<AdapterHelpDesk.MyVie
             name =  itemView.findViewById(R.id.tv_name);
 
             profile_image =  itemView.findViewById(R.id.profile_image);
+            tv_count =  itemView.findViewById(R.id.tv_count);
+            rl_count =  itemView.findViewById(R.id.rl_count);
 
 
 

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:background="@color/bg_gray"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        xmlns:app="http://schemas.android.com/tools"
+        android:id="@+id/toolbar"
+        android:theme="@style/ToolBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/blue"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        >
+        <ImageView
+            android:id="@+id/img_back"
+            android:layout_gravity="left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_left"
+            android:tint="@android:color/white">
+
+        </ImageView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:textSize="16dp"
+                android:text="My Tenants"/>
+
+            <RelativeLayout
+                android:id="@+id/rl_add_tenants"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:visibility="invisible"
+                android:layout_marginRight="10dp">
+
+
+                <ImageView
+                    android:tint="@android:color/white"
+                    android:layout_width="@dimen/dimen_50dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_plus"
+                    />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="8dp"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="7dp"
+        app:cardBackgroundColor="@color/white"
+        >
+        <LinearLayout
+            android:id="@+id/ll_add_tenant"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:gravity="center_vertical"
+            android:background="@android:color/white"
+            >
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:src="@mipmap/icn"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginStart="10dp"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:text="Add Tenant"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_list_tenant"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="8dp"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="7dp"
+        app:cardBackgroundColor="@color/white"
+        >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="8dp"
+            />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardview_delete_flat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="8dp"
+        app:cardUseCompatPadding="true"
+        app:cardCornerRadius="7dp"
+        app:cardBackgroundColor="@color/white"
+        >
+        <LinearLayout
+            android:id="@+id/ll_delete_flat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:gravity="center_vertical"
+            android:background="@android:color/white"
+            >
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:src="@mipmap/icn"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginStart="10dp"
+                android:textSize="15sp"
+                android:textColor="@color/red"
+                android:text="Delete Flat/Villa/Workplace"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

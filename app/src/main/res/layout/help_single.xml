@@ -8,72 +8,100 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="4dp"
-        app:cardCornerRadius="4dp"
+        app:cardElevation="8dp"
         app:cardUseCompatPadding="true"
+        app:cardCornerRadius="7dp"
         app:cardBackgroundColor="@color/white"
         >
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:padding="8dp"
             >
 
-            <TextView
-                android:id="@+id/tv_help_id"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/card_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="7dp"
+                    app:cardBackgroundColor="@color/white"
+                    >
+                    <ImageView
+                        android:id="@+id/iv_pic"
+                        android:layout_width="50dp"
+                        android:layout_height="55dp"
+                        android:background="@color/colorPrimaryDark"
+                        />
+
+                </androidx.cardview.widget.CardView>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_toEndOf="@id/card_image"
+                    android:paddingStart="@dimen/dimen_8dp"
+                    android:layout_centerVertical="true"
+                    >
+
+                    <TextView
+                        android:id="@+id/tv_help_id"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
+
+                </LinearLayout>
+
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/darker_gray"
-                android:textStyle="bold"
-                android:text="Sourav"
-                />
+                android:layout_marginTop="@dimen/dimen_10dp"
+                >
 
-            <TextView
-                android:id="@+id/tv_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:background="@drawable/curved_orange"
-                android:paddingStart="8dp"
-                android:paddingTop="5dp"
-                android:paddingEnd="8dp"
-                android:paddingBottom="5dp"
-                android:textSize="12sp"
-                android:text="Sourav"
-                />
+                <TextView
+                    android:id="@+id/tv_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/curved_orange"
+                    android:paddingStart="8dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="8dp"
+                    android:paddingBottom="5dp"
+                    android:textSize="12sp"
+                    android:text="Sourav"
+                    />
 
-            <TextView
-                android:id="@+id/tv_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/dark_gray"
-                android:layout_below="@+id/tv_help_id"
-                android:text="Sourav"
-                />
+                <TextView
+                    android:id="@+id/tv_post_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/blue"
+                    android:layout_alignParentEnd="true"
+                    android:text=""
+                    />
 
-            <TextView
-                android:id="@+id/tv_view_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_content"
-                android:padding="5dp"
-                android:text="view image"
-                />
+            </RelativeLayout>
 
-            <TextView
-                android:id="@+id/tv_post_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/blue"
-                android:layout_alignParentEnd="true"
-                android:layout_below="@+id/tv_view_image"
-                android:text=""
-                />
-
-
-
-        </RelativeLayout>
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 
