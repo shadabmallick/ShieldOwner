@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AppHelp extends AppCompatActivity {
+public class AppTour extends AppCompatActivity {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -85,7 +85,7 @@ public class AppHelp extends AppCompatActivity {
         arrayMidImage.add(R.mipmap.tour_102);
 
 
-        AppHelpAdapter appHelpAdapter = new AppHelpAdapter(AppHelp.this,
+        AppHelpAdapter appHelpAdapter = new AppHelpAdapter(AppTour.this,
                 arrayList, arrayTopImage, arrayMidImage);
         recycler_view.setAdapter(appHelpAdapter);
 

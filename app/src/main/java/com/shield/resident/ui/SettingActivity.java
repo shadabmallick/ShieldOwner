@@ -398,7 +398,7 @@ public class SettingActivity extends AppCompatActivity implements
         });
 
         ll_app_help.setOnClickListener(v -> {
-            Intent intent = new Intent(SettingActivity.this, AppHelp.class);
+            Intent intent = new Intent(SettingActivity.this, AppTour.class);
             startActivity(intent);
         });
 
@@ -627,7 +627,8 @@ public class SettingActivity extends AppCompatActivity implements
     }
 
 
-    public boolean checkForPermission(final String[] permissions, final int permRequestCode) {
+    public boolean checkForPermission(final String[] permissions,
+                                      final int permRequestCode) {
 
         final List<String> permissionsNeeded = new ArrayList<>();
         for (int i = 0; i < permissions.length; i++) {
@@ -1224,11 +1225,15 @@ public class SettingActivity extends AppCompatActivity implements
 
         dialog = new Dialog(this, R.style.datepicker);
         dialog.setContentView(R.layout.car_info);
-        ImageView img_edit=dialog.findViewById(R.id.edit_car);
+        ImageView img_edit = dialog.findViewById(R.id.edit_car);
         edit_car_no=dialog.findViewById(R.id.edit_car_no);
         edit_parking_no=dialog.findViewById(R.id.edit_parking_no);
 
-        edit_parking_no.setText(globalClass.getParking_no());
+        if (globalClass.getParking_no() != null
+                || !globalClass.getParking_no().equals(null)
+                || !globalClass.getParking_no().equals("null")){
+            edit_parking_no.setText(globalClass.getParking_no());
+        }
         edit_parking_no.setEnabled(false);
 
 
@@ -1560,12 +1565,14 @@ public class SettingActivity extends AppCompatActivity implements
 
 
         params.put("user_id",globalClass.getId());
+        params.put("flat_id",globalClass.getFlat_id());
         params.put("car_name", "");
         params.put("car_no", number);
         params.put("parking_no", parking);
         params.put("parking_id", globalClass.getParking_id());
         params.put("complex_id", globalClass.getComplex_id());
 
+        Log.d(TAG, "AddCar: "+params);
 
        // Log.d(TAG , "URL "+url);
        // Log.d(TAG , "params "+params.toString());
@@ -1594,12 +1601,15 @@ public class SettingActivity extends AppCompatActivity implements
 
                             profile_details_api_call();
 
-                        }else{
+                        }
 
-                            TastyToast.makeText(getApplicationContext(), message,
-                                    TastyToast.LENGTH_LONG, TastyToast.SUCCESS).show();
-
-
+                        else if(status == 0){
+                            dialog.dismiss();
+                          //  loaderDialog.dismiss();
+                            Log.d(TAG, "onSuccess: "+message);
+                            Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG).show();
+                           /* TastyToast.makeText(getApplicationContext(), message,
+                                    TastyToast.LENGTH_LONG, TastyToast.SUCCESS).show();*/
                         }
 
                     } catch (JSONException e) {

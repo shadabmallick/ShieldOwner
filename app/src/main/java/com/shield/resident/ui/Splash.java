@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.judemanutd.autostarter.AutoStartPermissionHelper;
 import com.shield.resident.Constant.AppConfig;
 import com.shield.resident.GlobalClass.GlobalClass;
 import com.shield.resident.GlobalClass.Shared_Preference;
@@ -38,6 +39,11 @@ public class Splash extends AppCompatActivity {
 
         Mint.initAndStartSession(this.getApplication(), "8a38783c");
 
+        /*if (AutoStartPermissionHelper.getInstance()
+                .isAutoStartPermissionAvailable(getApplicationContext())){
+            AutoStartPermissionHelper.getInstance().getAutoStartPermission(getApplicationContext());
+
+        }*/
 
 
         android.app.NotificationManager manager = (NotificationManager) getApplicationContext()

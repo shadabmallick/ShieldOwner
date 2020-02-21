@@ -228,7 +228,6 @@ public class CallUi extends AppCompatActivity {
                     status_updateCall("n");
                 }
 
-
             });
 
             rel_approved.setOnClickListener(v -> {

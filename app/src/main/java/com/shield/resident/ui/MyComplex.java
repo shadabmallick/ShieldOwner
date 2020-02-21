@@ -85,8 +85,7 @@ public class MyComplex extends AppCompatActivity implements
 
 
 
-        loaderDialog.show();
-        getFlatListOwnerWise();
+
     }
 
     @Override
@@ -252,7 +251,10 @@ public class MyComplex extends AppCompatActivity implements
 
     }
 
-
-
-
+    @Override
+    protected void onResume() {
+        swipe_refresh.setRefreshing(true);
+        getFlatListOwnerWise();
+        super.onResume();
+    }
 }

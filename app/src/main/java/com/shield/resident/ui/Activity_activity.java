@@ -28,6 +28,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -112,7 +113,7 @@ public class Activity_activity extends AppCompatActivity implements
         categoryAdapter.onItemClickListner,
         SwipeRefreshLayout.OnRefreshListener{
 
-   static String TAG = "Activity_activity";
+    static String TAG = "Activity_activity";
     @BindView(R.id.recycle_activity) RecyclerView recycle_activity;
     @BindView(R.id.recycle_upcoming) RecyclerView recycle_upcoming;
 
@@ -125,7 +126,7 @@ public class Activity_activity extends AppCompatActivity implements
     Shared_Preference prefManager;
     RelativeLayout rel_middle_icon;
     EditText tv_others;
-    String type_in_out, response_value = "", approved_by = "";
+    String response_value = "", approved_by = "";
     LinearLayout ll_bell,button_activity,
             view_add_visitor,rel_upcoming_visitor,rel_all_visitor,ll_community,
             ll_app_help, linear_nodata;
@@ -149,6 +150,8 @@ public class Activity_activity extends AppCompatActivity implements
     ActivityListAdapterIN activityListAdapter;
     ArrayList<ListItem> mItems;
 
+    LinearLayoutManager linearLayoutManager1;
+    int lastScrollPosition = 0;
     String all_upcoming;
 
     LoaderDialog loaderDialog;
@@ -306,7 +309,7 @@ public class Activity_activity extends AppCompatActivity implements
             }
         });
         ll_app_help.setOnClickListener(v -> {
-            Intent notification=new Intent(Activity_activity.this, AppHelp.class);
+            Intent notification=new Intent(Activity_activity.this, AppTour.class);
             startActivity(notification);
         });
 
@@ -326,7 +329,19 @@ public class Activity_activity extends AppCompatActivity implements
             }
         });
 
-        recycle_activity.setLayoutManager(new LinearLayoutManager(this));
+
+        linearLayoutManager1 = new LinearLayoutManager(this);
+        linearLayoutManager1.setSmoothScrollbarEnabled(true);
+        recycle_activity.setLayoutManager(linearLayoutManager1);
+        recycle_activity.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                lastScrollPosition = linearLayoutManager1.findFirstVisibleItemPosition();
+            }
+        });
+
+
         recycle_upcoming.setLayoutManager(new LinearLayoutManager(this));
 
        // tv_flat_name.setText(globalClass.getFlat_name());
@@ -342,7 +357,6 @@ public class Activity_activity extends AppCompatActivity implements
 
 
         activityModelArrayList = new ArrayList<>();
-        type_in_out = "in";
 
         mItems = new ArrayList<>();
         activityListAdapter = new ActivityListAdapterIN(Activity_activity.this,
@@ -646,75 +660,78 @@ public class Activity_activity extends AppCompatActivity implements
                                     }
 
 
-                                    if (main_object.has("data_temp")) {
+                                    try {
 
-                                        JSONArray data_temp =
-                                                main_object.optJSONArray("data_temp");
+                                        if (main_object.has("data_temp")) {
 
-                                        for (int i = 0; i < data_temp.length(); i++){
-                                            JSONObject object = data_temp.getJSONObject(i);
+                                            JSONArray data_temp =
+                                                    main_object.optJSONArray("data_temp");
 
-                                            String visiting_hour = object.optString("visiting_hour");
-                                            JSONArray data = object.optJSONArray("data");
-                                            listDates.add(visiting_hour);
+                                            for (int i = 0; i < data_temp.length(); i++){
+                                                JSONObject object = data_temp.getJSONObject(i);
 
-                                            childArrayList = new ArrayList<>();
-                                            for (int j = 0; j < data.length(); j++) {
-                                                JSONObject obj = data.getJSONObject(j);
+                                                String visiting_hour = object.optString("visiting_hour");
+                                                JSONArray data = object.optJSONArray("data");
+                                                listDates.add(visiting_hour);
 
-
-                                                ActivityChild child = new ActivityChild();
-                                                child.setType(obj.optString("type"));
-                                                child.setActivity_id(obj.optString("activity_id"));
-                                                child.setUser_id(obj.optString("user_id"));
-                                                child.setSecurity_id(obj.optString("security_id"));
-                                                child.setName(obj.optString("name"));
-                                                child.setMobile(obj.optString("mobile"));
-                                                child.setQr_code(obj.optString("qr_code"));
-                                                child.setQr_code_image(obj.optString("qr_code_image"));
-                                                child.setActivity_type(obj.optString("activity_type"));
-                                                child.setVisitor_type(obj.optString("visitor_type"));
-                                                child.setVisiting_time(obj.optString("visiting_time"));
-                                                child.setVisiting_date(visiting_hour);
-                                                child.setVisiting_help_cat(obj.optString("visiting_help_cat"));
-                                                child.setVehicle_no(obj.optString("vehicle_no"));
-                                                child.setProfile_image(obj.optString("profile_image"));
-                                                child.setVendor_name(obj.optString("vendor_name"));
-                                                child.setVendor_image(obj.optString("vendor_image"));
-                                                child.setApprove_status(obj.optString("approve_status"));
-                                                child.setBlock(obj.optString("block"));
-                                                child.setFlat_id(obj.optString("flat_id"));
-                                                child.setFlat_no(obj.optString("flat_name"));
-                                                child.setNote("");
-                                                child.setGuest_no_of_stay("");
-                                                child.setGuest_type_of_stay("");
+                                                childArrayList = new ArrayList<>();
+                                                for (int j = 0; j < data.length(); j++) {
+                                                    JSONObject obj = data.getJSONObject(j);
 
 
+                                                    ActivityChild child = new ActivityChild();
+                                                    child.setType(obj.optString("type"));
+                                                    child.setActivity_id(obj.optString("activity_id"));
+                                                    child.setUser_id(obj.optString("user_id"));
+                                                    child.setSecurity_id(obj.optString("security_id"));
+                                                    child.setName(obj.optString("name"));
+                                                    child.setMobile(obj.optString("mobile"));
+                                                    child.setQr_code(obj.optString("qr_code"));
+                                                    child.setQr_code_image(obj.optString("qr_code_image"));
+                                                    child.setActivity_type(obj.optString("activity_type"));
+                                                    child.setVisitor_type(obj.optString("visitor_type"));
+                                                    child.setVisiting_time(obj.optString("visiting_time"));
+                                                    child.setVisiting_date(visiting_hour);
+                                                    child.setVisiting_help_cat(obj.optString("visiting_help_cat"));
+                                                    child.setVehicle_no(obj.optString("vehicle_no"));
+                                                    child.setProfile_image(obj.optString("profile_image"));
+                                                    child.setVendor_name(obj.optString("vendor_name"));
+                                                    child.setVendor_image(obj.optString("vendor_image"));
+                                                    child.setApprove_status(obj.optString("approve_status"));
+                                                    child.setBlock(obj.optString("block"));
+                                                    child.setFlat_id(obj.optString("flat_id"));
+                                                    child.setFlat_no(obj.optString("flat_name"));
+                                                    child.setNote("");
+                                                    child.setGuest_no_of_stay("");
+                                                    child.setGuest_type_of_stay("");
 
 
-                                                child.setType_in_out("in");
 
 
-                                                childArrayList.add(child);
+                                                    child.setType_in_out("in");
+
+
+                                                    childArrayList.add(child);
+
+                                                }
+
+                                                activityModel = new ActivityModel();
+                                                activityModel.setDate(visiting_hour);
+                                                activityModel.setListChild(childArrayList);
+
+                                                activityModelArrayList.add(activityModel);
+                                                Log.d(AppConfig.TAG, "onResponse: "+activityModelArrayList.size());
 
                                             }
 
-
-                                            activityModel = new ActivityModel();
-                                            activityModel.setDate(visiting_hour);
-                                            activityModel.setListChild(childArrayList);
-
-                                            activityModelArrayList.add(activityModel);
-                                            Log.d(AppConfig.TAG, "onResponse: "+activityModelArrayList.size());
-
                                         }
 
+                                    }catch (Exception e){
+                                        e.printStackTrace();
                                     }
 
 
-
                                     setData("");
-
                                 }
 
                                 loaderDialog.dismiss();
@@ -828,6 +845,13 @@ public class Activity_activity extends AppCompatActivity implements
 
             activityListAdapter.setClickListenerIN(this);
             activityListAdapter.setClickListenerStatusUpdate(this);
+
+            if (lastScrollPosition==0)
+                lastScrollPosition = -1;
+
+           // if (lastScrollPosition != 0){
+                recycle_activity.scrollToPosition(lastScrollPosition);
+           // }
 
 
         }catch (Exception e){

@@ -21,9 +21,7 @@ import com.shield.resident.dialogs.DialogAlarmAdd;
 import com.shield.resident.dialogs.DialogCabAdd;
 import com.shield.resident.dialogs.DialogDeliveryAdd;
 import com.shield.resident.dialogs.DialogGuestActivityAdd;
-import com.shield.resident.dialogs.DialogGuestAdd;
 import com.shield.resident.dialogs.DialogHelpActivityAdd;
-import com.shield.resident.dialogs.DialogHelpAdd;
 import com.shield.resident.dialogs.LoaderDialog;
 
 
@@ -107,7 +105,7 @@ public class SecurityScreen extends AppCompatActivity {
         });
 
         ll_app_help.setOnClickListener(v -> {
-            Intent notification=new Intent(SecurityScreen.this, AppHelp.class);
+            Intent notification=new Intent(SecurityScreen.this, AppTour.class);
             startActivity(notification);
         });
 

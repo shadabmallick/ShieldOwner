@@ -38,13 +38,13 @@ import static com.shield.resident.GlobalClass.VolleySingleton.timeOut;
 
 public class FragmentNoticeBoard extends Fragment {
 
-    RecyclerView recyclerView;
-    ArrayList<HashMap<String,String>> noticeList;
-    GlobalClass globalClass;
-    AdapterNotice adapter;
+    private RecyclerView recyclerView;
+    private ArrayList<HashMap<String,String>> noticeList;
+    private GlobalClass globalClass;
+    private AdapterNotice adapter;
 
-    LoaderDialog loaderDialog;
-    LinearLayout linear_nodata;
+    private LoaderDialog loaderDialog;
+    private LinearLayout linear_nodata;
 
 
     @Nullable

@@ -23,6 +23,7 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
 
 
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -289,7 +290,7 @@
         </activity>
 
 
-        <activity android:name="com.shield.resident.ui.AppHelp"
+        <activity android:name="com.shield.resident.ui.AppTour"
             android:windowSoftInputMode="stateHidden"
             android:forceDarkAllowed="false"
             android:theme="@style/MyTheme">

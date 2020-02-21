@@ -28,6 +28,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.judemanutd.autostarter.AutoStartPermissionHelper;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -130,6 +131,8 @@ public class NotificationManager extends AppCompatActivity {
         txt_send_notification.setOnClickListener(v -> {
             Intent intent = new Intent(NotificationManager.this, CallUi.class);
             startActivity(intent);
+
+            //startAutoService();
         });
 
         getIVRNumber();
@@ -154,6 +157,14 @@ public class NotificationManager extends AppCompatActivity {
         context.startActivity(i);
     }
 
+    private void startAutoService(){
+
+        if (AutoStartPermissionHelper.getInstance()
+                .isAutoStartPermissionAvailable(getApplicationContext())){
+            AutoStartPermissionHelper.getInstance().getAutoStartPermission(getApplicationContext());
+
+        }
+    }
 
 
     private void getNotificationStatus() {

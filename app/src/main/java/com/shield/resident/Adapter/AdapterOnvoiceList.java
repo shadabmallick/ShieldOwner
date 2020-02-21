@@ -128,7 +128,7 @@ public class AdapterOnvoiceList extends RecyclerView.Adapter<AdapterOnvoiceList.
     }
     private AdapterOnvoiceList.onItemClickListner mListner;
     public interface onItemClickListner{
-        void onItemClick(String category);
+        void onItemClick(String link);
         void onClickForPay(HashMap<String, String> hashMap);
     }
 

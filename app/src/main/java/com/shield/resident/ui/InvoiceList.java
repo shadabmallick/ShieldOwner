@@ -273,12 +273,9 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
 
     @Override
     public void onItemClick(String url) {
-
         Intent show_invoice=new Intent(getApplicationContext(), ShowInvoice.class);
         show_invoice.putExtra("url",url);
-        //Log.d(TAG, "onItemClick: "+url);
         startActivity(show_invoice);
-
     }
 
 
@@ -335,7 +332,7 @@ public class InvoiceList extends AppCompatActivity implements AdapterOnvoiceList
         params.put("mode", mode);
         params.put("status", status);
         params.put("user_id", globalClass.getId());
-        params.put("invoice_id", invoice_id);
+        params.put("invoice_no", invoice_no);
         params.put("firstname", globalClass.getName());
         params.put("email", globalClass.getEmail());
         params.put("phone", globalClass.getPhone_number());

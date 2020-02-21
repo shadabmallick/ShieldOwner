@@ -76,25 +76,26 @@ import static com.shield.resident.GlobalClass.VolleySingleton.nuOfRetry;
 import static com.shield.resident.GlobalClass.VolleySingleton.timeOut;
 
 public class FragmentHelp extends Fragment {
-    Dialog dialog;
-    RecyclerView recyclerView;
+    private Dialog dialog;
+    private RecyclerView recyclerView;
 
-    File p_image;
-    GlobalClass globalClass;
-    AdapterHelp adapter;
-    EditText edit_content;
-    ImageView image_capture,gallery_capture;
-    LinearLayout linear_nodata, rl_add_help;
+    private File p_image;
+    private GlobalClass globalClass;
+    private AdapterHelp adapter;
+    private EditText edit_content;
+    private ImageView image_capture,gallery_capture;
+    private LinearLayout linear_nodata, rl_add_help;
 
-    ArrayList<HashMap<String,String>> helpList;
+    private ArrayList<HashMap<String,String>> helpList;
     private final int PICK_IMAGE_CAMERA_CAR = 5;
     private final int PICK_IMAGE_GALLERY = 1;
 
-    LoaderDialog loaderDialog;
+    private LoaderDialog loaderDialog;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(
                 R.layout.help_frag, container, false);
         return rootView;
@@ -144,7 +145,7 @@ public class FragmentHelp extends Fragment {
     }
 
     public void addHelpDialog(){
-        dialog = new Dialog(getActivity());
+        dialog = new Dialog(getActivity(), R.style.datepicker);
         dialog.setContentView(R.layout.help_dsk_dailog);
         dialog.setCancelable(false);
 

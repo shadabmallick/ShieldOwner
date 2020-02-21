@@ -169,18 +169,18 @@ public class CommitteeList extends AppCompatActivity implements
 
                                 committee.setComMemberArrayList(arrayList);
 
-
                                 committeeArrayList.add(committee);
 
                             }
 
-                            setCommitteeData();
-
-                            if (committeeArrayList.size() == 0){
-                                linear_nodata.setVisibility(View.VISIBLE);
-                            }
-
                         }
+
+                        setCommitteeData();
+
+                        if (committeeArrayList.size() == 0){
+                            linear_nodata.setVisibility(View.VISIBLE);
+                        }
+
 
                         loaderDialog.dismiss();
 

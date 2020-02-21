@@ -190,7 +190,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 shared_preference.setPref_logInStatus(false);
                 gotoLoginScreen();
 
-            }else if (type != null && type.equals("chat")){
+            }else if (type != null
+                    && (type.equals("chat") || type.equals("admin_chat"))){
 
                 String chat_data = remoteMessage.getData().get("chat_data");
                 sendResponseToChatScreen(getApplicationContext(), type, chat_data);

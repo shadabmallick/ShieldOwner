@@ -223,7 +223,7 @@ public class Activity_details extends AppCompatActivity {
 
                 visitor_type_name.setText("Staff");
 
-                //iv_visitor_type.setImageResource(R.mipmap.guest_white);
+                iv_visitor_type.setImageResource(R.mipmap.visiting_help_white);
 
             } else  if (activityChild.getVisitor_type().equals(AppConfig.cab)){
 
@@ -246,7 +246,6 @@ public class Activity_details extends AppCompatActivity {
                         + activityChild.getVisiting_help_cat()+")");
 
                 iv_visitor_type.setImageResource(R.mipmap.visiting_help_white);
-
 
             }
 
@@ -481,7 +480,7 @@ public class Activity_details extends AppCompatActivity {
             p_image = newfile;
 
             Uri photoURI = FileProvider.getUriForFile(Activity_details.this,
-                    "com.sketch.securityowner.provider", newfile);
+                    "com.shield.resident.provider", newfile);
             mCurrentPhotoPath = photoURI.toString();
 
 

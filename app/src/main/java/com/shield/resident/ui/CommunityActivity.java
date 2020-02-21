@@ -22,9 +22,7 @@ import com.shield.resident.dialogs.DialogAlarmAdd;
 import com.shield.resident.dialogs.DialogCabAdd;
 import com.shield.resident.dialogs.DialogDeliveryAdd;
 import com.shield.resident.dialogs.DialogGuestActivityAdd;
-import com.shield.resident.dialogs.DialogGuestAdd;
 import com.shield.resident.dialogs.DialogHelpActivityAdd;
-import com.shield.resident.dialogs.DialogHelpAdd;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -116,7 +114,7 @@ public class CommunityActivity extends AppCompatActivity {
         });
 
         ll_app_help.setOnClickListener(v -> {
-            Intent notification=new Intent(CommunityActivity.this, AppHelp.class);
+            Intent notification=new Intent(CommunityActivity.this, AppTour.class);
             startActivity(notification);
         });
 

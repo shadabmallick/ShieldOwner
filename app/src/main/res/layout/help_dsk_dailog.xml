@@ -58,18 +58,31 @@
 
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/edit_content"
-            android:layout_margin="10dp"
-            android:hint="Type of requirement shortly"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:gravity="top"
-            android:padding="10dp"
-            android:textColorHint="@android:color/black"
+            android:background="@drawable/black_border"
+            android:layout_margin="10dp"
             android:minHeight="100dp"
-            android:background="@drawable/black_border"/>
+            >
+
+            <EditText
+                android:id="@+id/edit_content"
+                android:hint="Type of requirement shortly"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:gravity="start"
+                android:padding="10dp"
+                android:textColorHint="@android:color/black"
+                android:background="@color/transparent"
+                android:maxLength="150"
+                android:inputType="text"
+                android:digits="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789., "
+                />
+
+        </RelativeLayout>
+
 
 
         <TextView

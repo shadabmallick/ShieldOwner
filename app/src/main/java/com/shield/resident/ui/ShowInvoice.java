@@ -31,12 +31,19 @@ public class ShowInvoice extends AppCompatActivity {
         progressBar.show();
 
 
+
         webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setAllowFileAccessFromFileURLs(true);
+        webView.getSettings().setAllowFileAccess(true);
+
+
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
             url = bundle.getString("url");
 
         }
+
+
         Log.d(TAG, "onCreate: "+url);
         webView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + url);
 

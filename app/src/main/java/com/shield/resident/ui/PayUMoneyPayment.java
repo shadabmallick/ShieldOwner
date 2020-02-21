@@ -132,7 +132,7 @@ public class PayUMoneyPayment extends AppCompatActivity {
                 .setUdf8("")
                 .setUdf9("")
                 .setUdf10("")
-                .setIsDebug(true)             // Integration environment - true (Debug)/ false(Production)
+                .setIsDebug(false)             // Integration environment - true (Debug)/ false(Production)
                 .setKey(merchantKey)          // Merchant key
                 .setMerchantId(merchant_id);
 
@@ -291,7 +291,7 @@ public class PayUMoneyPayment extends AppCompatActivity {
                         intent.putExtra("mode", mode);
                         intent.putExtra("bank_ref_num", bank_ref_num);
                         intent.putExtra("status", "y");
-                        intent.putExtra("invoice_no", productinfo);
+                        intent.putExtra("invoice_no", hashMap.get("invoice_no"));
                         intent.putExtra("invoice_id", hashMap.get("invoice_id"));
                         intent.putExtra("id", hashMap.get("id"));
 
@@ -312,7 +312,7 @@ public class PayUMoneyPayment extends AppCompatActivity {
                         intent.putExtra("paymentId", paymentId);
                         intent.putExtra("mode", mode);
                         intent.putExtra("bank_ref_num", bank_ref_num);
-                        intent.putExtra("invoice_no", productinfo);
+                        intent.putExtra("invoice_no", hashMap.get("invoice_no"));
                         intent.putExtra("status", "n");
                         intent.putExtra("invoice_id", hashMap.get("invoice_id"));
                         intent.putExtra("id", hashMap.get("id"));
